@@ -17,15 +17,36 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
+import scaladelray.math.{Ray, Vector3, Point3}
 
 class RaySpec extends FunSpec {
 
   describe( "A Ray" ) {
-    it( "should take the origin and the direction as parameter and provide them as attributes" )(pending)
 
-    it( "should throw an exception if null is passed as origin" )(pending)
+    it( "should take the origin and the direction as parameter and provide them as attributes" ) {
 
-    it( "should throw an exception if null is passed as direction" )(pending)
+      val o = Point3( 0, 0, 0 )
+      val d = Vector3( 0, 0, -1 )
+
+      val r = Ray( o, d )
+
+      assert( r.o == o )
+      assert( r.d == d )
+    }
+
+    it( "should throw an exception if null is passed as origin" ) {
+      val d = Vector3( 0, 0, -1 )
+      intercept[RuntimeException] {
+        Ray( null, d )
+      }
+    }
+
+    it( "should throw an exception if null is passed as direction" ) {
+      val o  = Point3( 0, 0, 0 )
+      intercept[RuntimeException] {
+        Ray( o, null )
+      }
+    }
 
     it( "should have an apply method that takes a double value as parameter and calculates a point" )(pending)
 
@@ -34,6 +55,14 @@ class RaySpec extends FunSpec {
     it( "should have a \"shoot-the-ray\" operator that take a geometry as parameter and calls the operator on that geometry" )(pending)
 
     it( "should have a \"shoot-the-ray\" operator that take a world as parameter and calls the operator on that world" )(pending)
+
+    it( "should not be altered by the apply method to calculate a point" )(pending)
+
+    it( "should not be altered by the apply method to calculate a t" )(pending)
+
+    it( "should not be altered by \"shoot-the-ray\" operator for a geometry" )(pending)
+
+    it( "should not be altered by \"shoot-the-ray\" operator for a world" )(pending)
 
 
   }
