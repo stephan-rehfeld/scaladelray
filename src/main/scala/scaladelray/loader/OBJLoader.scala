@@ -89,7 +89,7 @@ object OBJLoader extends OBJLoader {
       case t : TexCoord2D =>
         texCoords += t
 
-      case f : List[(Int,Option[Int],Option[Int])] =>
+      case (f : List[(Int,Option[Int],Option[Int])] @unchecked) =>
         faces += f
     }
   }
