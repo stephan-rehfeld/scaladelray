@@ -16,8 +16,11 @@
 
 package scala.del.ray.geometry
 
-import scaladelray.geometry.Hit
-/*
+import scaladelray.geometry.{Geometry, Hit}
+import scaladelray.material.Material
+import scaladelray.math.{Ray, Normal3, Point3}
+import scaladelray.texture.TexCoord2D
+
 class TriangleMesh( material : Material, val vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], indicies : Array[(Int,Option[Int],Option[Int])] ) extends Geometry {
   require( indicies.size % 3 == 0 )
   def <--(r: Ray) : Set[Hit] = {
@@ -25,4 +28,4 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], normals :
 
     }
   }
-} */
+}
