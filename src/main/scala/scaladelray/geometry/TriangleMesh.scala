@@ -21,11 +21,9 @@ import scaladelray.material.Material
 import scaladelray.math.{Ray, Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 
-class TriangleMesh( material : Material, val vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], indicies : Array[(Int,Option[Int],Option[Int])] ) extends Geometry {
-  require( indicies.size % 3 == 0 )
-  def <--(r: Ray) : Set[Hit] = {
-    for( i <- 0 until (indicies.size/3 ) {
+class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]] ) extends Geometry( material ) {
 
-    }
+  def <--(r: Ray) : Set[Hit] = {
+    Set()
   }
 }
