@@ -66,6 +66,14 @@ case class Vector3( x : Double, y : Double, z : Double ) {
   def *( v : Double ) = Vector3( x * v, y * v, z * v )
 
   /**
+   * This method divides all elements of the vector by a scalar.
+   *
+   * @param v The scalar.
+   * @return The vector divided by the scalar.
+   */
+  def /( v : Double ) = Vector3( x / v, y / v, z / v )
+
+  /**
    * This method calculates the cross product between two vectors and returns the result.
    *
    * @param v The other vector.
