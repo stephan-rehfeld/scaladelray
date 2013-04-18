@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package scala.del.ray.geometry
+package test.scaladelray.loader
 
-import scaladelray.geometry.Hit
-/*
-class TriangleMesh( material : Material, val vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], indicies : Array[(Int,Option[Int],Option[Int])] ) extends Geometry {
-  require( indicies.size % 3 == 0 )
-  def <--(r: Ray) : Set[Hit] = {
-    for( i <- 0 until (indicies.size/3 ) {
+import org.scalatest.FunSpec
 
-    }
+class OBJLoaderSpec extends FunSpec {
+
+  describe( "The OBJLoader" ) {
+    it( "should load a file that contains a cube with all vertices, texture coordinates, and normals into a triangle mesh" )(pending)
+    it( "should load a file that contains a cube with all vertices and texture coordinates into a triangle mesh" )(pending)
+    it( "should load a file that contains a cube with all vertices and normals into a triangle mesh" )(pending)
+
   }
-} */
+
+}

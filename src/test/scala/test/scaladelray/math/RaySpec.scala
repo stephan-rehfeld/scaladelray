@@ -18,6 +18,9 @@ package test.scaladelray.math
 
 import org.scalatest.FunSpec
 import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.geometry.Geometry
+import scaladelray.material.SingleColorMaterial
+import scaladelray.{World, Color}
 
 class RaySpec extends FunSpec {
 
@@ -48,21 +51,139 @@ class RaySpec extends FunSpec {
       }
     }
 
-    it( "should have an apply method that takes a double value as parameter and calculates a point" )(pending)
+    it( "should have an apply method that takes a double value as parameter and calculates a point" ) {
 
-    it( "should have an apply method that takes a point value as parameter and calculates the t of the point" )(pending)
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
 
-    it( "should have a \"shoot-the-ray\" operator that take a geometry as parameter and calls the operator on that geometry" )(pending)
+      val r = Ray( o, d )
 
-    it( "should have a \"shoot-the-ray\" operator that take a world as parameter and calls the operator on that world" )(pending)
+      assert( r( 10 ) == Point3( 2 + 10 * 7, 3 + 10 * 11, 5 + 10 * 13 ) )
 
-    it( "should not be altered by the apply method to calculate a point" )(pending)
+    }
 
-    it( "should not be altered by the apply method to calculate a t" )(pending)
+    it( "should have an apply method that takes a point value as parameter and calculates the t of the point" )  {
 
-    it( "should not be altered by \"shoot-the-ray\" operator for a geometry" )(pending)
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
 
-    it( "should not be altered by \"shoot-the-ray\" operator for a world" )(pending)
+      val r = Ray( o, d )
+
+      assert( r( Point3( 2 + 10 * 7, 3 + 10 * 11, 5 + 10 * 13 ) ) == 10 )
+
+    }
+
+    it( "should have a \"shoot-the-ray\" operator that take a geometry as parameter and calls the operator on that geometry" ) {
+
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      var called = false
+
+      val geo = new Geometry( SingleColorMaterial( Color( 0, 0, 0 ) )) {
+        override def <--(r: Ray) = {
+          called = true
+          Set()
+        }
+      }
+
+      r --> geo
+
+      assert( called == true )
+
+    }
+
+    it( "should have a \"shoot-the-ray\" operator that take a world as parameter and calls the operator on that world" ) {
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      var called = false
+
+      val world = new World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set(), 1.0 ) {
+        override def <--(r: Ray) = {
+          called = true
+          Set()
+        }
+      }
+
+      r --> world
+
+      assert( called == true )
+    }
+
+    it( "should not be altered by the apply method to calculate a point" ) {
+
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      r( 10 )
+
+      assert( r.o == o )
+      assert( r.d == d )
+
+    }
+
+    it( "should not be altered by the apply method to calculate a t" ) {
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      r( Point3( 2 + 10 * 7, 3 + 10 * 11, 5 + 10 * 13 ) )
+
+      assert( r.o == o )
+      assert( r.d == d )
+    }
+
+    it( "should not be altered by \"shoot-the-ray\" operator for a geometry" ) {
+
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      var called = false
+
+      val geo = new Geometry( SingleColorMaterial( Color( 0, 0, 0 ) )) {
+        override def <--(r: Ray) = {
+          called = true
+          Set()
+        }
+      }
+
+      r --> geo
+
+      assert( r.o == o )
+      assert( r.d == d )
+
+    }
+
+    it( "should not be altered by \"shoot-the-ray\" operator for a world" ) {
+      val o = Point3( 2, 3, 5 )
+      val d = Vector3( 7, 11, 13 )
+
+      val r = Ray( o, d )
+
+      var called = false
+
+      val world = new World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set(), 1.0 ) {
+        override def <--(r: Ray) = {
+          called = true
+          Set()
+        }
+      }
+
+      r --> world
+
+      assert( r.o == o )
+      assert( r.d == d )
+    }
 
 
   }
