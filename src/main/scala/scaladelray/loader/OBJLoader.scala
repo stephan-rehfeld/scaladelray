@@ -159,7 +159,6 @@ class OBJLoader extends JavaTokenParsers {
     facesBuffer.clear()
   }
 
-
   private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], elem : T ) : Int = {
     var i = list.indexOf( elem )
     if( i == -1 ) {
@@ -171,14 +170,3 @@ class OBJLoader extends JavaTokenParsers {
 
 }
 
-
-object OBJLoader extends OBJLoader {
-
-  def main( args : Array[String] ) {
-    val objLoader = new OBJLoader()
-    //val teddy = objLoader.load( "teddy.obj" )
-    //println( teddy )
-
-  }
-
-}
