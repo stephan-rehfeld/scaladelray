@@ -72,54 +72,46 @@ class OBJLoader extends JavaTokenParsers {
   private val texCoordsBuffer = mutable.MutableList[TexCoord2D]()
   private val facesBuffer = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
 
+  private var lastWasFace = true
+
   def load( fileName : String, material : Material ) : TriangleMesh = {
+
+    reset()
+
     val reader = new FileReader( fileName )
     val parseResult = parseAll( objFile, reader )
     val result = parseResult.get
 
-    vertices.clear()
-    normals.clear()
-    texCoords.clear()
-    faces.clear()
-    verticesBuffer.clear()
-    normalsBuffer.clear()
-    texCoordsBuffer.clear()
-    facesBuffer.clear()
-
-    var lastWasFace = false
-
     for( line <- result ) line match {
       case v : Point3 =>
-        if( lastWasFace ) {
-          constructFromBuffer
-          lastWasFace = false
-        }
-        verticesBuffer += v
+        processData( verticesBuffer, v )
 
       case n : Normal3 =>
-        if( lastWasFace ) {
-          constructFromBuffer
-          lastWasFace = false
-        }
-        normalsBuffer += n
+        processData( normalsBuffer, n )
 
       case t : TexCoord2D =>
-        if( lastWasFace ) {
-          constructFromBuffer
-          lastWasFace = false
-        }
-        texCoordsBuffer += t
+        processData( texCoordsBuffer, t )
 
       case (f : List[(Int,Option[Int],Option[Int])] @unchecked) =>
         lastWasFace = true
         facesBuffer += f
     }
-    constructFromBuffer
+
+    constructFromBuffer()
+
     new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray )
 
   }
 
-  private def constructFromBuffer {
+  private def processData[T]( list : mutable.MutableList[T], elem : T ) {
+    if( lastWasFace ) {
+      constructFromBuffer()
+      lastWasFace = false
+    }
+    list += elem
+  }
+
+  private def constructFromBuffer() {
     var minVertex = Int.MaxValue
     var minTexCoord = Int.MaxValue
     var minNormal = Int.MaxValue
@@ -135,9 +127,9 @@ class OBJLoader extends JavaTokenParsers {
     val correctedFacesBuffer = for( face <- facesBuffer ) yield {
       for ( vertexData <- face ) yield {
         val correctedVertexIndex = vertexData._1 - minVertex
-        val correctedTexCoord = if( vertexData._2.isDefined ) Some( vertexData._2.get - minTexCoord )  else None
-        val correctedNormal = if( vertexData._3.isDefined ) Some( vertexData._3.get - minNormal )  else None
-        (correctedVertexIndex,correctedTexCoord,correctedNormal)
+        val correctedTexCoordIndex = if( vertexData._2.isDefined ) Some( vertexData._2.get - minTexCoord )  else None
+        val correctedNormalIndex = if( vertexData._3.isDefined ) Some( vertexData._3.get - minNormal )  else None
+        (correctedVertexIndex,correctedTexCoordIndex,correctedNormalIndex)
       }
     }
 
@@ -157,41 +149,43 @@ class OBJLoader extends JavaTokenParsers {
           case None =>
             None
         }
-        var vIndex = vertices.indexOf( vertex )
-        if ( vIndex == -1 ) {
-          vertices += vertex
-          vIndex = vertices.size - 1
-        }
 
-        val tIndex = if ( texCoord.isDefined ) {
-          var i = texCoords.indexOf( texCoord.get )
-          if ( i == -1 ) {
-            texCoords += texCoord.get
-            i = texCoords.size - 1
-          }
-          Some( i )
-        } else {
-          None
-        }
+        var vIndex = indexOfAndMaybeAdd( vertices, vertex )
+        val tIndex = if( texCoord.isDefined ) Some( indexOfAndMaybeAdd( texCoords, texCoord.get ) ) else None
+        val nIndex = if ( normal.isDefined ) Some( indexOfAndMaybeAdd( normals, normal.get) ) else None
 
-        val nIndex = if ( normal.isDefined ) {
-          var i = normals.indexOf( normal.get )
-          if ( i == -1 ) {
-            normals += normal.get
-            i = texCoords.size - 1
-          }
-          Some( i )
-        } else {
-          None
-        }
         (vIndex,tIndex,nIndex)
       }
       faces += finalFace
     }
+    clearBuffer()
+  }
+
+  private def reset() {
+    vertices.clear()
+    normals.clear()
+    texCoords.clear()
+    faces.clear()
+
+    clearBuffer()
+
+    lastWasFace = false
+  }
+
+  private def clearBuffer() {
     verticesBuffer.clear()
     normalsBuffer.clear()
     texCoordsBuffer.clear()
     facesBuffer.clear()
+  }
+
+  private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], elem : T ) : Int = {
+    var i = list.indexOf( elem )
+    if( i == -1 ) {
+      list += elem
+      i = list.size - 1
+    }
+    i
   }
 
 }
