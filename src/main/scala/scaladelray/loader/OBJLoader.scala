@@ -23,7 +23,7 @@ import java.io.FileReader
 import scaladelray.texture.TexCoord2D
 import scala.None
 import scala.del.ray.geometry.TriangleMesh
-import scaladelray.material.SingleColorMaterial
+import scaladelray.material.{Material, SingleColorMaterial}
 import scaladelray.Color
 
 class OBJLoader extends JavaTokenParsers {
@@ -72,9 +72,10 @@ class OBJLoader extends JavaTokenParsers {
   private val texCoordsBuffer = mutable.MutableList[TexCoord2D]()
   private val facesBuffer = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
 
-  def load( fileName : String ) : TriangleMesh = {
-    val reader = new FileReader( "test.obj" )
-    val result = parseAll( objFile, reader ).get
+  def load( fileName : String, material : Material ) : TriangleMesh = {
+    val reader = new FileReader( fileName )
+    val parseResult = parseAll( objFile, reader )
+    val result = parseResult.get
 
     vertices.clear()
     normals.clear()
@@ -114,7 +115,7 @@ class OBJLoader extends JavaTokenParsers {
         facesBuffer += f
     }
     constructFromBuffer
-    new TriangleMesh( SingleColorMaterial( Color( 0, 0, 0 ) ), vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray )
+    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray )
 
   }
 
@@ -200,9 +201,8 @@ object OBJLoader extends OBJLoader {
 
   def main( args : Array[String] ) {
     val objLoader = new OBJLoader()
-    val mesh1 = objLoader.load( "test.obj" )
-    val mesh2 = objLoader.load( "test.obj" )
-    println( mesh1 )
+    //val teddy = objLoader.load( "teddy.obj" )
+    //println( teddy )
 
   }
 

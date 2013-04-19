@@ -53,7 +53,7 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
         (normals(face(0)._3.get),normals(face(0)._3.get),normals(face(0)._3.get))
       } else {
         val n = (b-c x a-c).asNormal
-        (n,n,n)
+        (-n,-n,-n)
       }
 
       val (at,bt,ct) = if( face(0)._2.isDefined ) {

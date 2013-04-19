@@ -18,10 +18,11 @@ package scaladelray.camera
 
 import scaladelray.{Color, World, WindowedRayTracer}
 import scaladelray.geometry.{Plane, Node, Geometry}
-import scaladelray.math.{Vector3, Point3, Transform}
-import scaladelray.material.PhongMaterial
+import scaladelray.math.{Transform, Vector3, Point3}
+import scaladelray.material.{LambertMaterial, PhongMaterial}
 import scaladelray.texture.{SingleColorTexture, ChessboardTexture}
 import scaladelray.light.PointLight
+import scaladelray.loader.OBJLoader
 
 
 object LightingExample extends WindowedRayTracer {
@@ -33,10 +34,13 @@ object LightingExample extends WindowedRayTracer {
     //new Plane(
       //material = ReflectiveMaterial( SingleColorTexture( Color( 0, 0.5, 0 ) ), SingleColorTexture( Color( 0, 0.5, 0 ) ), 64, SingleColorTexture( Color( 1, 1, 1 ) ) ) //LambertMaterial( SingleColorTexture( Color( 1, 0, 0 ) ) ),// SingleColorMaterial( Color( 1, 0, 0 ) ),
     new Node(
-                  Transform.translate( 0, -1, 0 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
+                  /*Transform.translate( 0, -1, 0 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
                   new Plane(
                     material = PhongMaterial( ChessboardTexture( 1, 1 ), SingleColorTexture( Color( 1, 1, 1 ) ), 64 ) //LambertMaterial( SingleColorTexture( Color( 0, 1, 0 ) ) ),// SingleColorMaterial( Color( 0, 1, 0 ) ),
-                  )
+                  )*/
+
+                  Transform.translate( 0, 0, -3 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
+                  (new OBJLoader).load( "teddy.obj", LambertMaterial( SingleColorTexture( Color( 1, 1, 1 ) ) ) )
                   //new Sphere(
                   //  material =   LambertMaterial( InterpolatedImageTexture( "erde-low.jpg" ) )
 
