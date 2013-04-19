@@ -23,8 +23,7 @@ import java.io.FileReader
 import scaladelray.texture.TexCoord2D
 import scala.None
 import scala.del.ray.geometry.TriangleMesh
-import scaladelray.material.{Material, SingleColorMaterial}
-import scaladelray.Color
+import scaladelray.material.Material
 
 class OBJLoader extends JavaTokenParsers {
 
@@ -112,52 +111,33 @@ class OBJLoader extends JavaTokenParsers {
   }
 
   private def constructFromBuffer() {
-    var minVertex = Int.MaxValue
-    var minTexCoord = Int.MaxValue
-    var minNormal = Int.MaxValue
+
+    val (minVertex,minTexCoord,minNormal) = facesBuffer.foldLeft( (Int.MaxValue,Int.MaxValue,Int.MaxValue) )( (b,faceData) => faceData.foldLeft( b )( ((mins,vertexData) => {
+      (if( vertexData._1 < mins._1 ) vertexData._1 else mins._1,
+        vertexData._2.fold( mins._2 )( (x) => if(x<mins._2) x else mins._2 ),
+        vertexData._3.fold( mins._3 )( (x) => if(x<mins._3) x else mins._3 ) )
+      }
+    )))
 
     for( face <- facesBuffer ) {
-      for ( vertexData <- face ) {
-        minVertex = if( vertexData._1 < minVertex ) vertexData._1 else minVertex
-        minTexCoord = if ( vertexData._2.isDefined && vertexData._2.get < minTexCoord ) vertexData._2.get else minVertex
-        minNormal = if ( vertexData._3.isDefined && vertexData._3.get < minNormal ) vertexData._3.get else minNormal
-      }
-    }
-
-    val correctedFacesBuffer = for( face <- facesBuffer ) yield {
-      for ( vertexData <- face ) yield {
-        val correctedVertexIndex = vertexData._1 - minVertex
-        val correctedTexCoordIndex = if( vertexData._2.isDefined ) Some( vertexData._2.get - minTexCoord )  else None
-        val correctedNormalIndex = if( vertexData._3.isDefined ) Some( vertexData._3.get - minNormal )  else None
-        (correctedVertexIndex,correctedTexCoordIndex,correctedNormalIndex)
-      }
-    }
-
-    for( face <- correctedFacesBuffer ) {
       if ( face.size != 3 ) throw new UnsupportedOperationException( "Triangulation is not supported yet" )
-      val finalFace = for( faceData <- face ) yield {
-        val vertex = verticesBuffer( faceData._1 )
-        val texCoord = faceData._2 match {
-          case Some( x ) =>
-            Some( texCoordsBuffer( x ) )
-          case None =>
-            None
-        }
-        val normal = faceData._3 match {
-          case Some( x ) =>
-            Some( normalsBuffer( x ) )
-          case None =>
-            None
-        }
+
+      val finalFace = for ( faceData <- face ) yield {
+        val vertex = verticesBuffer( faceData._1 - minVertex )
+
+        val texCoord = faceData._2.fold[Option[TexCoord2D]]( None )( (x:Int) => Some( texCoordsBuffer( x - minTexCoord ) ) )
+        val normal = faceData._3.fold[Option[Normal3]]( None )( (x:Int) => Some( normalsBuffer( x - minNormal ) ) )
 
         var vIndex = indexOfAndMaybeAdd( vertices, vertex )
         val tIndex = if( texCoord.isDefined ) Some( indexOfAndMaybeAdd( texCoords, texCoord.get ) ) else None
         val nIndex = if ( normal.isDefined ) Some( indexOfAndMaybeAdd( normals, normal.get) ) else None
 
         (vIndex,tIndex,nIndex)
+
       }
       faces += finalFace
     }
+
     clearBuffer()
   }
 
@@ -178,6 +158,7 @@ class OBJLoader extends JavaTokenParsers {
     texCoordsBuffer.clear()
     facesBuffer.clear()
   }
+
 
   private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], elem : T ) : Int = {
     var i = list.indexOf( elem )
