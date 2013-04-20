@@ -16,17 +16,10 @@
 
 package scaladelray.geometry
 
-import scaladelray.geometry.{Geometry, Hit}
 import scaladelray.material.Material
+import scaladelray.Constants
 import scaladelray.math._
 import scaladelray.texture.TexCoord2D
-import scaladelray.Constants
-import scaladelray.math.Point3
-import scaladelray.math.Ray
-import scaladelray.texture.TexCoord2D
-import scaladelray.math.Normal3
-import scaladelray.math.Mat3x3
-import scaladelray.geometry.Hit
 
 class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]] ) extends Geometry( material ) {
 
