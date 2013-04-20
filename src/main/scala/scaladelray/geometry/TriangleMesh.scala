@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scala.del.ray.geometry
+package scaladelray.geometry
 
 import scaladelray.geometry.{Geometry, Hit}
 import scaladelray.material.Material

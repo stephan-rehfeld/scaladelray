@@ -19,61 +19,171 @@ package scaladelray.loader
 import scaladelray.math.{Point3, Normal3}
 import collection.mutable
 import util.parsing.combinator.JavaTokenParsers
-import java.io.FileReader
 import scaladelray.texture.TexCoord2D
 import scala.None
-import scala.del.ray.geometry.TriangleMesh
+import scaladelray.geometry.TriangleMesh
 import scaladelray.material.Material
+import java.io.FileReader
 
+/**
+ * This class is a loader for the OBJ File format. It currently loads the vertices, normals, texture coordinates, and
+ * face into a [[scaladelray.geometry.TriangleMesh]]. It assumes that only triangles are defined within the files.
+ * Triangulation is not supported.
+ *
+ * @author Stephan Rehfeld
+ */
 class OBJLoader extends JavaTokenParsers {
 
-  def objFile : Parser[List[Any]] = rep( line )
+  /**
+   * Part of the parser implementation. Defines that an OBJ file consists of lines.
+   *
+   * @return A list that contains all parsed lines.
+   */
+  private def objFile : Parser[List[Any]] = rep( line )
 
-  def line : Parser[Any] = vertex | normal | texCoord | face
+  /**
+   * Part of the parser implementation. Defines that a line is a vertex, normal, texture coordinate, or face.
+   *
+   * @return The parsed line.
+   */
+  private def line : Parser[Any] = vertex | normal | texCoord | face
 
-  def vertex : Parser[Point3] = "v"~floatingPointNumber~floatingPointNumber~floatingPointNumber~opt( floatingPointNumber ) ^^ {
+  /**
+   * Part of the parser implementation. Defines that a vertex starts with a "v" followed by three floating point numbers
+   * and one optional number.
+   *
+   * @return The parsed vertex as [[scaladelray.math.Point3]].
+   */
+  private def vertex : Parser[Point3] = "v"~floatingPointNumber~floatingPointNumber~floatingPointNumber~opt( floatingPointNumber ) ^^ {
     case "v"~x~y~z~w => Point3( x.toDouble, y.toDouble, z.toDouble )
   }
-  def normal : Parser[Normal3] = "vn"~floatingPointNumber~floatingPointNumber~floatingPointNumber ^^ {
+
+  /**
+   * Part of the parser implementation. Defines that a normal starts with a "vn" followed by three floating point
+   * numbers.
+   *
+   * @return The parsed normal as [[scaladelray.math.Normal3]].
+   */
+  private def normal : Parser[Normal3] = "vn"~floatingPointNumber~floatingPointNumber~floatingPointNumber ^^ {
     case "vn"~x~y~z => Normal3( x.toDouble, y.toDouble, z.toDouble )
   }
-  def texCoord : Parser[TexCoord2D] = "vt"~floatingPointNumber~opt( floatingPointNumber )~opt( floatingPointNumber ) ^^ {
+
+  /**
+   * Part of the parser implementation. Defines that a texture coordinate start with a "vt" followed by at least one
+   * and up to three floating point numbers.
+   *
+   * 3D textures are currently not supported, so the third number is ignored.
+   *
+   * @return The parsed texture coordinate as [[scaladelray.math.TexCoord2D]].
+   */
+  private def texCoord : Parser[TexCoord2D] = "vt"~floatingPointNumber~opt( floatingPointNumber )~opt( floatingPointNumber ) ^^ {
     case "vt"~u~v~w => TexCoord2D( u.toDouble, v.get.toDouble )
   }
 
+  /**
+   * Part of the parser implementation. Defines that a face consists of arbitrary number of indices where an index
+   * word can consists of a combination of vertex index, normal index, and texture coordinate index according to
+   * the OBJ file specification.
+   *
+   * @return A tuple that contains the parsed indices.
+   */
   // Order matters
-  def face : Parser[List[(Int,Option[Int],Option[Int])]] = "f"~rep( vertexAndNormal | vertexTexCoordNormal | vertexAndTexCoord | vertexOnly ) ^^ {
+  private def face : Parser[List[(Int,Option[Int],Option[Int])]] = "f"~rep( vertexAndNormal | vertexTexCoordNormal | vertexAndTexCoord | vertexOnly ) ^^ {
     case "f"~x => x
   }
 
-  def vertexOnly : Parser[(Int,Option[Int],Option[Int])] = wholeNumber ^^ {
+  /**
+   * Part of the parser implementation. Defines the parser for an index word that only contains the vertex index.
+   *
+   * @return A tuple that contains the index of the vertex and [[scala.None]] for all other indices.
+   */
+  private def vertexOnly : Parser[(Int,Option[Int],Option[Int])] = wholeNumber ^^ {
     case v => (v.toInt,None,None)
   }
-  def vertexAndTexCoord : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"/"~wholeNumber ^^ {
+
+  /**
+   * Part of the parser implementation. Defines the parser for an index word that contains the vertex index and the
+   * texture coordinate index.
+   *
+   * @return A tuple that contains the index of the vertex and the texture coordinate but [[scala.None]] for the normal.
+   */
+  private def vertexAndTexCoord : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"/"~wholeNumber ^^ {
     case v~"/"~vt => (v.toInt,Some(vt.toInt),None)
   }
 
-  def vertexAndNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"//"~wholeNumber ^^ {
+  /**
+   * Part of the parser implementation. Defines the parser for an index word that contains the vertex index and the
+   * normal index.
+   *
+   * @return A tuple that contains the index of the vertex and the normal but [[scala.None]] for the texture coordinate.
+   */
+  private def vertexAndNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"//"~wholeNumber ^^ {
     case v~"//"~vn => (v.toInt,None,Some(vn.toInt))
   }
 
-  def vertexTexCoordNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"/"~wholeNumber~"/"~wholeNumber ^^ {
+  /**
+   * Part of the parser implementation. Defines the parser for an index word that contains the vertex index, the texture
+   * coordinate index, and the normal index.
+   *
+   * @return A tuple that contains all indices.
+   */
+  private def vertexTexCoordNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"/"~wholeNumber~"/"~wholeNumber ^^ {
     case v~"/"~vt~"/"~vn => (v.toInt,Some(vt.toInt),Some(vn.toInt))
   }
 
+  /**
+   * A list where all vertices for the final triangle mesh are collected.
+   */
   private val vertices = mutable.MutableList[Point3]()
+
+  /**
+   * A list where all normal for the final triangle mesh are collected.
+   */
   private val normals = mutable.MutableList[Normal3]()
+
+  /**
+   * A list where all texture coordinates for the final triangle mesh are collected.
+   */
   private val texCoords = mutable.MutableList[TexCoord2D]()
   private val faces = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
 
+  /**
+   * A buffer for the vertices.
+   */
   private val verticesBuffer = mutable.MutableList[Point3]()
+
+  /**
+   * A buffer for the normals.
+   */
   private val normalsBuffer = mutable.MutableList[Normal3]()
+
+  /**
+   * A buffer for the texture coordinates.
+   */
   private val texCoordsBuffer = mutable.MutableList[TexCoord2D]()
+
+  /**
+   * A buffer for the faces.
+   */
   private val facesBuffer = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
 
+  /**
+   * A flag variable used due the parsing process the construct the geometry if a new block of vertices, texture
+   * coordinates or normals are started after a face.
+   */
   private var lastWasFace = true
 
+  /**
+   * This method loads a model from a OBJ file and returns the loaded geometry as triangle mesh.
+   *
+   * @param fileName The name of the file that contains the model.
+   * @param material The material that should be applied to the loaded model.
+   * @return The loaded model as triangle mesh.
+   */
   def load( fileName : String, material : Material ) : TriangleMesh = {
+
+    assert( fileName != null, "The parameter 'fileName' must not be 'null'!" )
+    assert( material != null, "The parameter 'material' must not be 'null'!" )
 
     reset()
 
@@ -102,6 +212,14 @@ class OBJLoader extends JavaTokenParsers {
 
   }
 
+  /**
+   * Internal helper function to remove some redundant code. If the last line was a face, the geometry is constructed
+   * from the buffer. It also adds the element of the line to the list.
+   *
+   * @param list The buffer list.
+   * @param elem The element to add-
+   * @tparam T The type of the element.
+   */
   private def processData[T]( list : mutable.MutableList[T], elem : T ) {
     if( lastWasFace ) {
       constructFromBuffer()
@@ -110,6 +228,10 @@ class OBJLoader extends JavaTokenParsers {
     list += elem
   }
 
+  /**
+   * The method constructs the already buffered geometry and writes the vertices, normals, and texture coordinates into
+   * the final lists.
+   */
   private def constructFromBuffer() {
 
     val (minVertex,minTexCoord,minNormal) = facesBuffer.foldLeft( (Int.MaxValue,Int.MaxValue,Int.MaxValue) )( (b,faceData) => faceData.foldLeft( b )( ((mins,vertexData) => {
@@ -141,6 +263,9 @@ class OBJLoader extends JavaTokenParsers {
     clearBuffer()
   }
 
+  /**
+   * This method resets the parser.
+   */
   private def reset() {
     vertices.clear()
     normals.clear()
@@ -152,6 +277,9 @@ class OBJLoader extends JavaTokenParsers {
     lastWasFace = false
   }
 
+  /**
+   * This method clears all buffer.
+   */
   private def clearBuffer() {
     verticesBuffer.clear()
     normalsBuffer.clear()
@@ -159,6 +287,15 @@ class OBJLoader extends JavaTokenParsers {
     facesBuffer.clear()
   }
 
+  /**
+   * This method returns the index of the element in the list. If the element is not part of the list, it's added and
+   * the index is returned.
+   *
+   * @param list The list from which the index should be retrieved.
+   * @param elem The element.
+   * @tparam T The data type of the element.
+   * @return The index of the element within the list.
+   */
   private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], elem : T ) : Int = {
     var i = list.indexOf( elem )
     if( i == -1 ) {

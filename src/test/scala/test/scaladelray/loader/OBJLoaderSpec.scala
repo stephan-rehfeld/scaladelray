@@ -25,6 +25,8 @@ class OBJLoaderSpec extends FunSpec {
     it( "should load a file that contains a cube with all vertices and texture coordinates into a triangle mesh" )(pending)
     it( "should load a file that contains a cube with all vertices and normals into a triangle mesh" )(pending)
 
+    it( "should load a file that contains a cube with where more than one block of faces exist" )(pending)
+
   }
 
 }
