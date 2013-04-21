@@ -176,7 +176,15 @@ class Vector3Spec extends FunSpec {
       assert( vector.z == 5 )
     }
 
-    it( "should not be altered after divided with a scalar")(pending)
+    it( "should not be altered after divided with a scalar") {
+      val vector = Vector3( 2, 3, 5 )
+
+      vector / 10
+
+      assert( vector.x == 2 )
+      assert( vector.y == 3 )
+      assert( vector.z == 5 )
+    }
 
     it( "should not be altered after calculating the cross product with another vector") {
       val vector1 = Vector3( 2, 3, 5 )
