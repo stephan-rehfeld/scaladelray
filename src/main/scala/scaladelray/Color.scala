@@ -16,13 +16,49 @@
 
 package scaladelray
 
+/**
+ * This class represents a color in RGB color space. The channels normally have values between 0 and 1. Values smaller
+ * than 0 are not allowed. Values larger than 0 are allowed to support HDRR effect in future. An object of this class
+ * is immutable.
+ *
+ * @author Stephan Rehfeld
+ *
+ * @param r The red color channel. Must be at least 0.
+ * @param g The green color channel. Must be at least 0.
+ * @param b The blue color channel. Must be at least 0.
+ */
 case class Color( r : Double, g : Double, b : Double ) {
   require( r >= 0.0, "The parameter 'r' must be at least 0" )
   require( g >= 0.0, "The parameter 'g' must be at least 0" )
   require( b >= 0.0, "The parameter 'b' must be at least 0" )
 
+  /**
+   * The color converted to an ARGB integer. Values larger than 0 are just capped.
+   *
+   */
   val rgbInteger = 0xff << 24 | ((scala.math.min(r,1)*255).asInstanceOf[Int] & 0xff) << 16 | ((scala.math.min(g,1)*255).asInstanceOf[Int] & 0xff) << 8 | ((scala.math.min(b,1)*255).asInstanceOf[Int] & 0xff)
+
+  /**
+   * This method multiplies each channel of this color with a scalar and returns the result as new color.
+   *
+   * @param f The factor for the multiplication.
+   * @return The result of the multiplication.
+   */
   def *( f : Double ) = Color( r*f, g*f, b*f )
+
+  /**
+   * This method multiplies each channel of this color with the corresponding channel of another color.
+   *
+   * @param c The other color.
+   * @return The result of the multiplication.
+   */
   def *( c : Color ) = Color( r*c.r, g*c.g, b*c.b )
+
+  /**
+   * This method adds each channel of this color with the corresponding channel of another color.
+   *
+   * @param c The other color.
+   * @return The result of the addition.
+   */
   def +( c : Color ) = Color( r+c.r, g+c.g, b+c.b )
 }
