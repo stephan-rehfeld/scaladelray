@@ -74,7 +74,11 @@ class Vector3Spec extends FunSpec {
       assert( vector * 10 == Vector3( 2 *10, 3 * 10, 5 * 10 ) )
     }
 
-    it( "should calculate to correct fraction of a vector and a scalar" )(pending)
+    it( "should calculate to correct fraction of a vector and a scalar" ) {
+      val vector = Vector3( 2, 3, 5 )
+
+      assert( vector / 10 == Vector3( 2.0 / 10.0, 3.0 / 10.0, 5.0 / 10.0 ) )
+    }
 
     it( "should calculate to correct cross product of two vectors" ) {
       val vector1 = Vector3( 2, 3, 5 )
