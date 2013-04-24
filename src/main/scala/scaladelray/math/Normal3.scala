@@ -29,7 +29,7 @@ package scaladelray.math
 case class Normal3( x : Double, y : Double, z : Double ) {
 
   /**
-   * This method multiplies the normal with a scalar and returns the result as a new [[Normal3]]
+   * This method multiplies the normal with a scalar and returns the result as a new [[scaladelray.math.Normal3]]
    * object.
    *
    * @param v The factor for the multiplication.
@@ -38,7 +38,7 @@ case class Normal3( x : Double, y : Double, z : Double ) {
   def *( v : Double ) = Normal3( x * v, y * v, z * v )
 
   /**
-   * This method multiplies two normals and returns the result as a new [[Normal3]]
+   * This method multiplies two normals and returns the result as a new [[scaladelray.math.Normal3]]
    * object.
    *
    * @param n The normal that should be added to this normal.
@@ -56,7 +56,7 @@ case class Normal3( x : Double, y : Double, z : Double ) {
   def dot( v : Vector3 ) : Double = x * v.x + y * v.y + z * v.z
 
   /**
-   * This method converts the normal to a [[Vector3]]. The vector has the same values for x, y, and
+   * This method converts the normal to a [[scaladelray.math.Vector3]]. The vector has the same values for x, y, and
    * z.
    *
    * @return A vector with the same x, y, and z values as this normal.

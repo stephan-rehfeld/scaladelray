@@ -29,10 +29,10 @@ package scaladelray.math
 case class Point3( x : Double, y : Double, z : Double ) {
 
   /**
-   * This method calculates the direction between two points and returns the result as [[Vector3]].
+   * This method calculates the direction between two points and returns the result as [[scaladelray.math.Vector3]].
    *
    * @param p The other point.
-   * @return The direction between both points as [[Vector3]].
+   * @return The direction between both points as [[scaladelray.math.Vector3]].
    */
   def -( p : Point3 ) = Vector3( x - p.x, y - p.y, z - p.z )
 
@@ -53,7 +53,7 @@ case class Point3( x : Double, y : Double, z : Double ) {
   def +( v : Vector3 ) = Point3( x + v.x, y + v.y, z + v.z )
 
   /**
-   * This method converts the point to a [[Vector3]]. The vector has the same values for x, y, and
+   * This method converts the point to a [[scaladelray.math.Vector3]]. The vector has the same values for x, y, an
    * z.
    *
    * @return A vector with the same x, y, and z values as this point.
@@ -61,7 +61,7 @@ case class Point3( x : Double, y : Double, z : Double ) {
   def asVector = Vector3( x, y, z )
 
   /**
-   * This method converts the point to a [[Normal3]]. The normal has the same values for x, y, and
+   * This method converts the point to a [[scaladelray.math.Normal3]]. The normal has the same values for x, y, and
    * z.
    *
    * @return A normal with the same x, y, and z values as this point.
