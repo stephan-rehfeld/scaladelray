@@ -21,7 +21,7 @@ import scaladelray.math.{Vector3, Mat3x3, Point3}
 
 class Mat3x3Spec  extends FunSpec {
 
-  describe( "a Mat3x3" ) {
+  describe( "A Mat3x3" ) {
     it( "should take all nine elements as constructor parameter and provide them as attributes" ) {
       val m = Mat3x3(  2,  3,  5,
                        7, 11, 13,
@@ -146,7 +146,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( m.m33 == 23 )
     }
 
-    it( "should not be altered after multiplying with a point" ) {
+    it( "should not be altered after multiplied with a point" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
