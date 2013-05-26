@@ -140,14 +140,197 @@ class Mat4x4Spec extends FunSpec {
       assert( m1.transposed == m2 )
     }
 
-    it( "should not be altered after multiplied with a vector" )(pending)
-    it( "should not be altered after multiplied with a point" )(pending)
-    it( "should not be altered after multiplied with a Mat4x4" )(pending)
-    it( "should not be altered after creating the transposed matrix" )(pending)
+    it( "should not be altered after multiplied with a vector" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
 
-    it( "should not alter the other vector while multiplying" )(pending)
-    it( "should not alter the other point while multiplying" )(pending)
-    it( "should not alter the other matrix while multiplying" )(pending)
+      val v = Vector3( 59, 61, 67 )
+
+      val r = m * v
+
+      assert( m.m11 == 2 )
+      assert( m.m12 == 3 )
+      assert( m.m13 == 5 )
+      assert( m.m14 == 7 )
+
+      assert( m.m21 == 11 )
+      assert( m.m22 == 13 )
+      assert( m.m23 == 17 )
+      assert( m.m24 == 19 )
+
+      assert( m.m31 == 23 )
+      assert( m.m32 == 29 )
+      assert( m.m33 == 31 )
+      assert( m.m34 == 37 )
+
+      assert( m.m41 == 41 )
+      assert( m.m42 == 43 )
+      assert( m.m43 == 47 )
+      assert( m.m44 == 53 )
+    }
+
+
+    it( "should not be altered after multiplied with a point" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val p = Point3( 59, 61, 67 )
+
+      val r = m * p
+
+      assert( m.m11 == 2 )
+      assert( m.m12 == 3 )
+      assert( m.m13 == 5 )
+      assert( m.m14 == 7 )
+
+      assert( m.m21 == 11 )
+      assert( m.m22 == 13 )
+      assert( m.m23 == 17 )
+      assert( m.m24 == 19 )
+
+      assert( m.m31 == 23 )
+      assert( m.m32 == 29 )
+      assert( m.m33 == 31 )
+      assert( m.m34 == 37 )
+
+      assert( m.m41 == 41 )
+      assert( m.m42 == 43 )
+      assert( m.m43 == 47 )
+      assert( m.m44 == 53 )
+    }
+
+    it( "should not be altered after multiplied with a Mat4x4" ) {
+      val m1 = Mat4x4( 2,  3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val m2 = Mat4x4(  59,  61,  67,  71,
+        73,  79,  83,  89,
+        97, 101, 103, 107,
+        109, 113, 127, 131 )
+
+      val r = m1 * m2
+
+      assert( m1.m11 == 2 )
+      assert( m1.m12 == 3 )
+      assert( m1.m13 == 5 )
+      assert( m1.m14 == 7 )
+
+      assert( m1.m21 == 11 )
+      assert( m1.m22 == 13 )
+      assert( m1.m23 == 17 )
+      assert( m1.m24 == 19 )
+
+      assert( m1.m31 == 23 )
+      assert( m1.m32 == 29 )
+      assert( m1.m33 == 31 )
+      assert( m1.m34 == 37 )
+
+      assert( m1.m41 == 41 )
+      assert( m1.m42 == 43 )
+      assert( m1.m43 == 47 )
+      assert( m1.m44 == 53 )
+
+    }
+
+    it( "should not be altered after creating the transposed matrix" ) {
+      val m = Mat4x4( 2,  3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      m.transposed
+
+      assert( m.m11 == 2 )
+      assert( m.m12 == 3 )
+      assert( m.m13 == 5 )
+      assert( m.m14 == 7 )
+
+      assert( m.m21 == 11 )
+      assert( m.m22 == 13 )
+      assert( m.m23 == 17 )
+      assert( m.m24 == 19 )
+
+      assert( m.m31 == 23 )
+      assert( m.m32 == 29 )
+      assert( m.m33 == 31 )
+      assert( m.m34 == 37 )
+
+      assert( m.m41 == 41 )
+      assert( m.m42 == 43 )
+      assert( m.m43 == 47 )
+      assert( m.m44 == 53 )
+    }
+
+    it( "should not alter the other vector while multiplying" )  {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val v = Vector3( 59, 61, 67 )
+
+      val r = m * v
+
+      assert( v.x == 59 )
+      assert( v.y == 61 )
+      assert( v.z == 67 )
+    }
+
+    it( "should not alter the other point while multiplying" )  {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val p = Point3( 59, 61, 67 )
+
+      val r = m * p
+
+      assert( p.x == 59 )
+      assert( p.y == 61 )
+      assert( p.z == 67 )
+    }
+
+    it( "should not alter the other matrix while multiplying" )  {
+      val m1 = Mat4x4( 2,  3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val m2 = Mat4x4(  59,  61,  67,  71,
+        73,  79,  83,  89,
+        97, 101, 103, 107,
+        109, 113, 127, 131 )
+
+      val r = m1 * m2
+
+      assert( m2.m11 == 59 )
+      assert( m2.m12 == 61 )
+      assert( m2.m13 == 67 )
+      assert( m2.m14 == 71 )
+
+      assert( m2.m21 == 73 )
+      assert( m2.m22 == 79 )
+      assert( m2.m23 == 83 )
+      assert( m2.m24 == 89 )
+
+      assert( m2.m31 == 97 )
+      assert( m2.m32 == 101 )
+      assert( m2.m33 == 103 )
+      assert( m2.m34 == 107 )
+
+      assert( m2.m41 == 109 )
+      assert( m2.m42 == 113 )
+      assert( m2.m43 == 127 )
+      assert( m2.m44 == 131 )
+
+    }
 
   }
 }
