@@ -282,8 +282,6 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( v5 :: v6 :: v2 :: Nil ) )
       assert( triangleSets.contains( v2 :: v1 :: v5 :: Nil ) )
 
-      println( "Amount of faces " + mesh.faces.size )
-
       assert( mesh.vertices.size == 8 )
       assert( mesh.faces.size == 12 )
     }
