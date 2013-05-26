@@ -17,15 +17,128 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
+import scaladelray.math.{Point3, Vector3, Mat4x4}
 
 class Mat4x4Spec extends FunSpec {
   describe( "A Mat4x4" ) {
-    it( "should take all 16 elements as constructor parameter and provide them as attributes" )( pending )
-    it( "should be comparable")(pending)
-    it( "should have a multiply operator for a vector, assuming that a vector is a 4 element vector with value 0 for w" )(pending)
-    it( "should have a multiply operator for a point, assuming that a point is a 4 element vector with value 1 for w" )(pending)
-    it( "should have a multiply operator for another Mat4x4" )(pending)
-    it( "should create the correct transposed matrix")(pending)
+    it( "should take all 16 elements as constructor parameter and provide them as attributes" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+                      11, 13, 17, 19,
+                      23, 29, 31, 37,
+                      41, 43, 47, 53 )
+
+      assert( m.m11 == 2 )
+      assert( m.m12 == 3 )
+      assert( m.m13 == 5 )
+      assert( m.m14 == 7 )
+
+      assert( m.m21 == 11 )
+      assert( m.m22 == 13 )
+      assert( m.m23 == 17 )
+      assert( m.m24 == 19 )
+
+      assert( m.m31 == 23 )
+      assert( m.m32 == 29 )
+      assert( m.m33 == 31 )
+      assert( m.m34 == 37 )
+
+      assert( m.m41 == 41 )
+      assert( m.m42 == 43 )
+      assert( m.m43 == 47 )
+      assert( m.m44 == 53 )
+    }
+    it( "should be comparable") {
+      val m1 = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val m2 = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      assert( m1 == m2 )
+    }
+
+    it( "should have a multiply operator for a vector, assuming that a vector is a 4 element vector with value 0 for w" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+                      11, 13, 17, 19,
+                      23, 29, 31, 37,
+                      41, 43, 47, 53 )
+
+      val v = Vector3( 59, 61, 67 )
+
+      val r = m * v
+
+      assert( r.x == ( 2*59 +  3*61 +  5*67 +  7*0))
+      assert( r.y == (11*59 + 13*61 + 17*67 + 19*0))
+      assert( r.z == (23*59 + 29*61 + 31*67 + 37*0))
+    }
+
+    it( "should have a multiply operator for a point, assuming that a point is a 4 element vector with value 1 for w" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val p = Point3( 59, 61, 67 )
+
+      val r = m * p
+
+      assert( r.x == ( 2*59 +  3*61 +  5*67 +  7*1))
+      assert( r.y == (11*59 + 13*61 + 17*67 + 19*1))
+      assert( r.z == (23*59 + 29*61 + 31*67 + 37*1))
+    }
+
+    it( "should have a multiply operator for another Mat4x4" ) {
+      val m1 = Mat4x4( 2,  3,  5,  7,
+                      11, 13, 17, 19,
+                      23, 29, 31, 37,
+                      41, 43, 47, 53 )
+
+      val m2 = Mat4x4(  59,  61,  67,  71,
+                        73,  79,  83,  89,
+                        97, 101, 103, 107,
+                       109, 113, 127, 131 )
+
+      val r = m1 * m2
+
+      assert( r.m11 == 2*59 + 3 *73 + 5*97 + 7*109 )
+      assert( r.m12 == 2*61 + 3 *79 + 5*101 + 7*113 )
+      assert( r.m13 == 2*67 + 3 *83 + 5*103 + 7*127 )
+      assert( r.m14 == 2*71 + 3 *89 + 5*107 + 7*131 )
+
+      assert( r.m21 == 11*59 + 13*73 + 17*97  + 19*109 )
+      assert( r.m22 == 11*61 + 13*79 + 17*101 + 19*113 )
+      assert( r.m23 == 11*67 + 13*83 + 17*103 + 19*127 )
+      assert( r.m24 == 11*71 + 13*89 + 17*107 + 19*131 )
+
+      assert( r.m31 == 23*59 + 29*73 + 31*97  + 37*109 )
+      assert( r.m32 == 23*61 + 29*79 + 31*101 + 37*113 )
+      assert( r.m33 == 23*67 + 29*83 + 31*103 + 37*127 )
+      assert( r.m34 == 23*71 + 29*89 + 31*107 + 37*131 )
+
+      assert( r.m41 == 41*59 + 43*73 + 47*97  + 53*109 )
+      assert( r.m42 == 41*61 + 43*79 + 47*101 + 53*113 )
+      assert( r.m43 == 41*67 + 43*83 + 47*103 + 53*127 )
+      assert( r.m44 == 41*71 + 43*89 + 47*107 + 53*131 )
+
+    }
+
+    it( "should create the correct transposed matrix") {
+      val m1 = Mat4x4( 2,  3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val m2 = Mat4x4( 2, 11, 23, 41,
+                       3, 13, 29, 43,
+                       5, 17, 31, 47,
+                       7, 19, 37, 53 )
+
+      assert( m1.transposed == m2 )
+    }
 
     it( "should not be altered after multiplied with a vector" )(pending)
     it( "should not be altered after multiplied with a point" )(pending)
