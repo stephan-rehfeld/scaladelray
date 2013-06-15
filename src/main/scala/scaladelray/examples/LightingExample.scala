@@ -40,7 +40,7 @@ object LightingExample extends WindowedRayTracer {
                   )*/
 
                   Transform.translate( 0, 0, -3 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
-                  (new OBJLoader).load( "cube-v.obj", LambertMaterial( SingleColorTexture( Color( 1, 1, 1 ) ) ) )
+                  (new OBJLoader).load( "teddy.obj", LambertMaterial( SingleColorTexture( Color( 1, 1, 1 ) ) ) )
                   //new Sphere(
                   //  material =   LambertMaterial( InterpolatedImageTexture( "erde-low.jpg" ) )
 

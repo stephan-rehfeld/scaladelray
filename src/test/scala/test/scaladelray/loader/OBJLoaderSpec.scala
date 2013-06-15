@@ -286,6 +286,15 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.faces.size == 12 )
     }
 
+    it( "should apply the passed material to the loaded object") {
+      val objLoader = new OBJLoader()
+      val mat = SingleColorMaterial( Color( 0, 0, 0 ) )
+      val mesh = objLoader.load( "cube-v-blocks-weird-indices.obj", SingleColorMaterial( Color( 0, 0, 0 ) ) )
+
+
+      assert( mesh.material == mat )
+    }
+
   }
 
 }
