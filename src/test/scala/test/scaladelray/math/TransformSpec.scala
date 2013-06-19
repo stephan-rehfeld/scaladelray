@@ -17,15 +17,96 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
+import scaladelray.math.{Mat4x4, Transform}
 
 class TransformSpec extends FunSpec {
 
   describe( "The Transform companion object" ) {
-    it( "should have a function to create a translate transformation for a given x, y, and z value (includes inverse matrix)" )( pending )
-    it( "should have a function to create a scale transformation for a given x, y, and z value (includes inverse matrix)" )( pending )
-    it( "should have a function to create a rotation around the x axis for a given angle (includes inverse matrix)" )( pending )
-    it( "should have a function to create a rotation around the y axis for a given angle (includes inverse matrix)" )( pending )
-    it( "should have a function to create a rotation around the z axis for a given angle (includes inverse matrix)" )( pending )
+    it( "should have a function to create a translate transformation for a given x, y, and z value (includes inverse matrix)" ) {
+      val t = Transform.translate( 2, 3, 5 )
+
+      val m = Mat4x4( 1.0, 0.0, 0.0, 2.0,
+                      0.0, 1.0, 0.0, 3.0,
+                      0.0, 0.0, 1.0, 5.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      val i = Mat4x4( 1.0, 0.0, 0.0, -2.0,
+                      0.0, 1.0, 0.0, -3.0,
+                      0.0, 0.0, 1.0, -5.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      assert( t.m == m )
+      assert( t.i == i )
+    }
+
+    it( "should have a function to create a scale transformation for a given x, y, and z value (includes inverse matrix)" ) {
+      val t = Transform.scale( 2, 3, 5 )
+
+      val m = Mat4x4( 2.0, 0.0, 0.0, 0.0,
+                      0.0, 3.0, 0.0, 0.0,
+                      0.0, 0.0, 5.0, 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      val i = Mat4x4( 1.0/2.0, 0.0, 0.0, 0.0,
+                      0.0, 1.0/3.0, 0.0, 0.0,
+                      0.0, 0.0, 1.0/5.0, 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      assert( t.m == m )
+      assert( t.i == i )
+    }
+
+
+    it( "should have a function to create a rotation around the x axis for a given angle (includes inverse matrix)" ) {
+      val t = Transform.rotateX( 2 )
+
+      val m = Mat4x4( 1.0, 0.0, 0.0, 0.0,
+                      0.0, math.cos( 2 ), -math.sin( 2 ), 0.0,
+                      0.0, math.sin( 2 ), math.cos( 2 ), 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      val i = Mat4x4( 1.0, 0.0, 0.0, 0.0,
+                      0.0, math.cos( 2 ), math.sin( 2 ), 0.0,
+                      0.0, -math.sin( 2 ), math.cos( 2 ), 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      assert( t.m == m )
+      assert( t.i == i )
+    }
+
+    it( "should have a function to create a rotation around the y axis for a given angle (includes inverse matrix)" ) {
+      val t = Transform.rotateY( 2 )
+
+      val m = Mat4x4( math.cos( 2 ), 0.0, math.sin( 2 ), 0.0,
+                      0.0, 1.0, 0.0, 0.0,
+                      -math.sin( 2 ), 0.0, math.cos( 2 ), 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      val i = Mat4x4( math.cos( 2 ), 0.0, -math.sin( 2 ), 0.0,
+                      0.0, 1.0, 0.0, 0.0,
+                      math.sin( 2 ), 0.0, math.cos( 2 ), 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      assert( t.m == m )
+      assert( t.i == i )
+    }
+
+    it( "should have a function to create a rotation around the z axis for a given angle (includes inverse matrix)" ) {
+      val t = Transform.rotateZ( 2 )
+
+      val m = Mat4x4( math.cos( 2 ), -math.sin( 2 ), 0.0, 0.0,
+                      math.sin( 2 ), math.cos( 2 ), 0.0, 0.0,
+                      0.0, 0.0, 1.0, 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      val i = Mat4x4( math.cos( 2 ), math.sin( 2 ), 0.0, 0.0,
+                      -math.sin( 2 ), math.cos( 2 ), 0.0, 0.0,
+                      0.0, 0.0, 1.0, 0.0,
+                      0.0, 0.0, 0.0, 1.0 )
+
+      assert( t.m == m )
+      assert( t.i == i )
+    }
   }
 
   describe( "A Transform" ) {
