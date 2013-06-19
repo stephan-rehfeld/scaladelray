@@ -20,12 +20,28 @@ import camera.Camera
 import swing.{Component, MainFrame, SimpleSwingApplication}
 import java.awt.{Graphics2D, Dimension}
 import java.awt.image.BufferedImage
+import akka.actor.{Props, Actor, ActorSystem}
+import scaladelray.math.Ray
 
+case class Render( ray : Ray )
+
+class RenderingActor( world : World ) extends Actor {
+
+  println( "Rendering Actor Started" )
+  def receive = {
+    case msg : Render =>
+      sender ! Tracer.standardTracer( msg.ray, world, 9 ).rgbInteger
+  }
+
+}
 
 abstract class WindowedRayTracer extends SimpleSwingApplication {
 
+  private val actorSystem = ActorSystem("Rendering")
   def world : World
   def camera : ((Int,Int) => Camera)
+
+  val actors = for( i <- 1 to 8 ) yield actorSystem.actorOf( Props( new RenderingActor(( world ))) )
 
   def top = new MainFrame {
 
@@ -39,13 +55,17 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
         val raster = image.getRaster
         val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
         val myWorld = world
+        val begin = System.currentTimeMillis()
+
         for( x <- 0 until this.size.getWidth.asInstanceOf[Int] )
           for( y <- 0 until this.size.getHeight.asInstanceOf[Int] ) {
             val ray = cam( x, y )
-            raster.setDataElements(x, this.size.getHeight.asInstanceOf[Int]-1-y, model.getDataElements((Tracer.standardTracer( ray, myWorld, 9 ).rgbInteger), null))
-
+            val color = Tracer.standardTracer( ray, myWorld, 9 ).rgbInteger
+            raster.setDataElements(x, this.size.getHeight.asInstanceOf[Int]-1-y, model.getDataElements(color, null))
 
           }
+        val end = System.currentTimeMillis()
+        println( "Rendering took : " + ((end-begin).asInstanceOf[Double] / 1000.0) + " seconds.")
         //raster.setDataElements(x, y, model.getDataElements((if (x == y) java.awt.Color.RED.getRGB else java.awt.Color.BLACK.getRGB), null))
         g.drawImage(image, 0, 0, null)
       }
