@@ -46,6 +46,16 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
     new Transform( m * t.m, t.i * i )
   }
 
+
+  override def equals( obj: Any ) =
+    obj match {
+      case t : Transform =>
+        this.m == t.m && this.i == t.i
+      case _ =>
+        false
+    }
+
+
   def *( r : Ray ) = Ray( i * r.o, i * r.d )
   def *( n : Normal3 ) = (i.transposed * n.asVector).normalized.asNormal
 

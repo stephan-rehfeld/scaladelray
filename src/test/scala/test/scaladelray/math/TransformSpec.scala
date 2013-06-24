@@ -110,11 +110,28 @@ class TransformSpec extends FunSpec {
   }
 
   describe( "A Transform" ) {
-    it( "should have a function to append a translate transformation to an existing transformation for a given x, y, and z value (includes inverse matrix)" )( pending )
-    it( "should have a function to append a scale transformation to an existing transformation for a given x, y, and z value (includes inverse matrix)" )( pending )
-    it( "should have a function to append a rotation around the x axis to an existing transformation for a given angle (includes inverse matrix)" )( pending )
-    it( "should have a function to append a rotation around the y axis to an existing transformation for a given angle (includes inverse matrix)" )( pending )
-    it( "should have a function to append a rotation around the z axis to an existing transformation for a given angle (includes inverse matrix)" )( pending )
+    it( "should be comparable" ) {
+      assert( Transform.translate( 2, 3, 5 ) ==  Transform.translate( 2, 3, 5 ) )
+    }
+
+    it( "should have a function to append a translate transformation to an existing transformation for a given x, y, and z value (includes inverse matrix)" ) {
+      assert( Transform.translate( 2, 3, 5 ).translate( 7, 11, 13 ) == Transform.translate( 2 + 7, 3 + 11, 5 + 13 ) )
+    }
+
+    it( "should have a function to append a scale transformation to an existing transformation for a given x, y, and z value (includes inverse matrix)" ) {
+      assert( Transform.scale( 2, 3, 5 ).scale( 7, 11, 13 ) == Transform.scale( 2 * 7, 3 * 11, 5 * 13 ) )
+    }
+
+    it( "should have a function to append a rotation around the x axis to an existing transformation for a given angle (includes inverse matrix)" ) {
+      assert( Transform.rotateX( 2 ).rotateX( 3 ) == Transform.rotateX( 5 ) )
+    }
+
+    it( "should have a function to append a rotation around the y axis to an existing transformation for a given angle (includes inverse matrix)" ) {
+      assert( Transform.rotateY( 2 ).rotateY( 3 ) == Transform.rotateY( 5 ) )
+    }
+    it( "should have a function to append a rotation around the z axis to an existing transformation for a given angle (includes inverse matrix)" ) {
+      assert( Transform.rotateZ( 2 ).rotateZ( 3 ) == Transform.rotateZ( 5 ) )
+    }
   }
 
 }
