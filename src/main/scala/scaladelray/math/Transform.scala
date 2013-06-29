@@ -16,15 +16,44 @@
 
 package scaladelray.math
 
-
+/**
+ * This class represents a transform that is used by [[scaladelray.geometry.Node]] to transform the geometries within
+ * the scene graph node. A new Transform object is not directly created by calling a constructor, but by using methods
+ * of the companion object.
+ *
+ * The Transformation keeps track of the transformation matrix and the inverse matrix of it. New transformations are
+ * appended by calling the transformation methods of this object. The transformation is appended on the right side.
+ *
+ * A transformation object is immutable.
+ *
+ * @author Stephan Rehfeld
+ * @param m The transformation matrix of this transformation.
+ * @param i The inverse transformation matrix of this transformation.
+ */
 class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
 
+  /**
+   * This method appends a translation by the given x, y, and z values to the current transformation and returns
+   * a new Transformation object.
+   *
+   * @param x The x value for the translation.
+   * @param y The y value for the translation.
+   * @param z The z value for the translation.
+   * @return A new Transformation object with the appended translation.
+   */
   def translate( x : Double, y : Double, z : Double ) : Transform = {
     val t = Transform.translate( x, y, z )
     new Transform( m * t.m, t.i * i )
   }
 
-  def translate( p : Point3 ) : Transform = this.translate( p.x, p.y, p.z )
+  /**
+   * This method appends a translation by a given direction to the current transformation and returns
+   * a new Transformation object.
+   *
+   * @param v The direction of the translation.
+   * @return A new Transformation object with the appended translation.
+   */
+  def translate( v : Vector3 ) : Transform = this.translate( v.x, v.y, v.z )
 
   def scale( x : Double, y : Double, z : Double ) : Transform = {
     val t = Transform.scale( x, y, z )
