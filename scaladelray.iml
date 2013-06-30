@@ -20,6 +20,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="scala-library" level="project" />
     <orderEntry type="library" name="scalatest_2.10-1.9.1" level="project" />
+    <orderEntry type="library" name="akka-actor_2.10-2.1.4" level="project" />
+    <orderEntry type="library" name="config-1.0.0" level="project" />
   </component>
 </module>
 

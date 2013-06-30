@@ -75,6 +75,7 @@ case class TransparentMaterial( indexOfRefraction : Double ) extends Material {
     val inside = (n dot e) < 0
     val cn = if( inside ) n * -1 else n
     val cosThetaI = cn dot e
+    //TODO: Is it correct? I think it must be changed in order.
     val r0 = scala.math.pow( (etaOut - etaIn)/(etaOut+etaIn), 2 )
     val r = r0 + (1-r0)*scala.math.pow(1-cosThetaI,5)
     val t = 1-r
