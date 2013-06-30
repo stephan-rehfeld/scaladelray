@@ -47,34 +47,60 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
   }
 
   /**
-   * This method appends a translation by a given direction to the current transformation and returns
+   * This method appends a translation by a given point to the current transformation and returns
    * a new Transformation object.
    *
-   * @param v The direction of the translation.
+   * @param p The point of the translation.
    * @return A new Transformation object with the appended translation.
    */
-  def translate( v : Vector3 ) : Transform = this.translate( v.x, v.y, v.z )
+  def translate( p : Point3 ) : Transform = this.translate( p.x, p.y, p.z )
 
+  /**
+   * This method appends a scale transformation by given factors to an existing transformation and returns a new
+   * transformation object.
+   *
+   * @param x The scale factor for the x axis.
+   * @param y The scale factor for the y axis.
+   * @param z The scale factor for the z axis.
+   * @return The new Transformation object with the appended scale transformation.
+   */
   def scale( x : Double, y : Double, z : Double ) : Transform = {
     val t = Transform.scale( x, y, z )
     new Transform( m * t.m, t.i * i )
   }
 
+  /**
+   * This method appends a rotation around the x axis to the transformation and returns a new transformation object.
+   *
+   * @param angle The angle of the rotation in radians.
+   * @return The new Transformation object with the appended rotation around the x axis.
+   */
   def rotateX( angle : Double ) : Transform = {
     val t = Transform.rotateX( angle )
     new Transform( m * t.m, t.i * i )
   }
 
+  /**
+   * This method appends a rotation around the y axis to the transformation and returns a new transformation object.
+   *
+   * @param angle The angle of the rotation in radians.
+   * @return The new Transformation object with the appended rotation around the y axis.
+   */
   def rotateY( angle : Double ) : Transform = {
     val t = Transform.rotateY( angle )
     new Transform( m * t.m, t.i * i )
   }
 
+  /**
+   * This method appends a rotation around the z axis to the transformation and returns a new transformation object.
+   *
+   * @param angle The angle of the rotation in radians.
+   * @return The new Transformation object with the appended rotation around the z axis.
+   */
   def rotateZ( angle : Double ) : Transform = {
     val t = Transform.rotateZ( angle )
     new Transform( m * t.m, t.i * i )
   }
-
 
   override def equals( obj: Any ) =
     obj match {
@@ -85,14 +111,43 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
     }
 
 
+  /**
+   * This operator transforms a ray by multiplying the origin and the direction with the inverse transformation matrix.
+   *
+   * @param r The ray to transform.
+   * @return The transformed ray.
+   */
   def *( r : Ray ) = Ray( i * r.o, i * r.d )
+
+  /**
+   * This operator transforms a normals by multiplying it wth the transposed inverse transformation matrix.
+   *
+   * @param n The normal to transform.
+   * @return The transformed normal.
+   */
   def *( n : Normal3 ) = (i.transposed * n.asVector).normalized.asNormal
 
 }
 
-
+/**
+ * The companion object is the starting point to create a transformation.
+ *
+ * {{{
+ *   val t = Transform.translate( 0, 2, 0 ).scale( 1, 2, 1 ).rotateX( 2.1 )
+ * }}}
+ *
+ * @author Stephan Rehfeld
+ */
 object Transform {
 
+  /**
+   * This function creates a transformation that translates an object by a given x, y, and z value.
+   *
+   * @param x The x value for the translation.
+   * @param y The y value for the translation.
+   * @param z The z value for the translation.
+   * @return A translate transformation with the given x, y, and z value.
+   */
   def translate( x : Double, y : Double, z : Double ) = new Transform(
     Mat4x4( 1.0, 0.0, 0.0, x,
             0.0, 1.0, 0.0, y,
@@ -104,8 +159,22 @@ object Transform {
             0.0, 0.0, 0.0, 1.0 )
   )
 
+  /**
+   * This function creates a transformation that translates an object by a given point.
+   *
+   * @param p The point to which the object should be translated.
+   * @return A translate transformation with the given direction.
+   */
   def translate( p : Point3 ) : Transform = Transform.translate( p.x, p.y, p.z )
 
+  /**
+   * This function creates a scale transformation with the given factors for the x, y, and z axis.
+   *
+   * @param x The scale factor for the x axis.
+   * @param y The scale factor for the y axis.
+   * @param z The scale factor for the z axis.
+   * @return A scale transformation with the given factors.
+   */
   def scale( x : Double, y : Double, z : Double ) = new Transform(
     Mat4x4( x,   0.0, 0.0, 0.0,
             0.0, y,   0.0, 0.0,
@@ -118,6 +187,12 @@ object Transform {
             0.0,   0.0,   0.0,   1.0 )
   )
 
+  /**
+   * This function creates a rotation around the x axis.
+   *
+   * @param angle The angle in radians.
+   * @return A rotation around the x axis.
+   */
   def rotateX( angle : Double ) = new Transform(
     Mat4x4( 1.0, 0.0,               0.0,                0.0,
             0.0, math.cos( angle ), -math.sin( angle ), 0.0,
@@ -129,6 +204,12 @@ object Transform {
             0.0, 0.0,                0.0,               1.0 )
   )
 
+  /**
+   * This function creates a rotation around the y axis.
+   *
+   * @param angle The angle in radians.
+   * @return A rotation around the y axis.
+   */
   def rotateY( angle : Double ) = new Transform(
       Mat4x4( math.cos( angle ),  0.0, math.sin( angle ), 0.0,
               0.0,                1.0, 0.0,               0.0,
@@ -140,6 +221,12 @@ object Transform {
               0.0,               0.0, 0.0,                1.0 )
   )
 
+  /**
+   * This function creates a rotation around the z axis.
+   *
+   * @param angle The angle in radians.
+   * @return A rotation around the z axis.
+   */
   def rotateZ( angle : Double ) = new Transform(
     Mat4x4( math.cos( angle ), -math.sin( angle ), 0.0, 0.0,
             math.sin( angle ), math.cos( angle ),  0.0, 0.0,
