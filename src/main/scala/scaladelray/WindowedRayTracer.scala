@@ -23,14 +23,28 @@ import java.awt.image.BufferedImage
 import akka.actor.{Props, Actor, ActorSystem}
 import scaladelray.math.Ray
 
-case class Render( ray : Ray )
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.duration._
+import scala.concurrent.{Future, Await}
+import akka.routing.RoundRobinRouter
 
-class RenderingActor( world : World ) extends Actor {
+case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
 
-  println( "Rendering Actor Started" )
+class RenderingActor( world : World, id : Int ) extends Actor {
+
+  println( "Rendering Actor Started: " + id )
   def receive = {
     case msg : Render =>
-      sender ! Tracer.standardTracer( msg.ray, world, 9 ).rgbInteger
+      val pixel = scala.collection.mutable.MutableList[(Int,Int,Int)]()
+      for( x <- msg.startX until msg.width ) {
+        for( y <- msg.startY until msg.height ) yield {
+          val ray = msg.cam( x, y )
+          val v = (x,y,Tracer.standardTracer( ray, world, 9 ).rgbInteger)
+          pixel += v
+        }
+      }
+      sender ! pixel.toList
   }
 
 }
@@ -41,7 +55,12 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
   def world : World
   def camera : ((Int,Int) => Camera)
 
-  val actors = for( i <- 1 to 8 ) yield actorSystem.actorOf( Props( new RenderingActor(( world ))) )
+  //val actors = for( i <- 1 to 8 ) yield actorSystem.actorOf( Props( new RenderingActor(( world ), i )) )
+  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0 ) ).withRouter( RoundRobinRouter( nrOfInstances = 8 ) ) )
+
+
+  implicit val timeout = Timeout(5 minutes)
+
 
   def top = new MainFrame {
 
@@ -54,16 +73,31 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
         val model = image.getColorModel
         val raster = image.getRaster
         val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
-        val myWorld = world
         val begin = System.currentTimeMillis()
 
-        for( x <- 0 until this.size.getWidth.asInstanceOf[Int] )
-          for( y <- 0 until this.size.getHeight.asInstanceOf[Int] ) {
-            val ray = cam( x, y )
-            val color = Tracer.standardTracer( ray, myWorld, 9 ).rgbInteger
-            raster.setDataElements(x, this.size.getHeight.asInstanceOf[Int]-1-y, model.getDataElements(color, null))
 
+        var futures = scala.collection.mutable.MutableList[Future[Any]]()
+
+        print( "Creating jobs: " )
+        val linesPerActor = this.size.getHeight.asInstanceOf[Int] / 8
+        for( i <- 0 until 8 ) {
+          val ftr = targets ? Render( 0, i * linesPerActor, this.size.getWidth.asInstanceOf[Int],  (i+1) * linesPerActor, cam )
+          futures += ftr
+        }
+
+
+        println( "done" )
+
+        for( future <- futures ) {
+          val pixel = Await.result( future, timeout.duration ).asInstanceOf[List[(Int,Int,Int)]]
+
+          for( (x,y,c) <- pixel ) {
+            raster.setDataElements(x, this.size.getHeight.asInstanceOf[Int]-1-y, model.getDataElements(c, null))
           }
+
+
+        }
+
         val end = System.currentTimeMillis()
         println( "Rendering took : " + ((end-begin).asInstanceOf[Double] / 1000.0) + " seconds.")
         //raster.setDataElements(x, y, model.getDataElements((if (x == y) java.awt.Color.RED.getRGB else java.awt.Color.BLACK.getRGB), null))
