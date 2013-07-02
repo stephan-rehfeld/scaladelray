@@ -29,7 +29,7 @@ case class OrthographicCamera( e : Point3, g : Vector3, t : Vector3, width : Int
   val as = a * s
 
   override def apply( x : Int, y : Int ) = {
-    val o = e + ( u * ( as * (x-w12)/w1) ) + ( v * (s * (y-h12)/h1) )
+    val o = e +  u *  as * (x-w12)/w1  +  v * s * (y-h12)/h1
     Ray( o, d )
   }
 
