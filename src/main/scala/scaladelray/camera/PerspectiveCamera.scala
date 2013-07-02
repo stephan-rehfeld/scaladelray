@@ -18,15 +18,29 @@ package scaladelray.camera
 
 import scaladelray.math.{Vector3, Ray, Point3}
 
+/**
+ * This class represents a perspective camera. All rays of the camera are coming from the same origin but have a
+ * different direction. The half angle of view adjusts how much of the scene is visible. It's calculated by the half
+ * height of the image. The width is adjusted by the aspect ratio.
+ *
+ * @author Stephan Rehfeld
+ *
+ * @param e The position of the camera.
+ * @param g The gaze direction of the camera.
+ * @param t The up vector of the camera.
+ * @param width The width of the image.
+ * @param height The height of the image.
+ * @param a The half angle of view.
+ */
 case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double ) extends Camera( e, g, t ) {
 
   val mw = w * -1
-  val one = (height/2)/scala.math.tan( a / 2 )
+  val one = height/2/scala.math.tan( a / 2 )
   val two = (width-1)/2
   val three = (height-1)/2
 
   override def apply( x : Int, y : Int ) = {
-    val r = (mw * one) + (u * (x-two) ) + (v * (y-three))
+    val r = mw * one + u * (x-two)  + v * (y-three)
     Ray( e, r.normalized )
   }
 
