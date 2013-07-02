@@ -52,7 +52,7 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
   private val actorSystem = ActorSystem("Rendering")
   def world : World
   def camera : ((Int,Int) => Camera)
-
+  println( "Running with " + Runtime.getRuntime.availableProcessors() + " processors" )
   val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0 ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
 
 
