@@ -20,7 +20,7 @@ import scaladelray.{Constants, World, Color}
 import scaladelray.math.{Ray, Point3}
 
 
-class PointLight( color : Color, position : Point3, castsShadows : Boolean = true ) extends Light( color ) {
+class PointLight( color : Color, position : Point3, castsShadows : Boolean = true, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends Light( color ) {
   override def illuminates(point: Point3, world : World) = {
     if( castsShadows ) {
       val ray = Ray( point, (position - point).normalized )
@@ -33,4 +33,9 @@ class PointLight( color : Color, position : Point3, castsShadows : Boolean = tru
   }
 
   def directionFrom( point : Point3 ) = (position - point).normalized
+
+  def intensity(point: Point3): Double = {
+    val distance = (point - position).magnitude
+    1 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance)
+  }
 }

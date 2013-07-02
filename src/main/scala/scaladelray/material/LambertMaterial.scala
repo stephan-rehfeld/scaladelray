@@ -32,7 +32,7 @@ case class LambertMaterial( texture : Texture ) extends Material {
     for( light <- world.lights ) {
       if( light.illuminates( p, world ) ) {
         val l = light.directionFrom( p )
-        c = c + (light.color * color * math.max(0, normal dot l) )
+        c = c + light.color * color * math.max(0, normal dot l) * light.intensity( p )
       }
     }
     c

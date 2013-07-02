@@ -25,4 +25,5 @@ class DirectionalLight( color : Color, direction : Vector3 ) extends Light( colo
 
   def illuminates(point: Point3, world : World) = (Ray( point, direction * -1 ) --> world).filter( _.t > Constants.EPSILON ).isEmpty
   def directionFrom( point : Point3 ) = l
+  def intensity(point: Point3): Double = 1.0
 }

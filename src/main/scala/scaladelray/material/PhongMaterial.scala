@@ -35,7 +35,8 @@ case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, p
       if( light.illuminates( p, world ) ) {
         val l = light.directionFrom( p ).normalized
         val r = l.reflectOn( normal )
-        c = c + (light.color * diffuseColor * math.max(0, normal dot l) ) + (light.color * specularColor * scala.math.pow( scala.math.max( 0, r dot e ), phongExponent ))
+        val i = light.intensity( p )
+        c = c + light.color * diffuseColor * math.max(0, normal dot l) * i + light.color * specularColor * scala.math.pow( scala.math.max( 0, r dot e ), phongExponent ) * i
       }
     }
     c
