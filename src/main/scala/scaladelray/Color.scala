@@ -55,6 +55,14 @@ case class Color( r : Double, g : Double, b : Double ) {
   def *( c : Color ) = Color( r*c.r, g*c.g, b*c.b )
 
   /**
+   * This method divides each channel of this color by a scalar and returns the result as new color.
+   *
+   * @param f The divisor for the division.
+   * @return The result of the division.
+   */
+  def /( f : Double ) = Color( r/f, g/f, b/f )
+
+  /**
    * This method adds each channel of this color with the corresponding channel of another color.
    *
    * @param c The other color.

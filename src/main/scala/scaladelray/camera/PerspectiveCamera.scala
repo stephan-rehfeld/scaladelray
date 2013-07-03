@@ -17,6 +17,7 @@
 package scaladelray.camera
 
 import scaladelray.math.{Vector3, Ray, Point3}
+import scaladelray.sampling.SamplingPattern
 
 /**
  * This class represents a perspective camera. All rays of the camera are coming from the same origin but have a
@@ -31,8 +32,9 @@ import scaladelray.math.{Vector3, Ray, Point3}
  * @param width The width of the image.
  * @param height The height of the image.
  * @param a The half angle of view.
+ * @param samplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
  */
-case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double ) extends Camera( e, g, t ) {
+case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends Camera( e, g, t ) {
 
   val mw = w * -1
   val one = height/2/scala.math.tan( a / 2 )
@@ -40,8 +42,11 @@ case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int,
   val three = (height-1)/2
 
   override def apply( x : Int, y : Int ) = {
-    val r = mw * one + u * (x-two)  + v * (y-three)
-    Ray( e, r.normalized )
+    val rays = for( p <- samplingPattern.samplingPoints ) yield {
+      val r = mw * one + u * (x-two)  + v * (y-three) + u * p.x + v * p.y
+      Ray( e, r.normalized )
+    }
+    rays.toSet
   }
 
 }

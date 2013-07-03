@@ -24,7 +24,7 @@ class PerspectiveCameraSpec extends FunSpec {
   describe( "A PerspectiveCamera") {
     it( "should calculate the correct center for an image with the size of 1024x768 and half angle of view of PI/4") {
       val cam = new PerspectiveCamera( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 1024, 768, math.Pi/4.0 )
-      assert( cam( 511, 383 ) == Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) )
+      assert( cam( 511, 383 ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
     }
   }
 }

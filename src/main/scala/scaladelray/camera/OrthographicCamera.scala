@@ -17,6 +17,7 @@
 package scaladelray.camera
 
 import scaladelray.math.{Vector3, Ray, Point3}
+import scaladelray.sampling.SamplingPattern
 
 /**
  * This class represents an orthographic camera. All rays of the camera are pointing in the same direction but have
@@ -31,23 +32,33 @@ import scaladelray.math.{Vector3, Ray, Point3}
  * @param width The width of the image.
  * @param height The height of the image.
  * @param s The scale factor of the image plane.
+ * @param samplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
  */
-case class OrthographicCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, s : Double ) extends Camera( e, g, t ) {
+case class OrthographicCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, s : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends Camera( e, g, t ) {
 
-  val a = width.asInstanceOf[Double] / height.asInstanceOf[Double]
-  val d = g.normalized
-  val w1 = width-1
-  val h1 = height-1
-  val w12 = w1/2
-  val h12 = h1/2
-  val as = a * s
+  private val a = width.asInstanceOf[Double] / height.asInstanceOf[Double]
+  private val d = g.normalized
+  private val w1 = width-1
+  private val h1 = height-1
+  private val w12 = w1/2
+  private val h12 = h1/2
+  private val as = a * s
+
+  private val pixelWidth = a*s / width
+  private val pixelHeight = s / height
+
+
 
   override def apply( x : Int, y : Int ) = {
     require( x < width, "The parameter 'x' must be smaller than the width of the image.")
     require( y < width, "The parameter 'y' must be smaller than the width of the image.")
 
-    val o = e +  u *  as * (x-w12)/w1  +  v * s * (y-h12)/h1
-    Ray( o, d )
+    val rays = for( p <- samplingPattern.samplingPoints ) yield {
+      val o = e +  u *  as * (x-w12)/w1  +  v * s * (y-h12)/h1 + u * p.x * pixelWidth  + v * p.y * pixelHeight
+      Ray( o, d )
+    }
+    rays.toSet
+
   }
 
 }

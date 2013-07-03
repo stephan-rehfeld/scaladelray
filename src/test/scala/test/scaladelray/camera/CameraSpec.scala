@@ -22,9 +22,10 @@ import org.scalatest.FunSpec
 
 class CameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends Camera( e, g, t ) {
   var called = false
-  def apply(x: Int, y: Int): Ray = {
+
+  def apply(x: Int, y: Int): Set[Ray] = {
     called = true
-    Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+    Set() + Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
   }
 }
 
@@ -54,7 +55,7 @@ class CameraSpec extends FunSpec {
 
       val cam = new CameraProxy( e, g, t )
 
-      assert( cam( (100,100) ) == Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) )
+      assert( cam( (100,100) ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
       assert( cam.called )
     }
   }

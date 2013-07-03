@@ -52,22 +52,23 @@ abstract class Camera( e : Point3, g : Vector3, t : Vector3 ) {
 
 
   /**
-   * This method needs to be implemented by a camera implementation. An implementation generates a ray for the given
-   * pixel coordinates. The coordinates start with 0 and ends with width-1 or height-1.
+   * This method needs to be implemented by a camera implementation. An implementation generates a set of rays for the
+   * given pixel coordinates. The coordinates start with 0 and ends with width-1 or height-1. The amount of rays depends
+   * on the used sampling pattern.
    *
    * @param x The x position of the pixel.
    * @param y The y position of the pixel.
-   * @return The ray for the pixel.
+   * @return The set of rays for the pixel.
    */
-  def apply( x : Int, y : Int ) : Ray
+  def apply( x : Int, y : Int ) : Set[Ray]
 
   /**
    * This method calls the [[scaladelray.camera.Camera.apply()]] method but accepts a tuple of the pixel coordinates
    * as parameter.
    *
    * @param p The tuple of two integers, that contains the pixel coordinates.
-   * @return The ray of the pixel coordinates.
+   * @return The set of rays of the pixel coordinates.
    */
-  def apply( p : (Int,Int) ) : Ray = this( p._1, p._2 )
+  def apply( p : (Int,Int) ) : Set[Ray] = this( p._1, p._2 )
 
 }

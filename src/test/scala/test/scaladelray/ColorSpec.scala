@@ -76,6 +76,15 @@ class ColorSpec extends FunSpec {
       assert( r.b == 0.3 * 0.3 )
     }
 
+    it( "should have a divide operator for a scalar" ) {
+      val c = Color( 1, 0.5, 0.3 )
+      val r = c / 0.3
+
+      assert( r.r == 1 / 0.3 )
+      assert( r.g == 0.5 / 0.3 )
+      assert( r.b == 0.3 / 0.3 )
+    }
+
     it( "should have a multiply operator for another color" ) {
       val c1 = Color( 1, 0.5, 0.3 )
       val c2 = Color( 0.1, 0.2, 0.3 )
@@ -100,6 +109,15 @@ class ColorSpec extends FunSpec {
     it( "should not be altered while multiplied with a scalar" ) {
       val c = Color( 1, 0.5, 0.3 )
       val r = c * 0.3
+
+      assert( c.r == 1 )
+      assert( c.g == 0.5 )
+      assert( c.b == 0.3 )
+    }
+
+    it( "should not be altered while divided with a scalar" ) {
+      val c = Color( 1, 0.5, 0.3 )
+      val r = c / 0.3
 
       assert( c.r == 1 )
       assert( c.g == 0.5 )

@@ -26,7 +26,7 @@ class OrthographicCameraSpec extends FunSpec {
   describe( "An OrthographicCamera") {
     it( "should calculate the correct center for an image with the size of 1024x768 and a size of 1") {
       val cam = new OrthographicCamera( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 1024, 768, 1 )
-      assert( cam( 511, 383 ) == Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) )
+      assert( cam( 511, 383 ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
     }
   }
 
