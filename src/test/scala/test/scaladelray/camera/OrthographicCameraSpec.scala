@@ -49,8 +49,6 @@ class OrthographicCameraSpec extends FunSpec {
       assert( rays.contains( Ray( Point3( -0.5, 0.5, 0 ), Vector3( 0, 0, -1 ) ) ) )
       assert( rays.contains( Ray( Point3( -0.5, -0.5, 0 ), Vector3( 0, 0, -1 ) ) ) )
       assert( rays.contains( Ray( Point3( 0.5, -0.5, 0 ), Vector3( 0, 0, -1 ) ) ) )
-
-
     }
   }
 
