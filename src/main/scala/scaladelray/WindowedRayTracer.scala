@@ -96,7 +96,6 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
 
         val end = System.currentTimeMillis()
         println( "Rendering took : " + ((end-begin).asInstanceOf[Double] / 1000.0) + " seconds.")
-        //raster.setDataElements(x, y, model.getDataElements((if (x == y) java.awt.Color.RED.getRGB else java.awt.Color.BLACK.getRGB), null))
         g.drawImage(image, 0, 0, null)
       }
     }
