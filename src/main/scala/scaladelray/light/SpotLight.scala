@@ -26,19 +26,21 @@ class SpotLight( color : Color, position : Point3, direction : Vector3, halfAngl
     if( w ) {
       val ray = Ray( point, (position - point).normalized )
       val hits = (ray --> world).filter( _.t > Constants.EPSILON ).toList
-      hits.isEmpty || (hits.sortWith(  _.t < _.t ).head.t > ray( position ) )
+      ( hits.isEmpty || (hits.sortWith(  _.t < _.t ).head.t > ray( position ) ) ) :: Nil
     } else {
-      w
+      w :: Nil
     }
   }
   override def directionFrom( point : Point3 ) = {
-    (position - point).normalized
+    (position - point).normalized :: Nil
   }
 
-  override def intensity(point: Point3): Double = {
+  override def intensity(point: Point3) = {
     val distance = (point - position).magnitude
-    1 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance)
+    (1 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance)) :: Nil
   }
 
   override def createLight: Light = this
+
+  override def samplingPoints: Int = 1
 }

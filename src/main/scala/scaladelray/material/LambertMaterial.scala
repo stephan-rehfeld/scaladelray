@@ -31,10 +31,18 @@ case class LambertMaterial( texture : Texture ) extends Material {
     var c = world.ambientLight * color
     val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight
     for( light <- lights ) {
-      if( light.illuminates( p, world ) ) {
-        val l = light.directionFrom( p )
-        c = c + light.color * color * math.max(0, normal dot l) * light.intensity( p )
+      val illuminates = light.illuminates( p, world )
+      val directionFrom = light.directionFrom( p )
+      val intensity = light.intensity( p )
+      var c2 = Color( 0, 0, 0 )
+      for( i <- 0 until light.samplingPoints ) {
+        if( illuminates(i) ) {
+          val l = directionFrom(i)
+          c2 = c2 + light.color * color * math.max(0, normal dot l) * intensity( i )
+        }
       }
+      c2 = c2 / light.samplingPoints
+      c = c + c2
     }
     c
   }

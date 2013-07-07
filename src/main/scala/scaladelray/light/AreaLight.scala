@@ -26,4 +26,6 @@ class AreaLight( color : Color, position : Point3, direction : Vector3, upVector
   private val v = w x u
 
   def createLight: Light = null
+
+
 }

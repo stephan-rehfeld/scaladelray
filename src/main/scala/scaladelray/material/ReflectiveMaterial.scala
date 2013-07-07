@@ -34,12 +34,20 @@ case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Textu
     val e = (hit.ray.d * -1).normalized
     val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight
     for( light <- lights ) {
-      if( light.illuminates( p, world ) ) {
-        val l = light.directionFrom( p )
-        val r = l.reflectOn( normal )
-        val i = light.intensity( p )
-        c = c + light.color * diffuseColor * math.max(0, normal dot l) * i + light.color * specularColor * scala.math.pow( scala.math.max( 0, r dot e ), phongExponent ) * i
+      val illuminates = light.illuminates( p, world )
+      val directionFrom = light.directionFrom( p )
+      val intensity = light.intensity( p )
+      var c2 = Color( 0, 0, 0 )
+      for( i <- 0 until light.samplingPoints ) {
+        if( illuminates( i ) ) {
+          val l = directionFrom( i )
+          val r = l.reflectOn( normal )
+          val in = intensity( i )
+          c2 = c2 + light.color * diffuseColor * math.max(0, normal dot l) * in + light.color * specularColor * scala.math.pow( scala.math.max( 0, r dot e ), phongExponent ) * in
+        }
       }
+      c2 = c2 / light.samplingPoints
+      c = c + c2
     }
     val ray = Ray(p, hit.ray.d.normalized * -1 reflectOn normal)
     c + reflectionColor * tracer( ray, world )

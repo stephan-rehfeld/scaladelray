@@ -23,9 +23,11 @@ import scaladelray.math.{Ray, Point3, Vector3}
 class DirectionalLight( color : Color, direction : Vector3 ) extends LightDescription( color ) with Light {
   val l = (direction * -1).normalized
 
-  override def illuminates(point: Point3, world : World) = (Ray( point, direction * -1 ) --> world).filter( _.t > Constants.EPSILON ).isEmpty
-  override def directionFrom( point : Point3 ) = l
-  override def intensity(point: Point3): Double = 1.0
+  override def illuminates(point: Point3, world : World) = (Ray( point, direction * -1 ) --> world).filter( _.t > Constants.EPSILON ).isEmpty :: Nil
+  override def directionFrom( point : Point3 ) = l :: Nil
+  override def intensity(point: Point3) = 1.0 :: Nil
 
   override def createLight: Light = this
+
+  override def samplingPoints: Int = 1
 }

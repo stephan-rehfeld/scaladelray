@@ -35,13 +35,22 @@ case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Mat
     else {
       var c = Color( 0, 0, 0 )
       for ( light <- lights ) {
-        if( light.illuminates( p, world ) ) {
-          val l = light.directionFrom( p )
-          val f = normal dot l
-          c = c + ( (colorBright * f) + (colorDark * (1.0-f)) )
-        } else {
-          c = c + colorDark
+        val illuminates = light.illuminates( p, world )
+        val directionFrom = light.directionFrom( p )
+        val intensity = light.intensity( p )
+        var c2 = Color( 0, 0, 0 )
+        for( i <- 0 until light.samplingPoints ) {
+          if( illuminates( i ) ) {
+            val l = directionFrom( i )
+            val f = normal dot l
+            c2 = c2 + ( (colorBright * f) + (colorDark * (1.0-f)) )
+          } else {
+            c2 = c2 + colorDark
+          }
         }
+        c2 = c2 / light.samplingPoints
+        c = c + c2
+
       }
       c
     }
