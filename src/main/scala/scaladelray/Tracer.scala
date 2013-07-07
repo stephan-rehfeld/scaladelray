@@ -24,7 +24,7 @@ object Tracer {
     if( recursions < 0 ) {
       world.backgroundColor
     } else {
-      val hits = ((ray --> world).toList).filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
+      val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
       if( hits.isEmpty ) {
         world.backgroundColor
       } else {

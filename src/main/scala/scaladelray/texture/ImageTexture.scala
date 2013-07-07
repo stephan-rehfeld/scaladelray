@@ -34,7 +34,7 @@ case class ImageTexture( file : String ) extends Texture {
     val argb = image.getRGB(math.round( x ).asInstanceOf[Int], math.round( y ).asInstanceOf[Int])
     val r = (argb & 0xff0000) >> 16
     val g = (argb & 0xff00) >> 8
-    val b = (argb & 0xff)
+    val b = argb & 0xff
     Color( r/255.0, g/255.0, b/255.0 )
 
   }

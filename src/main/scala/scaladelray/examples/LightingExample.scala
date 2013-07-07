@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scaladelray.camera
+package scaladelray.examples
 
 import scaladelray.{Color, World, WindowedRayTracer}
 import scaladelray.geometry.{Plane, Node, Geometry}

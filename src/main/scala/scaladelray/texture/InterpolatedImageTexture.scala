@@ -55,5 +55,5 @@ case class InterpolatedImageTexture( file : String ) extends Texture {
     Color( red/255.0, green/255.0, blue/255.0 )
   }
 
-  private def extract( argb : Int ) = ((argb & 0xff0000) >> 16,(argb & 0xff00) >> 8,(argb & 0xff))
+  private def extract( argb : Int ) = ((argb & 0xff0000) >> 16,(argb & 0xff00) >> 8, argb & 0xff)
 }

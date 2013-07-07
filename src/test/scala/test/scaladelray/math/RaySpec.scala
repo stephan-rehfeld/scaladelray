@@ -91,7 +91,7 @@ class RaySpec extends FunSpec {
 
       r --> geo
 
-      assert( called == true )
+      assert( called )
 
     }
 
@@ -112,7 +112,7 @@ class RaySpec extends FunSpec {
 
       r --> world
 
-      assert( called == true )
+      assert( called )
     }
 
     it( "should not be altered by the apply method to calculate a point" ) {

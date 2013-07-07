@@ -234,12 +234,12 @@ class OBJLoader extends JavaTokenParsers {
    */
   private def constructFromBuffer() {
 
-    val (minVertex,minTexCoord,minNormal) = facesBuffer.foldLeft( (Int.MaxValue,Int.MaxValue,Int.MaxValue) )( (b,faceData) => faceData.foldLeft( b )( ((mins,vertexData) => {
+    val (minVertex,minTexCoord,minNormal) = facesBuffer.foldLeft( (Int.MaxValue,Int.MaxValue,Int.MaxValue) )( (b,faceData) => faceData.foldLeft( b )( (mins,vertexData) => {
       (if( vertexData._1 < mins._1 ) vertexData._1 else mins._1,
         vertexData._2.fold( mins._2 )( (x) => if(x<mins._2) x else mins._2 ),
         vertexData._3.fold( mins._3 )( (x) => if(x<mins._3) x else mins._3 ) )
       }
-    )))
+    ))
 
     for( face <- facesBuffer ) {
       if ( face.size != 3 ) throw new UnsupportedOperationException( "Triangulation is not supported yet" )

@@ -60,7 +60,7 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
   val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0 ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
 
 
-  implicit val timeout = Timeout(5 minutes)
+  implicit val timeout = Timeout(5 hours)
 
 
   def top = new MainFrame {
@@ -76,7 +76,6 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
         val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
         val begin = System.currentTimeMillis()
 
-
         var futures = scala.collection.mutable.MutableList[Future[Any]]()
 
         for( i <- 0 until this.size.getHeight.asInstanceOf[Int] ) {
@@ -90,8 +89,6 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
           for( (x,y,c) <- pixel ) {
             raster.setDataElements(x, this.size.getHeight.asInstanceOf[Int]-1-y, model.getDataElements(c, null))
           }
-
-
         }
 
         val end = System.currentTimeMillis()
