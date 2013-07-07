@@ -29,7 +29,7 @@ case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Mat
     val colorDark = dark( hit.texCoord2D )
     val normal = hit.n
     val p =  hit.ray( hit.t )
-    val lights = for( light <- world.lights ) yield light
+    val lights = for( light <- world.lightDescriptions ) yield light.createLight
     if ( lights.size == 0 )
       colorDark
     else {

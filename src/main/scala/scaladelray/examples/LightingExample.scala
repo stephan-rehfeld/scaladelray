@@ -51,7 +51,7 @@ object LightingExample extends WindowedRayTracer {
       new Plane( PhongMaterial( ChessboardTexture( 1, 1 ), SingleColorTexture( Color( 1, 1, 1 ) ), 64 ) )
     )*/,
     ambientLight = Color( 0.4, 0.4, 0.4 ),
-    lights = Set() + new PointLight(
+    lightDescriptions = Set() + new PointLight(
       position = Point3( 0, 0, 0 ),
       color = Color( 1, 1, 1 )
     )

@@ -17,11 +17,11 @@
 package scaladelray
 
 import geometry.{Hit, Geometry}
-import light.Light
+import scaladelray.light.{LightDescription, Light}
 import math.Ray
 
 
-case class World( backgroundColor : Color = Color( 0, 0, 0 ), objects : Set[Geometry], ambientLight : Color = Color( 0, 0, 0 ), lights : Set[Light] = Set(), indexOfRefraction : Double = 1.0 ) {
+case class World( backgroundColor : Color = Color( 0, 0, 0 ), objects : Set[Geometry], ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
 
   def <--( r : Ray ) : Set[Hit] = {
     var hits = Set[Hit]()

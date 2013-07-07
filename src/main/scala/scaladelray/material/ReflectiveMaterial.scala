@@ -32,7 +32,8 @@ case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Textu
     val p =  hit.ray( hit.t )
     var c = world.ambientLight * diffuseColor
     val e = (hit.ray.d * -1).normalized
-    for( light <- world.lights ) {
+    val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight
+    for( light <- lights ) {
       if( light.illuminates( p, world ) ) {
         val l = light.directionFrom( p )
         val r = l.reflectOn( normal )

@@ -43,7 +43,7 @@ object RefractionExample extends WindowedRayTracer {
       )
     ),
     ambientLight = Color( 0.1, 0.1, 0.1 ),
-    lights = Set() + new PointLight(
+    lightDescriptions = Set() + new PointLight(
       position = Point3( 1, 1, 0 ),
       color = Color( 1, 1, 1 )
 

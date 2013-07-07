@@ -39,7 +39,7 @@ object Playground extends WindowedRayTracer {
     ),
     ambientLight = Color( 0.25, 0.25, 0.25 ),
     indexOfRefraction = 1.0,
-    lights = Set() + new PointLight(
+    lightDescriptions = Set() + new PointLight(
       position = Point3( 8, 8, 0 ),
       color = Color ( 1, 1, 1 )
     )

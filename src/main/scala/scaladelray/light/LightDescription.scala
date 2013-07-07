@@ -16,12 +16,9 @@
 
 package scaladelray.light
 
-import scaladelray.{World, Color}
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.Color
 
-trait Light {
-  val color : Color
-  def illuminates( point : Point3, world : World ) : Boolean
-  def directionFrom( point : Point3 ) : Vector3
-  def intensity( point : Point3 ) : Double
+abstract class LightDescription( val color : Color ) {
+  def +( l : LightDescription ) = Set() + this + l
+  def createLight : Light
 }

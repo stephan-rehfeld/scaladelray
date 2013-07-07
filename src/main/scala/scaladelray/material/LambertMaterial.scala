@@ -29,7 +29,8 @@ case class LambertMaterial( texture : Texture ) extends Material {
     val normal = hit.n
     val p =  hit.ray( hit.t )
     var c = world.ambientLight * color
-    for( light <- world.lights ) {
+    val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight
+    for( light <- lights ) {
       if( light.illuminates( p, world ) ) {
         val l = light.directionFrom( p )
         c = c + light.color * color * math.max(0, normal dot l) * light.intensity( p )

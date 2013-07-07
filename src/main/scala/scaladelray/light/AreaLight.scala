@@ -16,12 +16,14 @@
 
 package scaladelray.light
 
-import scaladelray.{World, Color}
 import scaladelray.math.{Vector3, Point3}
+import scaladelray.{World, Color}
 
-trait Light {
-  val color : Color
-  def illuminates( point : Point3, world : World ) : Boolean
-  def directionFrom( point : Point3 ) : Vector3
-  def intensity( point : Point3 ) : Double
+class AreaLight( color : Color, position : Point3, direction : Vector3, upVector: Vector3, radius : Double, samplingPoints : Int, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) {
+
+  private val w = direction.normalized * -1
+  private val u = (upVector x w).normalized
+  private val v = w x u
+
+  def createLight: Light = null
 }
