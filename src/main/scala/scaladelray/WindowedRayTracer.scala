@@ -79,9 +79,8 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
 
         var futures = scala.collection.mutable.MutableList[Future[Any]]()
 
-        val linesPerActor = this.size.getHeight.asInstanceOf[Int] / 8
-        for( i <- 0 until 8 ) {
-          val ftr = targets ? Render( 0, i * linesPerActor, this.size.getWidth.asInstanceOf[Int],  (i+1) * linesPerActor, cam )
+        for( i <- 0 until this.size.getHeight.asInstanceOf[Int] ) {
+          val ftr = targets ? Render( 0, i, this.size.getWidth.asInstanceOf[Int],  i+1, cam )
           futures += ftr
         }
 
