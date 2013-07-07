@@ -17,6 +17,7 @@
 package scaladelray.sampling
 
 import scaladelray.math.Point2
+import scala.util.Random
 
 
 /**
@@ -57,6 +58,20 @@ object SamplingPattern {
       }
     }
     SamplingPattern( points )
+  }
+
+  private val random = new Random( System.currentTimeMillis() )
+
+  /**
+   * This function creates a sampling pattern with the given amount of random points.
+   *
+   * @param points The amount of points.
+   * @return A sampling pattern with the given amount of random sampling points.
+   */
+  def randomPattern( points : Int ) : SamplingPattern = {
+    val ps = for( i <- 0 until points ) yield Point2( random.nextDouble() - 0.5, random.nextDouble() - 0.5  )
+    require( ps.size == points )
+    new SamplingPattern( ps.toSet )
   }
 
 
