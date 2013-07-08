@@ -20,6 +20,7 @@ import scaladelray.material.Material
 import scaladelray.Constants
 import scaladelray.math._
 import scaladelray.texture.TexCoord2D
+import scaladelray.optimization.AxisAlignedBoundingBox
 
 class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]] ) extends Geometry( material ) {
 
@@ -35,42 +36,48 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
 
   val center = vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size
 
+  private val aabb = new AxisAlignedBoundingBox( Point3( maxX, maxY, maxZ ), Point3( minX, minY, minZ ) )
+
   def <--(r: Ray) : Set[Hit] = {
-    val hits = collection.mutable.Set[Hit]()
-    for( face <- faces ) {
-      val a = vertices( face(0)._1 )
-      val b = vertices( face(1)._1 )
-      val c = vertices( face(2)._1 )
+    if( aabb <-- r ) {
+      val hits = collection.mutable.Set[Hit]()
+      for( face <- faces ) {
+        val a = vertices( face(0)._1 )
+        val b = vertices( face(1)._1 )
+        val c = vertices( face(2)._1 )
 
-      val (an,bn,cn) = if( face(0)._3.isDefined ) {
-        (normals(face(0)._3.get),normals(face(0)._3.get),normals(face(0)._3.get))
-      } else {
-        val n = (b-c x a-c).asNormal
-        (-n,-n,-n)
+        val (an,bn,cn) = if( face(0)._3.isDefined ) {
+          (normals(face(0)._3.get),normals(face(0)._3.get),normals(face(0)._3.get))
+        } else {
+          val n = (b-c x a-c).asNormal
+          (-n,-n,-n)
+        }
+
+        val (at,bt,ct) = if( face(0)._2.isDefined ) {
+          (texCoords(face(0)._2.get),texCoords(face(0)._2.get),texCoords(face(0)._2.get))
+        } else {
+          val t = TexCoord2D( 0, 0 )
+          (t,t,t)
+        }
+
+        val base = Mat3x3( a.x - b.x, a.x - c.x, r.d.x,
+          a.y - b.y, a.y - c.y, r.d.y,
+          a.z - b.z, a.z - c.z, r.d.z)
+
+        val vec = a - r.o
+
+        val beta = base.replaceCol1( vec ).determinant / base.determinant
+        val gamma = base.replaceCol2( vec ).determinant / base.determinant
+        val t = base.replaceCol3( vec ).determinant / base.determinant
+
+        if( !(beta < 0.0 || gamma < 0.0 || beta + gamma > 1.0 || t < Constants.EPSILON) ) {
+          val alpha = 1 - beta - gamma
+          hits += Hit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
+        }
       }
-
-      val (at,bt,ct) = if( face(0)._2.isDefined ) {
-        (texCoords(face(0)._2.get),texCoords(face(0)._2.get),texCoords(face(0)._2.get))
-      } else {
-        val t = TexCoord2D( 0, 0 )
-        (t,t,t)
-      }
-
-      val base = Mat3x3( a.x - b.x, a.x - c.x, r.d.x,
-        a.y - b.y, a.y - c.y, r.d.y,
-        a.z - b.z, a.z - c.z, r.d.z)
-
-      val vec = a - r.o
-
-      val beta = base.replaceCol1( vec ).determinant / base.determinant
-      val gamma = base.replaceCol2( vec ).determinant / base.determinant
-      val t = base.replaceCol3( vec ).determinant / base.determinant
-
-      if( !(beta < 0.0 || gamma < 0.0 || beta + gamma > 1.0 || t < Constants.EPSILON) ) {
-        val alpha = 1 - beta - gamma
-        hits += Hit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
-      }
+      hits.toSet
+    } else {
+      Set()
     }
-    hits.toSet
   }
 }

@@ -23,6 +23,7 @@ import scaladelray.material.{LambertMaterial, PhongMaterial}
 import scaladelray.texture.{SingleColorTexture, ChessboardTexture}
 import scaladelray.light.PointLight
 import scaladelray.loader.OBJLoader
+import scaladelray.camera.PerspectiveCamera
 
 
 object LightingExample extends WindowedRayTracer {

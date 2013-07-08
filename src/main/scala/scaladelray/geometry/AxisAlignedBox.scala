@@ -47,8 +47,6 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
     new Plane( material )
   )
 
-  var planes = right :: top :: front :: left :: bottom :: far :: Nil
-
   def <--(r: Ray) = {
 
     var hits = Set[Hit]()
