@@ -18,7 +18,7 @@ package scaladelray.optimization
 
 import scaladelray.geometry.{Hit, Plane, Node}
 import scaladelray.math.{Point3, Ray, Transform}
-import scaladelray.Color
+import scaladelray.{Constants, Color}
 import scaladelray.material.SingleColorMaterial
 
 /**
@@ -111,7 +111,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
       val p = r( hit.t )
       if( p.x >= lbf.x && p.x <= run.x && p.y >= lbf.y && p.y <= run.y ) hits = hits + hit
     }
-
+    hits = hits.filter( (h) => h.t > Constants.EPSILON)
     !hits.isEmpty
   }
 
