@@ -26,7 +26,7 @@ import akka.util.Timeout
 import scala.concurrent.duration._
 import scala.concurrent.{Future, Await}
 import akka.routing.RoundRobinRouter
-import scaladelray.World
+import scaladelray.{Tracer, Color, World}
 import scaladelray.camera.Camera
 
 case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
