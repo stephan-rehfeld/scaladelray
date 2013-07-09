@@ -16,11 +16,12 @@
 
 package scaladelray.examples
 
-import scaladelray.{Color, World, WindowedRayTracer}
+import scaladelray.{Color, World}
 import scaladelray.geometry.{AxisAlignedBox, Node}
 import scaladelray.math.{Vector3, Point3, Transform}
 import scaladelray.material.SingleColorMaterial
 import scaladelray.camera.PerspectiveCamera
+import scaladelray.ui.WindowedRayTracer
 
 object BoxOnly  extends WindowedRayTracer {
 

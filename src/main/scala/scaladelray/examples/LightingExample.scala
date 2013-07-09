@@ -16,7 +16,7 @@
 
 package scaladelray.examples
 
-import scaladelray.{Color, World, WindowedRayTracer}
+import scaladelray.{Color, World}
 import scaladelray.geometry.{Plane, Node, Geometry}
 import scaladelray.math.{Transform, Vector3, Point3}
 import scaladelray.material.{LambertMaterial, PhongMaterial}
@@ -24,6 +24,7 @@ import scaladelray.texture.{SingleColorTexture, ChessboardTexture}
 import scaladelray.light.PointLight
 import scaladelray.loader.OBJLoader
 import scaladelray.camera.PerspectiveCamera
+import scaladelray.ui.WindowedRayTracer
 
 
 object LightingExample extends WindowedRayTracer {

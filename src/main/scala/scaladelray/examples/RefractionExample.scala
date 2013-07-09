@@ -16,13 +16,14 @@
 
 package scaladelray.examples
 
-import scaladelray.{Color, World, WindowedRayTracer}
+import scaladelray.{Color, World}
 import scaladelray.geometry.{AxisAlignedBox, Sphere, Node, Plane}
 import scaladelray.material.{PhongMaterial, TransparentMaterial, ReflectiveMaterial}
 import scaladelray.texture.SingleColorTexture
 import scaladelray.math.{Vector3, Point3, Transform}
 import scaladelray.camera.PerspectiveCamera
 import scaladelray.light.PointLight
+import scaladelray.ui.WindowedRayTracer
 
 
 object RefractionExample extends WindowedRayTracer {

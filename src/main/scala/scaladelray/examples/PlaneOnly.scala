@@ -16,11 +16,12 @@
 
 package scaladelray.examples
 
-import scaladelray.{Color, World, WindowedRayTracer}
+import scaladelray.{Color, World}
 import scaladelray.geometry.Plane
 import scaladelray.material.SingleColorMaterial
 import scaladelray.camera.PerspectiveCamera
 import scaladelray.math.{Vector3, Point3}
+import scaladelray.ui.WindowedRayTracer
 
 
 object PlaneOnly extends WindowedRayTracer {

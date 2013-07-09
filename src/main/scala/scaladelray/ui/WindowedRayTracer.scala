@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package scaladelray
+package scaladelray.ui
 
-import camera.Camera
 import swing.{Component, MainFrame, SimpleSwingApplication}
 import java.awt.{Graphics2D, Dimension}
 import java.awt.image.BufferedImage
@@ -27,6 +26,8 @@ import akka.util.Timeout
 import scala.concurrent.duration._
 import scala.concurrent.{Future, Await}
 import akka.routing.RoundRobinRouter
+import scaladelray.World
+import scaladelray.camera.Camera
 
 case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
 
