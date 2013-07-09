@@ -40,7 +40,7 @@ object LightingExample extends WindowedRayTracer {
                     material = PhongMaterial( ChessboardTexture( 1, 1 ), SingleColorTexture( Color( 1, 1, 1 ) ), 64 ) //LambertMaterial( SingleColorTexture( Color( 0, 1, 0 ) ) ),// SingleColorMaterial( Color( 0, 1, 0 ) ),
                   )*/
 
-                  Transform.translate( 0, 0, -3 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
+                  Transform.translate( 0, 0, -4 ),//.rotateY( math.Pi).rotateX( -(math.Pi / 4.0) ),
                   (new OBJLoader).load( "teddy.obj", LambertMaterial( SingleColorTexture( Color( 1, 1, 1 ) ) ) )
                   //new Sphere(
                   //  material =   LambertMaterial( InterpolatedImageTexture( "erde-low.jpg" ) )
@@ -51,7 +51,7 @@ object LightingExample extends WindowedRayTracer {
       Transform.translate( 0, -1, 0 ),
       new Plane( PhongMaterial( ChessboardTexture( 1, 1 ), SingleColorTexture( Color( 1, 1, 1 ) ), 64 ) )
     )*/,
-    ambientLight = Color( 0.4, 0.4, 0.4 ),
+    ambientLight = Color( 0.0, 0.0, 0.0 ),
     lightDescriptions = Set() + new PointLight(
       position = Point3( 0, 0, 0 ),
       color = Color( 1, 1, 1 )
