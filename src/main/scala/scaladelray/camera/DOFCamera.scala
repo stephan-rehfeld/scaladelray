@@ -16,15 +16,10 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Vector3, Ray, Point3}
+import scaladelray.math.{Ray, Vector3, Point3}
 import scaladelray.sampling.SamplingPattern
 
 /**
- * This class represents a perspective camera. All rays of the camera are coming from the same origin but have a
- * different direction. The half angle of view adjusts how much of the scene is visible. It's calculated by the half
- * height of the image. The width is adjusted by the aspect ratio.
- *
- * @author Stephan Rehfeld
  *
  * @param e The position of the camera.
  * @param g The gaze direction of the camera.
@@ -32,9 +27,12 @@ import scaladelray.sampling.SamplingPattern
  * @param width The width of the image.
  * @param height The height of the image.
  * @param a The half angle of view.
- * @param samplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
+ * @param focalLength The distance to the focus plane.
+ * @param lensRadius The radius of the simulated lense
+ * @param aaSamplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
+ * @param lensSamplingPoints The sampling pattern for the lens. The points are used to vary the origin of the rays.
  */
-case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends Camera( e, g, t ) {
+case class DOFCamera ( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, focalLength : Double, lensRadius : Double, aaSamplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ), lensSamplingPoints : SamplingPattern ) extends Camera( e, g, t ) {
 
   // Some computations that are valid for the whole lifetime of the camera.
   private val mw = w * -1
@@ -43,9 +41,21 @@ case class PerspectiveCamera( e : Point3, g : Vector3, t : Vector3, width : Int,
   private val three = (height-1)/2
 
   override def apply( x : Int, y : Int ) = {
-    val rays = for( p <- samplingPattern.samplingPoints ) yield {
-      val r = mw * one + u * (x-two)  + v * (y-three) + u * p.x + v * p.y
-      Ray( e, r.normalized )
+    val rays = collection.mutable.Set[Ray]()
+    for( p <- aaSamplingPattern.samplingPoints ) yield {
+      val px = x-two + p.x
+      val py = y-three + p.y
+
+      val fx = px * focalLength/one
+      val fy = py * focalLength/one
+
+      val fp = e + mw * focalLength + u * fx + v * fy
+
+      for( lp <- lensSamplingPoints.asDisc ) {
+        val lo = e + u * lp.x * lensRadius + v * lp.y * lensRadius
+        val d = (fp - lo).normalized
+        rays += Ray( lo, d )
+      }
     }
     rays.toSet
   }

@@ -29,6 +29,26 @@ case class SamplingPattern( samplingPoints : Set[Point2] ) {
 
   for( p <- samplingPoints ) require( p.x >= -0.5 && p.x <= 0.5 && p.y >= -0.5 && p.y <= 0.5, "The values for x and y of each point must be between -0.5 and 0.5!" )
 
+  /**
+   * This method maps the sampling points to a unit disc.
+   *
+   * @return The sampling points mapped to a unit disc.
+   */
+  def asDisc = {
+    for( p <- samplingPoints ) yield {
+      val x = 2.0 * p.x
+      val y = 2.0 * p.y
+
+      val (r,a) = if( x > -y ) {
+        if( x > y ) (x,y/x) else (y,2.0-x/y)
+      } else {
+        if( x < y ) (-x,4+y/x) else (-y,if(y!=0) 6-x/y else 0 )
+      }
+
+      val phi = a * math.Pi / 4.0
+      Point2( r*math.cos(phi), r*math.sin(phi) )
+    }
+  }
 }
 
 /**
