@@ -36,6 +36,16 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       worldProvider.lightDescriptionProvider( index )
     case pp : PlaneProvider =>
       if( pp.materialProvider.isDefined ) pp.materialProvider.get else "<Material>"
+    case ocp : OrthograpicCameraProvider =>
+      if( ocp.samplingPatternProvider.isDefined ) ocp.samplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
+    case pcp : PerspectiveCameraProvider =>
+      if( pcp.samplingPatternProvider.isDefined ) pcp.samplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
+    case dcp : DOFCameraProvider =>
+      index match {
+        case 0 => if( dcp.aaSamplingPatternProvider.isDefined ) dcp.aaSamplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
+        case 1 => if( dcp.lensSamplingPatternProvider.isDefined ) dcp.lensSamplingPatternProvider.get else "<Lens Sampling Pattern>"
+      }
+
   }
 
   def getChildCount( parent: Any ): Int = parent match {
@@ -43,6 +53,9 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Geometries" => worldProvider.geometryProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
     case pp : PlaneProvider => 1
+    case ocp : OrthograpicCameraProvider => 1
+    case pcp : PerspectiveCameraProvider => 1
+    case dcp : DOFCameraProvider => 2
     case _ => 0
   }
 
@@ -52,6 +65,9 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Geometries" => worldProvider.geometryProvider.size == 0
     case "Lights" => worldProvider.lightDescriptionProvider.size == 0
     case pp : PlaneProvider => false
+    case ocp : OrthograpicCameraProvider => false
+    case pcp : PerspectiveCameraProvider => false
+    case dcp : DOFCameraProvider => false
     case _ => true
   }
 
@@ -63,10 +79,20 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "<Camera>" => 0
         case "Geometries" => 1
         case "Lights" => 2
+        case ocp : OrthograpicCameraProvider => 0
+        case pcp : PerspectiveCameraProvider => 0
+        case dcp : DOFCameraProvider => 0
       }
     case "Geometries" => worldProvider.geometryProvider.indexOf( child )
     case "Lights" => worldProvider.lightDescriptionProvider.indexOf( child )
     case pp : PlaneProvider => 0
+    case ocp : OrthograpicCameraProvider => 0
+    case pcp : PerspectiveCameraProvider => 0
+    case dcp : DOFCameraProvider =>
+      child match {
+        case "<Anti-Aliasing Sampling Pattern>" => 0
+        case "<Lens Sampling Pattern>" => 1
+      }
 
   }
 

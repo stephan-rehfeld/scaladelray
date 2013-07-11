@@ -19,12 +19,12 @@ package scaladelray.ui
 import scala.swing._
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import javax.swing.table.TableModel
-import scaladelray.ui.model.{SceneGraphTreeModel, NodeProvider, PlaneProvider, WorldProvider}
-import javax.swing.JTree
+import scaladelray.ui.model._
+import javax.swing.{SwingUtilities, JMenuItem, JPopupMenu, JTree}
 import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
+import java.awt.event._
 import scala.swing.event.ButtonClicked
-import java.awt.event.{KeyEvent, KeyListener}
 
 
 object ScalaDelRay extends SimpleSwingApplication {
@@ -103,6 +103,33 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
 
+    val cameraPopupMenu = new JPopupMenu
+    val createOrthographicCameraMenuItem = new JMenuItem( "Orthographic Camera" )
+    createOrthographicCameraMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        worldProvider.cameraProvider = Some( new OrthograpicCameraProvider )
+        sceneGraphTree.updateUI()
+      }
+    })
+    val createPerspectiveCameraMenuItem = new JMenuItem( "Perspective Camera" )
+    createPerspectiveCameraMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        worldProvider.cameraProvider = Some( new PerspectiveCameraProvider )
+        sceneGraphTree.updateUI()
+      }
+    })
+    val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
+    createDOFCameraMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        worldProvider.cameraProvider = Some( new DOFCameraProvider )
+        sceneGraphTree.updateUI()
+      }
+    })
+
+    cameraPopupMenu.add( createOrthographicCameraMenuItem )
+    cameraPopupMenu.add( createPerspectiveCameraMenuItem )
+    cameraPopupMenu.add( createDOFCameraMenuItem )
+
     val sceneGraphTree = new JTree
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
     sceneGraphTree.addKeyListener( new KeyListener {
@@ -121,6 +148,25 @@ object ScalaDelRay extends SimpleSwingApplication {
 
       def keyReleased(e: KeyEvent) {}
     } )
+
+    sceneGraphTree.addMouseListener( new MouseAdapter {
+      override def mousePressed(e: MouseEvent) {
+        val path = sceneGraphTree.getPathForLocation( e.getX, e.getY )
+
+        if( path != null && SwingUtilities.isRightMouseButton( e ) ) {
+          path.getLastPathComponent match {
+            case "<Camera>" =>
+              cameraPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case cp : CameraProvider =>
+              cameraPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case _ =>
+          }
+
+        }
+      }
+    })
 
     sceneGraphTree.addTreeSelectionListener( new TreeSelectionListener {
       def valueChanged(e: TreeSelectionEvent) {

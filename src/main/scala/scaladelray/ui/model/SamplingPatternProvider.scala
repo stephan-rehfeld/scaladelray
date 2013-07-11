@@ -16,10 +16,10 @@
 
 package scaladelray.ui.model
 
-import scaladelray.camera.Camera
+import scaladelray.sampling.SamplingPattern
 
-abstract class CameraProvider {
+abstract class SamplingPatternProvider {
 
-  def createCamera : ((Int,Int) => Camera)
+  def createSamplingPattern : SamplingPattern
 
 }

@@ -32,7 +32,7 @@ import scaladelray.sampling.SamplingPattern
  * @param aaSamplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
  * @param lensSamplingPoints The sampling pattern for the lens. The points are used to vary the origin of the rays.
  */
-case class DOFCamera ( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, focalLength : Double, lensRadius : Double, aaSamplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ), lensSamplingPoints : SamplingPattern ) extends Camera( e, g, t ) {
+case class DOFCamera ( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, focalLength : Double, lensRadius : Double, aaSamplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ), lensSamplingPoints : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends Camera( e, g, t ) {
 
   // Some computations that are valid for the whole lifetime of the camera.
   private val mw = w * -1
