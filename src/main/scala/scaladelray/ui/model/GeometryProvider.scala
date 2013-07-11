@@ -21,5 +21,5 @@ import scaladelray.geometry.Geometry
 abstract class GeometryProvider {
 
   def createGeometry : Geometry
-
+  def remove( obj : Any )
 }

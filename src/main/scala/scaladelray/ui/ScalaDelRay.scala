@@ -19,20 +19,17 @@ package scaladelray.ui
 import scala.swing._
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import javax.swing.table.TableModel
-import scaladelray.ui.model.{NodeProvider, PlaneProvider, WorldProvider}
+import scaladelray.ui.model.{SceneGraphTreeModel, NodeProvider, PlaneProvider, WorldProvider}
 import javax.swing.JTree
-import javax.swing.tree.{TreeSelectionModel, DefaultMutableTreeNode}
+import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import scala.swing.event.ButtonClicked
-import scaladelray.Color
-import scala.swing.Color
+import java.awt.event.{KeyEvent, KeyListener}
 
 
 object ScalaDelRay extends SimpleSwingApplication {
 
   var worldProvider = new WorldProvider
-  val worldProviderTreeNode = new DefaultMutableTreeNode( worldProvider, true )
-  worldProviderTreeNode.add( new DefaultMutableTreeNode( "<Camera>", false ) )
 
   lazy val ui = new GridBagPanel {
     val c = new Constraints
@@ -45,30 +42,21 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val pp = new PlaneProvider
-          val node = sceneGraphTree.getLastSelectedPathComponent.asInstanceOf[DefaultMutableTreeNode]
+          val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
-            node.getUserObject match {
+            node match {
               case np : NodeProvider =>
                 np.childNodes += pp
-                val planeNode = new DefaultMutableTreeNode( pp, true )
-                planeNode.add( new DefaultMutableTreeNode( "<Material>", false ) )
-                node.add( planeNode )
-                sceneGraphTree.updateUI()
+
               case _ =>
                 worldProvider.geometryProvider += pp
-                val planeNode = new DefaultMutableTreeNode( pp, true )
-                planeNode.add( new DefaultMutableTreeNode( "<Material>", false ) )
-                worldProviderTreeNode.add( planeNode )
-                sceneGraphTree.updateUI()
+
             }
           } else {
             worldProvider.geometryProvider += pp
-            val planeNode = new DefaultMutableTreeNode( pp, true )
-            planeNode.add( new DefaultMutableTreeNode( "<Material>", false ) )
-            worldProviderTreeNode.add( planeNode )
-            sceneGraphTree.updateUI()
-          }
 
+          }
+          sceneGraphTree.updateUI()
       }
     }
 
@@ -85,12 +73,12 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newSphereButton ) = c
 
-    val newAxisAlignedBoxButton = new Button( "Axis aligned box" )
+    val newBoxButton = new Button( "Box" )
     c.fill = Fill.Horizontal
     c.weightx = 0.5
     c.gridx = 2
     c.gridy = 0
-    layout( newAxisAlignedBoxButton ) = c
+    layout( newBoxButton ) = c
 
     val newTriangleButton = new Button( "Triangle" )
     c.fill = Fill.Horizontal
@@ -106,7 +94,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newNodeButton ) = c
 
-    val newModelFromFile = new Button( "Model from File" )
+    val newModelFromFile = new Button( "Model" )
     c.fill = Fill.Horizontal
     c.weightx = 0.5
     c.gridx = 5
@@ -115,17 +103,37 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
 
-    val sceneGraphTree = new JTree( worldProviderTreeNode )
+    val sceneGraphTree = new JTree
+    sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
+    sceneGraphTree.addKeyListener( new KeyListener {
+      def keyTyped(e: KeyEvent) {
+        e.getKeyChar match {
+          case KeyEvent.VK_DELETE =>
+            val node = sceneGraphTree.getLastSelectedPathComponent
+            if( node != null ) {
+              worldProvider.remove( node )
+              sceneGraphTree.updateUI()
+            }
+        }
+      }
+
+      def keyPressed(e: KeyEvent) {}
+
+      def keyReleased(e: KeyEvent) {}
+    } )
+
     sceneGraphTree.addTreeSelectionListener( new TreeSelectionListener {
       def valueChanged(e: TreeSelectionEvent) {
-        val node = sceneGraphTree.getLastSelectedPathComponent.asInstanceOf[DefaultMutableTreeNode]
+        val node = sceneGraphTree.getLastSelectedPathComponent
         if( node != null ) {
-          node.getUserObject match {
+          node match {
             case o : TableModel =>
               detailsTable.model = o
             case _ =>
               detailsTable.model = DummyTableModel
           }
+        } else {
+          detailsTable.model = DummyTableModel
         }
       }
     })
@@ -162,13 +170,21 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 2
     layout( detailsTableScrollPane ) = c
 
+    val renderButton = new Button( "Render" )
+    c.fill = Fill.Horizontal
+    c.ipady = 0
+    c.weighty = 0
+    c.weightx = 0.5
+    c.gridx = 0
+    c.gridy = 3
+    layout( renderButton ) = c
 
   }
 
   def top = new MainFrame {
     title = "ScalaDelRay"
     contents = ui
-    size = new Dimension( 600, 700 )
+    size = new Dimension( 500, 700 )
     resizable = false
 
   }

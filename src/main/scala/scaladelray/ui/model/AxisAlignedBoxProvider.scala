@@ -31,4 +31,6 @@ class AxisAlignedBoxProvider extends GeometryProvider {
     val t = Transform.scale( scale.x, scale.y, scale.z ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).translate( translate )
     new Node( t, aab )
   }
+
+  def remove(obj: Any) {}
 }

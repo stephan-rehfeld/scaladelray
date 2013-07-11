@@ -92,6 +92,8 @@ class PlaneProvider extends GeometryProvider with TableModel {
 
   }
 
+  def remove(obj: Any) {}
+
   def addTableModelListener(p1: TableModelListener) {}
 
   def removeTableModelListener(p1: TableModelListener) {}

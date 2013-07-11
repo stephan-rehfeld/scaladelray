@@ -32,4 +32,11 @@ class NodeProvider extends GeometryProvider {
     val t = Transform.scale( scale.x, scale.y, scale.z ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).translate( translate )
     new Node( t, cn:_*  )
   }
+
+  def remove(obj: Any) {
+    obj match {
+      case gp : GeometryProvider =>
+        if( childNodes.contains( gp ) ) childNodes = childNodes.filterNot( _ == gp ) else for( v <- childNodes ) v.remove( gp )
+    }
+  }
 }

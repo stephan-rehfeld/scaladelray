@@ -30,6 +30,18 @@ class WorldProvider extends TableModel {
   var cameraProvider : Option[CameraProvider] = None
   var indexOfRefraction = 1.0
 
+  def remove( obj : Any ) {
+    obj match {
+      case cp : CameraProvider =>
+        cameraProvider = None
+      case lp : LightDescriptionProvider =>
+        lightDescriptionProvider = lightDescriptionProvider.filterNot( _ == lp )
+      case gp : GeometryProvider =>
+        if( geometryProvider.contains( gp ) ) geometryProvider = geometryProvider.filterNot( _ == gp ) else for( v <- geometryProvider ) v.remove( gp )
+      case s: String =>
+    }
+  }
+
   def createWorld = {
     val geometries = for( gp <- geometryProvider ) yield gp.createGeometry
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription
