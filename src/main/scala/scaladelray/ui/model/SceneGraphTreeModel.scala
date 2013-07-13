@@ -42,6 +42,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       if( bp.materialProvider.isDefined ) bp.materialProvider.get else "<Material>"
     case tp : TriangleProvider =>
       if( tp.materialProvider.isDefined ) tp.materialProvider.get else "<Material>"
+    case np : NodeProvider =>
+      np.childNodes(index)
     case ocp : OrthograpicCameraProvider =>
       if( ocp.samplingPatternProvider.isDefined ) ocp.samplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
     case pcp : PerspectiveCameraProvider =>
@@ -62,6 +64,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case sp : SphereProvider => 1
     case bp : AxisAlignedBoxProvider => 1
     case tp : TriangleProvider => 1
+    case np : NodeProvider => np.childNodes.size
     case ocp : OrthograpicCameraProvider => 1
     case pcp : PerspectiveCameraProvider => 1
     case dcp : DOFCameraProvider => 2
@@ -77,6 +80,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case sp : SphereProvider => false
     case bp : AxisAlignedBoxProvider => false
     case tp : TriangleProvider => false
+    case np : NodeProvider => np.childNodes.isEmpty
     case ocp : OrthograpicCameraProvider => false
     case pcp : PerspectiveCameraProvider => false
     case dcp : DOFCameraProvider => false
@@ -101,6 +105,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case sp : SphereProvider => 0
     case bp : AxisAlignedBoxProvider => 0
     case tp : TriangleProvider => 0
+    case np : NodeProvider => np.childNodes.indexOf( child )
     case ocp : OrthograpicCameraProvider => 0
     case pcp : PerspectiveCameraProvider => 0
     case dcp : DOFCameraProvider =>

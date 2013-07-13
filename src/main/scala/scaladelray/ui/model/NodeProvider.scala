@@ -19,8 +19,10 @@ package scaladelray.ui.model
 import scaladelray.geometry.{Node, Geometry}
 import scaladelray.math.{Transform, Vector3, Point3}
 import scala.collection.mutable
+import javax.swing.table.TableModel
+import javax.swing.event.TableModelListener
 
-class NodeProvider extends GeometryProvider {
+class NodeProvider extends GeometryProvider with TableModel {
 
   var childNodes = mutable.MutableList[GeometryProvider]()
   var translate = Point3( 0, 0, 0 )
@@ -39,4 +41,66 @@ class NodeProvider extends GeometryProvider {
         if( childNodes.contains( gp ) ) childNodes = childNodes.filterNot( _ == gp ) else for( v <- childNodes ) v.remove( gp )
     }
   }
+
+  def getRowCount: Int = 3
+
+  def getColumnCount: Int = 2
+
+  def getColumnName( column : Int): String = column match {
+    case 0 => "Property"
+    case 1 => "Value"
+  }
+
+  def getColumnClass(row: Int): Class[_] = classOf[String]
+
+  def isCellEditable(row: Int, column: Int): Boolean = column match {
+    case 0 => false
+    case 1 => true
+  }
+
+  def getValueAt(row: Int, column: Int): AnyRef = column match {
+    case 0 =>
+      row match {
+        case 0 =>
+          "Translate"
+        case 1 =>
+          "Scale"
+        case 2 =>
+          "Rotate"
+      }
+    case 1 =>
+      row match {
+        case 0 =>
+          "" + translate.x + " " + translate.y + " " + translate.z
+        case 1 =>
+          "" + scale.x + " " + scale.y + " " + scale.z
+        case 2 =>
+          "" + math.toDegrees( rotate.x ) + " " + math.toDegrees( rotate.y ) + " " + math.toDegrees( rotate.z )
+      }
+  }
+
+  def setValueAt(obj: Any, row: Int, column: Int) {
+    try {
+      row match {
+        case 0 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          translate = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        case 1 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          scale = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        case 2 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          rotate = Vector3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
+      }
+    } catch {
+      case _ : Throwable =>
+    }
+
+  }
+
+  def addTableModelListener(p1: TableModelListener) {}
+
+  def removeTableModelListener(p1: TableModelListener) {}
+
+  override def toString: String = "Node"
 }

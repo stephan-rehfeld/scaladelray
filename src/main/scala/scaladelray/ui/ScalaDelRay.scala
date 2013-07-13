@@ -25,9 +25,6 @@ import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scala.swing.event.ButtonClicked
-import scaladelray.camera.Camera
-import scaladelray.World
-
 
 object ScalaDelRay extends SimpleSwingApplication {
 
@@ -153,7 +150,29 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newTriangleButton ) = c
 
-    val newNodeButton = new Button( "Node" )
+    val newNodeButton = new Button {
+      text = "Node"
+      reactions += {
+        case ButtonClicked(_) =>
+          val sp = new NodeProvider
+          val node = sceneGraphTree.getLastSelectedPathComponent
+          if( node != null ) {
+            node match {
+              case np : NodeProvider =>
+                np.childNodes += sp
+
+              case _ =>
+                worldProvider.geometryProvider += sp
+
+            }
+          } else {
+            worldProvider.geometryProvider += sp
+
+          }
+          sceneGraphTree.updateUI()
+      }
+    }
+
     c.fill = Fill.Horizontal
     c.weightx = 0.5
     c.gridx = 4
@@ -298,6 +317,7 @@ object ScalaDelRay extends SimpleSwingApplication {
               sceneGraphTree.updateUI()
               detailsTable.model = DummyTableModel
             }
+          case _ =>
         }
       }
 
