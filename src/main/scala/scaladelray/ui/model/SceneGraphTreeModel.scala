@@ -92,6 +92,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       child match {
         case "<Anti-Aliasing Sampling Pattern>" => 0
         case "<Lens Sampling Pattern>" => 1
+        case spp : SamplingPatternProvider =>
+          if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) 0 else 1
       }
 
   }

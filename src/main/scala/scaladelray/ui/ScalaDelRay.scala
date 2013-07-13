@@ -94,12 +94,50 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newNodeButton ) = c
 
-    val newModelFromFile = new Button( "Model" )
+    val newModelButton = new Button( "Model" )
     c.fill = Fill.Horizontal
     c.weightx = 0.5
     c.gridx = 5
     c.gridy = 0
-    layout( newModelFromFile ) = c
+    layout( newModelButton ) = c
+
+    val lights = new GridBagPanel {
+      val c = new Constraints
+
+      val newPointLightButton = new Button( "Point Light" )
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 0
+      c.gridy = 1
+      layout( newPointLightButton ) = c
+
+      val newSpotLightButton = new Button( "Spot Light" )
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 1
+      c.gridy = 1
+      layout( newSpotLightButton ) = c
+
+      val newDirectionalLightButton = new Button( "Directional Light" )
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 2
+      c.gridy = 1
+      layout( newDirectionalLightButton ) = c
+
+      val newAreaLightButton = new Button( "Area Light" )
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 3
+      c.gridy = 1
+      layout( newAreaLightButton ) = c
+    }
+    c.fill = Fill.Horizontal
+    c.weightx = 0.5
+    c.gridx = 0
+    c.gridy = 1
+    c.gridwidth = 6
+    layout( lights ) = c
 
 
 
@@ -130,6 +168,37 @@ object ScalaDelRay extends SimpleSwingApplication {
     cameraPopupMenu.add( createPerspectiveCameraMenuItem )
     cameraPopupMenu.add( createDOFCameraMenuItem )
 
+    var selectionParent : Option[AnyRef] = None
+    var selection : Option[AnyRef] = None
+
+    val samplingPatternPopupMenu = new JPopupMenu
+    val regularSamplingPatternMenuItem = new JMenuItem( "Regular sampling pattern" )
+    regularSamplingPatternMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( ocp : OrthograpicCameraProvider ) =>
+            ocp.samplingPatternProvider = Some( new RegularSamplingPatternProvider )
+          case Some( pcp : PerspectiveCameraProvider ) =>
+            pcp.samplingPatternProvider = Some( new RegularSamplingPatternProvider )
+          case Some( dcp : DOFCameraProvider ) =>
+            selection match {
+              case Some( "<Anti-Aliasing Sampling Pattern>" ) =>
+                dcp.aaSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+              case Some( "<Lens Sampling Pattern>" ) =>
+                dcp.lensSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) dcp.aaSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+                if( dcp.lensSamplingPatternProvider.isDefined && dcp.lensSamplingPatternProvider.get == spp ) dcp.lensSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+            }
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
+    samplingPatternPopupMenu.add( regularSamplingPatternMenuItem )
+
+
     val sceneGraphTree = new JTree
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
     sceneGraphTree.addKeyListener( new KeyListener {
@@ -140,6 +209,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             if( node != null ) {
               worldProvider.remove( node )
               sceneGraphTree.updateUI()
+              detailsTable.model = DummyTableModel
             }
         }
       }
@@ -160,6 +230,22 @@ object ScalaDelRay extends SimpleSwingApplication {
 
             case cp : CameraProvider =>
               cameraPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Anti-Aliasing Sampling Pattern>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Lens Sampling Pattern>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case spp : SamplingPatternProvider =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
+
 
             case _ =>
           }
@@ -196,7 +282,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.weighty = 0.5
     c.gridwidth = 6
     c.gridx = 0
-    c.gridy = 1
+    c.gridy = 2
     c.anchor = Anchor.North
     layout( sceneGraphTreeScrollPane ) = c
 
@@ -213,7 +299,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.anchor = Anchor.PageEnd
     c.gridwidth = 6
     c.gridx = 0
-    c.gridy = 2
+    c.gridy = 3
     layout( detailsTableScrollPane ) = c
 
     val renderButton = new Button( "Render" )
@@ -222,7 +308,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.weighty = 0
     c.weightx = 0.5
     c.gridx = 0
-    c.gridy = 3
+    c.gridy = 4
     layout( renderButton ) = c
 
   }

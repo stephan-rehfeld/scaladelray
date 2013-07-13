@@ -26,10 +26,10 @@ class DOFCameraProvider extends CameraProvider with TableModel {
   var position = Point3( 0, 0, 0 )
   var gazeDirection = Vector3( 0, 0, -1 )
   var upVector = Vector3( 0, 1, 0 )
-  var angle = 1.0
+  var angle = math.Pi / 4.0
   var focalLength = 5.0
   var lensRadius = 0.1
-  var aaSamplingPatternProvider : Option[SamplingPatternProvider] = None
+  var aaSamplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
   var lensSamplingPatternProvider : Option[SamplingPatternProvider] = None
 
   def createCamera = DOFCamera( position, gazeDirection, upVector, _, _, angle, focalLength, lensRadius, aaSamplingPatternProvider.get.createSamplingPattern, lensSamplingPatternProvider.get.createSamplingPattern )
@@ -111,6 +111,12 @@ class DOFCameraProvider extends CameraProvider with TableModel {
   def addTableModelListener(p1: TableModelListener) {}
 
   def removeTableModelListener(p1: TableModelListener) {}
+
+
+  def remove(obj: AnyRef) {
+    if( aaSamplingPatternProvider.isDefined && obj == aaSamplingPatternProvider.get ) aaSamplingPatternProvider = None
+    if( lensSamplingPatternProvider.isDefined && obj == lensSamplingPatternProvider.get ) lensSamplingPatternProvider = None
+  }
 
   override def toString: String = "DOF Camera"
 }

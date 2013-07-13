@@ -38,7 +38,10 @@ class WorldProvider extends TableModel {
         lightDescriptionProvider = lightDescriptionProvider.filterNot( _ == lp )
       case gp : GeometryProvider =>
         if( geometryProvider.contains( gp ) ) geometryProvider = geometryProvider.filterNot( _ == gp ) else for( v <- geometryProvider ) v.remove( gp )
+      case spp : SamplingPatternProvider =>
+        if( cameraProvider.isDefined ) cameraProvider.get.remove( spp )
       case s: String =>
+      case _ =>
     }
   }
 

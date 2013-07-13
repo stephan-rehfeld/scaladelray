@@ -21,5 +21,6 @@ import scaladelray.camera.Camera
 abstract class CameraProvider {
 
   def createCamera : ((Int,Int) => Camera)
+  def remove( obj : AnyRef )
 
 }

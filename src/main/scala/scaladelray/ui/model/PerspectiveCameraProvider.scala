@@ -28,7 +28,7 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
     var gazeDirection = Vector3( 0, 0, -1 )
     var upVector = Vector3( 0, 1, 0 )
     var angle = math.Pi / 4.0
-    var samplingPatternProvider : Option[SamplingPatternProvider] = None
+    var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
 
     def createCamera = PerspectiveCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern )
 
@@ -97,6 +97,10 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
     def addTableModelListener(p1: TableModelListener) {}
 
     def removeTableModelListener(p1: TableModelListener) {}
+
+    def remove(obj: AnyRef) {
+      if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
+    }
 
     override def toString: String = "Perspective Camera"
 }
