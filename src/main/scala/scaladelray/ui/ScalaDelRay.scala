@@ -96,7 +96,28 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newSphereButton ) = c
 
-    val newBoxButton = new Button( "Box" )
+    val newBoxButton = new Button {
+      text = "Box"
+      reactions += {
+        case ButtonClicked(_) =>
+          val sp = new AxisAlignedBoxProvider
+          val node = sceneGraphTree.getLastSelectedPathComponent
+          if( node != null ) {
+            node match {
+              case np : NodeProvider =>
+                np.childNodes += sp
+
+              case _ =>
+                worldProvider.geometryProvider += sp
+
+            }
+          } else {
+            worldProvider.geometryProvider += sp
+
+          }
+          sceneGraphTree.updateUI()
+      }
+    }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
     c.gridx = 2
@@ -230,6 +251,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             pp.materialProvider = Some( new SingleColorMaterialProvider )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( new SingleColorMaterialProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.materialProvider = Some( new SingleColorMaterialProvider )
           case None =>
         }
         sceneGraphTree.updateUI()
