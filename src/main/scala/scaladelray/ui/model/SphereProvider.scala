@@ -16,13 +16,12 @@
 
 package scaladelray.ui.model
 
-import scaladelray.geometry.{Plane, Node, Geometry}
-import scaladelray.math.{Transform, Vector3, Point3}
 import javax.swing.table.TableModel
+import scaladelray.math.{Transform, Vector3, Point3}
+import scaladelray.geometry.{Sphere, Node, Plane, Geometry}
 import javax.swing.event.TableModelListener
-import scaladelray.Color
 
-class PlaneProvider extends GeometryProvider with TableModel {
+class SphereProvider extends GeometryProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
@@ -30,7 +29,7 @@ class PlaneProvider extends GeometryProvider with TableModel {
   var rotate = Vector3( 0, 0, 0 )
 
   def createGeometry: Geometry = {
-    val p = new Plane( materialProvider.get.createMaterial )
+    val p = new Sphere( materialProvider.get.createMaterial )
     val t = Transform.scale( scale.x, scale.y, scale.z ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).translate( translate )
     new Node( t, p )
   }
@@ -100,5 +99,5 @@ class PlaneProvider extends GeometryProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
-  override def toString: String = "Plane"
+  override def toString: String = "Sphere"
 }
