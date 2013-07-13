@@ -25,6 +25,8 @@ import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scala.swing.event.ButtonClicked
+import scaladelray.camera.Camera
+import scaladelray.World
 
 
 object ScalaDelRay extends SimpleSwingApplication {
@@ -198,6 +200,21 @@ object ScalaDelRay extends SimpleSwingApplication {
 
     samplingPatternPopupMenu.add( regularSamplingPatternMenuItem )
 
+    val materialPopupMenu = new JPopupMenu
+    val newSingleColorMaterialMenuItem = new JMenuItem( "Single color material" )
+    newSingleColorMaterialMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( new SingleColorMaterialProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
+    materialPopupMenu.add( newSingleColorMaterialMenuItem )
+
 
     val sceneGraphTree = new JTree
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
@@ -245,6 +262,16 @@ object ScalaDelRay extends SimpleSwingApplication {
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Material>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              materialPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case mp : MaterialProvider =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              materialPopupMenu.show( e.getComponent, e.getX, e.getY )
 
 
             case _ =>
@@ -302,7 +329,16 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 3
     layout( detailsTableScrollPane ) = c
 
-    val renderButton = new Button( "Render" )
+    val renderButton = new Button {
+      text = "Render"
+      reactions += {
+        case ButtonClicked(_) =>
+          val (c,w) = worldProvider.createWorld
+          val window = new NiceRenderingWindow( w, c, new Dimension( 640, 480 ), Runtime.getRuntime.availableProcessors() )
+          window.a ! StartRendering()
+
+      }
+    }
     c.fill = Fill.Horizontal
     c.ipady = 0
     c.weighty = 0

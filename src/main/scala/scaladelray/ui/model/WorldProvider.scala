@@ -40,6 +40,8 @@ class WorldProvider extends TableModel {
         if( geometryProvider.contains( gp ) ) geometryProvider = geometryProvider.filterNot( _ == gp ) else for( v <- geometryProvider ) v.remove( gp )
       case spp : SamplingPatternProvider =>
         if( cameraProvider.isDefined ) cameraProvider.get.remove( spp )
+      case mp : MaterialProvider =>
+        for( v <- geometryProvider ) v.remove( mp )
       case s: String =>
       case _ =>
     }
@@ -49,7 +51,7 @@ class WorldProvider extends TableModel {
     val geometries = for( gp <- geometryProvider ) yield gp.createGeometry
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription
 
-    World( backgroundColor, geometries.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction )
+    (cameraProvider.get.createCamera,World( backgroundColor, geometries.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
   }
 
   def getRowCount: Int = 3

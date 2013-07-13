@@ -92,7 +92,9 @@ class PlaneProvider extends GeometryProvider with TableModel {
 
   }
 
-  def remove(obj: Any) {}
+  def remove(obj: Any) {
+    if( materialProvider.isDefined && materialProvider.get == obj ) materialProvider = None
+  }
 
   def addTableModelListener(p1: TableModelListener) {}
 
