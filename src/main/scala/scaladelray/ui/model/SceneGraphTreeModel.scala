@@ -42,6 +42,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       if( bp.materialProvider.isDefined ) bp.materialProvider.get else "<Material>"
     case tp : TriangleProvider =>
       if( tp.materialProvider.isDefined ) tp.materialProvider.get else "<Material>"
+    case mp : ModelProvider =>
+      if( mp.materialProvider.isDefined ) mp.materialProvider.get else "<Material>"
     case np : NodeProvider =>
       np.childNodes(index)
     case ocp : OrthograpicCameraProvider =>
@@ -65,6 +67,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case bp : AxisAlignedBoxProvider => 1
     case tp : TriangleProvider => 1
     case np : NodeProvider => np.childNodes.size
+    case mp : ModelProvider => 1
     case ocp : OrthograpicCameraProvider => 1
     case pcp : PerspectiveCameraProvider => 1
     case dcp : DOFCameraProvider => 2
@@ -81,6 +84,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case bp : AxisAlignedBoxProvider => false
     case tp : TriangleProvider => false
     case np : NodeProvider => np.childNodes.isEmpty
+    case mp : ModelProvider => false
     case ocp : OrthograpicCameraProvider => false
     case pcp : PerspectiveCameraProvider => false
     case dcp : DOFCameraProvider => false
@@ -106,6 +110,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case bp : AxisAlignedBoxProvider => 0
     case tp : TriangleProvider => 0
     case np : NodeProvider => np.childNodes.indexOf( child )
+    case mp : ModelProvider => 0
     case ocp : OrthograpicCameraProvider => 0
     case pcp : PerspectiveCameraProvider => 0
     case dcp : DOFCameraProvider =>
