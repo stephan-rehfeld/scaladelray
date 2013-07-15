@@ -210,21 +210,45 @@ object ScalaDelRay extends SimpleSwingApplication {
     val lights = new GridBagPanel {
       val c = new Constraints
 
-      val newPointLightButton = new Button( "Point Light" )
+      val newPointLightButton = new Button {
+        text = "Point Light"
+        reactions += {
+          case ButtonClicked(_) =>
+            val sp = new PointLightProvider
+            worldProvider.lightDescriptionProvider += sp
+            sceneGraphTree.updateUI()
+        }
+      }
       c.fill = Fill.Horizontal
       c.weightx = 0.5
       c.gridx = 0
       c.gridy = 1
       layout( newPointLightButton ) = c
 
-      val newSpotLightButton = new Button( "Spot Light" )
+      val newSpotLightButton = new Button {
+        text = "Spot Light"
+        reactions += {
+          case ButtonClicked(_) =>
+            val sp = new SpotLightProvider
+            worldProvider.lightDescriptionProvider += sp
+            sceneGraphTree.updateUI()
+        }
+      }
       c.fill = Fill.Horizontal
       c.weightx = 0.5
       c.gridx = 1
       c.gridy = 1
       layout( newSpotLightButton ) = c
 
-      val newDirectionalLightButton = new Button( "Directional Light" )
+      val newDirectionalLightButton = new Button {
+        text = "Directional Light"
+        reactions += {
+          case ButtonClicked(_) =>
+            val sp = new DirectionalLightProvider
+            worldProvider.lightDescriptionProvider += sp
+            sceneGraphTree.updateUI()
+        }
+      }
       c.fill = Fill.Horizontal
       c.weightx = 0.5
       c.gridx = 2
