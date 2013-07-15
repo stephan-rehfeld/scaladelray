@@ -55,6 +55,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case 0 => if( dcp.aaSamplingPatternProvider.isDefined ) dcp.aaSamplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
         case 1 => if( dcp.lensSamplingPatternProvider.isDefined ) dcp.lensSamplingPatternProvider.get else "<Lens Sampling Pattern>"
       }
+    case lp : LambertMaterialProvider =>
+      if( lp.diffuseTextureProvider.isDefined ) lp.diffuseTextureProvider.get else "<Diffuse Texture>"
 
   }
 
@@ -71,6 +73,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case ocp : OrthograpicCameraProvider => 1
     case pcp : PerspectiveCameraProvider => 1
     case dcp : DOFCameraProvider => 2
+    case lp : LambertMaterialProvider => 1
     case _ => 0
   }
 
@@ -88,6 +91,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case ocp : OrthograpicCameraProvider => false
     case pcp : PerspectiveCameraProvider => false
     case dcp : DOFCameraProvider => false
+    case lp : LambertMaterialProvider => false
     case _ => true
   }
 
@@ -120,6 +124,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case spp : SamplingPatternProvider =>
           if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) 0 else 1
       }
+    case lp : LambertMaterialProvider => 0
 
   }
 

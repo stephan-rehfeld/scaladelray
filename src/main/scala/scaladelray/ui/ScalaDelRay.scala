@@ -357,7 +357,43 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
+    val newLambertMaterialMenuItem = new JMenuItem( "Lambert material" )
+    newLambertMaterialMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( new LambertMaterialProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.materialProvider = Some( new LambertMaterialProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.materialProvider = Some( new LambertMaterialProvider )
+          case Some( tp : TriangleProvider ) =>
+            tp.materialProvider = Some( new LambertMaterialProvider )
+          case Some( mp : ModelProvider ) =>
+            mp.materialProvider = Some( new LambertMaterialProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
     materialPopupMenu.add( newSingleColorMaterialMenuItem )
+    materialPopupMenu.add( newLambertMaterialMenuItem )
+
+    val newTexturePopupMenu = new JPopupMenu
+    val newSingleColorTextureMenuItem = new JMenuItem( "Single color texture" )
+    newSingleColorTextureMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( lp : LambertMaterialProvider ) =>
+            lp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
+    newTexturePopupMenu.add( newSingleColorTextureMenuItem )
 
 
     val sceneGraphTree = new JTree
@@ -417,6 +453,16 @@ object ScalaDelRay extends SimpleSwingApplication {
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               materialPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Diffuse Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case tp : TextureProvider =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
 
             case _ =>
