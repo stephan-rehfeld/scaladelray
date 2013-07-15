@@ -255,7 +255,15 @@ object ScalaDelRay extends SimpleSwingApplication {
       c.gridy = 1
       layout( newDirectionalLightButton ) = c
 
-      val newAreaLightButton = new Button( "Area Light" )
+      val newAreaLightButton = new Button {
+        text = "Area light"
+        reactions += {
+          case ButtonClicked(_) =>
+            val sp = new AreaLightProvider
+            worldProvider.lightDescriptionProvider += sp
+            sceneGraphTree.updateUI()
+        }
+      }
       c.fill = Fill.Horizontal
       c.weightx = 0.5
       c.gridx = 3

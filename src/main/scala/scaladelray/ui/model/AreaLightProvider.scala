@@ -17,26 +17,28 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
+import scaladelray.light.{AreaLight, LightDescription}
 import scaladelray.Color
 import scaladelray.math.{Vector3, Point3}
-import scaladelray.light.{SpotLight, LightDescription}
-import java.lang.Double
 import javax.swing.event.TableModelListener
+import java.lang.Double
 
-class SpotLightProvider extends LightDescriptionProvider with TableModel {
+class AreaLightProvider extends LightDescriptionProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
   var position = Point3( 0, 0, 0 )
   var direction = Vector3( 0, 0, -1 )
-  var halfAngle = math.Pi / 8.0
+  var upVector = Vector3( 0, 1, 0 )
+  var size = 1.0
+  var samplingPoints = 255
   var constantAttenuation = 1.0
   var linearAttenuation = 0.0
   var quadraticAttenuation = 0.0
 
 
-  def createLightDescription: LightDescription = new SpotLight( color, position, direction, halfAngle, constantAttenuation, linearAttenuation, quadraticAttenuation )
+  def createLightDescription: LightDescription = new AreaLight( color, position, direction, upVector, size, samplingPoints, constantAttenuation, linearAttenuation, quadraticAttenuation )
 
-  def getRowCount: Int = 7
+  def getRowCount: Int = 9
 
   def getColumnCount: Int = 2
 
@@ -62,12 +64,16 @@ class SpotLightProvider extends LightDescriptionProvider with TableModel {
         case 2 =>
           "Direction"
         case 3 =>
-          "Half angle"
+          "Up vector"
         case 4 =>
-          "Constant Attenuation"
+          "Size"
         case 5 =>
-          "Linear Attenuation"
+          "Sampling points"
         case 6 =>
+          "Constant Attenuation"
+        case 7 =>
+          "Linear Attenuation"
+        case 8 =>
           "Quadratic Attenuation"
 
       }
@@ -80,12 +86,16 @@ class SpotLightProvider extends LightDescriptionProvider with TableModel {
         case 2 =>
           "" + direction.x + " " + direction.y + " " + direction.z
         case 3 =>
-          new Double( math.toDegrees( halfAngle ))
+          "" + upVector.x + " " + upVector.y + " " + upVector.z
         case 4 =>
-          new Double( constantAttenuation )
+          new Double( size )
         case 5 =>
-          new Double( linearAttenuation )
+          new Integer( samplingPoints )
         case 6 =>
+          new Double( constantAttenuation )
+        case 7 =>
+          new Double( linearAttenuation )
+        case 8 =>
           new Double( quadraticAttenuation )
       }
   }
@@ -103,15 +113,21 @@ class SpotLightProvider extends LightDescriptionProvider with TableModel {
           val v = obj.asInstanceOf[String].split( " " )
           direction = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 3 =>
-          val v = obj.asInstanceOf[String].toDouble
-          halfAngle = math.toRadians( v )
+          val v = obj.asInstanceOf[String].split( " " )
+          upVector = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 4 =>
           val v = obj.asInstanceOf[String].toDouble
-          constantAttenuation = v
+          size = v
         case 5 =>
+          val v = obj.asInstanceOf[String].toInt
+          samplingPoints = v
+        case 6 =>
+          val v = obj.asInstanceOf[String].toDouble
+          constantAttenuation = v
+        case 7 =>
           val v = obj.asInstanceOf[String].toDouble
           linearAttenuation = v
-        case 6 =>
+        case 8 =>
           val v = obj.asInstanceOf[String].toDouble
           quadraticAttenuation = v
 
@@ -126,6 +142,6 @@ class SpotLightProvider extends LightDescriptionProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
-  override def toString: String = "Spot Light"
+  override def toString: String = "Area Light"
 
 }

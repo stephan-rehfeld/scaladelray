@@ -30,8 +30,8 @@ class PointLightProvider extends LightDescriptionProvider with TableModel {
   var position = Point3( 0, 0, 0 )
   var castsShadows = true
   var constantAttenuation = 1.0
-  var linearAttenuation = 0
-  var quadraticAttenuation = 0
+  var linearAttenuation = 0.0
+  var quadraticAttenuation = 0.0
 
 
   def createLightDescription: LightDescription = new PointLight( color, position, castsShadows, constantAttenuation, linearAttenuation, quadraticAttenuation )
@@ -99,13 +99,13 @@ class PointLightProvider extends LightDescriptionProvider with TableModel {
           val v = obj.asInstanceOf[Boolean]
          castsShadows = v
         case 3 =>
-          val v = obj.asInstanceOf[String].toInt
+          val v = obj.asInstanceOf[String].toDouble
           constantAttenuation = v
         case 4 =>
-          val v = obj.asInstanceOf[String].toInt
+          val v = obj.asInstanceOf[String].toDouble
           linearAttenuation = v
         case 5 =>
-          val v = obj.asInstanceOf[String].toInt
+          val v = obj.asInstanceOf[String].toDouble
           quadraticAttenuation = v
 
       }
