@@ -40,7 +40,7 @@ class RenderingActor( world : World, id : Int ) extends Actor {
         for( y <- msg.startY until msg.height ) yield {
           val rays = msg.cam( x, y )
           var c = Color( 0, 0, 0 )
-          for( ray <- rays ) c = c + Tracer.standardTracer( ray, world, 255 )
+          for( ray <- rays ) c = c + Tracer.standardTracer( ray, world, 10 )
 
           c = c / rays.size
 

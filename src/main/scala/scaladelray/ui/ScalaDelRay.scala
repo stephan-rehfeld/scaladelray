@@ -31,6 +31,7 @@ import scaladelray.math.Point3
 object ScalaDelRay extends SimpleSwingApplication {
 
   var worldProvider = createStandardScene
+  var renderingWindowsSize = new Dimension( 640, 480 )
 
   lazy val ui = new GridBagPanel {
     val c = new Constraints
@@ -732,7 +733,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val (c,w) = worldProvider.createWorld
-          val window = new NiceRenderingWindow( w, c, new Dimension( 640, 480 ), Runtime.getRuntime.availableProcessors() )
+          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors() )
           window.a ! StartRendering()
 
       }
@@ -752,6 +753,17 @@ object ScalaDelRay extends SimpleSwingApplication {
     contents = ui
     size = new Dimension( 500, 700 )
     resizable = false
+    menuBar = new MenuBar
+    val fileMenu = new Menu( "FILE" )
+    fileMenu.contents += new MenuItem( "New")
+    fileMenu.contents += new MenuItem( "Load...")
+    val renderingSettingsMenu = new Menu( "RENDERING SETTINGS" )
+    renderingSettingsMenu
+    val helpMenu = new Menu( "HELP" )
+    helpMenu.contents += new MenuItem( "About" )
+    menuBar.contents += fileMenu
+    menuBar.contents += renderingSettingsMenu
+    menuBar.contents += helpMenu
 
   }
 

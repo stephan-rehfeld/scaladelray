@@ -16,7 +16,7 @@
 
 package scaladelray.ui
 
-import scala.swing.{Component, Frame}
+import scala.swing._
 import scaladelray.camera.Camera
 import scaladelray.World
 import java.awt.{Graphics2D, Dimension}
@@ -27,6 +27,8 @@ import scala.concurrent.{Await, Future}
 import akka.util.Timeout
 import scala.concurrent.duration._
 import akka.pattern.ask
+import scaladelray.World
+import javax.imageio.ImageIO
 
 case class StartRendering()
 
@@ -50,6 +52,25 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
   val raster = image.getRaster
   val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
 
+
+
+  menuBar = new MenuBar
+  val fileMenu = new Menu( "FILE" )
+  val saveMenuItem = new MenuItem( Action("Save") {
+    val fsd = new FileChooser
+    val result = fsd.showSaveDialog( null )
+    if( result == FileChooser.Result.Approve ) {
+      val file = fsd.selectedFile
+      val extension = file.getName.split( '.' ).last
+      ImageIO.write( image, extension, file )
+
+    }
+  })
+  saveMenuItem.enabled = false
+
+  fileMenu.contents += saveMenuItem
+  menuBar.contents += fileMenu
+
   val a = actorSystem.actorOf( Props( new Actor {
     def receive = {
       case msg : StartRendering =>
@@ -68,6 +89,7 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
             win.repaint()
           }
         }
+      saveMenuItem.enabled = true
     }
   }))
 
@@ -78,4 +100,9 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
     }
   }
 
+  override def closeOperation() {
+    super.closeOperation()
+
+    actorSystem.shutdown()
+  }
 }
