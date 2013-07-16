@@ -31,7 +31,7 @@ import scaladelray.camera.Camera
 
 case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
 
-class RenderingActor( world : World, id : Int ) extends Actor {
+class RenderingActor( world : World, id : Int, recursionDepth : Int ) extends Actor {
 
   def receive = {
     case msg : Render =>
@@ -40,7 +40,7 @@ class RenderingActor( world : World, id : Int ) extends Actor {
         for( y <- msg.startY until msg.height ) yield {
           val rays = msg.cam( x, y )
           var c = Color( 0, 0, 0 )
-          for( ray <- rays ) c = c + Tracer.standardTracer( ray, world, 10 )
+          for( ray <- rays ) c = c + Tracer.standardTracer( ray, world, recursionDepth )
 
           c = c / rays.size
 
@@ -58,7 +58,7 @@ abstract class WindowedRayTracer extends SimpleSwingApplication {
   def world : World
   def camera : ((Int,Int) => Camera)
   println( "Running with " + Runtime.getRuntime.availableProcessors() + " processors" )
-  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0 ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
+  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0, 10 ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
 
 
   implicit val timeout = Timeout(5 hours)

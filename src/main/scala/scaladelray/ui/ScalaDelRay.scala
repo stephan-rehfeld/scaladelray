@@ -32,6 +32,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
   var worldProvider = createStandardScene
   var renderingWindowsSize = new Dimension( 640, 480 )
+  var recursionDepth = 10
 
   lazy val ui = new GridBagPanel {
     val c = new Constraints
@@ -733,7 +734,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val (c,w) = worldProvider.createWorld
-          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors() )
+          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth )
           window.a ! StartRendering()
 
       }

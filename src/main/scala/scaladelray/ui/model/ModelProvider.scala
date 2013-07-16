@@ -33,7 +33,7 @@ class ModelProvider extends GeometryProvider with TableModel {
   def createGeometry: Geometry = {
     val loader = new OBJLoader
     val m = loader.load( fileName, materialProvider.get.createMaterial )
-    val t = Transform.scale( scale.x, scale.y, scale.z ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).translate( translate )
+    val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, m  )
   }
 

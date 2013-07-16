@@ -31,7 +31,7 @@ class NodeProvider extends GeometryProvider with TableModel {
 
   def createGeometry: Geometry = {
     val cn = for( n <- childNodes ) yield n.createGeometry
-    val t = Transform.scale( scale.x, scale.y, scale.z ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).translate( translate )
+    val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, cn:_*  )
   }
 

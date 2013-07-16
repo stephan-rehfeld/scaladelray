@@ -32,7 +32,7 @@ import javax.imageio.ImageIO
 
 case class StartRendering()
 
-class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int ) extends Frame {
+class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int, recursionDepth : Int ) extends Frame {
 
   title = "Rendering"
   size = s
@@ -45,7 +45,7 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
   val win = this
 
   private val actorSystem = ActorSystem("Rendering")
-  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0 ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
+  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0, recursionDepth ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
 
   val image = new BufferedImage(s.width, s.height, BufferedImage.TYPE_INT_ARGB)
   val model = image.getColorModel
