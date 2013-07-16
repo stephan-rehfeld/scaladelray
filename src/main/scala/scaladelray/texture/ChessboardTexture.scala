@@ -25,6 +25,7 @@ case class ChessboardTexture( x : Int, y : Int ) extends Texture {
 
     var black = isBlack( math.abs( texCoord.u/xStep ).asInstanceOf[Int] ) == isBlack( math.abs( texCoord.v/yStep ).asInstanceOf[Int]  )
     if( texCoord.u < 0 ) black = !black
+    if( texCoord.v < 0 ) black = !black
     if( black ) Color( 0, 0, 0) else Color( 1, 1, 1 )
   }
 
