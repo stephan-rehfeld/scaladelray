@@ -25,10 +25,12 @@ import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scala.swing.event.ButtonClicked
+import scaladelray.Color
+import scaladelray.math.Point3
 
 object ScalaDelRay extends SimpleSwingApplication {
 
-  var worldProvider = new WorldProvider
+  var worldProvider = createStandardScene
 
   lazy val ui = new GridBagPanel {
     val c = new Constraints
@@ -753,6 +755,51 @@ object ScalaDelRay extends SimpleSwingApplication {
 
   }
 
+  private def createStandardScene : WorldProvider = {
+    val worldProvider = new WorldProvider
+    worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
+    val cameraProvider = new PerspectiveCameraProvider
+    cameraProvider.position = Point3( 0, 1, 0 )
+
+    worldProvider.cameraProvider = Some( cameraProvider )
+
+
+    val planeProvider = new PlaneProvider
+    val planeLambertMaterial = new LambertMaterialProvider
+    val greySingleColorTextureProvider = new SingleColorTextureProvider
+    greySingleColorTextureProvider.color = Color( 0.8, 0.8, 0.8 )
+
+    planeLambertMaterial.diffuseTextureProvider = Some( greySingleColorTextureProvider )
+    planeProvider.materialProvider = Some( planeLambertMaterial )
+    worldProvider.geometryProvider += planeProvider
+
+
+    val sphereProvider = new SphereProvider
+    sphereProvider.translate = Point3( 0, 1, -5 )
+
+    val spherePhongMaterial = new PhongMaterialProvider
+    spherePhongMaterial.phongExponent = 64
+    val redSingleColorTexture = new SingleColorTextureProvider
+    redSingleColorTexture.color = Color( 1, 0.2, 0.2 )
+    val whiteSingleColorTextureProvider = new SingleColorTextureProvider
+    whiteSingleColorTextureProvider.color = Color( 1, 1, 1 )
+    spherePhongMaterial.diffuseTextureProvider = Some( redSingleColorTexture )
+    spherePhongMaterial.specularTextureProvider = Some( whiteSingleColorTextureProvider )
+
+    sphereProvider.materialProvider = Some( spherePhongMaterial )
+
+    worldProvider.geometryProvider += sphereProvider
+
+
+    val pointLightProvider = new PointLightProvider
+    pointLightProvider.position = Point3( 0, 1, 0 )
+
+    worldProvider.lightDescriptionProvider += pointLightProvider
+
+
+    worldProvider
+  }
+
 }
 
 
@@ -778,4 +825,6 @@ object DummyTableModel extends TableModel {
   def addTableModelListener(p1: TableModelListener) {}
 
   def removeTableModelListener(p1: TableModelListener) {}
+
+
 }
