@@ -397,9 +397,30 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
+    val newReflectiveMaterialMenuItem = new JMenuItem( "Reflective material" )
+    newReflectiveMaterialMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( new ReflectiveMaterialProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.materialProvider = Some( new ReflectiveMaterialProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.materialProvider = Some( new ReflectiveMaterialProvider )
+          case Some( tp : TriangleProvider ) =>
+            tp.materialProvider = Some( new ReflectiveMaterialProvider )
+          case Some( mp : ModelProvider ) =>
+            mp.materialProvider = Some( new ReflectiveMaterialProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
     materialPopupMenu.add( newSingleColorMaterialMenuItem )
     materialPopupMenu.add( newLambertMaterialMenuItem )
     materialPopupMenu.add( newPhongMaterialMenuItem )
+    materialPopupMenu.add( newReflectiveMaterialMenuItem )
 
     val newTexturePopupMenu = new JPopupMenu
     val newSingleColorTextureMenuItem = new JMenuItem( "Single color texture" )
@@ -417,6 +438,19 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some( spp : SamplingPatternProvider ) =>
                 if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
                 if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new SingleColorTextureProvider )
+            }
+          case Some( rp : ReflectiveMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                rp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                rp.specularTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Reflection Texture>" ) =>
+                rp.reflectionTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new SingleColorTextureProvider )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new SingleColorTextureProvider )
             }
           case None =>
         }
@@ -491,6 +525,11 @@ object ScalaDelRay extends SimpleSwingApplication {
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
             case "<Specular Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Reflection Texture>" =>
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )

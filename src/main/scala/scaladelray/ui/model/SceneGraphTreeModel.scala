@@ -62,7 +62,12 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
         case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
       }
-
+    case pp : ReflectiveMaterialProvider =>
+      index match {
+        case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
+        case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
+        case 2 => if( pp.reflectionTextureProvider.isDefined ) pp.reflectionTextureProvider.get else "<Reflection Texture>"
+      }
   }
 
   def getChildCount( parent: Any ): Int = parent match {
@@ -80,6 +85,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case dcp : DOFCameraProvider => 2
     case lp : LambertMaterialProvider => 1
     case pp : PhongMaterialProvider => 2
+    case rp : ReflectiveMaterialProvider => 3
     case _ => 0
   }
 
@@ -99,6 +105,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case dcp : DOFCameraProvider => false
     case lp : LambertMaterialProvider => false
     case pp : PhongMaterialProvider => false
+    case rp : ReflectiveMaterialProvider => false
     case _ => true
   }
 
@@ -138,6 +145,15 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "<Specular Texture>" => 1
         case tp : TextureProvider =>
           if(pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) 0 else 1
+      }
+    case rp : ReflectiveMaterialProvider =>
+      child match {
+        case "<Diffuse Texture>" => 0
+        case "<Specular Texture>" => 1
+        case "<Reflection Texture>" => 2
+        case tp : TextureProvider =>
+          if(rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) {0}
+          else if(rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp) 1 else 2
       }
 
   }
