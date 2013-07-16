@@ -26,7 +26,7 @@ class Plane( material : Material ) extends Geometry( material ) {
    def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n
      if( h != 0.0 ) {
-       val t = ((r.o.asVector * -1.0) dot Plane.n) / h
+       val t = ((-r.o.asVector) dot Plane.n) / h
        val p = r( t )
        Set( Hit( r, this, t, Plane.n, TexCoord2D( p.x, -p.z ) ) )
      } else
