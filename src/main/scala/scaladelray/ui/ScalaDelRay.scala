@@ -417,10 +417,31 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
+    val newTransparentMaterialMenuItem = new JMenuItem( "Transparent material" )
+    newTransparentMaterialMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( new TransparentMaterialProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.materialProvider = Some( new TransparentMaterialProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.materialProvider = Some( new TransparentMaterialProvider )
+          case Some( tp : TriangleProvider ) =>
+            tp.materialProvider = Some( new TransparentMaterialProvider )
+          case Some( mp : ModelProvider ) =>
+            mp.materialProvider = Some( new TransparentMaterialProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
     materialPopupMenu.add( newSingleColorMaterialMenuItem )
     materialPopupMenu.add( newLambertMaterialMenuItem )
     materialPopupMenu.add( newPhongMaterialMenuItem )
     materialPopupMenu.add( newReflectiveMaterialMenuItem )
+    materialPopupMenu.add( newTransparentMaterialMenuItem )
 
     val newTexturePopupMenu = new JPopupMenu
     val newSingleColorTextureMenuItem = new JMenuItem( "Single color texture" )
