@@ -37,11 +37,13 @@ class ModelProvider extends GeometryProvider with TableModel {
     new Node( t, m  )
   }
 
-  def remove(obj: Any) {
+  def remove(obj: AnyRef) {
     obj match {
       case mp : MaterialProvider =>
         if( materialProvider.isDefined && materialProvider.get == mp ) materialProvider = None
+      case _ =>
     }
+    if( materialProvider.isDefined ) materialProvider.get.remove( obj )
   }
 
   def getRowCount: Int = 4

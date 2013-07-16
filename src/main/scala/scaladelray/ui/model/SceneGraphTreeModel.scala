@@ -57,6 +57,11 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       }
     case lp : LambertMaterialProvider =>
       if( lp.diffuseTextureProvider.isDefined ) lp.diffuseTextureProvider.get else "<Diffuse Texture>"
+    case pp : PhongMaterialProvider =>
+      index match {
+        case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
+        case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
+      }
 
   }
 
@@ -74,6 +79,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case pcp : PerspectiveCameraProvider => 1
     case dcp : DOFCameraProvider => 2
     case lp : LambertMaterialProvider => 1
+    case pp : PhongMaterialProvider => 2
     case _ => 0
   }
 
@@ -92,6 +98,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case pcp : PerspectiveCameraProvider => false
     case dcp : DOFCameraProvider => false
     case lp : LambertMaterialProvider => false
+    case pp : PhongMaterialProvider => false
     case _ => true
   }
 
@@ -125,6 +132,13 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
           if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) 0 else 1
       }
     case lp : LambertMaterialProvider => 0
+    case pp : PhongMaterialProvider =>
+      child match {
+        case "<Diffuse Texture>" => 0
+        case "<Specular Texture>" => 1
+        case tp : TextureProvider =>
+          if(pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) 0 else 1
+      }
 
   }
 

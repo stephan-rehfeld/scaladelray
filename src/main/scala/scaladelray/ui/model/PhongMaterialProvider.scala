@@ -16,22 +16,26 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.material.{LambertMaterial, Material}
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+import scaladelray.material.{PhongMaterial, Material}
 
-class LambertMaterialProvider extends MaterialProvider with TableModel {
+class PhongMaterialProvider extends MaterialProvider with TableModel {
 
+  var phongExponent = 1
   var diffuseTextureProvider : Option[TextureProvider] = None
+  var specularTextureProvider : Option[TextureProvider] = None
 
-  def createMaterial: Material = LambertMaterial( diffuseTextureProvider.get.createTexture )
+
+  def createMaterial: Material = PhongMaterial( diffuseTextureProvider.get.createTexture, specularTextureProvider.get.createTexture, phongExponent )
 
 
   def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
+    if( specularTextureProvider.isDefined && specularTextureProvider.get == obj ) specularTextureProvider = None
   }
 
-  def getRowCount: Int = 0
+  def getRowCount: Int = 1
 
   def getColumnCount: Int = 2
 
@@ -42,16 +46,44 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = false
+  def isCellEditable(row: Int, column: Int): Boolean = column match {
+    case 0 => false
+    case 1 => true
+  }
 
-  def getValueAt(row: Int, column: Int): AnyRef = ""
+  def getValueAt(row: Int, column: Int): AnyRef = column match {
+    case 0 =>
+      row match {
+        case 0 =>
+          "Phong exponent"
 
-  def setValueAt(obj: Any, row: Int, column: Int) {}
+      }
+    case 1 =>
+      row match {
+        case 0 =>
+          new Integer( phongExponent )
+
+      }
+  }
+
+  def setValueAt(obj: Any, row: Int, column: Int) {
+    try {
+      row match {
+        case 0 =>
+          val v = obj.asInstanceOf[String].toInt
+          phongExponent = v
+
+      }
+    } catch {
+      case _ : Throwable =>
+    }
+
+  }
 
   def addTableModelListener(p1: TableModelListener) {}
 
   def removeTableModelListener(p1: TableModelListener) {}
 
-  override def toString: String = "Lambert material"
+  override def toString: String = "Phong material"
 
 }

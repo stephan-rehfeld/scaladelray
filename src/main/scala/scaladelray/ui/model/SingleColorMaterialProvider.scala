@@ -27,6 +27,9 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
 
   def createMaterial: Material = SingleColorMaterial( color )
 
+
+  def remove(obj: AnyRef) {}
+
   def getRowCount: Int = 1
 
   def getColumnCount: Int = 2

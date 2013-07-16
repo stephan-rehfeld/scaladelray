@@ -140,8 +140,9 @@ class TriangleProvider extends GeometryProvider with TableModel {
 
   }
 
-  def remove(obj: Any) {
+  def remove(obj: AnyRef) {
     if( materialProvider.isDefined && materialProvider.get == obj ) materialProvider = None
+    if( materialProvider.isDefined ) materialProvider.get.remove( obj )
   }
 
   def addTableModelListener(p1: TableModelListener) {}

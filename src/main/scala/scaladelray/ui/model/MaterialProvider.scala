@@ -21,5 +21,6 @@ import scaladelray.material.Material
 abstract class MaterialProvider {
 
   def createMaterial : Material
+  def remove( obj : AnyRef )
 
 }

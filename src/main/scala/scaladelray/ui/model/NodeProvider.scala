@@ -35,10 +35,11 @@ class NodeProvider extends GeometryProvider with TableModel {
     new Node( t, cn:_*  )
   }
 
-  def remove(obj: Any) {
+  def remove(obj: AnyRef) {
     obj match {
       case gp : GeometryProvider =>
         if( childNodes.contains( gp ) ) childNodes = childNodes.filterNot( _ == gp ) else for( v <- childNodes ) v.remove( gp )
+      case _ =>
     }
   }
 

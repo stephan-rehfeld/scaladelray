@@ -42,6 +42,8 @@ class WorldProvider extends TableModel {
         if( cameraProvider.isDefined ) cameraProvider.get.remove( spp )
       case mp : MaterialProvider =>
         for( v <- geometryProvider ) v.remove( mp )
+      case tp : TextureProvider =>
+        for( v <- geometryProvider ) v.remove( tp )
       case s: String =>
       case _ =>
     }

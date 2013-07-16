@@ -377,8 +377,29 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
+    val newPhongMaterialMenuItem = new JMenuItem( "Phong material" )
+    newPhongMaterialMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( new PhongMaterialProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.materialProvider = Some( new PhongMaterialProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.materialProvider = Some( new PhongMaterialProvider )
+          case Some( tp : TriangleProvider ) =>
+            tp.materialProvider = Some( new PhongMaterialProvider )
+          case Some( mp : ModelProvider ) =>
+            mp.materialProvider = Some( new PhongMaterialProvider )
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
     materialPopupMenu.add( newSingleColorMaterialMenuItem )
     materialPopupMenu.add( newLambertMaterialMenuItem )
+    materialPopupMenu.add( newPhongMaterialMenuItem )
 
     val newTexturePopupMenu = new JPopupMenu
     val newSingleColorTextureMenuItem = new JMenuItem( "Single color texture" )
@@ -387,6 +408,16 @@ object ScalaDelRay extends SimpleSwingApplication {
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
             lp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+          case Some( pp : PhongMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                pp.specularTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new SingleColorTextureProvider )
+            }
           case None =>
         }
         sceneGraphTree.updateUI()
@@ -458,6 +489,12 @@ object ScalaDelRay extends SimpleSwingApplication {
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Specular Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
 
             case tp : TextureProvider =>
               selection = Some( path.getLastPathComponent )
