@@ -514,8 +514,80 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
+    val newImageTextureMenuItem = new JMenuItem( "Image texture" )
+    newImageTextureMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( lp : LambertMaterialProvider ) =>
+            lp.diffuseTextureProvider = Some( new ImageTextureProvider )
+          case Some( pp : PhongMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                pp.diffuseTextureProvider = Some( new ImageTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                pp.specularTextureProvider = Some( new ImageTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new ImageTextureProvider )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new ImageTextureProvider )
+            }
+          case Some( rp : ReflectiveMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                rp.diffuseTextureProvider = Some( new ImageTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                rp.specularTextureProvider = Some( new ImageTextureProvider )
+              case Some( "<Reflection Texture>" ) =>
+                rp.reflectionTextureProvider = Some( new ImageTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new ImageTextureProvider )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new ImageTextureProvider )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new ImageTextureProvider )
+            }
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
+    val newInterpolatedImageTextureMenuItem = new JMenuItem( "Interpolated image texture" )
+    newInterpolatedImageTextureMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        selectionParent match {
+          case Some( lp : LambertMaterialProvider ) =>
+            lp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+          case Some( pp : PhongMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+            }
+          case Some( rp : ReflectiveMaterialProvider ) =>
+            selection match {
+              case Some( "<Diffuse Texture>" ) =>
+                rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+              case Some( "<Specular Texture>" ) =>
+                rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+              case Some( "<Reflection Texture>" ) =>
+                rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider )
+              case Some( spp : SamplingPatternProvider ) =>
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider )
+            }
+          case None =>
+        }
+        sceneGraphTree.updateUI()
+      }
+    })
+
     newTexturePopupMenu.add( newSingleColorTextureMenuItem )
     newTexturePopupMenu.add( newChessboardTextureMenuItem )
+    newTexturePopupMenu.add( newImageTextureMenuItem )
+    newTexturePopupMenu.add( newInterpolatedImageTextureMenuItem )
 
 
     val sceneGraphTree = new JTree
