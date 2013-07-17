@@ -1,1 +1,1 @@
-java -classpath scala-library.jar:scala-swing.jar:scaladelray_2.10-0.8-beta.jar scaladelray.ui.ScalaDelRay
+java -classpath scala-library.jar:scala-swing.jar:akka-actor_2.10-2.1.4.jar:config-1.0.0.jar:scaladelray_2.10-0.8-beta.jar scaladelray.ui.ScalaDelRay
