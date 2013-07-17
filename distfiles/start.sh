@@ -1,0 +1,1 @@
+java -classpath scala-library.jar:scala-swing.jar:scaladelray_2.10-0.8-beta.jar scaladelray.ui.ScalaDelRay

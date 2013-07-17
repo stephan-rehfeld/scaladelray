@@ -1,0 +1,2 @@
+ScalaDelRay (scaladelray_2.10-0.8-beta.jar) is under the Apache 2.0 License
+Scala (scala-library.jar & scala-swing.jar) is under the SCALA LICENSE
