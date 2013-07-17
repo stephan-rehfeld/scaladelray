@@ -758,8 +758,68 @@ object ScalaDelRay extends SimpleSwingApplication {
     val fileMenu = new Menu( "FILE" )
     fileMenu.contents += new MenuItem( "New")
     fileMenu.contents += new MenuItem( "Load...")
-    val renderingSettingsMenu = new Menu( "RENDERING SETTINGS" )
-    renderingSettingsMenu
+    val renderingSettingsMenu = new Menu( "RENDERING" )
+    renderingSettingsMenu.contents += new MenuItem( Action("Settings...") {
+
+      val frame = new Frame {
+        title = "Rendering settings"
+        contents = new GridBagPanel {
+          val c = new Constraints
+
+          val widthLabel = new Label( "Width:")
+
+          c.fill = Fill.Horizontal
+          c.weightx = 0.5
+          c.gridx = 0
+          c.gridy = 0
+          layout( widthLabel ) = c
+
+          val widthTextField = new TextField( "" + renderingWindowsSize.getWidth.toInt )
+
+          c.gridx = 1
+          layout( widthTextField ) = c
+
+          val heightLabel = new Label( "Height:" )
+
+          c.gridy = 1
+          c.gridx = 0
+          layout( heightLabel ) = c
+
+          val heightTextField = new TextField( "" + renderingWindowsSize.getHeight.toInt )
+          c.gridx = 1
+          layout( heightTextField ) = c
+
+          val recursionsLabel = new Label( "Recursions: " )
+          c.gridy = 2
+          c.gridx = 0
+          layout( recursionsLabel ) = c
+
+          val recursionsTextField = new TextField( "" + recursionDepth )
+          c.gridx = 1
+          layout( recursionsTextField ) = c
+
+
+          val cancelButton = new Button("Cancel" )
+          cancelButton.action = Action( "Cancel" ) {
+           close()
+          }
+          c.gridy = 3
+          c.gridx = 0
+          layout( cancelButton ) = c
+
+          val okButton = new Button("Ok" )
+          okButton.action = Action( "Ok" ) {
+            renderingWindowsSize = new Dimension( widthTextField.text.toInt, heightTextField.text.toInt )
+            recursionDepth = recursionsTextField.text.toInt
+            close()
+          }
+          c.gridx = 1
+          layout( okButton ) = c
+
+        }
+        visible = true
+      }
+    })
     val helpMenu = new Menu( "HELP" )
     helpMenu.contents += new MenuItem( "About" )
     menuBar.contents += fileMenu
