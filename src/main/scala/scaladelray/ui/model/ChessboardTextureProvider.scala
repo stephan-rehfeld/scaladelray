@@ -64,5 +64,8 @@ class ChessboardTextureProvider extends TextureProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
+
+  def isReady: Boolean = true
+
   override def toString: String = "Chessboard texture"
 }

@@ -22,5 +22,6 @@ abstract class CameraProvider {
 
   def createCamera : ((Int,Int) => Camera)
   def remove( obj : AnyRef )
+  def isReady : Boolean
 
 }

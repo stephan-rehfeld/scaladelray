@@ -103,5 +103,8 @@ class NodeProvider extends GeometryProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
+
+  def isReady: Boolean = childNodes.find( (gp) => !gp.isReady ).isEmpty
+
   override def toString: String = "Node"
 }

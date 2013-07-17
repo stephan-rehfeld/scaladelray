@@ -84,6 +84,9 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
+
+  def isReady: Boolean = (if( diffuseTextureProvider.isDefined ) diffuseTextureProvider.get.isReady else false) && (if(specularTextureProvider.isDefined) specularTextureProvider.get.isReady else false)
+
   override def toString: String = "Phong material"
 
 }

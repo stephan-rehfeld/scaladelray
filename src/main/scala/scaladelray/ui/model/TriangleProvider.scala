@@ -149,5 +149,8 @@ class TriangleProvider extends GeometryProvider with TableModel {
 
   def removeTableModelListener(p1: TableModelListener) {}
 
+
+  def isReady: Boolean = if( materialProvider.isDefined ) materialProvider.get.isReady else false
+
   override def toString: String = "Triangle"
 }

@@ -21,5 +21,6 @@ import scaladelray.light.LightDescription
 abstract class LightDescriptionProvider {
 
   def createLightDescription : LightDescription
+  def isReady : Boolean
 
 }

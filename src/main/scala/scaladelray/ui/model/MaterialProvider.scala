@@ -22,5 +22,6 @@ abstract class MaterialProvider {
 
   def createMaterial : Material
   def remove( obj : AnyRef )
+  def isReady : Boolean
 
 }

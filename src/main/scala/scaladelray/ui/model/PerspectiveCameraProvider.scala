@@ -102,5 +102,7 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
       if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
     }
 
+    def isReady: Boolean = samplingPatternProvider.isDefined
+
     override def toString: String = "Perspective Camera"
 }

@@ -111,6 +111,8 @@ class WorldProvider extends TableModel {
 
   }
 
+  def isReady = (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && geometryProvider.find( (gp) => !gp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
+
   def addTableModelListener(p1: TableModelListener) {}
 
   def removeTableModelListener(p1: TableModelListener) {}

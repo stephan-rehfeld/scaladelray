@@ -97,6 +97,8 @@ class AxisAlignedBoxProvider extends GeometryProvider with TableModel {
 
   def addTableModelListener(p1: TableModelListener) {}
 
+  def isReady: Boolean = if( materialProvider.isDefined ) materialProvider.get.isReady else false
+
   def removeTableModelListener(p1: TableModelListener) {}
 
   override def toString: String = "Box"

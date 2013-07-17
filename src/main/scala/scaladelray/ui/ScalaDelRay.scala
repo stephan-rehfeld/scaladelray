@@ -22,11 +22,12 @@ import javax.swing.table.TableModel
 import scaladelray.ui.model._
 import javax.swing.{SwingUtilities, JMenuItem, JPopupMenu, JTree}
 import javax.swing.tree.TreeSelectionModel
-import javax.swing.event.{TableModelListener, TreeSelectionEvent, TreeSelectionListener}
+import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
 import scaladelray.math.Point3
+import java.io.File
 
 object ScalaDelRay extends SimpleSwingApplication {
 
@@ -34,7 +35,14 @@ object ScalaDelRay extends SimpleSwingApplication {
   var renderingWindowsSize = new Dimension( 640, 480 )
   var recursionDepth = 10
 
-  lazy val ui = new GridBagPanel {
+
+  lazy val ui : GridBagPanel with TableModelListener = new GridBagPanel with TableModelListener {
+
+
+    def tableChanged(e: TableModelEvent) {
+      updateUI()
+    }
+
     val c = new Constraints
     val shouldFill = true
 
@@ -59,7 +67,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += pp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
 
@@ -88,7 +96,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
     c.fill = Fill.Horizontal
@@ -116,7 +124,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
     c.fill = Fill.Horizontal
@@ -144,7 +152,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
 
@@ -173,7 +181,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
 
@@ -183,11 +191,11 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newNodeButton ) = c
 
-    val newModelButton = new Button {
+    val newModelButton : Button = new Button {
       text = "Model"
       reactions += {
         case ButtonClicked(_) =>
-          val sp = new ModelProvider
+          val sp = new ModelProvider( ui )
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -202,7 +210,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          sceneGraphTree.updateUI()
+          updateUI()
       }
     }
     c.fill = Fill.Horizontal
@@ -220,7 +228,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case ButtonClicked(_) =>
             val sp = new PointLightProvider
             worldProvider.lightDescriptionProvider += sp
-            sceneGraphTree.updateUI()
+            updateUI()
         }
       }
       c.fill = Fill.Horizontal
@@ -235,7 +243,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case ButtonClicked(_) =>
             val sp = new SpotLightProvider
             worldProvider.lightDescriptionProvider += sp
-            sceneGraphTree.updateUI()
+            updateUI()
         }
       }
       c.fill = Fill.Horizontal
@@ -250,7 +258,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case ButtonClicked(_) =>
             val sp = new DirectionalLightProvider
             worldProvider.lightDescriptionProvider += sp
-            sceneGraphTree.updateUI()
+            updateUI()
         }
       }
       c.fill = Fill.Horizontal
@@ -265,7 +273,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case ButtonClicked(_) =>
             val sp = new AreaLightProvider
             worldProvider.lightDescriptionProvider += sp
-            sceneGraphTree.updateUI()
+            updateUI()
         }
       }
       c.fill = Fill.Horizontal
@@ -288,21 +296,21 @@ object ScalaDelRay extends SimpleSwingApplication {
     createOrthographicCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
         worldProvider.cameraProvider = Some( new OrthograpicCameraProvider )
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
     val createPerspectiveCameraMenuItem = new JMenuItem( "Perspective Camera" )
     createPerspectiveCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
         worldProvider.cameraProvider = Some( new PerspectiveCameraProvider )
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
     val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
     createDOFCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
         worldProvider.cameraProvider = Some( new DOFCameraProvider )
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -334,7 +342,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             }
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -357,7 +365,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             mp.materialProvider = Some( new SingleColorMaterialProvider )
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -377,7 +385,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             mp.materialProvider = Some( new LambertMaterialProvider )
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -397,7 +405,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             mp.materialProvider = Some( new PhongMaterialProvider )
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -417,7 +425,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             mp.materialProvider = Some( new ReflectiveMaterialProvider )
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -437,7 +445,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             mp.materialProvider = Some( new TransparentMaterialProvider )
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -479,7 +487,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             }
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -514,7 +522,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             }
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -523,33 +531,33 @@ object ScalaDelRay extends SimpleSwingApplication {
       def actionPerformed(e: ActionEvent) {
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new ImageTextureProvider )
+            lp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new ImageTextureProvider )
+                pp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new ImageTextureProvider )
+                pp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some( spp : SamplingPatternProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new ImageTextureProvider )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new ImageTextureProvider )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new ImageTextureProvider )
+                rp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new ImageTextureProvider )
+                rp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new ImageTextureProvider )
+                rp.reflectionTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some( spp : SamplingPatternProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new ImageTextureProvider )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new ImageTextureProvider )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new ImageTextureProvider )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new ImageTextureProvider( ui ) )
             }
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -558,33 +566,33 @@ object ScalaDelRay extends SimpleSwingApplication {
       def actionPerformed(e: ActionEvent) {
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+            lp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+                pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+                pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some( spp : SamplingPatternProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == spp ) pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == spp ) pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
+                rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
+                rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider )
+                rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some( spp : SamplingPatternProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == spp ) rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == spp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == spp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
             }
           case None =>
         }
-        sceneGraphTree.updateUI()
+        updateUI()
       }
     })
 
@@ -603,7 +611,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val node = sceneGraphTree.getLastSelectedPathComponent
             if( node != null ) {
               worldProvider.remove( node )
-              sceneGraphTree.updateUI()
+              updateUI()
               detailsTable.model = DummyTableModel
             }
           case _ =>
@@ -679,6 +687,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
         }
       }
+
     })
 
     sceneGraphTree.addTreeSelectionListener( new TreeSelectionListener {
@@ -746,6 +755,11 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridx = 0
     c.gridy = 4
     layout( renderButton ) = c
+
+    private def updateUI() {
+      sceneGraphTree.updateUI()
+      renderButton.enabled = worldProvider.isReady
+    }
 
   }
 
@@ -822,11 +836,15 @@ object ScalaDelRay extends SimpleSwingApplication {
     })
     val helpMenu = new Menu( "HELP" )
     helpMenu.contents += new MenuItem( "About" )
-    menuBar.contents += fileMenu
+    //menuBar.contents += fileMenu
     menuBar.contents += renderingSettingsMenu
     menuBar.contents += helpMenu
 
+
+
   }
+
+
 
   private def createStandardScene : WorldProvider = {
     val worldProvider = new WorldProvider

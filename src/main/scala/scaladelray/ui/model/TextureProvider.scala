@@ -20,4 +20,5 @@ import scaladelray.texture.Texture
 
 abstract class TextureProvider {
   def createTexture : Texture
+  def isReady : Boolean
 }

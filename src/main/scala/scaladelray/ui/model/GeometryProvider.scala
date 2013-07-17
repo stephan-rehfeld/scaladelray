@@ -22,4 +22,5 @@ abstract class GeometryProvider {
 
   def createGeometry : Geometry
   def remove( obj : AnyRef )
+  def isReady : Boolean
 }

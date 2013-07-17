@@ -18,11 +18,17 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.texture.{ImageTexture, ChessboardTexture, Texture}
-import javax.swing.event.TableModelListener
+import javax.swing.event.{TableModelEvent, TableModelListener}
+import java.io.File
+import scala.collection.mutable
 
-class ImageTextureProvider extends TextureProvider with TableModel {
+class ImageTextureProvider( tml : TableModelListener ) extends TextureProvider with TableModel {
 
   var fileName = ""
+
+  var listener = mutable.Set[TableModelListener]()
+
+  listener += tml
 
 
   def createTexture: Texture = ImageTexture(fileName )
@@ -52,14 +58,23 @@ class ImageTextureProvider extends TextureProvider with TableModel {
   def setValueAt( obj : Any, row: Int, column: Int) {
 
     row match {
-      case 0 => fileName = obj.asInstanceOf[String]
+      case 0 =>
+        fileName = obj.asInstanceOf[String]
+        for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
     }
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  def addTableModelListener( l : TableModelListener) {
+    listener += l
+  }
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  def removeTableModelListener( l : TableModelListener) {
+    listener -= l
+  }
+
+
+  def isReady: Boolean = new File( fileName ).exists()
 
   override def toString: String = "Image texture"
 

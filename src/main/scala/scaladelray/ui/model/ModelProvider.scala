@@ -20,15 +20,21 @@ import javax.swing.table.TableModel
 import scaladelray.math.{Transform, Vector3, Point3}
 import scaladelray.geometry.{Node, Geometry}
 import scaladelray.loader.OBJLoader
-import javax.swing.event.TableModelListener
+import javax.swing.event.{TableModelEvent, TableModelListener}
+import java.io.File
+import scala.collection.mutable
 
-class ModelProvider extends GeometryProvider with TableModel {
+class ModelProvider( tml : TableModelListener ) extends GeometryProvider with TableModel {
 
   var fileName = ""
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
+
+  var listener = mutable.Set[TableModelListener]()
+
+  listener += tml
 
   def createGeometry: Geometry = {
     val loader = new OBJLoader
@@ -101,6 +107,8 @@ class ModelProvider extends GeometryProvider with TableModel {
           rotate = Vector3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
         case 3 =>
           fileName = obj.asInstanceOf[String]
+          for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
+
       }
     } catch {
       case _ : Throwable =>
@@ -108,9 +116,18 @@ class ModelProvider extends GeometryProvider with TableModel {
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  def isReady: Boolean = {
+    (if( materialProvider.isDefined ) materialProvider.get.isReady else false) && new File( fileName ).exists()
+  }
+
+  def addTableModelListener( l : TableModelListener) {
+    listener += l
+  }
+
+  def removeTableModelListener( l : TableModelListener) {
+    listener -= l
+  }
 
   override def toString: String = "Model"
 

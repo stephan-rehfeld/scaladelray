@@ -118,5 +118,7 @@ class DOFCameraProvider extends CameraProvider with TableModel {
     if( lensSamplingPatternProvider.isDefined && obj == lensSamplingPatternProvider.get ) lensSamplingPatternProvider = None
   }
 
+  def isReady: Boolean = aaSamplingPatternProvider.isDefined && lensSamplingPatternProvider.isDefined
+
   override def toString: String = "DOF Camera"
 }
