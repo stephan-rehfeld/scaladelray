@@ -1,2 +1,3 @@
-ScalaDelRay (scaladelray_2.10-0.8-beta.jar) is under the Apache 2.0 License
-Scala (scala-library.jar & scala-swing.jar) is under the SCALA LICENSE
+ScalaDelRay (scaladelray_2.10-0.8-beta.jar) is under the Apache 2.0 License and the copyright holder is Stephan Rehfeld
+Scala (scala-library.jar & scala-swing.jar) is under the SCALA LICENSE and the copyright holder is EPFL, Lausanne, unless otherwise specified
+Akka (akka-actor_2.10-2.14.jar & config-1.0.0.jar) is under the Apache 2.0 License and the copyright holder is Typesafe Inc. (http://doc.akka.io/docs/akka/snapshot/project/licenses.html)
