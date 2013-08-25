@@ -19,8 +19,8 @@ package scaladelray.ui
 import scala.swing._
 import scaladelray.camera.Camera
 import scaladelray.World
-import java.awt.{Graphics2D, Dimension}
-import akka.actor.{Actor, Props, ActorSystem}
+import java.awt.{GridBagLayout, Graphics2D, Dimension}
+import akka.actor._
 import akka.routing.RoundRobinRouter
 import java.awt.image.BufferedImage
 import scala.concurrent.{Await, Future}
@@ -29,6 +29,10 @@ import scala.concurrent.duration._
 import akka.pattern.ask
 import scaladelray.World
 import javax.imageio.ImageIO
+import scala.swing.GridBagPanel.Fill
+import scaladelray.ui.Render
+import scaladelray.ui.StartRendering
+import scaladelray.World
 
 case class StartRendering()
 
@@ -72,6 +76,9 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
   menuBar.contents += fileMenu
 
   val a = actorSystem.actorOf( Props( new Actor {
+
+    val begin = System.currentTimeMillis()
+
     def receive = {
       case msg : StartRendering =>
         var futures = scala.collection.mutable.MutableList[Future[Any]]()
@@ -81,6 +88,51 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
           futures += ftr
         }
 
+        var futuresResolved = 0
+
+        val start = System.currentTimeMillis()
+
+        val infoWindowUpdateActor = actorSystem.actorOf( Props( new Actor {
+          this.context.setReceiveTimeout( 1 second )
+          def receive = {
+            case m : ReceiveTimeout =>
+
+              var time = (System.currentTimeMillis() - start) / 1000
+              var month = time / (60*60*24*30)
+              time = time % (60*60*24*30)
+              var days = time / (60*60*24)
+              time = time % (60*60*24)
+              var hours = time / (60*60)
+              time = time % (60*60)
+              var minutes = time / 60
+              var seconds = time % 60
+
+              infoWindow.infoUI.timeInfoLabel.text = "" + month + " month " + days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds"
+
+              if( futuresResolved > 0 ) {
+                time = (System.currentTimeMillis() - start) / 1000
+
+                time = time * futures.size / futuresResolved
+
+                month = time / (60*60*24*30)
+                time = time % (60*60*24*30)
+                days = time / (60*60*24)
+                time = time % (60*60*24)
+                hours = time / (60*60)
+                time = time % (60*60)
+                minutes = time / 60
+                seconds = time % 60
+
+                infoWindow.infoUI.estimatedInfoLabel.text = "" + month + " month " + days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds"
+              }
+
+
+
+              infoWindow.infoUI.progressBar.value = futuresResolved * 100 / futures.size
+
+          }
+        }))
+
         for( future <- futures ) {
           val pixel = Await.result( future, timeout.duration ).asInstanceOf[List[(Int,Int,Int)]]
 
@@ -88,8 +140,18 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
             raster.setDataElements(x, s.height-1-y, model.getDataElements(c, null))
             win.repaint()
           }
+
+          futuresResolved = futuresResolved + 1
+
+
+
+
         }
-      saveMenuItem.enabled = true
+        infoWindow.infoUI.estimatedInfoLabel.text = infoWindow.infoUI.timeInfoLabel.text
+        infoWindow.infoUI.progressBar.value = 100
+        infoWindow.title = "Finished"
+        infoWindowUpdateActor ! PoisonPill
+        saveMenuItem.enabled = true
     }
   }))
 
@@ -104,5 +166,62 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
     super.closeOperation()
 
     actorSystem.shutdown()
+  }
+
+  val infoWindow = new Frame {
+    title = "Rendering..."
+
+    val infoUI = new GridBagPanel {
+      val c = new Constraints
+
+      val timeLabel = new Label( "Time:" )
+
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 0
+      c.gridy = 0
+      layout( timeLabel ) = c
+
+      val timeInfoLabel = new Label( "0 month 0 days 0 hours 0 minutes 0 seconds")
+
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 1
+      c.gridy = 0
+      layout( timeInfoLabel ) = c
+
+      val estimatedLabel = new Label( "Estimated:" )
+
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 0
+      c.gridy = 1
+      layout( estimatedLabel ) = c
+
+      val estimatedInfoLabel = new Label( "?")
+
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 1
+      c.gridy = 1
+      layout( estimatedInfoLabel ) = c
+
+      val progressBar = new ProgressBar{
+        min = 0
+        max = 100
+        value = 0
+        label = "Rendering..."
+      }
+
+      c.fill = Fill.Horizontal
+      c.weightx = 0.5
+      c.gridx = 0
+      c.gridy = 2
+      c.gridwidth = 2
+      layout( progressBar ) = c
+    }
+
+    contents = infoUI
+    visible = true
   }
 }

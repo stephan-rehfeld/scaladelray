@@ -48,6 +48,8 @@ class RenderingActor( world : World, id : Int, recursionDepth : Int ) extends Ac
         }
       }
       sender ! pixel.toList
+
+
   }
 
 }
