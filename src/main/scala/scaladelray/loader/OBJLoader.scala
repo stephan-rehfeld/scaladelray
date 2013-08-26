@@ -42,11 +42,11 @@ class OBJLoader extends JavaTokenParsers {
   private def objFile : Parser[List[Any]] = rep( line )
 
   /**
-   * Part of the parser implementation. Defines that a line is a vertex, normal, texture coordinate, or face.
+   * Part of the parser implementation. Defines that a line is a vertex, normal, texture coordinate, face, or comment.
    *
    * @return The parsed line.
    */
-  private def line : Parser[Any] = vertex | normal | texCoord | face
+  private def line : Parser[Any] = vertex | normal | texCoord | face | comment
 
   /**
    * Part of the parser implementation. Defines that a vertex starts with a "v" followed by three floating point numbers
@@ -90,6 +90,17 @@ class OBJLoader extends JavaTokenParsers {
   // Order matters
   private def face : Parser[List[(Int,Option[Int],Option[Int])]] = "f"~rep( vertexAndNormal | vertexTexCoordNormal | vertexAndTexCoord | vertexOnly ) ^^ {
     case "f"~x => x
+  }
+
+  /**
+   * A parser that mathes anything. Used for comments an unknown lines.
+   *
+   * @return A parther that mathces anyhing.
+   */
+  def any: Parser[String] = (""".*""").r
+
+  private def comment : Parser[String] = "#"~any ^^ {
+    case "#"~x => x
   }
 
   /**
@@ -204,6 +215,9 @@ class OBJLoader extends JavaTokenParsers {
       case (f : List[(Int,Option[Int],Option[Int])] @unchecked) =>
         lastWasFace = true
         facesBuffer += f
+
+      case _ =>
+
     }
 
     constructFromBuffer()
