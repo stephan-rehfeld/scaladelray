@@ -164,7 +164,8 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
 
   override def closeOperation() {
     super.closeOperation()
-
+    infoWindow.close()
+    targets ! PoisonPill
     actorSystem.shutdown()
   }
 
