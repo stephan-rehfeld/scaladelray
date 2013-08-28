@@ -1,6 +1,6 @@
 name := "ScalaDelRay"
 
-version := "0.8-beta"
+version := "0.9-beta"
 
 scalaVersion := "2.10.1"
 
