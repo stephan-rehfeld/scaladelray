@@ -30,8 +30,6 @@ import akka.pattern.ask
 import scaladelray.World
 import javax.imageio.ImageIO
 import scala.swing.GridBagPanel.Fill
-import scaladelray.ui.Render
-import scaladelray.ui.StartRendering
 import scaladelray.World
 
 case class StartRendering()

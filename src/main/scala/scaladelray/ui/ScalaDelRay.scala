@@ -26,7 +26,7 @@ import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEven
 import java.awt.event._
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
-import scaladelray.math.Point3
+import scaladelray.math.{Vector3, Point3}
 import java.io.File
 
 object ScalaDelRay extends SimpleSwingApplication {
@@ -869,7 +869,8 @@ object ScalaDelRay extends SimpleSwingApplication {
     val worldProvider = new WorldProvider
     worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
     val cameraProvider = new PerspectiveCameraProvider
-    cameraProvider.position = Point3( 0, 1, 0 )
+    cameraProvider.position = Point3( 8, 8, 8 )
+    cameraProvider.gazeDirection = Vector3( -1, -1, -1 )
 
     worldProvider.cameraProvider = Some( cameraProvider )
 
