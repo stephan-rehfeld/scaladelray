@@ -20,9 +20,13 @@ import scaladelray.material.Material
 import scaladelray.Constants
 import scaladelray.math._
 import scaladelray.texture.TexCoord2D
-import scaladelray.optimization.AxisAlignedBoundingBox
+import scaladelray.optimization.{Octree, AxisAlignedBoundingBox}
+import scala.Array
+import scala.collection.mutable
 
-class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]] ) extends Geometry( material ) {
+class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]], useOctree : Boolean = false, subDivideDecider : Option[ ((Int,Int) => Boolean ) ] = None ) extends Geometry( material ) {
+
+  if( useOctree ) require( subDivideDecider.isDefined, "A function that decides if a bound box should be sub divided needs to be passed if an octree should be generated." )
 
   val (minX,minY,minZ,maxX,maxY,maxZ) =
     vertices.foldLeft( (Double.MaxValue,Double.MaxValue,Double.MaxValue,Double.MinValue,Double.MinValue,Double.MinValue) )( (v : (Double,Double,Double,Double,Double,Double),p : Point3) => {
@@ -36,7 +40,51 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
 
   val center = vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size
 
-  private val aabb = new AxisAlignedBoundingBox( Point3( maxX, maxY, maxZ ), Point3( minX, minY, minZ ) )
+  val lbf = Point3( minX, minY, minZ )
+  val run = Point3( maxX, maxY, maxZ )
+
+  private val aabb = new AxisAlignedBoundingBox( run, lbf )
+  private val octree = if( useOctree ) {
+    generateOctree( 0, run, lbf, faces, subDivideDecider.get )
+  } else {
+    None
+  }
+
+
+  private def generateOctree( recursionDepth : Int, run: Point3, lbf : Point3, faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) : Octree[Array[List[(Int,Option[Int],Option[Int])]]] = {
+    if( subDivideDecider( recursionDepth, faces.size ) ) {
+      val center = lbf + ((run - lbf) / 2.0)
+      // for - yield does not work here
+      val facesOfOctants = Octree.values.toList.map( _ -> mutable.MutableList[List[(Int,Option[Int],Option[Int])]]() ).toMap
+
+      var thisNode  = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
+      for( face <- faces ) {
+        val octants = (for( (v,_,_) <- face ) yield Octree.getOctantOfVertex( center, vertices(v) )).toSet
+        if( octants.size > 1 ) {
+          thisNode += face
+        } else {
+          facesOfOctants( octants.head ) += face
+        }
+      }
+      if( thisNode.size == faces.size ) {
+        new Octree[Array[List[(Int,Option[Int],Option[Int])]]]( lbf, run, Set(), faces )
+      } else {
+        new Octree[Array[List[(Int,Option[Int],Option[Int])]]]( lbf, run,
+          Set() +
+            generateOctree( recursionDepth + 1, run, center, facesOfOctants( Octree.RightUpperNear ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( center.x, run.y, run.z ), Point3( lbf.x, center.y, center.z ), facesOfOctants( Octree.LeftUpperNear ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( run.x, run.y, center.z ), Point3( center.x, center.y, lbf.z ), facesOfOctants( Octree.RightUpperFar ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( center.x, run.y, center.z ), Point3( lbf.x, center.y, lbf.z ), facesOfOctants( Octree.LeftUpperFar ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( run.x, center.y, run.z ), Point3( center.x, lbf.y, center.z ), facesOfOctants( Octree.RightLowerNear ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( center.x, center.y, run.z ), Point3( lbf.x, lbf.y, center.z ), facesOfOctants( Octree.LeftLowerNear ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, Point3( run.x, center.y, center.z ), Point3( center.x, lbf.y, lbf.z ), facesOfOctants( Octree.RightLowerFar ).toArray, subDivideDecider ) +
+            generateOctree( recursionDepth + 1, center, lbf, facesOfOctants( Octree.RightUpperNear ).toArray, subDivideDecider )
+          , thisNode.toArray )
+      }
+    } else {
+      new Octree[Array[List[(Int,Option[Int],Option[Int])]]]( lbf, run, Set(), faces )
+    }
+  }
 
   def <--(r: Ray) : Set[Hit] = {
     if( aabb <-- r ) {
