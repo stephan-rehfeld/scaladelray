@@ -191,7 +191,7 @@ class OBJLoader extends JavaTokenParsers {
    * @param material The material that should be applied to the loaded model.
    * @return The loaded model as triangle mesh.
    */
-  def load( fileName : String, material : Material ) : TriangleMesh = {
+  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ) ) : TriangleMesh = {
 
     assert( fileName != null, "The parameter 'fileName' must not be 'null'!" )
     assert( material != null, "The parameter 'material' must not be 'null'!" )
@@ -222,7 +222,7 @@ class OBJLoader extends JavaTokenParsers {
 
     constructFromBuffer()
 
-    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray )
+    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
 
   }
 

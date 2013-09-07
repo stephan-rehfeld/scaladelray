@@ -31,14 +31,20 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
+  var octreeRecursionDepth = 5
+  var octreeFacesLimit = -1
 
   var listener = mutable.Set[TableModelListener]()
 
   listener += tml
 
+  private def subDivideFunction( maxRecursions : Int, facesLimit : Int, recursion : Int, faces : Int ) =
+    (maxRecursions == -1 || recursion < maxRecursions) && (facesLimit == -1 || faces > facesLimit)
+
+
   def createGeometry: Geometry = {
     val loader = new OBJLoader
-    val m = loader.load( fileName, materialProvider.get.createMaterial )
+    val m = loader.load( fileName, materialProvider.get.createMaterial, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ) )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, m  )
   }
@@ -52,7 +58,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
     if( materialProvider.isDefined ) materialProvider.get.remove( obj )
   }
 
-  def getRowCount: Int = 4
+  def getRowCount: Int = 6
 
   def getColumnCount: Int = 2
 
@@ -79,6 +85,10 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
           "Rotate"
         case 3 =>
           "File"
+        case 4 =>
+          "Octree recursion depth"
+        case 5 =>
+          "Octree faces limit"
       }
     case 1 =>
       row match {
@@ -90,6 +100,10 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
           "" + math.toDegrees( rotate.x ) + " " + math.toDegrees( rotate.y ) + " " + math.toDegrees( rotate.z )
         case 3 =>
           fileName
+        case 4 =>
+          new Integer( octreeRecursionDepth )
+        case 5 =>
+          new Integer( octreeFacesLimit )
       }
   }
 
@@ -108,7 +122,10 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
         case 3 =>
           fileName = obj.asInstanceOf[String]
           for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
-
+        case 4 =>
+          octreeRecursionDepth = obj.asInstanceOf[String].toInt
+        case 5 =>
+          octreeFacesLimit = obj.asInstanceOf[String].toInt
       }
     } catch {
       case _ : Throwable =>
@@ -118,7 +135,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
 
 
   def isReady: Boolean = {
-    (if( materialProvider.isDefined ) materialProvider.get.isReady else false) && new File( fileName ).exists()
+    (if( materialProvider.isDefined ) materialProvider.get.isReady else false) && new File( fileName ).exists() && !(octreeRecursionDepth == -1 && octreeFacesLimit == -1)
   }
 
   def addTableModelListener( l : TableModelListener) {
