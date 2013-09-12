@@ -13,7 +13,7 @@ object Octree extends Enumeration {
 
   def getOctantOfVertex( center : Point3, vertex : Point3 ) : Octree.Octants = {
     if( vertex.x > center.x ) { // right
-      if( vertex.y > center.x ) { // upper
+      if( vertex.y > center.y ) { // upper
         if( vertex.z > center.z ) { // near
           RightUpperNear
         } else { // far
@@ -27,7 +27,7 @@ object Octree extends Enumeration {
         }
       }
     } else { // left
-      if( vertex.y > center.x ) { // upper
+      if( vertex.y > center.y ) { // upper
         if( vertex.z > center.z ) { // near
           LeftUpperNear
         } else { // far
