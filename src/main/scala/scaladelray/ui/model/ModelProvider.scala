@@ -31,7 +31,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
-  var octreeRecursionDepth = 5
+  var octreeRecursionDepth = 3
   var octreeFacesLimit = -1
 
   var listener = mutable.Set[TableModelListener]()
