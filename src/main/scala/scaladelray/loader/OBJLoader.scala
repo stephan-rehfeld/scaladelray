@@ -222,8 +222,8 @@ class OBJLoader extends JavaTokenParsers {
 
     constructFromBuffer()
 
-    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
-
+    val mesh = new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
+    mesh
   }
 
   /**

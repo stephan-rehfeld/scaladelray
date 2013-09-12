@@ -70,7 +70,7 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
             generateOctree( recursionDepth + 1, Point3( run.x, center.y, run.z ), Point3( center.x, lbf.y, center.z ), facesOfOctants( Octree.RightLowerNear ).toArray, subDivideDecider ) +
             generateOctree( recursionDepth + 1, Point3( center.x, center.y, run.z ), Point3( lbf.x, lbf.y, center.z ), facesOfOctants( Octree.LeftLowerNear ).toArray, subDivideDecider ) +
             generateOctree( recursionDepth + 1, Point3( run.x, center.y, center.z ), Point3( center.x, lbf.y, lbf.z ), facesOfOctants( Octree.RightLowerFar ).toArray, subDivideDecider ) +
-            generateOctree( recursionDepth + 1, center, lbf, facesOfOctants( Octree.RightUpperNear ).toArray, subDivideDecider )
+            generateOctree( recursionDepth + 1, center, lbf, facesOfOctants( Octree.LeftLowerFar ).toArray, subDivideDecider )
           , thisNode.toArray )
       }
     } else {
