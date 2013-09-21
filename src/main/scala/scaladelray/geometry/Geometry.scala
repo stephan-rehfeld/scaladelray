@@ -21,6 +21,17 @@ import scaladelray.texture.TexCoord2D
 import scaladelray.material.Material
 
 
+/**
+ * This class represents a hit of a ray with a geometry.
+ *
+ * @author Stephan Rehfeld
+ *
+ * @param ray The ray that hits the geometry.
+ * @param geometry The geometry hit by the ray.
+ * @param t The t value of the hit.
+ * @param n The normal of the hit.
+ * @param texCoord2D The texture coordinate of the hit.
+ */
 case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D )
 
 abstract class Geometry( val material : Material ) {
