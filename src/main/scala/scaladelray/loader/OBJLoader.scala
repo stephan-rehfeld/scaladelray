@@ -156,6 +156,10 @@ class OBJLoader extends JavaTokenParsers {
    * A list where all texture coordinates for the final triangle mesh are collected.
    */
   private val texCoords = mutable.MutableList[TexCoord2D]()
+
+  /**
+   * A list where the face for the model are constructed.
+   */
   private val faces = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
 
   /**
@@ -222,8 +226,7 @@ class OBJLoader extends JavaTokenParsers {
 
     constructFromBuffer()
 
-    val mesh = new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
-    mesh
+    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
   }
 
   /**

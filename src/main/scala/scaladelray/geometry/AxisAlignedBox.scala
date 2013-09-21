@@ -110,10 +110,10 @@ object AxisAlignedBox {
   /**
    * The default right-upper-near point of the axis aligned box.
    */
-  private var run = Point3( 0.5, 0.5, 0.5 )
+  private val run = Point3( 0.5, 0.5, 0.5 )
 
   /**
    * The default lower-bottom-far point of the axis aligned box.
    */
-  private var lbf = Point3( -0.5, -0.5, -0.5 )
+  private val lbf = Point3( -0.5, -0.5, -0.5 )
 }
