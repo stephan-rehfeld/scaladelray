@@ -34,9 +34,30 @@ import scaladelray.material.Material
  */
 case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D )
 
+/**
+ * The base class for all geometries. It holds the material of the geometry. Additionally, it overloads the +-operator
+ * to construct sets.
+ *
+ * @param material The material of the geometry.
+ */
 abstract class Geometry( val material : Material ) {
 
+  /**
+   * This arrow operator means "shoot the ray on the geometry." (Nice, isn't it?)
+   *
+   * It returns all hits between the geometry and the ray in a set. This may includes all hits where t is small than 0.
+   *
+   * @param r The ray that's been shooted.
+   * @return All hits between the ray an the geometry. Maybe empty.
+   */
   def <-- ( r : Ray ) : Set[Hit]
-  def +( g : Geometry ) = Set() + this + g
+
+  /**
+   * The +-operator should be used to construct a set out of two geometries.
+   *
+   * @param g The next geometry in the set.
+   * @return A set that contains both geometries.
+   */
+  def +( g : Geometry ) = Set( this, g )
 
 }
