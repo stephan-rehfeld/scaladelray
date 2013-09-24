@@ -96,7 +96,6 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
       val hits = r --> aab
-      println( hits )
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )
@@ -106,7 +105,6 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> aab
-      println( hits )
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )
@@ -116,7 +114,6 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> aab
-      println( hits )
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )
@@ -126,7 +123,6 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 1, 0 ) ) )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> aab
-      println( hits )
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )
@@ -136,7 +132,6 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 1, 0 ) ) )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> aab
-      println( hits )
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )

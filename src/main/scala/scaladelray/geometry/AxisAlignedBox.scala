@@ -37,7 +37,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
   /**
    * The top plane of the box.
    */
-  val top = new Node(
+  private val top = new Node(
     Transform.translate( AxisAlignedBox.run ),
     new Plane( material )
   )
@@ -45,7 +45,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
   /**
    * The front plane of the box.
    */
-  val front = new Node(
+  private val front = new Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
     new Plane( material )
   )
@@ -53,7 +53,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
   /**
    * The left plane of the box.
    */
-  val left =  new Node(
+  private val left =  new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi/2.0 ),
     new Plane( material )
   )
@@ -61,7 +61,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
   /**
    * The bottom plane of the box.
    */
-  val bottom = new Node(
+  private val bottom = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateX( math.Pi ),
     new Plane( material )
   )
@@ -69,7 +69,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) {
   /**
    * The far plane of the box.
    */
-  val far = new Node(
+  private val far = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
     new Plane( material )
   )
@@ -110,10 +110,10 @@ object AxisAlignedBox {
   /**
    * The default right-upper-near point of the axis aligned box.
    */
-  private val run = Point3( 0.5, 0.5, 0.5 )
+  val run = Point3( 0.5, 0.5, 0.5 )
 
   /**
    * The default lower-bottom-far point of the axis aligned box.
    */
-  private val lbf = Point3( -0.5, -0.5, -0.5 )
+  val lbf = Point3( -0.5, -0.5, -0.5 )
 }

@@ -21,8 +21,15 @@ import scaladelray.material.SingleColorMaterial
 import scaladelray.Color
 
 
+/**
+ * A scene graph node that combines several geometries under one node and applies a transformation on the geometries.
+ *
+ * @param t The transformation of the objects.
+ * @param nodes The geometries of the node.
+ */
 class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMaterial( Color( 0, 0, 0 ) ) ) {
-  def <--(r: Ray) : Set[Hit] = {
+
+  override def <--(r: Ray) : Set[Hit] = {
     var hits = Set[Hit]()
     val transformedRay = t * r
     for( node <- nodes ) {
@@ -30,4 +37,5 @@ class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMate
     }
     for( hit <- hits ) yield Hit( r, hit.geometry, hit.t, t * hit.n, hit.texCoord2D )
   }
+
 }

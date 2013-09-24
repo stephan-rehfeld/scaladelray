@@ -120,7 +120,7 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
   def *( r : Ray ) = Ray( i * r.o, i * r.d )
 
   /**
-   * This operator transforms a normals by multiplying it wth the transposed inverse transformation matrix.
+   * This operator transforms a normals by multiplying it with the transposed inverse transformation matrix.
    *
    * @param n The normal to transform.
    * @return The transformed normal.
