@@ -21,9 +21,15 @@ import scaladelray.math.{Normal3, Ray}
 import scaladelray.texture.TexCoord2D
 
 
+/**
+ * An infinite large plane with the normal 0 1 0.
+ *
+ * @author Stephan Rehfeld
+ * @param material The material of the geometry.
+ */
 class Plane( material : Material ) extends Geometry( material ) {
 
-   def <-- ( r : Ray ) = {
+   override def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n
      if( h != 0.0 ) {
        val t = ((-r.o.asVector) dot Plane.n) / h
@@ -35,6 +41,13 @@ class Plane( material : Material ) extends Geometry( material ) {
 
 }
 
+/**
+ * The companion object of the plane. It contains the standard normal.
+ */
 object Plane {
-  private val n = Normal3( 0.0, 1.0, 0.0 )
+
+  /**
+   * The standard normal of all planes.
+   */
+  val n = Normal3( 0.0, 1.0, 0.0 )
 }
