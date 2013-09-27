@@ -93,11 +93,11 @@ class OBJLoader extends JavaTokenParsers {
   }
 
   /**
-   * A parser that mathes anything. Used for comments an unknown lines.
+   * A parser that matches anything. Used for comments an unknown lines.
    *
-   * @return A parther that mathces anyhing.
+   * @return A parser that matches anything.
    */
-  def any: Parser[String] = (""".*""").r
+  def any: Parser[String] = """.*""".r
 
   private def comment : Parser[String] = "#"~any ^^ {
     case "#"~x => x
@@ -158,6 +158,26 @@ class OBJLoader extends JavaTokenParsers {
   private val texCoords = mutable.MutableList[TexCoord2D]()
 
   /**
+   * A map that holds the indices of all vertices. Used to speed up file loading.
+   */
+  private val verticesIndexMap = mutable.HashMap[Point3,Int]()
+
+  /**
+   * A map that holds the indices of all normals. Used to speed up file loading.
+   */
+  private val normalsIndexMap = mutable.HashMap[Normal3,Int]()
+
+  /**
+   * A map that holds the indices of all texture coordinates. Used to speed up file loading.
+   */
+  private val texCoordsIndexMap = mutable.HashMap[TexCoord2D,Int]()
+
+  /**
+   * A flag that indicates if fast load is enabled.
+   */
+  private var fastLoad = false
+
+  /**
    * A list where the face for the model are constructed.
    */
   private val faces = mutable.MutableList[List[(Int,Option[Int],Option[Int])]]()
@@ -193,12 +213,15 @@ class OBJLoader extends JavaTokenParsers {
    *
    * @param fileName The name of the file that contains the model.
    * @param material The material that should be applied to the loaded model.
+   * @param fastLoad Loads the model faster but may consumes more memory.
    * @return The loaded model as triangle mesh.
    */
-  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ) ) : TriangleMesh = {
+  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : TriangleMesh = {
 
     assert( fileName != null, "The parameter 'fileName' must not be 'null'!" )
     assert( material != null, "The parameter 'material' must not be 'null'!" )
+
+    this.fastLoad = fastLoad
 
     reset()
 
@@ -227,6 +250,7 @@ class OBJLoader extends JavaTokenParsers {
     constructFromBuffer()
 
     new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
+
   }
 
   /**
@@ -250,7 +274,6 @@ class OBJLoader extends JavaTokenParsers {
    * the final lists.
    */
   private def constructFromBuffer() {
-
     val (minVertex,minTexCoord,minNormal) = facesBuffer.foldLeft( (Int.MaxValue,Int.MaxValue,Int.MaxValue) )( (b,faceData) => faceData.foldLeft( b )( (mins,vertexData) => {
       (if( vertexData._1 < mins._1 ) vertexData._1 else mins._1,
         vertexData._2.fold( mins._2 )( (x) => if(x<mins._2) x else mins._2 ),
@@ -258,23 +281,45 @@ class OBJLoader extends JavaTokenParsers {
       }
     ))
 
-    for( face <- facesBuffer ) {
-      if ( face.size != 3 ) throw new UnsupportedOperationException( "Triangulation is not supported yet" )
+    if( fastLoad ) {
+      val vBegin = vertices.size
+      val tBegin = texCoords.size
+      val nBegin = normals.size
 
-      val finalFace = for ( faceData <- face ) yield {
-        val vertex = verticesBuffer( faceData._1 - minVertex )
+      vertices ++= verticesBuffer
+      texCoords ++= texCoordsBuffer
+      normals ++= normalsBuffer
 
-        val texCoord = faceData._2.fold[Option[TexCoord2D]]( None )( (x:Int) => Some( texCoordsBuffer( x - minTexCoord ) ) )
-        val normal = faceData._3.fold[Option[Normal3]]( None )( (x:Int) => Some( normalsBuffer( x - minNormal ) ) )
+      for( face <- facesBuffer ) {
+        if ( face.size != 3 ) throw new UnsupportedOperationException( "Triangulation is not supported yet" )
 
-        var vIndex = indexOfAndMaybeAdd( vertices, vertex )
-        val tIndex = if( texCoord.isDefined ) Some( indexOfAndMaybeAdd( texCoords, texCoord.get ) ) else None
-        val nIndex = if ( normal.isDefined ) Some( indexOfAndMaybeAdd( normals, normal.get) ) else None
-
-        (vIndex,tIndex,nIndex)
-
+        val finalFace = for ( faceData <- face ) yield {
+          val vIndex = faceData._1 - minVertex + vBegin
+          val tIndex = if( faceData._2.isDefined ) Some( faceData._2.get - minTexCoord + tBegin ) else None
+          val nIndex = if( faceData._3.isDefined ) Some( faceData._3.get - minNormal + nBegin ) else None
+          (vIndex,tIndex,nIndex)
+        }
+        faces += finalFace
       }
-      faces += finalFace
+    } else {
+      for( face <- facesBuffer ) {
+        if ( face.size != 3 ) throw new UnsupportedOperationException( "Triangulation is not supported yet" )
+
+        val finalFace = for ( faceData <- face ) yield {
+          val vertex = verticesBuffer( faceData._1 - minVertex )
+
+          val texCoord = faceData._2.fold[Option[TexCoord2D]]( None )( (x:Int) => Some( texCoordsBuffer( x - minTexCoord ) ) )
+          val normal = faceData._3.fold[Option[Normal3]]( None )( (x:Int) => Some( normalsBuffer( x - minNormal ) ) )
+
+          val vIndex = indexOfAndMaybeAdd( vertices, verticesIndexMap, vertex )
+          val tIndex = if( texCoord.isDefined ) Some( indexOfAndMaybeAdd( texCoords, texCoordsIndexMap, texCoord.get ) ) else None
+          val nIndex = if ( normal.isDefined ) Some( indexOfAndMaybeAdd( normals, normalsIndexMap, normal.get) ) else None
+
+          (vIndex,tIndex,nIndex)
+
+        }
+        faces += finalFace
+      }
     }
 
     clearBuffer()
@@ -288,6 +333,9 @@ class OBJLoader extends JavaTokenParsers {
     normals.clear()
     texCoords.clear()
     faces.clear()
+    verticesIndexMap.clear()
+    normalsIndexMap.clear()
+    texCoordsIndexMap.clear()
 
     clearBuffer()
 
@@ -309,17 +357,21 @@ class OBJLoader extends JavaTokenParsers {
    * the index is returned.
    *
    * @param list The list from which the index should be retrieved.
+   * @param indexMap A map that contains the index of each element in the list.
    * @param elem The element.
    * @tparam T The data type of the element.
    * @return The index of the element within the list.
    */
-  private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], elem : T ) : Int = {
-    var i = list.indexOf( elem )
-    if( i == -1 ) {
-      list += elem
-      i = list.size - 1
+  private def indexOfAndMaybeAdd[T]( list : mutable.MutableList[T], indexMap : mutable.HashMap[T,Int], elem : T ) : Int = {
+    indexMap.get( elem ) match {
+      case Some( i ) => i
+      case None =>
+        list += elem
+        val i = list.size - 1
+        indexMap += (elem -> i )
+        i
+
     }
-    i
   }
 
 }

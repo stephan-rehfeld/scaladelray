@@ -33,6 +33,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
   var rotate = Vector3( 0, 0, 0 )
   var octreeRecursionDepth = 3
   var octreeFacesLimit = -1
+  var fastLoad = true
 
   var listener = mutable.Set[TableModelListener]()
 
@@ -44,7 +45,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
 
   def createGeometry: Geometry = {
     val loader = new OBJLoader
-    val m = loader.load( fileName, materialProvider.get.createMaterial, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ) )
+    val m = loader.load( fileName, materialProvider.get.createMaterial, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, m  )
   }
@@ -58,7 +59,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
     if( materialProvider.isDefined ) materialProvider.get.remove( obj )
   }
 
-  def getRowCount: Int = 6
+  def getRowCount: Int = 7
 
   def getColumnCount: Int = 2
 
@@ -89,6 +90,8 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
           "Octree recursion depth"
         case 5 =>
           "Octree faces limit"
+        case 6 =>
+          "Fast load"
       }
     case 1 =>
       row match {
@@ -104,6 +107,8 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
           new Integer( octreeRecursionDepth )
         case 5 =>
           new Integer( octreeFacesLimit )
+        case 6 =>
+          new java.lang.Boolean( fastLoad )
       }
   }
 
@@ -126,6 +131,8 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
           octreeRecursionDepth = obj.asInstanceOf[String].toInt
         case 5 =>
           octreeFacesLimit = obj.asInstanceOf[String].toInt
+        case 6 =>
+          fastLoad = obj.asInstanceOf[Boolean]
       }
     } catch {
       case _ : Throwable =>
