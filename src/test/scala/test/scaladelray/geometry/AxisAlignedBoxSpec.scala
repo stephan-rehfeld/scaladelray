@@ -17,8 +17,6 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.Color
-import scaladelray.material.SingleColorMaterial
 import scaladelray.math.{Point3, Ray, Vector3}
 import scaladelray.geometry.AxisAlignedBox
 
@@ -29,7 +27,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
   describe( "An AxisAlignedBox" ) {
     it( "should return two hit points for a ray that comes from the front of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -38,7 +36,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the back of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, -3 ), Vector3( 0, 0, 1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -47,7 +45,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the left of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( -3, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -55,7 +53,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       assert( hits.exists( _.t == 3.5  ) )
     }
     it( "should return two hit points for a ray that comes from the right of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 3, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -64,7 +62,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the top of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -73,7 +71,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the bottom of the box" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, -3, 0 ), Vector3( 0, 1, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -84,7 +82,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the back" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -93,7 +91,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the front" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -102,7 +100,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the left" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -111,7 +109,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the right" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 0, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -120,7 +118,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the top" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 1, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
@@ -129,12 +127,19 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the bottom" ) {
-      val aab = new AxisAlignedBox( SingleColorMaterial( Color( 0, 1, 0 ) ) )
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
       assert( hits.exists( (h) => roughlyEquals( h.t, -0.5 ) ) )
+    }
+
+    it( "should return no hit point for a ray that does not hit the box" ) {
+      val aab = new AxisAlignedBox( MaterialTestAdapter() )
+      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, -1 ) )
+      val hits = r --> aab
+      assert( hits.isEmpty )
     }
 
   }

@@ -21,9 +21,14 @@ import scaladelray.math.{Point3, Ray}
 import scaladelray.texture.TexCoord2D
 
 
+/**
+ * A sphere with the center at 0 0 0 and a radius of 1.
+ *
+ * @param material The material of the geometry.
+ */
 class Sphere( material : Material ) extends Geometry( material ) {
 
-  def <-- ( r : Ray ) = {
+  override def <-- ( r : Ray ) = {
     val o = r.o.asVector
     val one = r.d dot r.d
     val two = r.d dot (o * 2)
@@ -45,6 +50,12 @@ class Sphere( material : Material ) extends Geometry( material ) {
     }
   }
 
+  /**
+   * This function calculates the texture coordinates of a point.
+   *
+   * @param p The point.
+   * @return The texture coordinate.
+   */
   private def texCoordFor( p : Point3 ) : TexCoord2D = {
     val d = p.asVector
     val theta = math.acos( d.y )
