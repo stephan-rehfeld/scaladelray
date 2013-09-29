@@ -20,7 +20,7 @@ import scaladelray.material.Material
 import scaladelray.Constants
 import scaladelray.math._
 import scaladelray.texture.TexCoord2D
-import scaladelray.optimization.{Octree, AxisAlignedBoundingBox}
+import scaladelray.optimization.Octree
 import scala.Array
 import scala.collection.mutable
 

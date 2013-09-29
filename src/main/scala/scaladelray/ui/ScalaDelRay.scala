@@ -27,14 +27,24 @@ import java.awt.event._
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
 import scaladelray.math.{Vector3, Point3}
-import java.io.File
+import scaladelray.Constants
+import scala.swing.TabbedPane.Page
+import scala.collection.mutable
+import akka.actor._
+import scala.concurrent.duration._
+import scaladelray.math.Vector3
+import scaladelray.math.Point3
+import scala.Some
+import scala.swing.event.ButtonClicked
+import scaladelray.Color
 
 object ScalaDelRay extends SimpleSwingApplication {
 
   var worldProvider = createStandardScene
   var renderingWindowsSize = new Dimension( 640, 480 )
   var recursionDepth = 10
-
+  var clusterNodes = mutable.ListBuffer[String]()
+  private val actorSystem = ActorSystem("ui")
 
   lazy val ui : GridBagPanel with TableModelListener = new GridBagPanel with TableModelListener {
 
@@ -795,62 +805,279 @@ object ScalaDelRay extends SimpleSwingApplication {
     renderingSettingsMenu.contents += new MenuItem( Action("Settings...") {
 
       val frame = new Frame {
-        title = "Rendering settings"
-        contents = new GridBagPanel {
+
+        lazy val imagePage = new GridBagPanel {
+
           val c = new Constraints
+
+
 
           val widthLabel = new Label( "Width:")
 
           c.fill = Fill.Horizontal
-          c.weightx = 0.5
+
+          c.weightx = 0.3
           c.gridx = 0
           c.gridy = 0
+
           layout( widthLabel ) = c
 
           val widthTextField = new TextField( "" + renderingWindowsSize.getWidth.toInt )
 
+          c.weightx = 0.7
           c.gridx = 1
           layout( widthTextField ) = c
 
           val heightLabel = new Label( "Height:" )
 
+          c.weightx = 0.3
           c.gridy = 1
           c.gridx = 0
           layout( heightLabel ) = c
 
           val heightTextField = new TextField( "" + renderingWindowsSize.getHeight.toInt )
+          c.weightx = 0.7
           c.gridx = 1
           layout( heightTextField ) = c
 
-          val recursionsLabel = new Label( "Recursions: " )
+          // Just to correct the layout
+          val dummyLabel = new Label( "" )
+          c.fill = Fill.Horizontal
+          c.ipady = 0
+          c.weighty = 1.0
+          c.anchor = Anchor.PageEnd
+          c.gridx = 1
+          c.gridwidth = 1
           c.gridy = 2
+          layout(dummyLabel) = c
+
+        }
+
+        lazy val algorithmPage =  new GridBagPanel {
+
+
+
+          val c = new Constraints
+
+          val recursionsLabel = new Label( "Recursions: " )
+
+          c.fill = Fill.Horizontal
+
+          c.weightx = 0.3
           c.gridx = 0
+          c.gridy = 0
+
           layout( recursionsLabel ) = c
 
           val recursionsTextField = new TextField( "" + recursionDepth )
+
+          c.weightx = 0.7
           c.gridx = 1
+
           layout( recursionsTextField ) = c
 
+          val epsilonLabel = new Label( "Epsilon: " )
+
+          c.fill = Fill.Horizontal
+
+          c.weightx = 0.3
+          c.gridx = 0
+          c.gridy = 1
+
+          layout( epsilonLabel ) = c
+
+          val epsilonTextField = new TextField( "" + Constants.EPSILON )
+          epsilonTextField.editable = false
+          c.weightx = 0.7
+          c.gridx = 1
+
+          layout( epsilonTextField ) = c
+
+          // Just to correct the layout
+          val dummyLabel = new Label( "" )
+          c.fill = Fill.Horizontal
+          c.ipady = 0
+          c.weighty = 1.0
+          c.anchor = Anchor.PageEnd
+          c.gridx = 1
+          c.gridwidth = 1
+          c.gridy = 2
+          layout(dummyLabel) = c
+
+        }
+
+        lazy val clusterPage =  new GridBagPanel {
+
+          var tempClusterNodes = clusterNodes.clone()
+
+          val c = new Constraints
+
+          val addButton = new Button("+" )
+          addButton.action = Action( "+" ) {
+            tempClusterNodes += ""
+            nodesTable.revalidate()
+          }
+
+          c.fill = Fill.Horizontal
+
+          c.weightx = 0.5
+          c.gridx = 0
+          c.gridy = 0
+
+          layout( addButton ) = c
+
+          val deleteButton = new Button("-" )
+          deleteButton.action = Action( "-" ) {
+            val x = nodesTable.selection.rows.toList.reverse
+            for( i <- x ) if( i < tempClusterNodes.size ) tempClusterNodes.remove( i )
+            nodesTable.revalidate()
+          }
+
+          c.fill = Fill.Horizontal
+
+          c.weightx = 0.5
+          c.gridx = 1
+          c.gridy = 0
+
+          layout( deleteButton ) = c
+
+          val nodesTable = new Table()
+          val nodesTableScrollPane = new ScrollPane {
+            contents = nodesTable
+          }
+
+          nodesTable.model = new TableModel {
+            def getRowCount: Int = tempClusterNodes.size
+
+            def getColumnCount: Int = 1
+
+            def getColumnName(columnIndex: Int): String = "Address"
+
+            def getColumnClass(columnIndex: Int): Class[_] = classOf[String]
+
+            def isCellEditable(rowIndex: Int, columnIndex: Int): Boolean = true
+
+            def getValueAt(rowIndex: Int, columnIndex: Int): AnyRef = tempClusterNodes( rowIndex )
+
+            def setValueAt(aValue: scala.Any, rowIndex: Int, columnIndex: Int) {
+              tempClusterNodes.update( rowIndex, aValue.asInstanceOf[String] )
+            }
+
+            def addTableModelListener(l: TableModelListener) {}
+
+            def removeTableModelListener(l: TableModelListener) {}
+          }
+          c.fill = Fill.Both
+          c.ipady = 0
+          c.weighty = 0.5
+          c.anchor = Anchor.PageEnd
+          c.gridwidth = 2
+          c.gridx = 0
+          c.gridy = 1
+          layout( nodesTableScrollPane ) = c
+
+
+
+          val discoverButton = new Button("Discover" )
+          discoverButton.action = Action( "Discover" ) {
+            discoverButton.enabled = false
+            actorSystem.actorOf( Props( new Actor {
+
+              discoverProgressBar.value = 0
+              this.context.setReceiveTimeout( 0.0625 second )
+
+              def receive = {
+                case m : ReceiveTimeout =>
+                discoverProgressBar.value = discoverProgressBar.value + 1
+
+                if( discoverProgressBar.value == 60 ) {
+                  self ! PoisonPill
+                  discoverButton.enabled = true
+                }
+
+              }
+
+            }))
+          }
+
+          c.ipady = 0
+          c.weightx = 0.5
+          c.weighty = 0
+          c.gridx = 0
+          c.gridy = 2
+          c.gridwidth = 2
+
+
+          layout( discoverButton ) = c
+
+          val discoverProgressBar = new ProgressBar() {
+            min = 0
+            max = 60
+          }
+
+
+          c.gridy = 3
+
+
+          layout( discoverProgressBar ) = c
+
+
+
+        }
+
+        title = "Rendering settings"
+
+
+
+        contents = new GridBagPanel {
+          val c = new Constraints
+
+          c.fill = Fill.Both
+          c.weightx = 0.5
+          c.weighty = 0.5
+          c.gridx = 0
+          c.gridy = 0
+          c.gridwidth = 2
+
+
+          c.anchor = Anchor.PageEnd
+
+          val tabbedPane = new TabbedPane {
+            pages += new Page( "Image", imagePage )
+            pages += new Page( "Algorithm", algorithmPage )
+            pages += new Page( "Cluster", clusterPage )
+          }
+
+          layout( tabbedPane ) = c
+          c.weighty = 0.5
+          c.weighty = 0
+          c.fill = Fill.Horizontal
+          c.gridwidth = 1
 
           val cancelButton = new Button("Cancel" )
           cancelButton.action = Action( "Cancel" ) {
-           close()
+            close()
           }
-          c.gridy = 3
+          c.gridy = 1
           c.gridx = 0
           layout( cancelButton ) = c
 
           val okButton = new Button("Ok" )
           okButton.action = Action( "Ok" ) {
-            renderingWindowsSize = new Dimension( widthTextField.text.toInt, heightTextField.text.toInt )
-            recursionDepth = recursionsTextField.text.toInt
+            renderingWindowsSize = new Dimension( imagePage.widthTextField.text.toInt, imagePage.heightTextField.text.toInt )
+            recursionDepth = algorithmPage.recursionsTextField.text.toInt
+            clusterNodes = clusterPage.tempClusterNodes
             close()
           }
           c.gridx = 1
           layout( okButton ) = c
 
+
         }
+
         visible = true
+
+
       }
     })
     val helpMenu = new Menu( "HELP" )
@@ -939,3 +1166,5 @@ object DummyTableModel extends TableModel {
 
 
 }
+
+
