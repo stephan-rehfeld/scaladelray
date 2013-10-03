@@ -32,8 +32,6 @@
         <CLASSES>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.10.3.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.10/jars/scalatest_2.10-1.9.2.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.10.0.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-tools.testing/test-interface/jars/test-interface-0.5.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.antlr/stringtemplate/jars/stringtemplate-3.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/antlr/antlr/jars/antlr-2.7.7.jar!/" />
@@ -61,6 +59,8 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-swing/jars/scala-swing-2.10.3.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.10/jars/akka-actor_2.10-2.2.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/bundles/config-1.0.2.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.10.0.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.10.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

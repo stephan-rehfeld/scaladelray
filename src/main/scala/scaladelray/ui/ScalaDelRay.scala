@@ -37,6 +37,9 @@ import scaladelray.math.Point3
 import scala.Some
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
+import java.net.{SocketException, DatagramPacket, DatagramSocket, InetAddress}
+
+case class StartDiscovery()
 
 object ScalaDelRay extends SimpleSwingApplication {
 
@@ -990,6 +993,44 @@ object ScalaDelRay extends SimpleSwingApplication {
           val discoverButton = new Button("Discover" )
           discoverButton.action = Action( "Discover" ) {
             discoverButton.enabled = false
+            okButton.enabled = false
+            cancelButton.enabled = false
+            addButton.enabled = false
+            deleteButton.enabled = false
+
+            val socket = new DatagramSocket()
+            val buf = new Array[Byte]( 256 )
+            val address = InetAddress.getByName("228.5.6.7")
+            val packet = new DatagramPacket(buf, buf.length, address, 12345 )
+            packet.setData( "ScalaDelRay:1.0".getBytes )
+            socket.send( packet )
+
+            val discoveryActor = actorSystem.actorOf( Props( new Actor {
+
+              def receive = {
+                case m : StartDiscovery =>
+                  try {
+                    while( true ) {
+                      socket.receive( packet )
+                      val nodeAddress = packet.getAddress.getHostAddress
+                      val nodePort = (packet.getData()(0) << 24) | (packet.getData()(1) << 16) |  (packet.getData()(2) << 8) |  packet.getData()(3)
+                      val addressString = nodeAddress + ":" + nodePort
+                      if( !tempClusterNodes.contains( addressString ) ) tempClusterNodes += addressString
+
+                      nodesTable.revalidate()
+                    }
+                  } catch {
+                    case ex : SocketException =>
+
+                  }
+                  self ! PoisonPill
+
+              }
+
+            }))
+
+            discoveryActor ! StartDiscovery()
+
             actorSystem.actorOf( Props( new Actor {
 
               discoverProgressBar.value = 0
@@ -1002,11 +1043,20 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( discoverProgressBar.value == 60 ) {
                   self ! PoisonPill
                   discoverButton.enabled = true
+                  okButton.enabled = true
+                  cancelButton.enabled = true
+                  addButton.enabled = true
+                  deleteButton.enabled = true
+                  socket.close()
+
                 }
 
               }
 
             }))
+
+
+
           }
 
           c.ipady = 0
@@ -1036,7 +1086,8 @@ object ScalaDelRay extends SimpleSwingApplication {
 
         title = "Rendering settings"
 
-
+        val cancelButton = new Button("Cancel" )
+        val okButton = new Button("Ok" )
 
         contents = new GridBagPanel {
           val c = new Constraints
@@ -1063,7 +1114,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           c.fill = Fill.Horizontal
           c.gridwidth = 1
 
-          val cancelButton = new Button("Cancel" )
+
           cancelButton.action = Action( "Cancel" ) {
             close()
           }
@@ -1071,7 +1122,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           c.gridx = 0
           layout( cancelButton ) = c
 
-          val okButton = new Button("Ok" )
+
           okButton.action = Action( "Ok" ) {
             renderingWindowsSize = new Dimension( imagePage.widthTextField.text.toInt, imagePage.heightTextField.text.toInt )
             recursionDepth = algorithmPage.recursionsTextField.text.toInt
@@ -1083,7 +1134,6 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
         }
-
         visible = true
 
 
