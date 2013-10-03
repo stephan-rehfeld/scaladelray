@@ -350,6 +350,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) dcp.aaSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
                 if( dcp.lensSamplingPatternProvider.isDefined && dcp.lensSamplingPatternProvider.get == spp ) dcp.lensSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
               case Some( _ ) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some( _ ) => assert( false, "This should not happen!")
           case None =>
@@ -489,6 +490,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
                 if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new SingleColorTextureProvider )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
@@ -503,6 +505,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new SingleColorTextureProvider )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new SingleColorTextureProvider )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
@@ -527,6 +530,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
                 if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new ChessboardTextureProvider )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
@@ -541,6 +545,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new ChessboardTextureProvider )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new ChessboardTextureProvider )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
@@ -565,6 +570,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
                 if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
@@ -579,6 +585,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new ImageTextureProvider( ui ) )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
@@ -603,6 +610,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
                 if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
@@ -617,6 +625,7 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some(_) => assert( false, "This should not happen!")
+              case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
