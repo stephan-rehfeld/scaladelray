@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="akka-actor_2.10-2.1.4">
-    <CLASSES>
-      <root url="jar://C:/Program Files (x86)/scala/akka-2.1.4/lib/akka/akka-actor_2.10-2.1.4.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
