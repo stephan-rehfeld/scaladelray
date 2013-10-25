@@ -22,6 +22,6 @@ package scaladelray.math
  * @param x The x value of the point.
  * @param y The y value of the point.
  */
-case class Point2( x : Double, y : Double ) {
+case class Point2( x : Double, y : Double ) extends Serializable {
 
 }

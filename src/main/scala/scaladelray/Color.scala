@@ -27,7 +27,7 @@ package scaladelray
  * @param g The green color channel. Must be at least 0.
  * @param b The blue color channel. Must be at least 0.
  */
-case class Color( r : Double, g : Double, b : Double ) {
+case class Color( r : Double, g : Double, b : Double ) extends Serializable {
   require( r >= 0.0, "The parameter 'r' must be at least 0" )
   require( g >= 0.0, "The parameter 'g' must be at least 0" )
   require( b >= 0.0, "The parameter 'b' must be at least 0" )

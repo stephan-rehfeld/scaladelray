@@ -24,7 +24,7 @@ import scaladelray.optimization.Octree
 import scala.Array
 import scala.collection.mutable
 
-class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry( material ) {
+class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry( material ) with Serializable {
 
   val (minX,minY,minZ,maxX,maxY,maxZ) =
     vertices.foldLeft( (Double.MaxValue,Double.MaxValue,Double.MaxValue,Double.MinValue,Double.MinValue,Double.MinValue) )( (v : (Double,Double,Double,Double,Double,Double),p : Point3) => {

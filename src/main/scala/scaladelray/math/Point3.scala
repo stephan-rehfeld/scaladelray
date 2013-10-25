@@ -26,7 +26,7 @@ package scaladelray.math
  * @param y The y-value of the point.
  * @param z The z-value of the point.
  */
-case class Point3( x : Double, y : Double, z : Double ) {
+case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
    * This method calculates the direction between two points and returns the result as [[scaladelray.math.Vector3]].

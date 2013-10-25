@@ -30,7 +30,7 @@ package scaladelray.math
  * @param m The transformation matrix of this transformation.
  * @param i The inverse transformation matrix of this transformation.
  */
-class Transform private ( val m : Mat4x4, val i : Mat4x4 ) {
+class Transform private ( val m : Mat4x4, val i : Mat4x4 ) extends Serializable {
 
   /**
    * This method appends a translation by the given x, y, and z values to the current transformation and returns

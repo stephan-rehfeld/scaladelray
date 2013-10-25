@@ -22,7 +22,7 @@ import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
 
-case class LambertMaterial( texture : Texture ) extends Material {
+case class LambertMaterial( texture : Texture ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val color = texture( hit.texCoord2D )

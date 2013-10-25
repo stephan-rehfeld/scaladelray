@@ -29,7 +29,7 @@ import scaladelray.math.{Vector3, Ray, Point3}
  * @param g The gaze direction of the camera.
  * @param t The up vector of the camera.
  */
-abstract class Camera( e : Point3, g : Vector3, t : Vector3 ) {
+abstract class Camera( e : Point3, g : Vector3, t : Vector3 ) extends Serializable {
 
   require( e != null )
   require( g != null )

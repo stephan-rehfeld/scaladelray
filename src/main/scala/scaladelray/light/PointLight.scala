@@ -20,7 +20,7 @@ import scaladelray.{Constants, World, Color}
 import scaladelray.math.{Ray, Point3}
 
 
-class PointLight( color : Color, position : Point3, castsShadows : Boolean = true, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light {
+class PointLight( color : Color, position : Point3, castsShadows : Boolean = true, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
   override def illuminates(point: Point3, world : World) = {
     if( castsShadows ) {
       val ray = Ray( point, (position - point).normalized )

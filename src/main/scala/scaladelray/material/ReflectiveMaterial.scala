@@ -22,7 +22,7 @@ import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
 
-case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int, reflectionTexture : Texture ) extends Material {
+case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int, reflectionTexture : Texture ) extends Material with Serializable {
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val diffuseColor = diffuseTexture( hit.texCoord2D )
     val specularColor = specularTexture( hit.texCoord2D )

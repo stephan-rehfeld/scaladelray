@@ -46,7 +46,7 @@ object ScalaDelRay extends SimpleSwingApplication {
   var worldProvider = createStandardScene
   var renderingWindowsSize = new Dimension( 640, 480 )
   var recursionDepth = 10
-  var clusterNodes = mutable.ListBuffer[String]()
+  var clusterNodes = mutable.ListBuffer[(String,Int,Int)]()
   private val actorSystem = ActorSystem("ui")
 
   lazy val ui : GridBagPanel with TableModelListener = new GridBagPanel with TableModelListener {
@@ -784,7 +784,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val (c,w) = worldProvider.createWorld
-          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth )
+          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
           window.a ! StartRendering()
 
       }
@@ -926,7 +926,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
           val addButton = new Button("+" )
           addButton.action = Action( "+" ) {
-            tempClusterNodes += ""
+            tempClusterNodes += (("",4444,1))
             nodesTable.revalidate()
           }
 
@@ -961,18 +961,54 @@ object ScalaDelRay extends SimpleSwingApplication {
           nodesTable.model = new TableModel {
             def getRowCount: Int = tempClusterNodes.size
 
-            def getColumnCount: Int = 1
+            def getColumnCount: Int = 3
 
-            def getColumnName(columnIndex: Int): String = "Address"
+            def getColumnName(columnIndex: Int): String =
+              columnIndex match {
+                case 0 =>
+                  "Address"
+                case 1 =>
+                  "Port"
+                case 2 =>
+                  "Cores"
+              }
 
-            def getColumnClass(columnIndex: Int): Class[_] = classOf[String]
+            def getColumnClass(columnIndex: Int): Class[_] =
+              columnIndex match {
+                case 0 =>
+                  classOf[String]
+                case 1 =>
+                  classOf[java.lang.Integer]
+                case 2 =>
+                  classOf[java.lang.Integer]
+              }
+
 
             def isCellEditable(rowIndex: Int, columnIndex: Int): Boolean = true
 
-            def getValueAt(rowIndex: Int, columnIndex: Int): AnyRef = tempClusterNodes( rowIndex )
+            def getValueAt(rowIndex: Int, columnIndex: Int): AnyRef = {
+              val (address,port,cores) = tempClusterNodes( rowIndex )
+              columnIndex match {
+                case 0 =>
+                  address
+                case 1 =>
+                  port.asInstanceOf[java.lang.Integer]
+                case 2 =>
+                  cores.asInstanceOf[java.lang.Integer]
+              }
+            }
 
             def setValueAt(aValue: scala.Any, rowIndex: Int, columnIndex: Int) {
-              tempClusterNodes.update( rowIndex, aValue.asInstanceOf[String] )
+              val (address,port,cores) = tempClusterNodes( rowIndex )
+              columnIndex match {
+                case 0 =>
+                  tempClusterNodes.update( rowIndex, (aValue.asInstanceOf[String],port,cores) )
+                case 1 =>
+                  tempClusterNodes.update( rowIndex, (address,aValue.asInstanceOf[Int],cores) )
+                case 2 =>
+                  tempClusterNodes.update( rowIndex, (address,port,aValue.asInstanceOf[Int]) )
+
+              }
             }
 
             def addTableModelListener(l: TableModelListener) {}
@@ -1014,8 +1050,9 @@ object ScalaDelRay extends SimpleSwingApplication {
                       socket.receive( packet )
                       val nodeAddress = packet.getAddress.getHostAddress
                       val nodePort = (packet.getData()(0) << 24) | (packet.getData()(1) << 16) |  (packet.getData()(2) << 8) |  packet.getData()(3)
-                      val addressString = nodeAddress + ":" + nodePort
-                      if( !tempClusterNodes.contains( addressString ) ) tempClusterNodes += addressString
+                      val nodeCores = (packet.getData()(4) << 24) | (packet.getData()(5) << 16) |  (packet.getData()(6) << 8) |  packet.getData()(7)
+
+                      if( !tempClusterNodes.contains( (nodeAddress,nodePort,nodeCores) ) ) tempClusterNodes += ((nodeAddress,nodePort,nodeCores))
 
                       nodesTable.revalidate()
                     }

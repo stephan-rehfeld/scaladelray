@@ -34,7 +34,7 @@ package scaladelray.math
  */
 case class Mat3x3( m11 : Double, m12 : Double, m13 : Double,
                    m21 : Double, m22 : Double, m23 : Double,
-                   m31 : Double, m32 : Double, m33 : Double ) {
+                   m31 : Double, m32 : Double, m33 : Double ) extends Serializable {
 
   /**
    * The determinant of the matrix.

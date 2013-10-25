@@ -42,7 +42,7 @@ package scaladelray.math
 case class Mat4x4( m11 : Double, m12 : Double, m13 : Double, m14 : Double,
                    m21 : Double, m22 : Double, m23 : Double, m24 : Double,
                    m31 : Double, m32 : Double, m33 : Double, m34 : Double,
-                   m41 : Double, m42 : Double, m43 : Double, m44 : Double ) {
+                   m41 : Double, m42 : Double, m43 : Double, m44 : Double ) extends Serializable {
 
   /**
    * This method multiplies this matrix with a vector. A 0 is assumed as value for w.

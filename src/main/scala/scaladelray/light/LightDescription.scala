@@ -18,7 +18,7 @@ package scaladelray.light
 
 import scaladelray.Color
 
-abstract class LightDescription( val color : Color ) {
+abstract class LightDescription( val color : Color ) extends Serializable {
   def +( l : LightDescription ) = Set() + this + l
   def createLight : Light
 }

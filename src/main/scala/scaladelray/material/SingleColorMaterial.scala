@@ -21,7 +21,7 @@ import scaladelray.geometry.Hit
 import scaladelray.math.Ray
 
 
-case class SingleColorMaterial( color : Color ) extends Material {
+case class SingleColorMaterial( color : Color ) extends Material with Serializable {
 
   def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
 }

@@ -19,7 +19,7 @@ package scaladelray.light
 import scaladelray.{World, Color}
 import scaladelray.math.{Vector3, Point3}
 
-trait Light {
+trait Light extends Serializable {
   val color : Color
   def illuminates( point : Point3, world : World ) : List[Boolean]
   def directionFrom( point : Point3 ) : List[Vector3]

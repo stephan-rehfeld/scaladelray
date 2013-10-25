@@ -13,7 +13,7 @@ import scaladelray.math.Point3
  * @param data The data of the node. Usually faces.
  * @tparam T The type of the data of the node.
  */
-class Octree[T](run : Point3, lbf : Point3, val nodes : Set[Octree[T]], val data : T ) extends AxisAlignedBoundingBox( run, lbf ) {
+class Octree[T](run : Point3, lbf : Point3, val nodes : Set[Octree[T]], val data : T ) extends AxisAlignedBoundingBox( run, lbf ) with Serializable {
   require( nodes.size == 0 || nodes.size == 8, "Each node must contain 0 or 8 octants." )
 }
 

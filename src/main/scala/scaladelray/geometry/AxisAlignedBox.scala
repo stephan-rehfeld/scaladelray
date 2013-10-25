@@ -24,7 +24,7 @@ import scaladelray.math.{Point3, Ray, Transform}
  *
  * @param material The material for the box.
  */
-class AxisAlignedBox( material : Material ) extends Geometry( material ) {
+class AxisAlignedBox( material : Material ) extends Geometry( material ) with Serializable {
 
   /**
    * The right plane of the box.

@@ -22,7 +22,7 @@ import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
 
-case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Material {
+case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val colorBright = bright( hit.texCoord2D )

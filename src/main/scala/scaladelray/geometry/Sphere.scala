@@ -26,7 +26,7 @@ import scaladelray.texture.TexCoord2D
  *
  * @param material The material of the geometry.
  */
-class Sphere( material : Material ) extends Geometry( material ) {
+class Sphere( material : Material ) extends Geometry( material ) with Serializable {
 
   override def <-- ( r : Ray ) = {
     val o = r.o.asVector

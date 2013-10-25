@@ -26,7 +26,7 @@ package scaladelray.math
  * @param y The y-direction of the normal.
  * @param z The z-direction of the normal.
  */
-case class Normal3( x : Double, y : Double, z : Double ) {
+case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
    * This method multiplies the normal with a scalar and returns the result as a new [[scaladelray.math.Normal3]]

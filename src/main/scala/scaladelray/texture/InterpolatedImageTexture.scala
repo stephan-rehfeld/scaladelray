@@ -20,7 +20,7 @@ import javax.imageio.ImageIO
 import java.io.File
 import scaladelray.Color
 
-case class InterpolatedImageTexture( file : String ) extends Texture {
+case class InterpolatedImageTexture( file : String ) extends Texture with Serializable {
 
   private val image = ImageIO.read( new File( file ) )
 

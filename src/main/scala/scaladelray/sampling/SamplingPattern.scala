@@ -25,7 +25,7 @@ import scala.util.Random
  *
  * @param samplingPoints The points of the sampling pattern. Each element of each point must be between -0.5 and 0.5.
  */
-case class SamplingPattern( samplingPoints : Set[Point2] ) {
+case class SamplingPattern( samplingPoints : Set[Point2] ) extends Serializable {
 
   for( p <- samplingPoints ) require( p.x >= -0.5 && p.x <= 0.5 && p.y >= -0.5 && p.y <= 0.5, "The values for x and y of each point must be between -0.5 and 0.5!" )
 

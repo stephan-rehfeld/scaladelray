@@ -27,7 +27,7 @@ import scaladelray.texture.TexCoord2D
  * @author Stephan Rehfeld
  * @param material The material of the geometry.
  */
-class Plane( material : Material ) extends Geometry( material ) {
+class Plane( material : Material ) extends Geometry( material ) with Serializable {
 
    override def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n

@@ -27,7 +27,7 @@ import scaladelray.Color
  * @param t The transformation of the objects.
  * @param nodes The geometries of the node.
  */
-class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMaterial( Color( 0, 0, 0 ) ) ) {
+class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMaterial( Color( 0, 0, 0 ) ) ) with Serializable {
 
   override def <--(r: Ray) : Set[Hit] = {
     var hits = Set[Hit]()

@@ -18,6 +18,6 @@ package scaladelray.texture
 
 import scaladelray.Color
 
-case class SingleColorTexture( color : Color ) extends Texture {
+case class SingleColorTexture( color : Color ) extends Texture with  Serializable{
   def apply( texCoord : TexCoord2D ) = color
 }

@@ -26,7 +26,7 @@ package scaladelray.math
  * @param y The y-direction of the vector.
  * @param z The z-direction of the vector.
  */
-case class Vector3( x : Double, y : Double, z : Double ) {
+case class Vector3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
    * The magnitude of the vector.

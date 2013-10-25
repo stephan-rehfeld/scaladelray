@@ -20,7 +20,7 @@ import scaladelray.math.{Ray, Vector3, Point3}
 import scaladelray.{Constants, World, Color}
 import scaladelray.sampling.SamplingPattern
 
-class AreaLight( color : Color, position : Point3, direction : Vector3, upVector: Vector3, size : Double, samplingPoints : Int, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) {
+class AreaLight( color : Color, position : Point3, direction : Vector3, upVector: Vector3, size : Double, samplingPoints : Int, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Serializable {
 
   private val w = direction.normalized * -1
   private val u = (upVector x w).normalized

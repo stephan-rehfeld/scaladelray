@@ -18,7 +18,7 @@ package scaladelray.texture
 
 import scaladelray.Color
 
-case class ChessboardTexture( x : Int, y : Int ) extends Texture {
+case class ChessboardTexture( x : Int, y : Int ) extends Texture with Serializable {
   def apply( texCoord : TexCoord2D ) = {
     val xStep = 0.5 / x.asInstanceOf[Double]
     val yStep = 0.5 / y.asInstanceOf[Double]

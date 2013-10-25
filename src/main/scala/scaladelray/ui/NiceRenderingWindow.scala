@@ -31,10 +31,21 @@ import scaladelray.World
 import javax.imageio.ImageIO
 import scala.swing.GridBagPanel.Fill
 import scaladelray.World
+import scaladelray.rendering.{Render, RenderingActor}
+import scala.collection.mutable
+import akka.remote.RemoteScope
+import com.typesafe.config.ConfigFactory
 
 case class StartRendering()
 
-class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int, recursionDepth : Int ) extends Frame {
+class TestActor extends Actor {
+  println( "Created a test actor" )
+  def receive: Actor.Receive = {
+    case _ =>
+  }
+}
+
+class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int, recursionDepth : Int, clusterNodes : List[(String,Int,Int)] ) extends Frame {
 
   title = "Rendering"
   size = s
@@ -46,8 +57,25 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
 
   val win = this
 
-  private val actorSystem = ActorSystem("Rendering")
-  val targets = actorSystem.actorOf( Props( new RenderingActor( world, 0, recursionDepth ) ).withRouter( RoundRobinRouter( nrOfInstances = Runtime.getRuntime.availableProcessors() ) ) )
+  val config = ConfigFactory.parseString("""
+      akka {
+        actor {
+          provider = "akka.remote.RemoteActorRefProvider"
+        }
+        remote {
+          enabled-transports = ["akka.remote.netty.tcp"]
+          netty.tcp {
+            hostname = "127.0.0.1"
+            port = 4441
+          }
+        }
+      }""")//.withFallback(ConfigFactory.load())
+
+  private val actorSystem = ActorSystem("Rendering",config)
+
+
+
+  val targets = createRenderNodes
 
   val image = new BufferedImage(s.width, s.height, BufferedImage.TYPE_INT_ARGB)
   val model = image.getColorModel
@@ -222,5 +250,23 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
 
     contents = infoUI
     visible = true
+  }
+
+  private def createRenderNodes : ActorRef = {
+    val targets = mutable.MutableList[ActorRef]()
+
+    for( i <- 1 to Runtime.getRuntime.availableProcessors() ) {
+      targets += actorSystem.actorOf( Props( classOf[RenderingActor], world, 0, recursionDepth ) )
+    }
+
+    for( (hostname,port,threads) <- clusterNodes ) {
+      val address = Address("akka.tcp", "renderNode", hostname, port )
+      for( i <- 1 to threads ) {
+        targets += actorSystem.actorOf( Props( classOf[RenderingActor], world, 0, recursionDepth ).withDeploy(Deploy(scope = RemoteScope(address))) )
+      }
+    }
+
+    actorSystem.actorOf(Props.empty.withRouter( RoundRobinRouter(routees = targets.toList)) )
+
   }
 }

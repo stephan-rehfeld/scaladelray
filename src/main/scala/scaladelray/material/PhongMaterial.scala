@@ -22,7 +22,7 @@ import scaladelray.math.Ray
 import scaladelray.geometry.Hit
 
 
-case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int ) extends Material {
+case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val diffuseColor = diffuseTexture( hit.texCoord2D )

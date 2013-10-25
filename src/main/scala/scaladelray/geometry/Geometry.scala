@@ -32,7 +32,7 @@ import scaladelray.material.Material
  * @param n The normal of the hit.
  * @param texCoord2D The texture coordinate of the hit.
  */
-case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D )
+case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D ) extends Serializable
 
 /**
  * The base class for all geometries. It holds the material of the geometry. Additionally, it overloads the +-operator
@@ -40,7 +40,7 @@ case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoor
  *
  * @param material The material of the geometry.
  */
-abstract class Geometry( val material : Material ) {
+abstract class Geometry( val material : Material ) extends Serializable {
 
   /**
    * This arrow operator means "shoot the ray on the geometry." (Nice, isn't it?)

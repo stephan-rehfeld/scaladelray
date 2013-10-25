@@ -18,8 +18,9 @@ package scaladelray.clustering
 
 import java.net._
 import akka.actor.{Props, ActorSystem, Actor}
+import com.typesafe.config.ConfigFactory
 
-case class StartBeacon( beaconPort : Int, servicePort : Int )
+case class StartBeacon( beaconPort : Int, servicePort : Int, cores : Int )
 case class BeaconSocket( socket : MulticastSocket )
 
 class BeaconActor extends Actor {
@@ -37,22 +38,24 @@ class BeaconActor extends Actor {
         val packet = new DatagramPacket(buf, buf.size)
 
         try {
-          println( "Receiving" )
           socket.receive(packet)
-          println( "Received" )
           val data = new String( packet.getData, 0, packet.getLength )
           if( data == "ScalaDelRay:1.0" ) {
             val address = packet.getAddress
             val port = packet.getPort
 
-            println( "Got request from " + address + ":" + port )
-            val portBuf = new Array[Byte]( 4 )
-            portBuf(0) = ((m.servicePort & 0xff000000) >> 24).asInstanceOf[Byte]
-            portBuf(1) = ((m.servicePort & 0xff0000) >> 16).asInstanceOf[Byte]
-            portBuf(2) = ((m.servicePort & 0xff00) >> 8).asInstanceOf[Byte]
-            portBuf(3) = (m.servicePort & 0xff).asInstanceOf[Byte]
+            val dataBuffer = new Array[Byte]( 8 )
+            dataBuffer(0) = ((m.servicePort & 0xff000000) >> 24).asInstanceOf[Byte]
+            dataBuffer(1) = ((m.servicePort & 0xff0000) >> 16).asInstanceOf[Byte]
+            dataBuffer(2) = ((m.servicePort & 0xff00) >> 8).asInstanceOf[Byte]
+            dataBuffer(3) = (m.servicePort & 0xff).asInstanceOf[Byte]
 
-            packet.setData( portBuf )
+            dataBuffer(4) = ((m.cores & 0xff000000) >> 24).asInstanceOf[Byte]
+            dataBuffer(5) = ((m.cores & 0xff0000) >> 16).asInstanceOf[Byte]
+            dataBuffer(6) = ((m.cores & 0xff00) >> 8).asInstanceOf[Byte]
+            dataBuffer(7) = (m.cores & 0xff).asInstanceOf[Byte]
+
+            packet.setData( dataBuffer )
 
             socket.send( packet )
 
@@ -67,9 +70,25 @@ class BeaconActor extends Actor {
 object RenderNode {
   def main( args : Array[String] ) = {
 
-    val actorSystem = ActorSystem( "renderNode" )
-    val beaconActor = actorSystem.actorOf( Props( new BeaconActor ) )
-    beaconActor ! StartBeacon( 12345, 4444 )
+    val port = 4444
+
+    val config = ConfigFactory.parseString("""
+      akka {
+        actor {
+          provider = "akka.remote.RemoteActorRefProvider"
+        }
+        remote {
+          enabled-transports = ["akka.remote.netty.tcp"]
+          netty.tcp {
+            hostname = "127.0.0.1"
+            port = """ + port + """
+          }
+        }
+      }""")
+
+    val actorSystem = ActorSystem( "renderNode", config )
+    val beaconActor = actorSystem.actorOf( Props[BeaconActor] )
+    beaconActor ! StartBeacon( 12345, port, Runtime.getRuntime.availableProcessors() )
 
   }
 }

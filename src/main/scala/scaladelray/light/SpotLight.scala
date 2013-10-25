@@ -20,7 +20,7 @@ import scaladelray.{Constants, World, Color}
 import scaladelray.math.{Ray, Vector3, Point3}
 
 
-class SpotLight( color : Color, position : Point3, direction : Vector3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light {
+class SpotLight( color : Color, position : Point3, direction : Vector3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
   override def illuminates( point: Point3, world : World ) = {
     val w = math.asin( ((point - position).normalized x direction).magnitude ) <= halfAngle
     if( w ) {
