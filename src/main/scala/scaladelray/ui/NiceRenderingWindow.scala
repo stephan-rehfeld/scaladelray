@@ -21,7 +21,7 @@ import scaladelray.camera.Camera
 import scaladelray.World
 import java.awt.{GridBagLayout, Graphics2D, Dimension}
 import akka.actor._
-import akka.routing.RoundRobinRouter
+import akka.routing.{Broadcast, RoundRobinRouter}
 import java.awt.image.BufferedImage
 import scala.concurrent.{Await, Future}
 import akka.util.Timeout
@@ -35,6 +35,7 @@ import scaladelray.rendering.{Render, RenderingActor}
 import scala.collection.mutable
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
+import akka.actor.SupervisorStrategy.Stop
 
 case class StartRendering()
 
@@ -191,7 +192,8 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
   override def closeOperation() {
     super.closeOperation()
     infoWindow.close()
-    targets ! PoisonPill
+    targets ! Broadcast( PoisonPill )
+    Thread.sleep( 1000 )
     actorSystem.shutdown()
   }
 

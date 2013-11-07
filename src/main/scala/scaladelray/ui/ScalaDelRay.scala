@@ -1037,7 +1037,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val socket = new DatagramSocket()
             val buf = new Array[Byte]( 256 )
             val address = InetAddress.getByName("228.5.6.7")
-            val packet = new DatagramPacket(buf, buf.length, address, 12345 )
+            var packet = new DatagramPacket(buf, buf.length, address, 12345 )
             packet.setData( "ScalaDelRay:1.0".getBytes )
             socket.send( packet )
 
@@ -1047,8 +1047,9 @@ object ScalaDelRay extends SimpleSwingApplication {
                 case m : StartDiscovery =>
                   try {
                     while( true ) {
+                      packet = new DatagramPacket(buf, buf.length, address, 12345 )
                       socket.receive( packet )
-                      val nodeAddress = packet.getAddress.getHostAddress
+                      val nodeAddress = new String( packet.getData, 8, packet.getLength - 8 )
                       val nodePort = (packet.getData()(0) << 24) | (packet.getData()(1) << 16) |  (packet.getData()(2) << 8) |  packet.getData()(3)
                       val nodeCores = (packet.getData()(4) << 24) | (packet.getData()(5) << 16) |  (packet.getData()(6) << 8) |  packet.getData()(7)
 

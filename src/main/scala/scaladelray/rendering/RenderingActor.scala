@@ -2,11 +2,19 @@ package scaladelray.rendering
 
 import scaladelray.camera.Camera
 import scaladelray.{Tracer, Color, World}
-import akka.actor.Actor
+import akka.actor.{OneForOneStrategy, ActorKilledException, SupervisorStrategy, Actor}
+import akka.actor.SupervisorStrategy.{Escalate, Stop}
+import scala.concurrent.duration._
 
 case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
 
 class RenderingActor( world : World, id : Int, recursionDepth : Int ) extends Actor {
+
+
+  override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    case _: ActorKilledException  => Stop
+    case _: Exception             => Escalate
+  }
 
   def receive = {
     case msg : Render =>
