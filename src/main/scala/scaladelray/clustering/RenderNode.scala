@@ -17,101 +17,52 @@
 package scaladelray.clustering
 
 import java.net._
-import akka.actor.{Props, ActorSystem, Actor}
+import akka.actor.{Props, ActorSystem}
 import akka.pattern.ask
 import com.typesafe.config.ConfigFactory
 import scala.swing._
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import java.awt.Dimension
-import javax.swing.table.TableModel
-import javax.swing.event.{TableModelEvent, TableModelListener}
 import scala.collection.mutable
 import java.util.Date
-import java.text.SimpleDateFormat
 import scala.swing.event.ButtonClicked
 import akka.util.Timeout
 import scala.concurrent.duration._
 import scala.concurrent.Await
 
 
-case class StartBeacon( beaconPort : Int, interface : String, servicePort : Int, cores : Int )
-case class BeaconSocket( socket : MulticastSocket )
-
-class BeaconActor extends Actor {
-
-  def receive = {
-    case m : StartBeacon =>
-      val socket = new MulticastSocket( m.beaconPort )
-      val group = InetAddress.getByName("228.5.6.7")
-      socket.joinGroup( group )
-
-      sender ! BeaconSocket( socket )
-
-      var running = true
-      while( running ) {
-        val buf = new Array[Byte]( 256 )
-        val packet = new DatagramPacket(buf, buf.size)
-
-        try {
-          socket.receive(packet)
-          val data = new String( packet.getData, 0, packet.getLength )
-          if( data == "ScalaDelRay:1.0" ) {
-            val interfaceData = m.interface.getBytes
-
-            val address = packet.getAddress
-            val port = packet.getPort
-
-            val dataBuffer = new Array[Byte]( interfaceData.size + 8 )
-
-            dataBuffer(0) = ((m.servicePort & 0xff000000) >> 24).asInstanceOf[Byte]
-            dataBuffer(1) = ((m.servicePort & 0xff0000) >> 16).asInstanceOf[Byte]
-            dataBuffer(2) = ((m.servicePort & 0xff00) >> 8).asInstanceOf[Byte]
-            dataBuffer(3) = (m.servicePort & 0xff).asInstanceOf[Byte]
-
-            dataBuffer(4) = ((m.cores & 0xff000000) >> 24).asInstanceOf[Byte]
-            dataBuffer(5) = ((m.cores & 0xff0000) >> 16).asInstanceOf[Byte]
-            dataBuffer(6) = ((m.cores & 0xff00) >> 8).asInstanceOf[Byte]
-            dataBuffer(7) = (m.cores & 0xff).asInstanceOf[Byte]
-
-            for( i <- 0 until interfaceData.size ) dataBuffer( i+8 ) = interfaceData( i )
-
-            val answerBuf = new Array[Byte]( 256 )
-            val answer = new DatagramPacket(answerBuf, answerBuf.size)
-            answer.setAddress( address )
-            answer.setPort( port )
-            answer.setData( dataBuffer )
-
-            socket.send( answer )
-
-
-
-          }
-        } catch {
-          case ex : SocketException => running = false
-        }
-      }
-  }
-}
-
+/**
+ * The render node application. It opens a windows where the user can configure the interface, the port, and the number
+ * of cores that are provided. The service can be started and stopped in the UI.
+ */
 object RenderNode extends SimpleSwingApplication {
 
+  /**
+   * The actor system where the rendering actors run in.
+   */
+  private var remoteActorSystem : Option[ActorSystem] = None
 
-  var remoteActorSystem : Option[ActorSystem] = None
-  var beaconSocket : Option[MulticastSocket] = None
+  /**
+   * The socket of the [[scaladelray.clustering.BeaconActor]]. It is used to close the multicast socket and shutdown
+   * the BeaconNActor properly.
+   */
+  private var beaconSocket : Option[MulticastSocket] = None
 
   Logging.loggingActor ! LogMessage( new Date, "Application started" )
 
-  def top = new MainFrame {
+  override def top = new MainFrame {
     title = "ScalaDelRay rendering node"
     contents = ui
     size = new Dimension( 320, 480 )
     resizable = false
   }
 
-  lazy val ui = new GridBagPanel {
+  /**
+   * The UI.
+   */
+  private lazy val ui = new GridBagPanel {
+
     val c = new Constraints
-
-
     val interfaceLabel = new Label( "Interface: " )
     c.fill = Fill.Horizontal
     c.weightx = 0.5
@@ -236,66 +187,4 @@ object RenderNode extends SimpleSwingApplication {
   }
 }
 
-case class LogMessage( date : Date, message : String )
-case class PromoteTable( table : Table )
 
-class LoggingActor extends Actor {
-
-
-  val listener = mutable.MutableList[TableModelListener]()
-  var table : Option[Table] = None
-  val dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
-  val tableModel = new mutable.MutableList[(String,String)] with TableModel {
-
-    def getRowCount: Int = this.size
-
-    def getColumnCount: Int = 2
-
-    def getColumnName( column : Int): String = column match {
-      case 0 => "Time"
-      case 1 => "Event"
-    }
-
-    def getColumnClass(row: Int): Class[_] = classOf[String]
-
-    def isCellEditable(row: Int, column: Int): Boolean = false
-
-    def getValueAt(row: Int, column: Int): AnyRef = {
-      val (time,message) = this(row)
-      column match {
-        case 0 => time
-        case 1 => message
-      }
-    }
-
-    def setValueAt(obj: Any, row: Int, column: Int) {}
-
-    def addTableModelListener(p1: TableModelListener) {
-      listener += p1
-    }
-
-    def removeTableModelListener(p1: TableModelListener) {}
-
-    override def +=(elem : (String,String) ) = {
-      super.+=(elem)
-      for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
-      this
-    }
-  }
-
-  override def receive = {
-    case LogMessage( date, message ) =>
-      tableModel += ((dateFormat.format(date),message))
-    case PromoteTable( promotedTable ) =>
-      this.table = Some( promotedTable )
-      promotedTable.model = tableModel
-
-  }
-}
-
-
-object Logging {
-  lazy val loggingActorSystem = ActorSystem( "logging" )
-  lazy val loggingActor = loggingActorSystem.actorOf( Props[LoggingActor ] )
-
-}
