@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package test.scaladelray.geometry
+package test.scaladelray.light
 
 import org.scalatest.FunSpec
 
-class TriangleSpec extends FunSpec {
-
-  describe( "A Triangle" ) {
-    it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) (pending)
-    it( "should return interpolated normals and texture coordinates when hit an edge." ) (pending)
-    it( "should return interpolated normals and texture coordinates when hit on the face." ) (pending)
-    it( "should return nothing when missed by the ray." ) (pending)
+class LightDescriptionSpec extends FunSpec  {
+  describe( "A LightDescription" ) {
+    it( "should have a convenience function to create a set out of two light descriptions" ) (pending)
   }
 
 }

@@ -45,7 +45,7 @@ abstract class Geometry( val material : Material ) extends Serializable {
   /**
    * This arrow operator means "shoot the ray on the geometry." (Nice, isn't it?)
    *
-   * It returns all hits between the geometry and the ray in a set. This may includes all hits where t is small than 0.
+   * It returns all hits between the geometry and the ray in a set. This may includes all hits where t is smaller than 0.
    *
    * @param r The ray that's been shooted.
    * @return All hits between the ray an the geometry. Maybe empty.

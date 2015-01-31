@@ -16,6 +16,9 @@
     </option>
     <option name="useCustomIvySettings" value="false" />
   </component>
+  <component name="IvyProjectSettings">
+    <dependencies />
+  </component>
   <component name="ProjectResources">
     <resource url="http://ant.apache.org/ivy/schemas/ivy.xsd" location="C:/" />
   </component>

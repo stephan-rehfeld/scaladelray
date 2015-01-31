@@ -20,7 +20,20 @@ import scaladelray.{Constants, World, Color}
 import scaladelray.math.{Ray, Point3}
 
 
+/**
+ * A point lights illuminates the scene from a single point in all directions.
+ * Because a point light is a simple light, it implements [[scaladelray.light.LightDescription]] and also is
+ * a [[scaladelray.light.Light]]. It returns itself when createLight is called.
+ *
+ * @param color The color of the light.
+ * @param position The position of the point light.
+ * @param castsShadows A flag if the lights casts a shadow.
+ * @param constantAttenuation The constant attenuation.
+ * @param linearAttenuation The linear attenuation.
+ * @param quadraticAttenuation The quadratic attenuation.
+ */
 class PointLight( color : Color, position : Point3, castsShadows : Boolean = true, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
+
   override def illuminates(point: Point3, world : World) = {
     if( castsShadows ) {
       val ray = Ray( point, (position - point).normalized )

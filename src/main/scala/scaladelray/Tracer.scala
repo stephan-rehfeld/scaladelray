@@ -22,7 +22,7 @@ import math.Ray
 object Tracer {
   def standardTracer( ray : Ray, world : World, recursions : Int ) : Color = {
     if( recursions < 0 ) {
-      world.backgroundColor
+      Color( 1, 1, 0 )
     } else {
       val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
       if( hits.isEmpty ) {

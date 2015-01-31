@@ -24,8 +24,29 @@ import scaladelray.optimization.Octree
 import scala.Array
 import scala.collection.mutable
 
+/**
+ * An instance of this class represents a triangle mesh geometry. An octree is created to enhance rendering performance.
+ * The triangle mesh is expected to be provided as an array of vertices and indices Normals and texture coordinates
+ * can also be provided.
+ *
+ * Inidicies for vertices are mandatory. Normals and texture coordinates are optional.
+ *
+ * The depth of the octree is determined by the passed function subDivideDecider. The current recursion depth (first parameter)
+ * and the number of triangles within the current node of the octree are passed to the subDivideDecider. If the decider
+ * returns true, the current node is split to 8 more nodes.
+ *
+ * @param material The material of the geometry.
+ * @param vertices An array that contains all vertices of the model.
+ * @param normals An array that contains all normals of the model.
+ * @param texCoords An array that contains all texture coordinates of the model.
+ * @param faces An array that contains the description of the faces of the model. The first value on the tuple is the index of the vertex. The second one is the index of the texture coordinate. The third one is the normal.
+ * @param subDivideDecider A function that decides if a node in the octree should be ddecidedinto 8 more bounding boxes.
+ */
 class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry( material ) with Serializable {
 
+  /**
+   * The smalltest and largest x, y, and z values.
+   */
   val (minX,minY,minZ,maxX,maxY,maxZ) =
     vertices.foldLeft( (Double.MaxValue,Double.MaxValue,Double.MaxValue,Double.MinValue,Double.MinValue,Double.MinValue) )( (v : (Double,Double,Double,Double,Double,Double),p : Point3) => {
               (if(p.x<v._1)p.x else v._1,
@@ -36,13 +57,36 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
                if(p.z>v._6)p.z else v._6)
             } )
 
+  /**
+   * The geometrical center of the object. The average of all vertices of the model.
+   */
   val center = vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size
 
+  /**
+   * The left bottom far point of the bounding box of the model.
+   */
   val lbf = Point3( minX, minY, minZ )
+
+  /**
+   * The right upper near point of the bounding box of the model.
+   */
   val run = Point3( maxX, maxY, maxZ )
 
+  /**
+   * The octree to enhance rendering performance.
+   */
   private val octree = generateOctree( 0, run, lbf, faces, subDivideDecider )
 
+  /**
+   * This recursive function constructs an octree to enhance rendering performance.
+   *
+   * @param recursionDepth The current recursions depth
+   * @param run The right upper near point of the current bounding box.
+   * @param lbf The left bottom far point of the current bounding box.
+   * @param faces The faces for the current recusion depth.
+   * @param subDivideDecider The subDevideDecider.
+   * @return A octree that split the model into various nodes to enhance rendering performance.
+   */
   private def generateOctree( recursionDepth : Int, run: Point3, lbf : Point3, faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) : Octree[Array[List[(Int,Option[Int],Option[Int])]]] = {
     if( subDivideDecider( recursionDepth, faces.size ) ) {
       val center = lbf + ((run - lbf) / 2.0)
@@ -78,11 +122,19 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
     }
   }
 
-  def <--(r: Ray) : Set[Hit] = {
+  override def <--(r: Ray) : Set[Hit] = {
     findHitsInOctree( octree, r )
   }
 
-  def findHitsInOctree( node : Octree[Array[List[(Int,Option[Int],Option[Int])]]], r : Ray ) : Set[Hit] = {
+
+  /**
+   * A function that traverses the octree recursivley to determine the hits with the model.
+   *
+   * @param node The current octree node.
+   * @param r The ray.
+   * @return A set of hits from this node and sub nodes.
+   */
+  private def findHitsInOctree( node : Octree[Array[List[(Int,Option[Int],Option[Int])]]], r : Ray ) : Set[Hit] = {
     val hits = collection.mutable.Set[Hit]()
 
     if( node <-- r ) {
@@ -93,7 +145,14 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
     hits.toSet
   }
 
-  def findHitsInFaces( faces : Array[List[(Int,Option[Int],Option[Int])]], r : Ray ) : Set[Hit] = {
+  /**
+   * This function finds the intersections between a ray and triangles, that are defined by the faces array.
+   *
+   * @param faces The faces array.
+   * @param r The ray.
+   * @return A set of hits between the ray and triangles from the faces array.
+   */
+  private def findHitsInFaces( faces : Array[List[(Int,Option[Int],Option[Int])]], r : Ray ) : Set[Hit] = {
     val hits = collection.mutable.Set[Hit]()
     for( face <- faces ) {
       val a = vertices( face(0)._1 )

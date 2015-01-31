@@ -16,6 +16,17 @@
 
 package test.scaladelray.geometry
 
-class TriangleMeshSpec {
+import org.scalatest.FunSpec
+
+class TriangleMeshSpec extends FunSpec  {
+
+  describe( "A TriangleMesh" ) {
+    it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) (pending)
+    it( "should return interpolated normals and texture coordinates when hit an edge." ) (pending)
+    it( "should return interpolated normals and texture coordinates when hit on the face." ) (pending)
+    it( "should return nothing when missed by the ray." ) (pending)
+    it( "should create the octree correctly" ) (pending)
+    it( "should hit return the correct hit when it contains a triangle" ) (pending)
+  }
 
 }

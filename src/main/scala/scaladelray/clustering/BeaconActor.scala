@@ -41,7 +41,7 @@ case class BeaconSocket( socket : MulticastSocket )
 
 /**
  * The BeaconActor opens a multicast port and listens for broadcast messages of the render node discovery service.
- * I replies on broadcast message and transmits information on how to connect to this node.
+ * It replies on broadcast message and transmits information on how to connect to this node.
  *
  */
 class BeaconActor extends Actor {

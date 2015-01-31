@@ -19,7 +19,15 @@ package scaladelray.light
 import scaladelray.{Constants, World, Color}
 import scaladelray.math.{Ray, Point3, Vector3}
 
-
+/**
+ * The directional light represents the light of the sun. It behaves like a point light with an infinite distance.
+ *
+ * Because a directional light is a simple light, it implements [[scaladelray.light.LightDescription]] and also is
+ * a [[scaladelray.light.Light]]. It returns itself when createLight is called.
+ *
+ * @param color The color of the light.
+ * @param direction The direction of the light.
+ */
 class DirectionalLight( color : Color, direction : Vector3 ) extends LightDescription( color ) with Light with Serializable {
   val l = (direction * -1).normalized
 

@@ -18,7 +18,28 @@ package scaladelray.light
 
 import scaladelray.Color
 
+/**
+ * A light description creates a instance of a light whenever createLight is called. This is necessary if a random
+ * sampling pattern is used for an area light and needs to be recreated for each point.
+ *
+ * Simple lights, like spot or point lights usually derived directly and just return this.
+ *
+ * @param color The color of the light.
+ */
 abstract class LightDescription( val color : Color ) extends Serializable {
+
+  /**
+   * Convenience function to create a set of light descriptions.
+   *
+   * @param l Another light.
+   * @return A set that contains this description and another light description.
+   */
   def +( l : LightDescription ) = Set() + this + l
+
+  /**
+   * An implementation of this function should create a light that matches the description.
+   *
+   * @return A light.
+   */
   def createLight : Light
 }

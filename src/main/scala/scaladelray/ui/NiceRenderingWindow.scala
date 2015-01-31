@@ -72,7 +72,7 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
         }
       }""")//.withFallback(ConfigFactory.load())
 
-  private val actorSystem = ActorSystem("Rendering",config)
+  private val actorSystem = if( clusterNodes.isEmpty ) ActorSystem("Rendering") else ActorSystem("Rendering",config)
 
 
 
