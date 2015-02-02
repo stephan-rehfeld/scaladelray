@@ -867,9 +867,25 @@ object ScalaDelRay extends SimpleSwingApplication {
 
         lazy val algorithmPage =  new GridBagPanel {
 
-
-
           val c = new Constraints
+
+          val algorithmLabel = new Label( "Algorithm: " )
+
+          c.fill = Fill.Horizontal
+
+          c.weightx = 0.3
+          c.gridx = 0
+          c.gridy = 0
+
+          layout( algorithmLabel ) = c
+
+          val algorithmComboBox = new ComboBox[String]( List( "Ray Casting", "Recursive Ray Tracing", "Stochastic Ray Tracing", "Path Tracing", "Photon Mapping" ) )
+          algorithmComboBox.enabled = false
+          algorithmComboBox.selection.item = "Stochastic Ray Tracing"
+          c.weightx = 0.7
+          c.gridx = 1
+
+          layout( algorithmComboBox ) = c
 
           val recursionsLabel = new Label( "Recursions: " )
 
@@ -877,7 +893,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
           c.weightx = 0.3
           c.gridx = 0
-          c.gridy = 0
+          c.gridy = 1
 
           layout( recursionsLabel ) = c
 
@@ -894,7 +910,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
           c.weightx = 0.3
           c.gridx = 0
-          c.gridy = 1
+          c.gridy = 2
 
           layout( epsilonLabel ) = c
 
@@ -913,7 +929,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           c.anchor = Anchor.PageEnd
           c.gridx = 1
           c.gridwidth = 1
-          c.gridy = 2
+          c.gridy = 3
           layout(dummyLabel) = c
 
         }
