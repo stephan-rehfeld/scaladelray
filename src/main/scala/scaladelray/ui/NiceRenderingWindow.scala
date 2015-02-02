@@ -18,8 +18,7 @@ package scaladelray.ui
 
 import scala.swing._
 import scaladelray.camera.Camera
-import scaladelray.World
-import java.awt.{GridBagLayout, Graphics2D, Dimension}
+import java.awt.{Graphics2D, Dimension}
 import akka.actor._
 import akka.routing.{Broadcast, RoundRobinRouter}
 import java.awt.image.BufferedImage
@@ -27,7 +26,6 @@ import scala.concurrent.{Await, Future}
 import akka.util.Timeout
 import scala.concurrent.duration._
 import akka.pattern.ask
-import scaladelray.World
 import javax.imageio.ImageIO
 import scala.swing.GridBagPanel.Fill
 import scaladelray.World
@@ -35,7 +33,7 @@ import scaladelray.rendering.{Render, RenderingActor}
 import scala.collection.mutable
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
-import akka.actor.SupervisorStrategy.Stop
+import scala.language.reflectiveCalls
 
 case class StartRendering()
 

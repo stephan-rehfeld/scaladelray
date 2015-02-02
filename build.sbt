@@ -2,7 +2,7 @@ name := "ScalaDelRay"
 
 version := "0.9-beta"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.5"
 
 scalacOptions ++= Seq("-feature", "-language:postfixOps")
 
@@ -12,14 +12,14 @@ packageOptions  += Package.MainClass("scaladelray.ui.ScalaDelRay")
 
 resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.5.1")
+libraryDependencies += "org.scala-lang" % "scala-swing" % "2.11+"
 
-libraryDependencies += "org.scala-lang" % "scala-swing" % "2.10.3"
+libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.10" % "1.9.2" % "test"
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.2.3"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.9"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.2.3"
+libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.3.9"
 
-libraryDependencies += "com.typesafe" % "config" % "1.0.2"
+libraryDependencies += "com.typesafe" % "config" % "1.2.1"

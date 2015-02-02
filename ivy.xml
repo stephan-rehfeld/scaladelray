@@ -21,11 +21,13 @@
         <description>A small ray tracer implemented in Scala</description>
     </info>
     <dependencies>
-        <dependency org="org.scala-lang" name="scala-library" rev="2.10.3"/>
-        <dependency org="org.scalatest" name="scalatest_2.10" rev="1.9.2"/>
-        <dependency org="org.scala-lang" name="scala-swing" rev="2.10.3"/>
-        <dependency org="com.typesafe.akka" name="akka-actor_2.10" rev="2.2.3"/>
-        <dependency org="com.typesafe.akka" name="akka-remote_2.10" rev="2.2.3"/>
-        <dependency org="com.typesafe" name="config" rev="1.0.2"/>
+        <dependency org="org.scala-lang" name="scala-library" rev="2.11.5"/>
+        <dependency org="org.scala-lang" name="scala-swing" rev="2.11+"/>
+        <dependency org="org.scala-lang.modules" name="scala-parser-combinators" rev="1.0.3"/>
+        <dependency org="org.scalatest" name="scalatest_2.11" rev="2.2.1"/>
+        <dependency org="com.typesafe.akka" name="akka-actor_2.11" rev="2.3.9"/>
+        <dependency org="com.typesafe.akka" name="akka-remote_2.11" rev="2.3.9"/>
+        <dependency org="com.typesafe" name="config" rev="1.2.1"/>
+
     </dependencies>
 </ivy-module>
