@@ -24,9 +24,6 @@ import javax.swing.{SwingUtilities, JMenuItem, JPopupMenu, JTree}
 import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
-import scala.swing.event.ButtonClicked
-import scaladelray.Color
-import scaladelray.math.{Vector3, Point3}
 import scaladelray.Constants
 import scala.swing.TabbedPane.Page
 import scala.collection.mutable
@@ -38,6 +35,7 @@ import scala.Some
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
 import java.net.{SocketException, DatagramPacket, DatagramSocket, InetAddress}
+import scala.language.reflectiveCalls
 
 case class StartDiscovery()
 

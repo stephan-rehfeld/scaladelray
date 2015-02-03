@@ -61,6 +61,13 @@ class Vector3Spec extends FunSpec {
       assert( vector + normal == Vector3( 2 + 7, 3 + 11, 5 + 13 ) )
     }
 
+    it( "should calculate to correct difference of two vector" ) {
+      val vector1 = Vector3( 2, 3, 5 )
+      val vector2 = Vector3( 7, 11, 13 )
+
+      assert( vector1 - vector2 == Vector3( 2 - 7, 3 - 11, 5 - 13 ) )
+    }
+
     it( "should calculate to correct difference of a vector and a normal" ) {
       val vector = Vector3( 2, 3, 5 )
       val normal = Normal3( 7, 11, 13 )
@@ -107,13 +114,22 @@ class Vector3Spec extends FunSpec {
       assert( vector.normalized == Vector3( 2 / vector.magnitude, 3 / vector.magnitude, 5 / vector.magnitude ) )
     }
 
-    it( "should be convertible to a Normal3 with with normalized values for x, z, and y" ) {
+    it( "should be convertible to a Normal3 with normalized values for x, z, and y" ) {
       val vector = Vector3( 2, 3, 5 )
       val normal = vector.asNormal
 
       assert( vector.normalized.x == normal.x )
       assert( vector.normalized.y == normal.y )
       assert( vector.normalized.z == normal.z )
+    }
+
+    it( "should be convertible to a Point with the same values for x, z, and y" ) {
+      val vector = Vector3( 2, 3, 5 )
+      val point = vector.asPoint
+
+      assert( vector.x == point.x )
+      assert( vector.y == point.y )
+      assert( vector.z == point.z )
     }
 
     it( "should be reflectable on a normal" ) {

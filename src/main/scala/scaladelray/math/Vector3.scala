@@ -50,6 +50,14 @@ case class Vector3( x : Double, y : Double, z : Double ) extends Serializable {
   def +( v : Normal3 ) = Vector3( x + v.x, y + v.y, z + v.z )
 
   /**
+   * This method calculates the difference between two vetors and returns the result as vector.
+   *
+   * @param v The vectir.
+   * @return The difference of the vectors
+   */
+  def -( v : Vector3 ) = Vector3( x - v.x, y - v.y, z - v.z )
+
+  /**
    * This method calculates the difference between this vector and a normal and returns the result as vector.
    *
    * @param v The normal.
@@ -112,6 +120,15 @@ case class Vector3( x : Double, y : Double, z : Double ) extends Serializable {
   def asNormal = {
     val n = normalized
     Normal3( n.x, n.y, n.z )
+  }
+
+  /**
+   * This method creates a point out of the vector.
+   *
+   * @return A point at the point where the vector points to.
+   */
+  def asPoint = {
+    Point3( x, y, z )
   }
 
   /**
