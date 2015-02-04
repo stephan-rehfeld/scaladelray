@@ -26,9 +26,6 @@ class DirectionalLightSpec extends FunSpec {
     it( "should return itself when createLight is called." ) (pending)
     it( "should check the world if an object is between the point and the point light" ) (pending)
     it( "should return false if an object is between the point and the light" ) (pending)
-    it( "should calculate the constant attenuation correctly") (pending)
-    it( "should calculate the linear attenuation correctly") (pending)
-    it( "should calculate the quadratic attenuation correctly") (pending)
     it( "should only have one sampling point") (pending)
     it( "should always return the same direction") (pending)
   }

@@ -17,10 +17,33 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
+import scaladelray.light.{Light, LightDescription}
+import scaladelray.Color
 
 class LightDescriptionSpec extends FunSpec  {
   describe( "A LightDescription" ) {
-    it( "should have a convenience function to create a set out of two light descriptions" ) (pending)
+    it( "should have a convenience function to create a set out of two light descriptions" ) {
+
+      val l1 = new LightDescription( Color( 0, 0, 0 ) ) {
+        def createLight : Light = {
+          null
+        }
+      }
+
+      val l2 = new LightDescription( Color( 0, 0, 0 ) ){
+
+        def createLight : Light = {
+          null
+        }
+      }
+
+      val s : Set[LightDescription] = l1 + l2
+
+      assert( s.contains( l1 ))
+      assert( s.contains( l2 ))
+
+    }
+
   }
 
 }

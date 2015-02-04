@@ -17,7 +17,7 @@
 package scaladelray
 
 import geometry.{Hit, Geometry}
-import scaladelray.light.{LightDescription, Light}
+import scaladelray.light.LightDescription
 import math.Ray
 
 
