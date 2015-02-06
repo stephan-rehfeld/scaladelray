@@ -18,9 +18,6 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 
-/**
- * Created by Stephan Rehfeld on 31.01.15.
- */
 class AreaLightSpec extends FunSpec {
 
   describe( "An AreaLight" ) {
