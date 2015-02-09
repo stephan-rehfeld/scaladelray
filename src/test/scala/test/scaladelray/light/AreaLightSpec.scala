@@ -17,19 +17,77 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
+import scaladelray.light.{PointLight, AreaLight}
+import scaladelray.math.{Ray, Point3, Vector3}
+import scaladelray.{World, Color}
+import scaladelray.geometry.{Sphere, Hit, Geometry}
 
 class AreaLightSpec extends FunSpec {
 
   describe( "An AreaLight" ) {
-    it( "should radiate all points" ) (pending)
-    it( "should return a new light for each call of createLight" ) (pending)
-    it( "should check the world if an object is between the point and the area light" ) (pending)
-    it( "should return false if an object is between the point and the light" ) (pending)
+    it( "should radiate all points" ) {
+      val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
+      val l = ld.createLight
+      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() )
+      val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
+
+      for( p <- points )
+        for( b <- l.illuminates( p, w ) )
+          assert( b )
+    }
+
+    it( "should return a new light for each call of createLight" ) {
+      val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
+      val lights = for( i <- 0 until 10 ) yield ld.createLight
+      for( i <- 0 until 9 )
+        for( j <- (i+1) until 10 )
+           assert( lights(i) != lights(j) )
+
+    }
+
+    it( "should check the world if an object is between the point and the area light" ) {
+      var called = false
+
+      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
+        override def <--( r : Ray ) : Set[Hit] = {
+          called = true
+          Set[Hit]()
+        }
+      }
+      val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
+      val l = ld.createLight
+      l.illuminates( Point3( 3, 3, 3 ), w )
+      assert( called )
+    }
+
+    it( "should return false if an object is between the point and the light" ) {
+      val ld = new AreaLight( Color( 1, 1, 1 ),Point3( 0, 0, -2 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 0.01, 255 )
+      val l = ld.createLight
+      val s = new Sphere( null )
+      val p = Point3( 0, 0, 2 )
+      val w = new World( Color( 0, 0, 0 ), Set() + s )
+
+      for( b <- l.illuminates( p, w ) )
+        assert( !b )
+    }
+
     it( "should calculate the constant attenuation correctly") (pending)
     it( "should calculate the linear attenuation correctly") (pending)
     it( "should calculate the quadratic attenuation correctly") (pending)
-    it( "should have the specified number of sampling points") (pending)
-    it( "should always calculate the direction to each sampling point") (pending)
+
+    it( "should have the specified number of sampling points") {
+      val sps = 255
+      val ld = new AreaLight( Color( 1, 1, 1 ),Point3( 0, 0, -2 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 0.01, sps )
+      assert( ld.createLight.samplingPoints == sps )
+    }
+
+    it( "should always calculate the direction to each sampling point") {
+      val ld = new AreaLight( Color( 1, 1, 1 ),Point3( 0, 0, -2 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 10, 10 )
+      val l = ld.createLight
+      val directions = l.directionFrom( Point3( 0, 0, 0 ) )
+      val s = directions.toSet
+      assert( s.size == directions.size )
+    }
   }
 
 }

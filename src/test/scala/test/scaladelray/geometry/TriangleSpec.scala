@@ -69,6 +69,7 @@ class TriangleSpec extends FunSpec {
       }
 
     }
+
     it( "should return interpolated normals and texture coordinates when hit an edge." ) {
       val r1 = Ray( Point3( 0.5, 0, 1 ), Vector3( 0, 0, -1 ) )
       val r2 = Ray( Point3( 1, 0.5, 1 ), Vector3( 0, 0, -1 ) )
@@ -97,6 +98,7 @@ class TriangleSpec extends FunSpec {
         assert( h.texCoord2D == (t3 + t1) * 0.5 )
       }
     }
+
     it( "should return interpolated normals and texture coordinates when hit on the face." ) {
       val o = (((a.asVector + b.asVector + c.asVector) * (1.0/3.0)) - Vector3( 0, 0, 1 ) ).asPoint
       val r = Ray( o, Vector3( 0, 0, 1 ) )

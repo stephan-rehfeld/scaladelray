@@ -160,14 +160,14 @@ class TriangleMesh( material : Material, val vertices : Array[Point3], val norma
       val c = vertices( face(2)._1 )
 
       val (an,bn,cn) = if( face(0)._3.isDefined ) {
-        (normals(face(0)._3.get),normals(face(0)._3.get),normals(face(0)._3.get))
+        (normals(face(0)._3.get),normals(face(1)._3.get),normals(face(2)._3.get))
       } else {
         val n = (b-c x a-c).asNormal
         (-n,-n,-n)
       }
 
       val (at,bt,ct) = if( face(0)._2.isDefined ) {
-        (texCoords(face(0)._2.get),texCoords(face(0)._2.get),texCoords(face(0)._2.get))
+        (texCoords(face(0)._2.get),texCoords(face(1)._2.get),texCoords(face(2)._2.get))
       } else {
         val t = TexCoord2D( 0, 0 )
         (t,t,t)

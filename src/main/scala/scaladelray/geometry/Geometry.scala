@@ -47,7 +47,7 @@ abstract class Geometry( val material : Material ) extends Serializable {
    *
    * It returns all hits between the geometry and the ray in a set. This may includes all hits where t is smaller than 0.
    *
-   * @param r The ray that's been shooted.
+   * @param r The ray that's been shot.
    * @return All hits between the ray an the geometry. Maybe empty.
    */
   def <-- ( r : Ray ) : Set[Hit]
