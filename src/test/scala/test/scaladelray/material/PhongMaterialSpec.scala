@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package test.scaladelray.material
 
-import scaladelray.geometry.Hit
-import scaladelray.{Color, World}
-import scaladelray.math.{Vector3, Point3, Ray}
-import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.light.{LightDescription, Light}
+/**
+ * Created by Stephan Rehfeld on 10.02.15.
+ */
+class PhongMaterialSpec {
 
-abstract class Material {
-  def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color
 }

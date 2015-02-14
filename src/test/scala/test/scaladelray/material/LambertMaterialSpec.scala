@@ -1,0 +1,177 @@
+/*
+ * Copyright 2015 Stephan Rehfeld
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package test.scaladelray.material
+
+import org.scalatest.FunSpec
+import scaladelray.material.LambertMaterial
+import scaladelray.{Color, World}
+import scaladelray.math.{Normal3, Vector3, Ray, Point3}
+import test.scaladelray.geometry.GeometryTestAdapter
+import scaladelray.geometry.Hit
+import scaladelray.texture.TexCoord2D
+
+class LambertMaterialSpec extends FunSpec {
+
+  describe( "A LambertMaterial" ) {
+    it( "should retrieve to color from the texture, using texture coordinate in the hit" ) {
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set() )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+
+      assert( t.coordinates.isDefined )
+      assert( t.coordinates.get == tc )
+    }
+
+    it( "should not call the tracer" ) {
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set() )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      var called = false
+
+      val tracer = ( r: Ray, w : World) => {
+        called = true
+        Color( 0, 0, 0 )
+      }
+
+      m.colorFor( h, w, tracer )
+
+      assert( !called )
+    }
+
+    it( "should call createLight of the light" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+      val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+
+      assert( l1.createLightCalled )
+      assert( l2.createLightCalled )
+    }
+
+    it( "should request if a light hits a point" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+      val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+
+      assert( l1.illuminatesPoint.isDefined )
+      assert( l1.illuminatesPoint.get == r( h.t ) )
+      assert( l1.illuminatesWorld.isDefined )
+      assert( l1.illuminatesWorld.get == w )
+
+      assert( l2.illuminatesPoint.isDefined )
+      assert( l2.illuminatesPoint.get == r( h.t ) )
+      assert( l2.illuminatesWorld.isDefined )
+      assert( l2.illuminatesWorld.get == w )
+    }
+
+
+    it( "should request the direction to the light" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+      val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+
+      assert( l1.directionPoint.isDefined )
+      assert( l1.directionPoint.get == r( h.t ) )
+
+      assert( l2.directionPoint.isDefined )
+      assert( l2.directionPoint.get == r( h.t ) )
+    }
+
+
+    it( "should request the intensity of the light" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+      val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new TextureTestAdapter()
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+
+      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+
+      assert( l1.intensityPoint.isDefined )
+      assert( l1.intensityPoint.get == r( h.t ) )
+
+      assert( l2.intensityPoint.isDefined )
+      assert( l2.intensityPoint.get == r( h.t ) )
+    }
+
+    it( "should use color returned by the texture to calculate to color at the point on the surface" ) (pending)
+    it( "should use the normal of the hit to calculate the color" ) (pending)
+    it( "should use the information if the light illuminates the surface to calculate the color" ) (pending)
+    it( "should use the intensity returned by the light to calculate to color" ) (pending)
+    it( "should use the direction returned by the light to calculate to color" ) (pending)
+    it( "should use the number of sampling points interpret the data received from the light" ) (pending)
+  }
+
+}

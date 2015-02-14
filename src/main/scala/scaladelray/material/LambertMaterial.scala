@@ -21,7 +21,11 @@ import scaladelray.geometry.Hit
 import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
-
+/**
+ * A perfectly diffuse reflecting material.
+ *
+ * @param texture The texture that is used to determine the color.
+ */
 case class LambertMaterial( texture : Texture ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {

@@ -146,16 +146,6 @@ class TransformSpec extends FunSpec {
       assert( transformedRay.d == t.i * ray.d )
     }
 
-    it( "should have a multiply operator for a ray that multiplies origin and direction with the inverse" ) {
-      val ray = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
-      val t = Transform.translate( 2, 3, 1 ).rotateX( Math.PI ).scale( 0.1, 2.0, 2.5 )
-
-      val transformedRay = t * ray
-
-      assert( transformedRay.o == t.i * ray.o )
-      assert( transformedRay.d == t.i * ray.d )
-    }
-
     it( "should have a multiply operator for a normal that multiplies the normal with transposed inverse" ) {
       val n = Normal3( 0, 1, 0 )
       val t = Transform.translate( 2, 3, 1 ).rotateX( Math.PI ).scale( 0.1, 2.0, 2.5 )
