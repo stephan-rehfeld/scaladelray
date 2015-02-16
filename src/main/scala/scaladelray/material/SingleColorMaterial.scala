@@ -20,8 +20,14 @@ import scaladelray.{World, Color}
 import scaladelray.geometry.Hit
 import scaladelray.math.Ray
 
-
+/**
+ * A single color material always returns the same color, regardless of lighting conditions.
+ * It is primarily used for testing and not in real scene.
+ *
+ * @param color The color of the material
+ */
 case class SingleColorMaterial( color : Color ) extends Material with Serializable {
 
-  def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
+  override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
+
 }

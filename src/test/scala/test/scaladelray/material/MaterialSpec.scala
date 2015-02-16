@@ -32,7 +32,7 @@ class TextureTestAdapter extends Texture {
 
 }
 
-class LightTestAdapter( illuminatesData : List[Boolean], directionFromData : List[Vector3], intensityData : List[Double] ) extends LightDescription( Color( 0, 0, 0 )) with Light {
+class LightTestAdapter( illuminatesData : List[Boolean], directionFromData : List[Vector3], intensityData : List[Double] ) extends LightDescription( Color( 1, 1, 1 )) with Light {
 
   assert( illuminatesData.size == directionFromData.size )
   assert( illuminatesData.size == intensityData.size )

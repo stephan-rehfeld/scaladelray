@@ -16,9 +16,6 @@
 
 package test.scaladelray.material
 
-/**
- * Created by Stephan Rehfeld on 10.02.15.
- */
 class ReflectiveMaterialSpec {
 
 }

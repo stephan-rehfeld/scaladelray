@@ -18,9 +18,7 @@ package scaladelray.material
 
 import scaladelray.geometry.Hit
 import scaladelray.{Color, World}
-import scaladelray.math.{Vector3, Point3, Ray}
-import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.light.{LightDescription, Light}
+import scaladelray.math.Ray
 
 abstract class Material {
   def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color

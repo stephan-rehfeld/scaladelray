@@ -22,7 +22,8 @@ import scaladelray.{Color, World}
 import scaladelray.math.{Normal3, Vector3, Ray, Point3}
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.geometry.Hit
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.light.PointLight
 
 class LambertMaterialSpec extends FunSpec {
 
@@ -166,12 +167,91 @@ class LambertMaterialSpec extends FunSpec {
       assert( l2.intensityPoint.get == r( h.t ) )
     }
 
-    it( "should use color returned by the texture to calculate to color at the point on the surface" ) (pending)
-    it( "should use the normal of the hit to calculate the color" ) (pending)
-    it( "should use the information if the light illuminates the surface to calculate the color" ) (pending)
-    it( "should use the intensity returned by the light to calculate to color" ) (pending)
-    it( "should use the direction returned by the light to calculate to color" ) (pending)
-    it( "should use the number of sampling points interpret the data received from the light" ) (pending)
+    it( "should use the color returned by the texture to calculate to color at the point on the surface" ) {
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
+
+      val t = new SingleColorTexture( Color( 1, 0, 0 ) )
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 0, 0 ) )
+    }
+
+    it( "should use the normal of the hit to calculate the color" ) {
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
+
+      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
+    }
+
+    it( "should use the information if the light illuminates the surface to calculate the color" ) {
+      val illuminatesData = false :: Nil
+      val directionFromData = Vector3( 0, 0, 1 ) :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
+    }
+
+    it( "should use the intensity returned by the light to calculate to color" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 0, 1 ) :: Nil
+      val intensityData = 0.5 :: Nil
+
+      val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.5 ) )
+    }
+
+    it( "should use the direction returned by the light to calculate to color" ) {
+      val illuminatesData = true :: Nil
+      val directionFromData = Vector3( 0, 1, 1 ).normalized :: Nil
+      val intensityData = 1.0 :: Nil
+
+      val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
+
+      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val m = LambertMaterial( t )
+      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val g = new GeometryTestAdapter( m )
+      val tc = TexCoord2D( 1.0, 1.0 )
+      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
+    }
+
+    it( "should use the number of sampling points to interpret the data received from the light" ) {
+
+    }
   }
 
 }
