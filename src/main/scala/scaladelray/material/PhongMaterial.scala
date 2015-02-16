@@ -21,10 +21,17 @@ import scaladelray.{World, Color}
 import scaladelray.math.Ray
 import scaladelray.geometry.Hit
 
-
+/**
+ * A phong material with diffuse and specular reflection.
+ *
+ * @param diffuseTexture The texture for the diffuse reflection
+ * @param specularTexture The texture for the specular reflection.
+ * @param phongExponent The phong exponent.
+ */
 case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
+
     val diffuseColor = diffuseTexture( hit.texCoord2D )
     val specularColor = specularTexture( hit.texCoord2D )
     val normal = hit.n

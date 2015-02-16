@@ -249,9 +249,6 @@ class LambertMaterialSpec extends FunSpec {
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
     }
 
-    it( "should use the number of sampling points to interpret the data received from the light" ) {
-
-    }
   }
 
 }
