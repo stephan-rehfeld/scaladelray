@@ -18,9 +18,10 @@ package test.scaladelray.math
 
 import org.scalatest.FunSpec
 import scaladelray.math.{Vector3, Normal3}
+import scaladelray.Constants
 
 /**
- * A behavior test of [[Normal3]].
+ * A behavior test of [[scaladelray.math.Normal3]].
  *
  * @author Stephan Rehfeld
  */
@@ -155,6 +156,18 @@ class Normal3Spec extends FunSpec {
       val normal = Normal3( 2, 3, 5 )
 
       assert( -normal == Normal3( -2, -3, -5 ) )
+    }
+
+    it( "should have a roughly-equals (=~=) operator that compares two normals math within the tolerance defined by Constants.EPSILON") {
+      val n = Normal3( 0, 0, 0 )
+
+      assert( n =~= n )
+      assert( n =~= Normal3( n.x + Constants.EPSILON, n.y, n.z ) )
+      assert( n =~= Normal3( n.x - Constants.EPSILON, n.y, n.z ) )
+      assert( n =~= Normal3( n.x, n.y + Constants.EPSILON, n.z ) )
+      assert( n =~= Normal3( n.x, n.y - Constants.EPSILON, n.z ) )
+      assert( n =~= Normal3( n.x, n.y, n.z + Constants.EPSILON ) )
+      assert( n =~= Normal3( n.x, n.y, n.z - Constants.EPSILON ) )
     }
 
   }

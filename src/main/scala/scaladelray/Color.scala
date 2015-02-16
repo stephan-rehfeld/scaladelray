@@ -69,4 +69,14 @@ case class Color( r : Double, g : Double, b : Double ) extends Serializable {
    * @return The result of the addition.
    */
   def +( c : Color ) = Color( r+c.r, g+c.g, b+c.b )
+
+  /**
+   * A roughly equals between two colors. It is used to get rid of problems from rounding errors of floating points.
+   *
+   * @param c The other color.
+   * @return Returns true if both colors equal roughly.
+   */
+  def =~=( c : Color ) = r >= c.r - Constants.EPSILON && r <= c.r + Constants.EPSILON &&
+                         g >= c.g - Constants.EPSILON && g <= c.g + Constants.EPSILON &&
+                         b >= c.b - Constants.EPSILON && b <= c.b + Constants.EPSILON
 }

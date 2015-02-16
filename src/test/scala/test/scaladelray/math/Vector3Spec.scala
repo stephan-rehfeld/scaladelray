@@ -18,6 +18,7 @@ package test.scaladelray.math
 
 import org.scalatest.FunSpec
 import scaladelray.math.{Vector3, Normal3}
+import scaladelray.Constants
 
 class Vector3Spec extends FunSpec {
 
@@ -349,6 +350,18 @@ class Vector3Spec extends FunSpec {
       assert( normal.x == 0 )
       assert( normal.y == 1 )
       assert( normal.z == 0 )
+    }
+
+    it( "should have a roughly-equals (=~=) operator that compares two vectors math within the tolerance defined by Constants.EPSILON") {
+      val v = Vector3( 0, 0, 0 )
+
+      assert( v =~= v )
+      assert( v =~= Vector3( v.x + Constants.EPSILON, v.y, v.z ) )
+      assert( v =~= Vector3( v.x - Constants.EPSILON, v.y, v.z ) )
+      assert( v =~= Vector3( v.x, v.y + Constants.EPSILON, v.z ) )
+      assert( v =~= Vector3( v.x, v.y - Constants.EPSILON, v.z ) )
+      assert( v =~= Vector3( v.x, v.y, v.z + Constants.EPSILON ) )
+      assert( v =~= Vector3( v.x, v.y, v.z - Constants.EPSILON ) )
     }
 
   }

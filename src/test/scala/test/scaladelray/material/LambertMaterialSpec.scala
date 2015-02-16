@@ -246,7 +246,7 @@ class LambertMaterialSpec extends FunSpec {
       val tc = TexCoord2D( 1.0, 1.0 )
       val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) =~= (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
     }
 
   }

@@ -17,7 +17,7 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.material.{PhongMaterial, ReflectiveMaterial}
+import scaladelray.material.ReflectiveMaterial
 import scaladelray.{Color, World}
 import scaladelray.math.{Normal3, Vector3, Point3, Ray}
 import test.scaladelray.geometry.GeometryTestAdapter
@@ -25,7 +25,7 @@ import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.geometry.Hit
 import scaladelray.light.PointLight
 
-class ReflectiveMaterialSpec  extends FunSpec {
+class ReflectiveMaterialSpec extends FunSpec {
 
   describe( "A ReflectiveMaterial" ) {
 
@@ -68,7 +68,7 @@ class ReflectiveMaterialSpec  extends FunSpec {
 
       val tracer = ( r: Ray, w : World) => {
         assert( r.o == Point3( 0, 0, -1 ) )
-        assert( r.d == Vector3( 0, 1, 0 ) )
+        assert( r.d =~= Vector3( 0, 1, 0 ) )
         called = true
         Color( 0, 0, 0 )
       }
@@ -284,7 +284,7 @@ class ReflectiveMaterialSpec  extends FunSpec {
       val tc = TexCoord2D( 1.0, 1.0 )
       val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1 * Math.cos( Math.PI / 4 ), 1 * Math.cos( Math.PI / 4 ), 1 )  )
+      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) =~= Color( 1 * Math.cos( Math.PI / 4 ), 1 * Math.cos( Math.PI / 4 ), 1 )  )
     }
 
   }

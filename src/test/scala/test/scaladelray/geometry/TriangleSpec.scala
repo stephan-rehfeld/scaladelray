@@ -108,7 +108,7 @@ class TriangleSpec extends FunSpec {
       assert( h.nonEmpty )
 
       for( hit <- h ) {
-        assert( hit.n == (n1 + n2 + n3 ) * (1.0/3.0)  )
+        assert( hit.n =~= (n1 + n2 + n3 ) * (1.0/3.0)  )
         assert( hit.texCoord2D == (t1 + t2 + t3) * (1.0/3.0) )
       }
 

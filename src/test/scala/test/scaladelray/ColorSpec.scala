@@ -17,7 +17,8 @@
 package test.scaladelray
 
 import org.scalatest.FunSpec
-import scaladelray.Color
+import scaladelray.{Constants, Color}
+import scaladelray.math.Vector3
 
 class ColorSpec extends FunSpec {
 
@@ -168,6 +169,15 @@ class ColorSpec extends FunSpec {
       assert( c2.b == 0.3 )
     }
 
-  }
+    it( "should have a roughly-equals (=~=) operator that compares two colors math within the tolerance defined by Constants.EPSILON") {
+      val c = Color( 0.5, 0.5, 0.5 )
 
+      assert( c =~= c )
+      assert( c =~= Color( c.r + Constants.EPSILON, c.g, c.b ) )
+      assert( c =~= Color( c.r - Constants.EPSILON, c.g, c.b ) )
+      assert( c =~= Color( c.r, c.g + Constants.EPSILON, c.b ) )
+      assert( c =~= Color( c.r, c.g - Constants.EPSILON, c.b ) )
+      assert( c =~= Color( c.r, c.g, c.b + Constants.EPSILON ) )
+    }
+  }
 }

@@ -16,6 +16,8 @@
 
 package scaladelray.math
 
+import scaladelray.Constants
+
 /**
  * This class represents a normal on the surface of an object. It it used for light calculation. An instance of this
  * class is immutable. Every method creates a new object that contains the result.
@@ -69,4 +71,15 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
     * @return An inverted normal.
     */
   def unary_- = Normal3( -x, -y, -z )
+
+
+  /**
+   * A roughly equals between two normals. It is used to get rid of problems from rounding errors of floating points.
+   *
+   * @param n The other normals.
+   * @return Returns true if both normals equal roughly.
+   */
+  def =~=( n : Normal3 ) = x >= n.x - Constants.EPSILON && x <= n.x + Constants.EPSILON &&
+                           y >= n.y - Constants.EPSILON && y <= n.y + Constants.EPSILON &&
+                           z >= n.z - Constants.EPSILON && z <= n.z + Constants.EPSILON
 }

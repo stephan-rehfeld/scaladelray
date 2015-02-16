@@ -16,6 +16,8 @@
 
 package scaladelray.math
 
+import scaladelray.Constants
+
 /**
  * This class represents a vector. It it used to represent directions. An instance of this class is immutable. Every
  * method creates a new object that contains the result.
@@ -145,5 +147,15 @@ case class Vector3( x : Double, y : Double, z : Double ) extends Serializable {
    * @return An inverted vector.
    */
   def unary_- = Vector3( -x, -y, -z )
+
+  /**
+   * A roughly equals between two vectors. It is used to get rid of problems from rounding errors of floating points.
+   *
+   * @param v The other vector.
+   * @return Returns true if both vectors equal roughly.
+   */
+  def =~=( v : Vector3 ) = x >= v.x - Constants.EPSILON && x <= v.x + Constants.EPSILON &&
+                           y >= v.y - Constants.EPSILON && y <= v.y + Constants.EPSILON &&
+                           z >= v.z - Constants.EPSILON && z <= v.z + Constants.EPSILON
 
 }
