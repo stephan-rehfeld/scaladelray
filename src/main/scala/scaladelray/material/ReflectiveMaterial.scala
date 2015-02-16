@@ -21,7 +21,14 @@ import scaladelray.geometry.Hit
 import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
-
+/**
+ * A material that reflects the light diffuse, specular, and like a mirror.
+ *
+ * @param diffuseTexture The texture for the diffuse reflection.
+ * @param specularTexture The texture for the specular reflection.
+ * @param phongExponent The phong exponent.
+ * @param reflectionTexture The texture for the mirror reflection.
+ */
 case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int, reflectionTexture : Texture ) extends Material with Serializable {
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val diffuseColor = diffuseTexture( hit.texCoord2D )
