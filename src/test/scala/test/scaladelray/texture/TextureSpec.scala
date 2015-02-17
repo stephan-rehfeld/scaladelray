@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package scaladelray.texture
+package test.scaladelray.texture
 
-import scaladelray.Color
+class TextureSpec {
 
-case class SingleColorTexture( color : Color ) extends Texture with  Serializable{
-  override def apply( texCoord : TexCoord2D ) = color
 }

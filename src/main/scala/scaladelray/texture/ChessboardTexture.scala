@@ -18,8 +18,14 @@ package scaladelray.texture
 
 import scaladelray.Color
 
+/**
+ * A generated texture that alters between black and white.
+ *
+ * @param x Number of changes in x direction.
+ * @param y Number of changes in y direction.
+ */
 case class ChessboardTexture( x : Int, y : Int ) extends Texture with Serializable {
-  def apply( texCoord : TexCoord2D ) = {
+  override def apply( texCoord : TexCoord2D ) = {
     val xStep = 0.5 / x.asInstanceOf[Double]
     val yStep = 0.5 / y.asInstanceOf[Double]
 
@@ -29,5 +35,11 @@ case class ChessboardTexture( x : Int, y : Int ) extends Texture with Serializab
     if( black ) Color( 0, 0, 0) else Color( 1, 1, 1 )
   }
 
+  /**
+   * A function to calculate if the black color should be returned.
+   *
+   * @param v A value.
+   * @return Returns true if black should be returned.
+   */
   private def isBlack( v : Int ) = (v % 2) == 0
 }

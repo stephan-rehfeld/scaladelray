@@ -24,7 +24,7 @@ case class ImageTexture( file : String ) extends Texture with Serializable {
 
   private val image = ImageIO.read( new File( file ) )
 
-  def apply(texCoord: TexCoord2D) = {
+  override def apply(texCoord: TexCoord2D) = {
     var u = texCoord.u % 1.0
     var v = texCoord.v % 1.0
     if( u < 0.0 ) u = u + 1.0
