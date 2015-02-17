@@ -1,3 +1,8 @@
-ScalaDelRay (scaladelray_2.10-0.8-beta.jar) is under the Apache 2.0 License and the copyright holder is Stephan Rehfeld
-Scala (scala-library.jar & scala-swing.jar) is under the SCALA LICENSE and the copyright holder is EPFL, Lausanne, unless otherwise specified
-Akka (akka-actor_2.10-2.14.jar & config-1.0.0.jar) is under the Apache 2.0 License and the copyright holder is Typesafe Inc. (http://doc.akka.io/docs/akka/snapshot/project/licenses.html)
+ScalaDelRay (scaladelray_2.11-1.0) is under the Apache 2.0 License and the copyright holder is Stephan Rehfeld
+Scala (scala-library-2.11.5.jar, scala-swing-2.11.0-M7.jar, scala-compiler-2.11.5.jar, scala-parser-combinators_2.11-1.0.3.jar, scala-reflect-2.11.5.jar, scala-xml_2.11-1.0.3.jar) is under the SCALA LICENSE and the copyright holder is EPFL, Lausanne, unless otherwise specified
+Akka (akka-remote_2.11-2.3.9.jar, akka-actor_2.11-2.3.9.jar & config-1.2.1) is under the Apache 2.0 License and the copyright holder is Typesafe Inc. (http://doc.akka.io/docs/akka/snapshot/project/licenses.html)
+JLine (jline-2.12.jar) is under the BSD License (http://www.opensource.org/licenses/bsd-license.php) and the copyright holders are the original authors
+Netty (netty-3.8.0.Final.jar) is under the Apache 2.0 License and the copyright holder is The Netty Project
+Protobuf (protobuf-java-2.5.0.jar) is under the New BSD License (http://opensource.org/licenses/BSD-3-Clause) and the copyright holder is Google Inc.
+Scalatest (scalatest_2.11-2.2.1.jar) is under the Apache 2.0 License and the copyright holder is Artima Inc.
+Uncommons Maths (uncommons-maths-1.2.2a.jar) is under the Apache 2.0 License and the copyright holder is Daniel W. Dyer.

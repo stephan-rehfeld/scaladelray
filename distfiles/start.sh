@@ -1,1 +1,1 @@
-java -classpath scala-library.jar:scala-swing.jar:akka-actor_2.10-2.1.4.jar:config-1.0.0.jar:scaladelray_2.10-0.8-beta.jar scaladelray.ui.ScalaDelRay
+java -classpath akka-actor_2.11-2.3.9.jar:akka-remote_2.11-2.3.9.jar:config-1.2.1.jar:jline-2.12.jar:netty-3.8.0.Final.jar:protobuf-java-2.5.0.jar:scala-compiler-2.11.5.jar:scaladelray_2.11-1.0.jar:scala-library-2.11.5.jar:scala-parser-combinators_2.11-1.0.3.jar:scala-reflect-2.11.5.jar:scala-swing-2.11.0-M7.jar:scalatest_2.11-2.2.1.jar:scala-xml_2.11-1.0.3.jar:uncommons-maths-1.2.2a.jar scaladelray.ui.ScalaDelRay
