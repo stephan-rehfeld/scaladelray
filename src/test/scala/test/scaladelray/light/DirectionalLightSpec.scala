@@ -18,16 +18,17 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 import scaladelray.{Color, World}
-import scaladelray.geometry.{Sphere, GeometryHit, Geometry}
+import scaladelray.geometry.Sphere
 import scaladelray.light.DirectionalLight
-import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.math.{Transform, Ray, Vector3, Point3}
+import scaladelray.rendering.{Hit, Renderable}
 
 
 class DirectionalLightSpec extends FunSpec {
 
   describe( "A DirectionalLight" ) {
     it( "should radiate all points" ) {
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() )
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() )
       val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
@@ -45,10 +46,10 @@ class DirectionalLightSpec extends FunSpec {
     it( "should check the world if an object is between the point and the point light" ) {
       var called = false
 
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[GeometryHit] = {
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() ) {
+        override def <--( r : Ray ) : Set[Hit] = {
           called = true
-          Set[GeometryHit]()
+          Set[Hit]()
         }
       }
       val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
@@ -58,8 +59,8 @@ class DirectionalLightSpec extends FunSpec {
 
     it( "should return false if an object is between the point and the light" ) {
       val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
-      val s = new Sphere( null )
-      val w = new World( Color( 0, 0, 0 ), Set() + s )
+      val s = Sphere()
+      val w = new World( Color( 0, 0, 0 ), Set() + Renderable( Transform(), s, null ) )
       for( d <- directions ) {
         val l = new DirectionalLight( Color( 1, 1, 1 ), d )
         val p = (d * 2).asPoint

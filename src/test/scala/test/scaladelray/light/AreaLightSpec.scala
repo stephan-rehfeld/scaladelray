@@ -17,10 +17,11 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
-import scaladelray.light.{PointLight, AreaLight}
-import scaladelray.math.{Ray, Point3, Vector3}
+import scaladelray.light.AreaLight
+import scaladelray.math.{Transform, Ray, Point3, Vector3}
 import scaladelray.{World, Color}
-import scaladelray.geometry.{Sphere, GeometryHit, Geometry}
+import scaladelray.geometry.Sphere
+import scaladelray.rendering.{Hit, Renderable}
 
 class AreaLightSpec extends FunSpec {
 
@@ -28,7 +29,7 @@ class AreaLightSpec extends FunSpec {
     it( "should radiate all points" ) {
       val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
       val l = ld.createLight
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() )
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() )
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
       for( p <- points )
@@ -48,10 +49,10 @@ class AreaLightSpec extends FunSpec {
     it( "should check the world if an object is between the point and the area light" ) {
       var called = false
 
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[GeometryHit] = {
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() ) {
+        override def <--( r : Ray ) : Set[Hit] = {
           called = true
-          Set[GeometryHit]()
+          Set[Hit]()
         }
       }
       val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
@@ -63,9 +64,9 @@ class AreaLightSpec extends FunSpec {
     it( "should return false if an object is between the point and the light" ) {
       val ld = new AreaLight( Color( 1, 1, 1 ),Point3( 0, 0, -2 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 0.01, 255 )
       val l = ld.createLight
-      val s = new Sphere( null )
+      val s = Sphere()
       val p = Point3( 0, 0, 2 )
-      val w = new World( Color( 0, 0, 0 ), Set() + s )
+      val w = new World( Color( 0, 0, 0 ), Set() + Renderable( Transform(), s, null ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

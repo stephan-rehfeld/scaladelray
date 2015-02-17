@@ -19,7 +19,6 @@ package test.scaladelray.math
 import org.scalatest.FunSpec
 import scaladelray.math.{Ray, Vector3, Point3}
 import scaladelray.geometry.Geometry
-import scaladelray.material.SingleColorMaterial
 import scaladelray.{World, Color}
 
 class RaySpec extends FunSpec {
@@ -82,7 +81,7 @@ class RaySpec extends FunSpec {
 
       var called = false
 
-      val geo = new Geometry( SingleColorMaterial( Color( 0, 0, 0 ) )) {
+      val geo = new Geometry {
         override def <--(r: Ray) = {
           called = true
           Set()
@@ -150,7 +149,7 @@ class RaySpec extends FunSpec {
 
       var called = false
 
-      val geo = new Geometry( SingleColorMaterial( Color( 0, 0, 0 ) )) {
+      val geo = new Geometry {
         override def <--(r: Ray) = {
           called = true
           Set()

@@ -16,7 +16,6 @@
 
 package scaladelray.geometry
 
-import scaladelray.material.Material
 import scaladelray.Constants
 import scaladelray.math._
 import scaladelray.texture.TexCoord2D
@@ -35,14 +34,13 @@ import scala.collection.mutable
  * and the number of triangles within the current node of the octree are passed to the subDivideDecider. If the decider
  * returns true, the current node is split to 8 more nodes.
  *
- * @param material The material of the geometry.
  * @param vertices An array that contains all vertices of the model.
  * @param normals An array that contains all normals of the model.
  * @param texCoords An array that contains all texture coordinates of the model.
  * @param faces An array that contains the description of the faces of the model. The first value on the tuple is the index of the vertex. The second one is the index of the texture coordinate. The third one is the normal.
  * @param subDivideDecider A function that decides if a node in the octree should be ddecidedinto 8 more bounding boxes.
  */
-class TriangleMesh( material : Material, val vertices : Array[Point3], val normals : Array[Normal3], val texCoords : Array[TexCoord2D], val faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry( material ) with Serializable {
+case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry with Serializable {
 
   /**
    * The smalltest and largest x, y, and z values.

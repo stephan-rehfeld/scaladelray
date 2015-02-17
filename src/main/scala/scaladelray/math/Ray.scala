@@ -18,6 +18,7 @@ package scaladelray.math
 
 import scaladelray.geometry.Geometry
 import scaladelray.World
+import scaladelray.rendering.Renderable
 
 /**
  * This class represents a ray. It has an origin and a direction. It implements a parametric line, so it can calculate
@@ -56,6 +57,14 @@ case class Ray( o : Point3, d : Vector3 ) extends Serializable {
    * @return A set with all hits.
    */
   def --> ( g : Geometry ) = g <-- this
+
+  /**
+   * This method shoots the ray on the renderable and returns the set with all hits on the renderable.
+   *
+   * @param r The renderable where this ray should be shot on.
+   * @return A set with all hits.
+   */
+  def --> ( r : Renderable ) = r <-- this
 
   /**
    * This method shoots the ray on into a world and returns the set with all hits on the geometries in the world.

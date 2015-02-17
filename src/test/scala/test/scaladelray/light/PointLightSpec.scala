@@ -17,17 +17,18 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Ray, Point3}
+import scaladelray.math.{Transform, Ray, Point3}
 import scaladelray.{World, Color}
 import scaladelray.light.PointLight
-import scaladelray.geometry.{GeometryHit, Sphere, Geometry}
+import scaladelray.geometry.Sphere
+import scaladelray.rendering.{Hit, Renderable}
 
 class PointLightSpec extends FunSpec {
 
   describe( "A PointLight" ) {
     it( "should radiate in all directions." ) {
 
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() )
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() )
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
@@ -46,10 +47,10 @@ class PointLightSpec extends FunSpec {
     it( "should check the world if an object is between the point and the point light" ) {
       var called = false
 
-      val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[GeometryHit] = {
+      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() ) {
+        override def <--( r : Ray ) : Set[Hit] = {
           called = true
-          Set[GeometryHit]()
+          Set[Hit]()
         }
       }
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
@@ -59,9 +60,9 @@ class PointLightSpec extends FunSpec {
 
     it( "should return false if an object is between the point and the light" ) {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
-      val s = new Sphere( null )
+      val s = Sphere()
       val p = Point3( 0, 0, 2 )
-      val w = new World( Color( 0, 0, 0 ), Set() + s )
+      val w = new World( Color( 0, 0, 0 ), Set() + Renderable( Transform(), s, null ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

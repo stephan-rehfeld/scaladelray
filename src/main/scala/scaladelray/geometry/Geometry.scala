@@ -18,7 +18,6 @@ package scaladelray.geometry
 
 import scaladelray.math.{Normal3, Ray}
 import scaladelray.texture.TexCoord2D
-import scaladelray.material.Material
 
 
 /**
@@ -35,12 +34,10 @@ import scaladelray.material.Material
 case class GeometryHit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D ) extends Serializable
 
 /**
- * The base class for all geometries. It holds the material of the geometry. Additionally, it overloads the +-operator
- * to construct sets.
+ * The base class for all geometries.
  *
- * @param material The material of the geometry.
  */
-abstract class Geometry( val material : Material ) extends Serializable {
+abstract class Geometry extends Serializable {
 
   /**
    * This arrow operator means "shoot the ray on the geometry." (Nice, isn't it?)
@@ -51,13 +48,5 @@ abstract class Geometry( val material : Material ) extends Serializable {
    * @return All hits between the ray an the geometry. Maybe empty.
    */
   def <-- ( r : Ray ) : Set[GeometryHit]
-
-  /**
-   * The +-operator should be used to construct a set out of two geometries.
-   *
-   * @param g The next geometry in the set.
-   * @return A set that contains both geometries.
-   */
-  def +( g : Geometry ) = Set( this, g )
 
 }

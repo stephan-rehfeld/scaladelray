@@ -17,21 +17,23 @@
 package scaladelray.ui.model
 
 import scaladelray.math.{Transform, Point3, Vector3}
-import scaladelray.geometry.{Node, AxisAlignedBox, Geometry}
+import scaladelray.geometry.AxisAlignedBox
 import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
+import scaladelray.rendering.Renderable
 
-class AxisAlignedBoxProvider extends GeometryProvider with TableModel {
+class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  def createGeometry: Geometry = {
-    val aab = new AxisAlignedBox( materialProvider.get.createMaterial )
+  override def createRenderable = {
+    val aab = new AxisAlignedBox(  )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    new Node( t, aab )
+    val m = materialProvider.get.createMaterial
+    Renderable( t, aab, m )
   }
 
   def getRowCount: Int = 3

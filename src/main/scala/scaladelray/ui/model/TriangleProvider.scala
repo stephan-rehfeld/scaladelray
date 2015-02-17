@@ -17,12 +17,13 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.math.{Normal3, Transform, Vector3, Point3}
-import scaladelray.geometry.{Triangle, Node, AxisAlignedBox, Geometry}
+import scaladelray.math.{Normal3, Transform, Point3}
+import scaladelray.geometry.Triangle
 import javax.swing.event.TableModelListener
 import scaladelray.texture.TexCoord2D
+import scaladelray.rendering.Renderable
 
-class TriangleProvider extends GeometryProvider with TableModel {
+class TriangleProvider extends RenderableProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
 
@@ -38,8 +39,9 @@ class TriangleProvider extends GeometryProvider with TableModel {
   var texCoordB = TexCoord2D( 0, 1 )
   var texCoordC = TexCoord2D( 1, 0 )
 
-  def createGeometry: Geometry = {
-    new Triangle( materialProvider.get.createMaterial, vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC )
+  override def createRenderable = {
+    val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC )
+    Renderable( Transform(), g, materialProvider.get.createMaterial )
   }
 
   def getRowCount: Int = 9

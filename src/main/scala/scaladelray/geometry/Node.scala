@@ -17,8 +17,6 @@
 package scaladelray.geometry
 
 import scaladelray.math.{Ray, Transform}
-import scaladelray.material.SingleColorMaterial
-import scaladelray.Color
 
 
 /**
@@ -27,7 +25,7 @@ import scaladelray.Color
  * @param t The transformation of the objects.
  * @param nodes The geometries of the node.
  */
-class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMaterial( Color( 0, 0, 0 ) ) ) with Serializable {
+case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serializable {
 
   override def <--(r: Ray) : Set[GeometryHit] = {
     var hits = Set[GeometryHit]()

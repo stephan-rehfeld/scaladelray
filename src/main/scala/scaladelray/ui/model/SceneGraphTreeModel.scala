@@ -27,11 +27,11 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case wp : WorldProvider =>
       index match {
         case 0 => if( wp.cameraProvider.isDefined ) wp.cameraProvider.get else "<Camera>"
-        case 1 => "Geometries"
+        case 1 => "Renderables"
         case 2 => "Lights"
       }
-    case "Geometries" =>
-      worldProvider.geometryProvider (index )
+    case "Renderables" =>
+      worldProvider.renderableProvider (index )
     case "Lights" =>
       worldProvider.lightDescriptionProvider( index )
     case pp : PlaneProvider =>
@@ -72,7 +72,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
   def getChildCount( parent: Any ): Int = parent match {
     case wp : WorldProvider => 3
-    case "Geometries" => worldProvider.geometryProvider.size
+    case "Renderables" => worldProvider.renderableProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
     case pp : PlaneProvider => 1
     case sp : SphereProvider => 1
@@ -92,7 +92,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
   def isLeaf(node: Any): Boolean = node match {
     case wp : WorldProvider => false
     case "<Camera>" => true
-    case "Geometries" => worldProvider.geometryProvider.size == 0
+    case "Renderables" => worldProvider.renderableProvider.size == 0
     case "Lights" => worldProvider.lightDescriptionProvider.size == 0
     case pp : PlaneProvider => false
     case sp : SphereProvider => false
@@ -115,13 +115,13 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case wp : WorldProvider =>
       child match {
         case "<Camera>" => 0
-        case "Geometries" => 1
+        case "Renderables" => 1
         case "Lights" => 2
         case ocp : OrthograpicCameraProvider => 0
         case pcp : PerspectiveCameraProvider => 0
         case dcp : DOFCameraProvider => 0
       }
-    case "Geometries" => worldProvider.geometryProvider.indexOf( child )
+    case "Renderables" => worldProvider.renderableProvider.indexOf( child )
     case "Lights" => worldProvider.lightDescriptionProvider.indexOf( child )
     case pp : PlaneProvider => 0
     case sp : SphereProvider => 0

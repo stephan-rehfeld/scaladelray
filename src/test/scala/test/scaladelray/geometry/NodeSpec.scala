@@ -23,7 +23,7 @@ import scaladelray.math.Ray
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 
-class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends Geometry( MaterialTestAdapter() ) {
+class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends Geometry {
 
   var called = false
 

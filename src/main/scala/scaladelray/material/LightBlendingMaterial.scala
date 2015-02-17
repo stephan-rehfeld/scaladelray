@@ -17,14 +17,14 @@
 package scaladelray.material
 
 import scaladelray.texture.Texture
-import scaladelray.geometry.GeometryHit
 import scaladelray.{Color, World}
 import scaladelray.math.Ray
+import scaladelray.rendering.Hit
 
 
 case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Material with Serializable {
 
-  override def colorFor( hit: GeometryHit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
+  override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val colorBright = bright( hit.texCoord2D )
     val colorDark = dark( hit.texCoord2D )
     val normal = hit.n

@@ -16,23 +16,24 @@
 
 package scaladelray.ui.model
 
-import scaladelray.geometry.{Plane, Node, Geometry}
+import scaladelray.geometry.Plane
 import scaladelray.math.{Transform, Vector3, Point3}
 import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
-import scaladelray.Color
+import scaladelray.rendering.Renderable
 
-class PlaneProvider extends GeometryProvider with TableModel {
+class PlaneProvider extends RenderableProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  def createGeometry: Geometry = {
-    val p = new Plane( materialProvider.get.createMaterial )
+  override def createRenderable = {
+    val p = Plane()
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    new Node( t, p )
+    val m = materialProvider.get.createMaterial
+    Renderable( t, p, m )
   }
 
 

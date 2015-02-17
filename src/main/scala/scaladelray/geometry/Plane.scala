@@ -16,7 +16,6 @@
 
 package scaladelray.geometry
 
-import scaladelray.material.Material
 import scaladelray.math.{Normal3, Ray}
 import scaladelray.texture.TexCoord2D
 
@@ -25,9 +24,8 @@ import scaladelray.texture.TexCoord2D
  * An infinite large plane with the normal 0 1 0.
  *
  * @author Stephan Rehfeld
- * @param material The material of the geometry.
  */
-class Plane( material : Material ) extends Geometry( material ) with Serializable {
+case class Plane() extends Geometry with Serializable {
 
    override def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n

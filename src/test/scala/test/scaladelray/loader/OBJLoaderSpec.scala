@@ -18,8 +18,6 @@ package test.scaladelray.loader
 
 import org.scalatest.FunSpec
 import scaladelray.loader.OBJLoader
-import scaladelray.Color
-import scaladelray.material.SingleColorMaterial
 import scaladelray.math.{Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 
@@ -51,7 +49,7 @@ class OBJLoaderSpec extends FunSpec {
     it( "should load a file that contains a cube with all vertices into a triangle mesh" ) {
 
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -85,7 +83,7 @@ class OBJLoaderSpec extends FunSpec {
 
     it( "should load a file that contains a cube with all vertices and normals into a triangle mesh" ) {
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v-vn.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v-vn.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -127,7 +125,7 @@ class OBJLoaderSpec extends FunSpec {
 
     it( "should load a file that contains a cube with all vertices and texture coordinates into a triangle mesh" ) {
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v-vt.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v-vt.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -168,7 +166,7 @@ class OBJLoaderSpec extends FunSpec {
 
     it( "should load a file that contains a cube with all vertices, texture coordinates, and normals into a triangle mesh" ) {
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v-vt-vn.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v-vt-vn.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -219,7 +217,7 @@ class OBJLoaderSpec extends FunSpec {
 
     it( "should load a file that contains a cube where more than one block of faces exist" ) {
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -254,7 +252,7 @@ class OBJLoaderSpec extends FunSpec {
     it( "should load a file that contains a cube where the indices of the faces are that with a negative number" ) {
 
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v-blocks-weird-indices.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v-blocks-weird-indices.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )
@@ -286,18 +284,9 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.faces.size == 12 )
     }
 
-    it( "should apply the passed material to the loaded object") {
-      val objLoader = new OBJLoader()
-      val mat = SingleColorMaterial( Color( 0, 0, 0 ) )
-      val mesh = objLoader.load( "cube-v-blocks-weird-indices.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
-
-
-      assert( mesh.material == mat )
-    }
-
     it( "should load a file with comments that contains a cube with all vertices, texture coordinates, and normals into a triangle mesh" ) {
       val objLoader = new OBJLoader()
-      val mesh = objLoader.load( "cube-v-vt-vn-comments.obj", SingleColorMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val mesh = objLoader.load( "cube-v-vt-vn-comments.obj", (recursions,faces) => recursions < 0, false )
 
       assert( mesh.vertices.contains( v1 ) )
       assert( mesh.vertices.contains( v2 ) )

@@ -22,7 +22,6 @@ import util.parsing.combinator.JavaTokenParsers
 import scaladelray.texture.TexCoord2D
 import scala.None
 import scaladelray.geometry.TriangleMesh
-import scaladelray.material.Material
 import java.io.FileReader
 
 /**
@@ -74,7 +73,7 @@ class OBJLoader extends JavaTokenParsers {
    *
    * 3D textures are currently not supported, so the third number is ignored.
    *
-   * @return The parsed texture coordinate as [[scaladelray.math.TexCoord2D]].
+   * @return The parsed texture coordinate as [[scaladelray.texture.TexCoord2D]].
    */
   private def texCoord : Parser[TexCoord2D] = "vt"~floatingPointNumber~opt( floatingPointNumber )~opt( floatingPointNumber ) ^^ {
     case "vt"~u~v~w => TexCoord2D( u.toDouble, v.get.toDouble )
@@ -212,14 +211,12 @@ class OBJLoader extends JavaTokenParsers {
    * This method loads a model from a OBJ file and returns the loaded geometry as triangle mesh.
    *
    * @param fileName The name of the file that contains the model.
-   * @param material The material that should be applied to the loaded model.
    * @param fastLoad Loads the model faster but may consumes more memory.
    * @return The loaded model as triangle mesh.
    */
-  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : TriangleMesh = {
+  def load( fileName : String, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : TriangleMesh = {
 
     assert( fileName != null, "The parameter 'fileName' must not be 'null'!" )
-    assert( material != null, "The parameter 'material' must not be 'null'!" )
 
     this.fastLoad = fastLoad
 
@@ -249,7 +246,7 @@ class OBJLoader extends JavaTokenParsers {
 
     constructFromBuffer()
 
-    new TriangleMesh( material, vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
+    new TriangleMesh( vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider )
 
   }
 

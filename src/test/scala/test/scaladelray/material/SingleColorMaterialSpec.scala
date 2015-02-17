@@ -17,12 +17,17 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.material.SingleColorMaterial
-import scaladelray.{World, Color}
-import scaladelray.math.{Normal3, Vector3, Point3, Ray}
+import scaladelray.math._
+import scaladelray.rendering.{Hit, Renderable}
 import test.scaladelray.geometry.GeometryTestAdapter
+import scaladelray.World
+import scaladelray.material.SingleColorMaterial
+import scaladelray.math.Vector3
+import scaladelray.math.Point3
+import scaladelray.math.Ray
+import scaladelray.Color
 import scaladelray.texture.TexCoord2D
-import scaladelray.geometry.GeometryHit
+import scaladelray.math.Normal3
 
 class SingleColorMaterialSpec extends FunSpec {
 
@@ -32,9 +37,9 @@ class SingleColorMaterialSpec extends FunSpec {
 
       val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
-      val g = new GeometryTestAdapter( m )
+      val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
 
       var called = false
 
@@ -51,9 +56,9 @@ class SingleColorMaterialSpec extends FunSpec {
 
       val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
-      val g = new GeometryTestAdapter( m )
+      val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
 
       var called = false
 
@@ -79,9 +84,9 @@ class SingleColorMaterialSpec extends FunSpec {
 
       val w = new World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
-      val g = new GeometryTestAdapter( m )
+      val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 

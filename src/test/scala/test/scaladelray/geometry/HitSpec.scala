@@ -20,17 +20,13 @@ import org.scalatest.FunSpec
 import scaladelray.math.{Normal3, Ray, Point3, Vector3}
 import scaladelray.geometry.GeometryHit
 import scaladelray.texture.TexCoord2D
-import scaladelray.material.Material
-import scaladelray.{Color, World}
 
 class HitSpec extends FunSpec {
 
   describe( "A Hit" ) {
     it( "should consume a ray, geometry, t, normal, and texture coordinate as constructor parameter and provider them as value") {
       val r = Ray( Point3( 3, 5, 7 ), Vector3( 11, 13, 17 ) )
-      val g = new GeometryTestAdapter( new Material() {
-        def colorFor(hit: GeometryHit, world: World, tracer: (Ray, World) => Color): Color = throw new UnsupportedOperationException( "This is just a test adapter! Don't call this method!")
-      } )
+      val g = new GeometryTestAdapter()
       val t = 8.15
       val n = Normal3( 3, 5, 7 )
       val tc = TexCoord2D( 2, 3 )

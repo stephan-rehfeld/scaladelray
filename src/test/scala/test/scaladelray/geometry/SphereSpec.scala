@@ -23,7 +23,7 @@ import scaladelray.geometry.Sphere
 class SphereSpec extends FunSpec {
   describe( "A Sphere" ) {
     it( "should return two hit points for a ray that comes from the front of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -32,7 +32,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the back of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, -3 ), Vector3( 0, 0, 1 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -41,7 +41,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the left of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( -3, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -49,7 +49,7 @@ class SphereSpec extends FunSpec {
       assert( hits.exists( _.t == 4  ) )
     }
     it( "should return two hit points for a ray that comes from the right of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 3, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -58,7 +58,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the top of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -67,7 +67,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from the bottom of the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, -3, 0 ), Vector3( 0, 1, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -78,7 +78,7 @@ class SphereSpec extends FunSpec {
 
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the back" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -87,7 +87,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the front" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -96,7 +96,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the left" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -105,7 +105,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the right" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -114,7 +114,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the top" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -123,7 +123,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the bottom" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
       val hits = r --> s
       assert( hits.size == 2 )
@@ -132,7 +132,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return one hit point for a ray that intersects the sphere at the border" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 1, 1 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
       assert( hits.size == 1 )
@@ -140,7 +140,7 @@ class SphereSpec extends FunSpec {
     }
 
     it( "should return no hit point for a ray that does not hit the sphere" ) {
-      val s = new Sphere( MaterialTestAdapter() )
+      val s = Sphere()
       val r = Ray( Point3( 0, 2, 0 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
       assert( hits.isEmpty )

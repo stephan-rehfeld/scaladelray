@@ -18,7 +18,7 @@ package scaladelray.optimization
 
 import scaladelray.geometry.{GeometryHit, Plane, Node}
 import scaladelray.math.{Point3, Ray, Transform}
-import scaladelray.{Constants, Color}
+import scaladelray.Color
 import scaladelray.material.SingleColorMaterial
 
 /**
@@ -41,7 +41,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val right = new Node(
     Transform.translate( run ).rotateZ( -math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -49,7 +49,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val top = new Node(
     Transform.translate( run ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -57,7 +57,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val front = new Node(
     Transform.translate( run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -65,7 +65,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val left =  new Node(
     Transform.translate( lbf ).rotateZ( math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -73,7 +73,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val bottom = new Node(
     Transform.translate( lbf ).rotateX( math.Pi ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -81,7 +81,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val far = new Node(
     Transform.translate( lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**

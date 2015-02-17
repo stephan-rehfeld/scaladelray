@@ -16,7 +16,6 @@
 
 package scaladelray.geometry
 
-import scaladelray.material.Material
 import scaladelray.math.{Point3, Ray}
 import scaladelray.texture.TexCoord2D
 
@@ -24,9 +23,8 @@ import scaladelray.texture.TexCoord2D
 /**
  * A sphere with the center at 0 0 0 and a radius of 1.
  *
- * @param material The material of the geometry.
  */
-class Sphere( material : Material ) extends Geometry( material ) with Serializable {
+case class Sphere() extends Geometry with Serializable {
 
   override def <-- ( r : Ray ) = {
     val o = r.o.asVector
@@ -37,16 +35,14 @@ class Sphere( material : Material ) extends Geometry( material ) with Serializab
 
     four match {
       case x if x < 0.0 => Set()
-      case 0.0 => {
-
+      case 0.0 =>
         val t = -two / (2 * one)
         Set( GeometryHit( r, this, t, r( t ).asNormal, texCoordFor( r( t ) )) )
-      }
-      case _ => {
+
+      case _ =>
         val t1 = (-two + scala.math.sqrt( four ))/ (2 * one)
         val t2 = (-two - scala.math.sqrt( four ))/ (2 * one)
         Set() + GeometryHit( r, this, t1, r( t1 ).asNormal, texCoordFor( r( t1 ) ) ) + GeometryHit( r, this, t2, r( t2 ).asNormal, texCoordFor( r( t2 ) ) )
-      }
     }
   }
 

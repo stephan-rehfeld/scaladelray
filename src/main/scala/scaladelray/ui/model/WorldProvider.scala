@@ -25,7 +25,7 @@ class WorldProvider extends TableModel {
 
   var backgroundColor = Color( 0, 0, 0 )
   var ambientLight = Color( 0, 0, 0 )
-  var geometryProvider = mutable.MutableList[GeometryProvider]()
+  var renderableProvider = mutable.MutableList[RenderableProvider]()
   var lightDescriptionProvider = mutable.MutableList[LightDescriptionProvider]()
   var cameraProvider : Option[CameraProvider] = None
   var indexOfRefraction = 1.0
@@ -36,24 +36,24 @@ class WorldProvider extends TableModel {
         cameraProvider = None
       case lp : LightDescriptionProvider =>
         lightDescriptionProvider = lightDescriptionProvider.filterNot( _ == lp )
-      case gp : GeometryProvider =>
-        if( geometryProvider.contains( gp ) ) geometryProvider = geometryProvider.filterNot( _ == gp ) else for( v <- geometryProvider ) v.remove( gp )
+      case rp : RenderableProvider =>
+        if( renderableProvider.contains( rp ) ) renderableProvider = renderableProvider.filterNot( _ == rp ) else for( v <- renderableProvider ) v.remove( rp )
       case spp : SamplingPatternProvider =>
         if( cameraProvider.isDefined ) cameraProvider.get.remove( spp )
       case mp : MaterialProvider =>
-        for( v <- geometryProvider ) v.remove( mp )
+        for( v <- renderableProvider ) v.remove( mp )
       case tp : TextureProvider =>
-        for( v <- geometryProvider ) v.remove( tp )
+        for( v <- renderableProvider ) v.remove( tp )
       case s: String =>
       case _ =>
     }
   }
 
   def createWorld = {
-    val geometries = for( gp <- geometryProvider ) yield gp.createGeometry
+    val renderables = for( rp <- renderableProvider ) yield rp.createRenderable
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription
 
-    (cameraProvider.get.createCamera,World( backgroundColor, geometries.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
+    (cameraProvider.get.createCamera,World( backgroundColor, renderables.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
   }
 
   def getRowCount: Int = 3
@@ -111,7 +111,7 @@ class WorldProvider extends TableModel {
 
   }
 
-  def isReady = (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && geometryProvider.find( (gp) => !gp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
+  def isReady = (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && renderableProvider.find( (rp) => !rp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
 
   def addTableModelListener(p1: TableModelListener) {}
 

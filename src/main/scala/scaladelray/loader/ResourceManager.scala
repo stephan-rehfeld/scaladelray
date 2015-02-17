@@ -46,7 +46,7 @@ private class ResourceManager extends Actor {
       else if( runningLoads.contains( m.fileName ) ) runningLoads += m.fileName -> (runningLoads( m.fileName ) + sender)
       else m.fileName match {
         case m.fileName if m.fileName.endsWith( ".obj" ) =>
-          val a = context.actorOf( Props[ResourceManager.OBJResourceLoadActor] );
+          val a = context.actorOf( Props[ResourceManager.OBJResourceLoadActor] )
           runningLoads += (m.fileName -> (Set()+sender))
           a ! m
         case _ => sender ! ResourceManager.UnknownResourceFormat()
@@ -76,11 +76,10 @@ object ResourceManager {
    * message. This message is also used internally to communicate with data type specific load actors.
    *
    * @param fileName The name of the file.
-   * @param material The material that should be used to the loaded object.
    * @param subDivideDecider The sub devide decider for the octree.
    * @param fastLoad Flag to perform faster loading, typically by not eliminating duplicated vertices.
    */
-  private case class LoadResource( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean )
+  private case class LoadResource( fileName : String, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean )
 
   /**
    * A type specific actor for loading resources sends this message back after it loaded the resource.
@@ -123,26 +122,24 @@ object ResourceManager {
    * This function asynchronously preloads a resource. The function return immediately.
    *
    * @param fileName The name of the file.
-   * @param material The material that should be used to the loaded object.
    * @param subDivideDecider The sub devide decider for the octree.
    * @param fastLoad Flag to perform faster loading, typically by not eliminating duplicated vertices.
    */
   def preLoad( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) {
-    getResourceManager ! ResourceManager.LoadResource( fileName, material, subDivideDecider, fastLoad )
+    getResourceManager ! ResourceManager.LoadResource( fileName, subDivideDecider, fastLoad )
   }
 
   /**
    *  This function loads a file and blocks until the resource has been loaded completely.
    *
    * @param fileName The name of the file.
-   * @param material The material that should be used to the loaded object.
    * @param subDivideDecider The sub devide decider for the octree.
    * @param fastLoad Flag to perform faster loading, typically by not eliminating duplicated vertices.
    * @return Either the loaded geometry or a [[scaladelray.loader.ResourceManager.UnknownResourceFormat]] object.
    */
   def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : Either[Geometry,UnknownResourceFormat] = {
     implicit val timeout = Timeout(500 seconds)
-    val future = getResourceManager ? ResourceManager.LoadResource( fileName, material, subDivideDecider, fastLoad )
+    val future = getResourceManager ? ResourceManager.LoadResource( fileName, subDivideDecider, fastLoad )
     val result = Await.result(future, timeout.duration )
     if( result.isInstanceOf[Geometry] )
       Left(result.asInstanceOf[Geometry])
@@ -164,7 +161,7 @@ object ResourceManager {
     override def receive = {
       case m : ResourceManager.LoadResource =>
         val objLoader = new OBJLoader
-        val g = objLoader.load( m.fileName, m.material, m.subDivideDecider, m.fastLoad )
+        val g = objLoader.load( m.fileName, m.subDivideDecider, m.fastLoad )
         sender ! ResourceManager.LoadedResource( m.fileName, g )
         context.stop( self )
     }

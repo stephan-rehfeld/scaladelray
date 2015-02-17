@@ -29,7 +29,7 @@ object Tracer {
         world.backgroundColor
       } else {
         val hit = hits.head
-        hit.geometry.material.colorFor( hit, world, Tracer.standardTracer( _, _, recursions - 1 ) )
+        hit.renderable.material.colorFor( hit, world, Tracer.standardTracer( _, _, recursions - 1 ) )
       }
     }
   }

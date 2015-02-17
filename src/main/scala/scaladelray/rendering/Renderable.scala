@@ -21,21 +21,21 @@ import scaladelray.geometry.Geometry
 import scaladelray.material.Material
 import scaladelray.texture.TexCoord2D
 
-case class Hit( t : Double, ray : Ray, renderable : Renderable, n : Normal3, texCoord2D : TexCoord2D )
+case class Hit( ray : Ray, renderable : Renderable, t : Double, n : Normal3, texCoord2D : TexCoord2D )
 
 /**
  * A renderable combines a transformation with a geometry and a material.
  *
  * @param t The transformation of the renderable.
- * @param g The geometry of the renderable.
- * @param m The material of the renderable.
+ * @param geometry The geometry of the renderable.
+ * @param material The material of the renderable.
  */
-case class Renderable( override val t : Transform, g : Geometry, m : Material ) extends Transformable( t ) {
+case class Renderable( override val t : Transform, geometry : Geometry, material : Material ) extends Transformable( t ) {
 
   def <-- ( r : Ray ) : Set[Hit] = {
     val ri = down( r )
-    val geoHits = ri --> g
-    for( h <- geoHits ) yield Hit( h.t, r, this, up( h.n ), h.texCoord2D )
+    val geoHits = ri --> geometry
+    for( h <- geoHits ) yield Hit( r, this, h.t, up( h.n ), h.texCoord2D )
   }
 
 }

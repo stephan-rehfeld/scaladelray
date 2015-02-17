@@ -16,10 +16,10 @@
 
 package scaladelray.material
 
-import scaladelray.geometry.GeometryHit
 import scaladelray.{Color, World}
 import scaladelray.math.Ray
+import scaladelray.rendering.Hit
 
 abstract class Material {
-  def colorFor( hit : GeometryHit, world : World, tracer : ((Ray,World) => Color) ) : Color
+  def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color
 }

@@ -16,29 +16,31 @@
 
 package scaladelray.ui.model
 
-import scaladelray.geometry.{Node, Geometry}
-import scaladelray.math.{Transform, Vector3, Point3}
+import scaladelray.math.{Vector3, Point3}
 import scala.collection.mutable
 import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
 
-class NodeProvider extends GeometryProvider with TableModel {
+class NodeProvider extends RenderableProvider with TableModel {
 
-  var childNodes = mutable.MutableList[GeometryProvider]()
+  var childNodes = mutable.MutableList[RenderableProvider]()
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  def createGeometry: Geometry = {
-    val cn = for( n <- childNodes ) yield n.createGeometry
+  // TODO: Repair node creator
+  override def createRenderable = ???
+  /*{
+    val cn = for( n <- childNodes ) yield n.createRenderable
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    new Node( t, cn:_*  )
-  }
+    //new Node( t, cn:_*  )
+    null
+  }*/
 
   def remove(obj: AnyRef) {
     obj match {
-      case gp : GeometryProvider =>
-        if( childNodes.contains( gp ) ) childNodes = childNodes.filterNot( _ == gp ) else for( v <- childNodes ) v.remove( gp )
+      case rp : RenderableProvider =>
+        if( childNodes.contains( rp ) ) childNodes = childNodes.filterNot( _ == rp ) else for( v <- childNodes ) v.remove( rp )
       case _ =>
     }
   }

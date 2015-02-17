@@ -18,20 +18,22 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.geometry.{Sphere, Node, Plane, Geometry}
+import scaladelray.geometry.Sphere
 import javax.swing.event.TableModelListener
+import scaladelray.rendering.Renderable
 
-class SphereProvider extends GeometryProvider with TableModel {
+class SphereProvider extends RenderableProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  def createGeometry: Geometry = {
-    val p = new Sphere( materialProvider.get.createMaterial )
+  override def createRenderable = {
+    val s = Sphere()
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    new Node( t, p )
+    val m = materialProvider.get.createMaterial
+    Renderable( t, s, m )
   }
 
 

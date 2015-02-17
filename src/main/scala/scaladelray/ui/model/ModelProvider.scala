@@ -18,13 +18,13 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.geometry.{Node, Geometry}
 import scaladelray.loader.OBJLoader
 import javax.swing.event.{TableModelEvent, TableModelListener}
 import java.io.File
 import scala.collection.mutable
+import scaladelray.rendering.Renderable
 
-class ModelProvider( tml : TableModelListener ) extends GeometryProvider with TableModel {
+class ModelProvider( tml : TableModelListener ) extends RenderableProvider with TableModel {
 
   var fileName = ""
   var materialProvider : Option[MaterialProvider] = None
@@ -43,11 +43,12 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
     (maxRecursions == -1 || recursion < maxRecursions) && (facesLimit == -1 || faces > facesLimit)
 
 
-  def createGeometry: Geometry = {
+  override def createRenderable = {
     val loader = new OBJLoader
-    val m = loader.load( fileName, materialProvider.get.createMaterial, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad )
+    val m = loader.load( fileName, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    new Node( t, m  )
+    val mat = materialProvider.get.createMaterial
+    Renderable( t, m, mat )
   }
 
   def remove(obj: AnyRef) {

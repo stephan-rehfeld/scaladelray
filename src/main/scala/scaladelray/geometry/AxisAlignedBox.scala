@@ -16,22 +16,20 @@
 
 package scaladelray.geometry
 
-import scaladelray.material.Material
 import scaladelray.math.{Point3, Ray, Transform}
 
 /**
  * This class represents an axis aligned box. The box has a width, height and depth of 1.
  *
- * @param material The material for the box.
  */
-class AxisAlignedBox( material : Material ) extends Geometry( material ) with Serializable {
+case class AxisAlignedBox() extends Geometry with Serializable {
 
   /**
    * The right plane of the box.
    */
   private val right = new Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( -math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -39,7 +37,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
    */
   private val top = new Node(
     Transform.translate( AxisAlignedBox.run ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -47,7 +45,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
    */
   private val front = new Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -55,7 +53,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
    */
   private val left =  new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -63,7 +61,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
    */
   private val bottom = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateX( math.Pi ),
-    new Plane( material )
+    Plane()
   )
 
   /**
@@ -71,7 +69,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
    */
   private val far = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
-    new Plane( material )
+    Plane()
   )
 
   override def <--(r: Ray) = {

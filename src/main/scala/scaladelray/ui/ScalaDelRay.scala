@@ -71,11 +71,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += pp
 
               case _ =>
-                worldProvider.geometryProvider += pp
+                worldProvider.renderableProvider += pp
 
             }
           } else {
-            worldProvider.geometryProvider += pp
+            worldProvider.renderableProvider += pp
 
           }
           updateUI()
@@ -100,11 +100,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += sp
 
               case _ =>
-                worldProvider.geometryProvider += sp
+                worldProvider.renderableProvider += sp
 
             }
           } else {
-            worldProvider.geometryProvider += sp
+            worldProvider.renderableProvider += sp
 
           }
           updateUI()
@@ -128,11 +128,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += sp
 
               case _ =>
-                worldProvider.geometryProvider += sp
+                worldProvider.renderableProvider += sp
 
             }
           } else {
-            worldProvider.geometryProvider += sp
+            worldProvider.renderableProvider += sp
 
           }
           updateUI()
@@ -156,11 +156,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += sp
 
               case _ =>
-                worldProvider.geometryProvider += sp
+                worldProvider.renderableProvider += sp
 
             }
           } else {
-            worldProvider.geometryProvider += sp
+            worldProvider.renderableProvider += sp
 
           }
           updateUI()
@@ -185,11 +185,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += sp
 
               case _ =>
-                worldProvider.geometryProvider += sp
+                worldProvider.renderableProvider += sp
 
             }
           } else {
-            worldProvider.geometryProvider += sp
+            worldProvider.renderableProvider += sp
 
           }
           updateUI()
@@ -214,11 +214,11 @@ object ScalaDelRay extends SimpleSwingApplication {
                 np.childNodes += sp
 
               case _ =>
-                worldProvider.geometryProvider += sp
+                worldProvider.renderableProvider += sp
 
             }
           } else {
-            worldProvider.geometryProvider += sp
+            worldProvider.renderableProvider += sp
 
           }
           updateUI()
@@ -1230,7 +1230,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     sphere1ReflectiveMaterial.specularTextureProvider = Some( sphere1SpecularColorTexture )
     sphere1ReflectiveMaterial.reflectionTextureProvider = Some( sphere1MirrorColorTexture )
     sphere1Provider.materialProvider = Some( sphere1ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere1Provider
+    worldProvider.renderableProvider += sphere1Provider
 
     val sphere2Provider = new SphereProvider
     sphere2Provider.translate = Point3( 1, -1, 0 )
@@ -1247,7 +1247,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     sphere2ReflectiveMaterial.specularTextureProvider = Some( sphere2SpecularColorTexture )
     sphere2ReflectiveMaterial.reflectionTextureProvider = Some( sphere2MirrorColorTexture )
     sphere2Provider.materialProvider = Some( sphere2ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere2Provider
+    worldProvider.renderableProvider += sphere2Provider
 
     val sphere3Provider = new SphereProvider
     sphere3Provider.translate = Point3( 0, 0.707, 0 )
@@ -1264,7 +1264,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     sphere3ReflectiveMaterial.specularTextureProvider = Some( sphere3SpecularColorTexture )
     sphere3ReflectiveMaterial.reflectionTextureProvider = Some( sphere3MirrorColorTexture )
     sphere3Provider.materialProvider = Some( sphere3ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere3Provider
+    worldProvider.renderableProvider += sphere3Provider
 
     val sphere4Provider = new SphereProvider
     sphere4Provider.translate = Point3( 0, 0.0, -0.707 )
@@ -1281,7 +1281,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     sphere4ReflectiveMaterial.specularTextureProvider = Some( sphere4SpecularColorTexture )
     sphere4ReflectiveMaterial.reflectionTextureProvider = Some( sphere4MirrorColorTexture )
     sphere4Provider.materialProvider = Some( sphere4ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere4Provider
+    worldProvider.renderableProvider += sphere4Provider
 
 
     val pointLightProvider = new PointLightProvider

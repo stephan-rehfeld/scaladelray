@@ -16,7 +16,6 @@
 
 package scaladelray.geometry
 
-import scaladelray.material.Material
 import scaladelray.math.{Mat3x3, Ray, Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 import scaladelray.Constants
@@ -25,7 +24,6 @@ import scaladelray.Constants
  * This class represents a triangle. The vertices can freely be set. Furthermore, the normal and texture coordinate of
  * each vertex can be set.
  *
- * @param material The material of the geometry.
  * @param a Point for the first vertex.
  * @param b Point for the second vertex.
  * @param c Point for the third vertex.
@@ -36,9 +34,9 @@ import scaladelray.Constants
  * @param bt Texture coordinate on the second vertex.
  * @param ct Texture coordinate on the third vertex.
  */
-class Triangle  ( material : Material, a: Point3, b : Point3, c : Point3,
+case class Triangle  ( a: Point3, b : Point3, c : Point3,
                 an: Normal3, bn : Normal3, cn : Normal3,
-                at: TexCoord2D, bt : TexCoord2D, ct : TexCoord2D ) extends Geometry( material ) with Serializable {
+                at: TexCoord2D, bt : TexCoord2D, ct : TexCoord2D ) extends Geometry with Serializable {
 
   override def <--(r: Ray) = {
     val base = Mat3x3( a.x - b.x, a.x - c.x, r.d.x,

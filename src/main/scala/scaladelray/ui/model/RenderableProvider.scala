@@ -16,11 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.geometry.Geometry
+import scaladelray.rendering.Renderable
 
-abstract class GeometryProvider {
+abstract class RenderableProvider {
 
-  def createGeometry : Geometry
+  def createRenderable : Renderable
   def remove( obj : AnyRef )
   def isReady : Boolean
 }
