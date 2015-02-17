@@ -16,7 +16,7 @@
 
 package scaladelray.optimization
 
-import scaladelray.geometry.{Hit, Plane, Node}
+import scaladelray.geometry.{GeometryHit, Plane, Node}
 import scaladelray.math.{Point3, Ray, Transform}
 import scaladelray.{Constants, Color}
 import scaladelray.material.SingleColorMaterial
@@ -92,7 +92,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   def <--(r: Ray) = {
 
-    var hits = Set[Hit]()
+    var hits = Set[GeometryHit]()
 
     var planeHits = (r --> right) | (r --> left)
     for( hit <- planeHits ) {

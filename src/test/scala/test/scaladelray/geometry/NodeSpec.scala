@@ -17,18 +17,18 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.geometry.{Node, Hit, Geometry}
+import scaladelray.geometry.{Node, GeometryHit, Geometry}
 import scaladelray.math._
 import scaladelray.math.Ray
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 
-class NodeTestGeometry( t : Transform, r : Ray, hits : Hit*  ) extends Geometry( MaterialTestAdapter() ) {
+class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends Geometry( MaterialTestAdapter() ) {
 
   var called = false
 
-  override def <--(r: Ray): Set[Hit] = {
-    assert( r == (t * this.r) )
+  override def <--(r: Ray): Set[GeometryHit] = {
+    assert( r == Ray(t.i * this.r.o, t.i * this.r.d) )
     called = true
     hits.toSet
   }
@@ -42,16 +42,16 @@ class NodeSpec extends FunSpec {
       val t = Transform.translate( 2, 3, 5 ).rotateX( 7 )
       val r = Ray( Point3( 5, 3, 2 ), Vector3( 7, 11, 13 ) )
 
-      val g = new NodeTestGeometry( t, r, Hit( r, null, 1, Normal3( 1, 0, 0 ), null ), Hit( r, null, 1, Normal3( 0, 1, 0 ), null ), Hit( r, null, 1, Normal3( 0, 0, 1 ), null ) )
+      val g = new NodeTestGeometry( t, r, GeometryHit( r, null, 1, Normal3( 1, 0, 0 ), null ), GeometryHit( r, null, 1, Normal3( 0, 1, 0 ), null ), GeometryHit( r, null, 1, Normal3( 0, 0, 1 ), null ) )
       val n = new Node( t, g )
 
       val hits = n <-- r
 
       assert( hits.size == 3 )
       assert( g.called )
-      assert( hits.exists( _.n == t * Normal3( 1, 0, 0 ) ) )
-      assert( hits.exists( _.n == t * Normal3( 0, 1, 0 ) ) )
-      assert( hits.exists( _.n == t * Normal3( 0, 0, 1 ) ) )
+      assert( hits.exists( _.n == (t.i.transposed * Normal3( 1, 0, 0 )).normalized ) )
+      assert( hits.exists( _.n == (t.i.transposed * Normal3( 0, 1, 0 )).normalized ) )
+      assert( hits.exists( _.n == (t.i.transposed * Normal3( 0, 0, 1 )).normalized ) )
     }
   }
 

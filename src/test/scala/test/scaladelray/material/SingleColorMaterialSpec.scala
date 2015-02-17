@@ -22,7 +22,7 @@ import scaladelray.{World, Color}
 import scaladelray.math.{Normal3, Vector3, Point3, Ray}
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.texture.TexCoord2D
-import scaladelray.geometry.Hit
+import scaladelray.geometry.GeometryHit
 
 class SingleColorMaterialSpec extends FunSpec {
 
@@ -34,7 +34,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       var called = false
 
@@ -53,7 +53,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       var called = false
 
@@ -81,7 +81,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 

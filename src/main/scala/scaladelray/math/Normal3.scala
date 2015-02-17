@@ -31,6 +31,11 @@ import scaladelray.Constants
 case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
+   * The magnitude of the normal.
+   */
+  val magnitude = scala.math.sqrt( x*x + y*y + z*z )
+
+  /**
    * This method multiplies the normal with a scalar and returns the result as a new [[scaladelray.math.Normal3]]
    * object.
    *
@@ -72,6 +77,12 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
     */
   def unary_- = Normal3( -x, -y, -z )
 
+  /**
+   * This method returns a normalized normal that points in the same direction like this normal.
+   *
+   * @return A normalized normal that points in the same direction like this normal.
+   */
+  def normalized = Normal3( x / this.magnitude, y / this.magnitude, z / this.magnitude )
 
   /**
    * A roughly equals between two normals. It is used to get rid of problems from rounding errors of floating points.

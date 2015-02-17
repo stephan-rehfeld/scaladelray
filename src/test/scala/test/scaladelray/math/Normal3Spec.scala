@@ -48,6 +48,12 @@ class Normal3Spec extends FunSpec {
       assert( normal1 == normal2 )
     }
 
+    it( "should provide the correct magnitude" ) {
+      val normal = Normal3( 2, 3, 5 )
+
+      assert( normal.magnitude == math.sqrt( 2 * 2 + 3 * 3 + 5 * 5 ) )
+    }
+
     it( "should compute the product with a scalar correctly" ) {
       val normal = Normal3( 2, 3, 5 )
       val v = 10
@@ -168,6 +174,12 @@ class Normal3Spec extends FunSpec {
       assert( n =~= Normal3( n.x, n.y - Constants.EPSILON, n.z ) )
       assert( n =~= Normal3( n.x, n.y, n.z + Constants.EPSILON ) )
       assert( n =~= Normal3( n.x, n.y, n.z - Constants.EPSILON ) )
+    }
+
+    it( "should compute the correct normalized normal" ) {
+      val normal = Normal3( 2, 3, 5 )
+
+      assert( normal.normalized == Normal3( 2 / normal.magnitude, 3 / normal.magnitude, 5 / normal.magnitude ) )
     }
 
   }

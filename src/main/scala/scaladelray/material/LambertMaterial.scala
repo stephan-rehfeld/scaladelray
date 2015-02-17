@@ -17,7 +17,7 @@
 package scaladelray.material
 
 import scaladelray.texture.Texture
-import scaladelray.geometry.Hit
+import scaladelray.geometry.GeometryHit
 import scaladelray.{Color, World}
 import scaladelray.math.Ray
 
@@ -28,7 +28,7 @@ import scaladelray.math.Ray
  */
 case class LambertMaterial( texture : Texture ) extends Material with Serializable {
 
-  override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
+  override def colorFor( hit: GeometryHit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val color = texture( hit.texCoord2D )
     val normal = hit.n
     val p =  hit.ray( hit.t )

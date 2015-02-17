@@ -40,12 +40,12 @@ class Sphere( material : Material ) extends Geometry( material ) with Serializab
       case 0.0 => {
 
         val t = -two / (2 * one)
-        Set( Hit( r, this, t, r( t ).asNormal, texCoordFor( r( t ) )) )
+        Set( GeometryHit( r, this, t, r( t ).asNormal, texCoordFor( r( t ) )) )
       }
       case _ => {
         val t1 = (-two + scala.math.sqrt( four ))/ (2 * one)
         val t2 = (-two - scala.math.sqrt( four ))/ (2 * one)
-        Set() + Hit( r, this, t1, r( t1 ).asNormal, texCoordFor( r( t1 ) ) ) + Hit( r, this, t2, r( t2 ).asNormal, texCoordFor( r( t2 ) ) )
+        Set() + GeometryHit( r, this, t1, r( t1 ).asNormal, texCoordFor( r( t1 ) ) ) + GeometryHit( r, this, t2, r( t2 ).asNormal, texCoordFor( r( t2 ) ) )
       }
     }
   }

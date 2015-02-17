@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Point3, Vector3, Mat4x4}
+import scaladelray.math.{Normal3, Point3, Vector3, Mat4x4}
 
 class Mat4x4Spec extends FunSpec {
   describe( "A Mat4x4" ) {
@@ -70,6 +70,21 @@ class Mat4x4Spec extends FunSpec {
       val v = Vector3( 59, 61, 67 )
 
       val r = m * v
+
+      assert( r.x == ( 2*59 +  3*61 +  5*67 +  7*0))
+      assert( r.y == (11*59 + 13*61 + 17*67 + 19*0))
+      assert( r.z == (23*59 + 29*61 + 31*67 + 37*0))
+    }
+
+    it( "should have a multiply operator for a normal, assuming that a normal is a 4 element normal with value 0 for w" ) {
+      val m = Mat4x4( 2,   3,  5,  7,
+        11, 13, 17, 19,
+        23, 29, 31, 37,
+        41, 43, 47, 53 )
+
+      val n = Normal3( 59, 61, 67 )
+
+      val r = m * n
 
       assert( r.x == ( 2*59 +  3*61 +  5*67 +  7*0))
       assert( r.y == (11*59 + 13*61 + 17*67 + 19*0))

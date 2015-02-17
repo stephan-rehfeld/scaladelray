@@ -16,15 +16,15 @@
 
 package scaladelray
 
-import geometry.{Hit, Geometry}
+import geometry.{GeometryHit, Geometry}
 import scaladelray.light.LightDescription
 import math.Ray
 
 
 case class World( backgroundColor : Color = Color( 0, 0, 0 ), objects : Set[Geometry], ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
 
-  def <--( r : Ray ) : Set[Hit] = {
-    var hits = Set[Hit]()
+  def <--( r : Ray ) : Set[GeometryHit] = {
+    var hits = Set[GeometryHit]()
     for( e <- objects ) {
       hits = hits | (r --> e)
     }

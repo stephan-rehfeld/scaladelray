@@ -18,7 +18,7 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 import scaladelray.{Color, World}
-import scaladelray.geometry.{Sphere, Hit, Geometry}
+import scaladelray.geometry.{Sphere, GeometryHit, Geometry}
 import scaladelray.light.DirectionalLight
 import scaladelray.math.{Ray, Vector3, Point3}
 
@@ -46,9 +46,9 @@ class DirectionalLightSpec extends FunSpec {
       var called = false
 
       val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[Hit] = {
+        override def <--( r : Ray ) : Set[GeometryHit] = {
           called = true
-          Set[Hit]()
+          Set[GeometryHit]()
         }
       }
       val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )

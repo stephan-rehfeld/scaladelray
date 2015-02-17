@@ -34,7 +34,7 @@ class Plane( material : Material ) extends Geometry( material ) with Serializabl
      if( h != 0.0 ) {
        val t = ((-r.o.asVector) dot Plane.n) / h
        val p = r( t )
-       Set( Hit( r, this, t, Plane.n, TexCoord2D( p.x, -p.z ) ) )
+       Set( GeometryHit( r, this, t, Plane.n, TexCoord2D( p.x, -p.z ) ) )
      } else
        Set()
    }

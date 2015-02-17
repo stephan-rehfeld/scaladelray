@@ -76,7 +76,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
 
   override def <--(r: Ray) = {
 
-    var hits = Set[Hit]()
+    var hits = Set[GeometryHit]()
 
     var planeHits = (r --> right) | (r --> left)
     for( hit <- planeHits ) {
@@ -96,7 +96,7 @@ class AxisAlignedBox( material : Material ) extends Geometry( material ) with Se
       if( p.x >= AxisAlignedBox.lbf.x && p.x <= AxisAlignedBox.run.x && p.y >= AxisAlignedBox.lbf.y && p.y <= AxisAlignedBox.run.y ) hits = hits + hit
     }
 
-    for( hit <- hits ) yield Hit( hit.ray, this, hit.t, hit.n, hit.texCoord2D )
+    for( hit <- hits ) yield GeometryHit( hit.ray, this, hit.t, hit.n, hit.texCoord2D )
 
   }
 

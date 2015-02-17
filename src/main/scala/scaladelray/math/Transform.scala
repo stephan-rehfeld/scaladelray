@@ -110,23 +110,6 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) extends Serializable 
         false
     }
 
-
-  /**
-   * This operator transforms a ray by multiplying the origin and the direction with the inverse transformation matrix.
-   *
-   * @param r The ray to transform.
-   * @return The transformed ray.
-   */
-  def *( r : Ray ) = Ray( i * r.o, i * r.d )
-
-  /**
-   * This operator transforms a normals by multiplying it with the transposed inverse transformation matrix.
-   *
-   * @param n The normal to transform.
-   * @return The transformed normal.
-   */
-  def *( n : Normal3 ) = (i.transposed * n.asVector).normalized.asNormal
-
 }
 
 /**

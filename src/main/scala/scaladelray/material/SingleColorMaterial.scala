@@ -17,7 +17,7 @@
 package scaladelray.material
 
 import scaladelray.{World, Color}
-import scaladelray.geometry.Hit
+import scaladelray.geometry.GeometryHit
 import scaladelray.math.Ray
 
 /**
@@ -28,6 +28,6 @@ import scaladelray.math.Ray
  */
 case class SingleColorMaterial( color : Color ) extends Material with Serializable {
 
-  override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
+  override def colorFor( hit: GeometryHit, world : World, tracer : ((Ray,World) => Color) ) = color
 
 }

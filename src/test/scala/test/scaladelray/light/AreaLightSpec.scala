@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 import scaladelray.light.{PointLight, AreaLight}
 import scaladelray.math.{Ray, Point3, Vector3}
 import scaladelray.{World, Color}
-import scaladelray.geometry.{Sphere, Hit, Geometry}
+import scaladelray.geometry.{Sphere, GeometryHit, Geometry}
 
 class AreaLightSpec extends FunSpec {
 
@@ -49,9 +49,9 @@ class AreaLightSpec extends FunSpec {
       var called = false
 
       val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[Hit] = {
+        override def <--( r : Ray ) : Set[GeometryHit] = {
           called = true
-          Set[Hit]()
+          Set[GeometryHit]()
         }
       }
       val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )

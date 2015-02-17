@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 import scaladelray.math.{Ray, Point3}
 import scaladelray.{World, Color}
 import scaladelray.light.PointLight
-import scaladelray.geometry.{Hit, Sphere, Geometry}
+import scaladelray.geometry.{GeometryHit, Sphere, Geometry}
 
 class PointLightSpec extends FunSpec {
 
@@ -47,9 +47,9 @@ class PointLightSpec extends FunSpec {
       var called = false
 
       val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[Hit] = {
+        override def <--( r : Ray ) : Set[GeometryHit] = {
           called = true
-          Set[Hit]()
+          Set[GeometryHit]()
         }
       }
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )

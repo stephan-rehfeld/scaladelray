@@ -55,6 +55,16 @@ case class Mat4x4( m11 : Double, m12 : Double, m13 : Double, m14 : Double,
                                   m31 * v.x + m32 * v.y + m33 * v.z )
 
   /**
+   * This method multiplies this matrix with a normal. A 0 is assumed as value for w.
+   *
+   * @param n The normal that should be multiplied with this matrix.
+   * @return The resulting normal.
+   */
+  def *( n : Normal3 ) = Normal3( m11 * n.x + m12 * n.y + m13 * n.z,
+                                  m21 * n.x + m22 * n.y + m23 * n.z,
+                                  m31 * n.x + m32 * n.y + m33 * n.z )
+
+  /**
    * This method multiplies this matrix with a point. A 1 is assumed as value for w.
    *
    * @param p The point that should be multiplied with this matrix.

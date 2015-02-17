@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.rendering
 
-import scaladelray.geometry.GeometryHit
-import scaladelray.{Color, World}
-import scaladelray.math.Ray
+class RayCasting extends Algorithm {
 
-abstract class Material {
-  def colorFor( hit : GeometryHit, world : World, tracer : ((Ray,World) => Color) ) : Color
 }

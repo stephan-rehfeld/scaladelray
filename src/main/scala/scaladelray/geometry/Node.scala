@@ -29,13 +29,13 @@ import scaladelray.Color
  */
 class Node( t : Transform, nodes : Geometry* ) extends Geometry( SingleColorMaterial( Color( 0, 0, 0 ) ) ) with Serializable {
 
-  override def <--(r: Ray) : Set[Hit] = {
-    var hits = Set[Hit]()
-    val transformedRay = t * r
+  override def <--(r: Ray) : Set[GeometryHit] = {
+    var hits = Set[GeometryHit]()
+    val transformedRay = Ray( t.i * r.o, t.i * r.d )
     for( node <- nodes ) {
       hits = hits | (transformedRay --> node )
     }
-    for( hit <- hits ) yield Hit( r, hit.geometry, hit.t, t * hit.n, hit.texCoord2D )
+    for( hit <- hits ) yield GeometryHit( r, hit.geometry, hit.t, (t.i.transposed * hit.n).normalized, hit.texCoord2D )
   }
 
 }

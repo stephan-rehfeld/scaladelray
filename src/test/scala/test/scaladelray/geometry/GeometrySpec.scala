@@ -18,19 +18,19 @@ package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
 import scaladelray.material.Material
-import scaladelray.geometry.{Hit, Geometry}
+import scaladelray.geometry.{GeometryHit, Geometry}
 import scaladelray.math.Ray
 import scaladelray.{Color, World}
 
 class GeometryTestAdapter( material : Material ) extends Geometry( material ) {
 
-  override def <--(r: Ray): Set[Hit] = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
+  override def <--(r: Ray): Set[GeometryHit] = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
 
 }
 
 // TODO: Move this class the materials as soon as you implemented the tests for the Material class.
 case class MaterialTestAdapter() extends Material {
-  def colorFor(hit: Hit, world: World, tracer: (Ray, World) => Color): Color = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
+  def colorFor(hit: GeometryHit, world: World, tracer: (Ray, World) => Color): Color = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
 }
 
 class GeometrySpec extends FunSpec {

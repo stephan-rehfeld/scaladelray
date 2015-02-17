@@ -22,7 +22,7 @@ import scaladelray.{Color, World}
 import scaladelray.math.{Normal3, Vector3, Point3, Ray}
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
-import scaladelray.geometry.Hit
+import scaladelray.geometry.GeometryHit
 import scaladelray.light.PointLight
 
 class ReflectiveMaterialSpec extends FunSpec {
@@ -38,7 +38,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -62,7 +62,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+      val h = GeometryHit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
 
       var called = false
 
@@ -95,7 +95,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -120,7 +120,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -152,7 +152,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -180,7 +180,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 1, 0 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 1, 0 ), tc )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -203,7 +203,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
       assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1, 1, 1 ) )
     }
@@ -220,7 +220,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+      val h = GeometryHit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
 
       assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.n ) dot -r.d , 1 ) )
     }
@@ -241,7 +241,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
       assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0, 0, 1 ) )
     }
@@ -262,7 +262,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
       assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0.5, 0.5, 1 ) )
     }
@@ -282,7 +282,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Normal3( 0, 0, 1 ), tc )
+      val h = GeometryHit( r, g, 1, Normal3( 0, 0, 1 ), tc )
 
       assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) =~= Color( 1 * Math.cos( Math.PI / 4 ), 1 * Math.cos( Math.PI / 4 ), 1 )  )
     }

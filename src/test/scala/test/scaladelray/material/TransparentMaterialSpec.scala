@@ -22,7 +22,7 @@ import scaladelray.{Color, World}
 import scaladelray.math.{Vector3, Point3, Ray}
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.texture.TexCoord2D
-import scaladelray.geometry.Hit
+import scaladelray.geometry.GeometryHit
 
 class TransparentMaterialSpec extends FunSpec {
 
@@ -35,7 +35,7 @@ class TransparentMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter( m )
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = new Hit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+      val h = GeometryHit( r, g, 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
 
       var called = 0
 

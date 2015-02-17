@@ -18,7 +18,7 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 import scaladelray.{Color, World}
-import scaladelray.geometry.{Sphere, Hit, Geometry}
+import scaladelray.geometry.{Sphere, GeometryHit, Geometry}
 import scaladelray.light.SpotLight
 import scaladelray.math.{Ray, Vector3, Point3}
 
@@ -55,9 +55,9 @@ class SpotLightSpec extends FunSpec {
       var called = false
 
       val w = new World( Color( 0, 0, 0 ), Set[Geometry]() ) {
-        override def <--( r : Ray ) : Set[Hit] = {
+        override def <--( r : Ray ) : Set[GeometryHit] = {
           called = true
-          Set[Hit]()
+          Set[GeometryHit]()
         }
       }
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), math.toRadians( 22.5 ) )

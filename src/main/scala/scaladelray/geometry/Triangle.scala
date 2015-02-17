@@ -55,7 +55,7 @@ class Triangle  ( material : Material, a: Point3, b : Point3, c : Point3,
       Set()
     } else {
       val alpha = 1 - beta - gamma
-      Set() + Hit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
+      Set() + GeometryHit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
     }
 
   }

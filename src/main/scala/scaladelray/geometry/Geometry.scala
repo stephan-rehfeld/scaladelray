@@ -32,7 +32,7 @@ import scaladelray.material.Material
  * @param n The normal of the hit.
  * @param texCoord2D The texture coordinate of the hit.
  */
-case class Hit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D ) extends Serializable
+case class GeometryHit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D ) extends Serializable
 
 /**
  * The base class for all geometries. It holds the material of the geometry. Additionally, it overloads the +-operator
@@ -50,7 +50,7 @@ abstract class Geometry( val material : Material ) extends Serializable {
    * @param r The ray that's been shot.
    * @return All hits between the ray an the geometry. Maybe empty.
    */
-  def <-- ( r : Ray ) : Set[Hit]
+  def <-- ( r : Ray ) : Set[GeometryHit]
 
   /**
    * The +-operator should be used to construct a set out of two geometries.
