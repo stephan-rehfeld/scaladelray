@@ -36,7 +36,6 @@ class SpotLightSpec extends FunSpec {
         assert( b )
     }
 
-    // TODO: Because the angle is checked by evaluating the sine of the angle, is seems to illuminate the back side.
     it( "should not radiate a point outside the angle" ) {
       val w = new World( Color( 0, 0, 0 ), Set[Renderable]() )
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), math.toRadians( 22.5 ) )
