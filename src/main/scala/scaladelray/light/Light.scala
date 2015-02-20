@@ -16,8 +16,9 @@
 
 package scaladelray.light
 
-import scaladelray.{World, Color}
+import scaladelray.Color
 import scaladelray.math.{Vector3, Point3}
+import scaladelray.world.World
 
 /**
  * This trait defines attributes and functions of a light. All lights in the ray tracer need to implement this trait.

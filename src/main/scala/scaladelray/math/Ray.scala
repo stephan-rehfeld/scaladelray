@@ -17,8 +17,8 @@
 package scaladelray.math
 
 import scaladelray.geometry.Geometry
-import scaladelray.World
 import scaladelray.rendering.Renderable
+import scaladelray.world.World
 
 /**
  * This class represents a ray. It has an origin and a direction. It implements a parametric line, so it can calculate

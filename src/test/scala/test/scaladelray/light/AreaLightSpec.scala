@@ -19,9 +19,10 @@ package test.scaladelray.light
 import org.scalatest.FunSpec
 import scaladelray.light.AreaLight
 import scaladelray.math.{Transform, Ray, Point3, Vector3}
-import scaladelray.{World, Color}
+import scaladelray.Color
 import scaladelray.geometry.Sphere
 import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class AreaLightSpec extends FunSpec {
 
@@ -29,7 +30,7 @@ class AreaLightSpec extends FunSpec {
     it( "should radiate all points" ) {
       val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 5, 1 )
       val l = ld.createLight
-      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() )
+      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
       for( p <- points )
@@ -49,7 +50,7 @@ class AreaLightSpec extends FunSpec {
     it( "should check the world if an object is between the point and the area light" ) {
       var called = false
 
-      val w = new World( Color( 0, 0, 0 ), Set[Renderable]() ) {
+      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() ) {
         override def <--( r : Ray ) : Set[Hit] = {
           called = true
           Set[Hit]()
@@ -66,7 +67,7 @@ class AreaLightSpec extends FunSpec {
       val l = ld.createLight
       val s = Sphere()
       val p = Point3( 0, 0, 2 )
-      val w = new World( Color( 0, 0, 0 ), Set() + Renderable( Transform(), s, null ) )
+      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

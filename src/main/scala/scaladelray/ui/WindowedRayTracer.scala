@@ -19,16 +19,16 @@ package scaladelray.ui
 import swing.{Component, MainFrame, SimpleSwingApplication}
 import java.awt.{Graphics2D, Dimension}
 import java.awt.image.BufferedImage
-import akka.actor.{Props, Actor, ActorSystem}
+import akka.actor.{Props, ActorSystem}
 
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
 import scala.concurrent.{Future, Await}
 import akka.routing.RoundRobinRouter
-import scaladelray.{Tracer, Color, World}
 import scaladelray.camera.Camera
 import scaladelray.rendering.{Render, RenderingActor}
+import scaladelray.world.World
 
 
 abstract class WindowedRayTracer extends SimpleSwingApplication {

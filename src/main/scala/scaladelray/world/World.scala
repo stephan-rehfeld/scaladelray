@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.world
 
+import scaladelray.light.LightDescription
+import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.Color
 import scaladelray.math.Ray
-import scaladelray.rendering.Hit
-import scaladelray.world.World
 
-abstract class Material {
-  def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color
+
+case class World( background : Background, objects : Set[Renderable], ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
+
+  def <--( r : Ray ) : Set[Hit] = {
+    var hits = Set[Hit]()
+    for( e <- objects ) {
+      hits = hits | (r --> e)
+    }
+    hits
+  }
+
 }

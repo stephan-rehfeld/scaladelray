@@ -20,7 +20,6 @@ import org.scalatest.FunSpec
 import scaladelray.math._
 import scaladelray.light.PointLight
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.World
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.math.Ray
@@ -30,6 +29,7 @@ import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
 import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class PhongMaterialSpec extends FunSpec {
 
@@ -38,7 +38,7 @@ class PhongMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter()
       val t2 = new TextureTestAdapter()
       val m = PhongMaterial( t1, t2, 1 )
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -58,7 +58,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new TextureTestAdapter()
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -88,7 +88,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new TextureTestAdapter()
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -111,7 +111,7 @@ class PhongMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter()
       val t2 = new TextureTestAdapter()
       val m = PhongMaterial( t1, t2, 1 )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -143,7 +143,7 @@ class PhongMaterialSpec extends FunSpec {
       val m = PhongMaterial( t1, t2, 1 )
 
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -170,7 +170,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new TextureTestAdapter()
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -192,7 +192,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -208,7 +208,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -228,7 +228,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -248,7 +248,7 @@ class PhongMaterialSpec extends FunSpec {
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val m = PhongMaterial( t1, t2, 1 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -267,7 +267,7 @@ class PhongMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val m = PhongMaterial( t1, t2, 1 )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )

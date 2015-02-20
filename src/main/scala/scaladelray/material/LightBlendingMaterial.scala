@@ -17,9 +17,10 @@
 package scaladelray.material
 
 import scaladelray.texture.Texture
-import scaladelray.{Color, World}
+import scaladelray.Color
 import scaladelray.math.Ray
 import scaladelray.rendering.Hit
+import scaladelray.world.World
 
 
 case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Material with Serializable {

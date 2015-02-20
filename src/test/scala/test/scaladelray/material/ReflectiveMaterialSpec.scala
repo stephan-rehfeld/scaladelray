@@ -21,7 +21,6 @@ import scaladelray.math._
 import scaladelray.light.PointLight
 import scaladelray.rendering.{Hit, Renderable}
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.World
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.material.ReflectiveMaterial
@@ -30,6 +29,7 @@ import scaladelray.texture.SingleColorTexture
 import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class ReflectiveMaterialSpec extends FunSpec {
 
@@ -40,7 +40,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t2 = new TextureTestAdapter()
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -64,7 +64,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -97,7 +97,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -122,7 +122,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -154,7 +154,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -182,7 +182,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new TextureTestAdapter()
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -205,7 +205,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -222,7 +222,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -243,7 +243,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -264,7 +264,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -284,7 +284,7 @@ class ReflectiveMaterialSpec extends FunSpec {
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )

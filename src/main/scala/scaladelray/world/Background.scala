@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.world
 
-import scaladelray.Color
 import scaladelray.math.Ray
-import scaladelray.rendering.Hit
-import scaladelray.world.World
+import scaladelray.Color
 
-abstract class Material {
-  def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color
+/**
+ * A background generates a color for a ray that does not hit any renderable object in a world.
+ */
+trait Background {
+
+  /**
+   * An implementation of this method generates a color for the ray. The ray did not hit any object.
+   *
+   * @param r The ray that did not hit any renderable object.
+   * @return A background color.
+   */
+  def apply( r : Ray ) : Color
+
 }

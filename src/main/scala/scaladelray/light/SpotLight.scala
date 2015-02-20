@@ -16,8 +16,9 @@
 
 package scaladelray.light
 
-import scaladelray.{Constants, World, Color}
+import scaladelray.{Constants, Color}
 import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.world.World
 
 /**
  * A point lights illuminates the scene similar to a point light, but only within a specified angle.

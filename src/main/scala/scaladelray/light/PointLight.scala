@@ -16,8 +16,9 @@
 
 package scaladelray.light
 
-import scaladelray.{Constants, World, Color}
+import scaladelray.{Constants, Color}
 import scaladelray.math.{Ray, Point3}
+import scaladelray.world.World
 
 
 /**

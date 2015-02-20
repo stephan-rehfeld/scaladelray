@@ -17,9 +17,10 @@
 package scaladelray.material
 
 import scaladelray.texture.Texture
-import scaladelray.{World, Color}
+import scaladelray.Color
 import scaladelray.math.Ray
 import scaladelray.rendering.Hit
+import scaladelray.world.World
 
 /**
  * A phong material with diffuse and specular reflection.

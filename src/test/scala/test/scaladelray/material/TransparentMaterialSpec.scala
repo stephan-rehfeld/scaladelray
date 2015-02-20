@@ -18,11 +18,12 @@ package test.scaladelray.material
 
 import org.scalatest.FunSpec
 import scaladelray.material.TransparentMaterial
-import scaladelray.{Color, World}
+import scaladelray.Color
 import scaladelray.math.{Transform, Vector3, Point3, Ray}
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.texture.TexCoord2D
 import scaladelray.rendering.{Renderable, Hit}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class TransparentMaterialSpec extends FunSpec {
 
@@ -31,7 +32,7 @@ class TransparentMaterialSpec extends FunSpec {
     it( "should call the tracer twice, once with the reflected and with the refracted ray" ) {
       val m = TransparentMaterial( 1.0 )
 
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )

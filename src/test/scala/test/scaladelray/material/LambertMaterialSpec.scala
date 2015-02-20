@@ -20,7 +20,6 @@ import org.scalatest.FunSpec
 import scaladelray.math._
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.light.PointLight
-import scaladelray.World
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.math.Ray
@@ -31,6 +30,7 @@ import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
 import scaladelray.rendering.Hit
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class LambertMaterialSpec extends FunSpec {
 
@@ -38,7 +38,7 @@ class LambertMaterialSpec extends FunSpec {
     it( "should retrieve to color from the texture, using texture coordinate in the hit" ) {
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -53,7 +53,7 @@ class LambertMaterialSpec extends FunSpec {
     it( "should not call the tracer" ) {
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -81,7 +81,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -103,7 +103,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -133,7 +133,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -159,7 +159,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new TextureTestAdapter()
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), l1 + l2 )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -179,7 +179,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new SingleColorTexture( Color( 1, 0, 0 ) )
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -193,7 +193,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new SingleColorTexture( Color( 1, 1, 1 ) )
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -211,7 +211,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new SingleColorTexture( Color( 1, 1, 1 ) )
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -229,7 +229,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new SingleColorTexture( Color( 1, 1, 1 ) )
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -247,7 +247,7 @@ class LambertMaterialSpec extends FunSpec {
 
       val t = new SingleColorTexture( Color( 1, 1, 1 ) )
       val m = LambertMaterial( t )
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l  )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )

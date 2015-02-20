@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package scaladelray
+package scaladelray.world
 
-import scaladelray.light.LightDescription
-import math.Ray
-import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.Color
+import scaladelray.math.Ray
 
-
-case class World( backgroundColor : Color = Color( 0, 0, 0 ), objects : Set[Renderable], ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
-
-  def <--( r : Ray ) : Set[Hit] = {
-    var hits = Set[Hit]()
-    for( e <- objects ) {
-      hits = hits | (r --> e)
-    }
-    hits
-  }
-
+/**
+ * The same background color regardless of the origin or direction of the ray.
+ *
+ * @param c The color that is returned for any ray.
+ */
+case class SingleBackgroundColor( c : Color ) extends Background {
+  override def apply(r: Ray): Color = c
 }

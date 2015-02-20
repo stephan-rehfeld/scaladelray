@@ -16,9 +16,10 @@
 
 package scaladelray.material
 
-import scaladelray.{World, Color}
+import scaladelray.Color
 import scaladelray.math.Ray
 import scaladelray.rendering.Hit
+import scaladelray.world.World
 
 /**
  * A single color material always returns the same color, regardless of lighting conditions.

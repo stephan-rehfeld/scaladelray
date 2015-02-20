@@ -16,9 +16,10 @@
 
 package scaladelray.material
 
-import scaladelray.{Color, World}
+import scaladelray.Color
 import scaladelray.math.{Normal3, Vector3, Ray}
 import scaladelray.rendering.Hit
+import scaladelray.world.World
 
 
 case class TransparentMaterial( indexOfRefraction : Double ) extends Material with Serializable {

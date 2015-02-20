@@ -17,9 +17,10 @@
 package test.scaladelray.material
 
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.{World, Color}
+import scaladelray.Color
 import scaladelray.math.{Point3, Vector3}
 import scaladelray.light.{Light, LightDescription}
+import scaladelray.world.World
 
 class TextureTestAdapter extends Texture {
 

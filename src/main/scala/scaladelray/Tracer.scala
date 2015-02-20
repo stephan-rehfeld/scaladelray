@@ -17,6 +17,7 @@
 package scaladelray
 
 import math.Ray
+import scaladelray.world.World
 
 
 object Tracer {
@@ -26,7 +27,7 @@ object Tracer {
     } else {
       val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
       if( hits.isEmpty ) {
-        world.backgroundColor
+        world.background( ray )
       } else {
         val hit = hits.head
         hit.renderable.material.colorFor( hit, world, Tracer.standardTracer( _, _, recursions - 1 ) )

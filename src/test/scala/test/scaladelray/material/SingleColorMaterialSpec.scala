@@ -20,7 +20,6 @@ import org.scalatest.FunSpec
 import scaladelray.math._
 import scaladelray.rendering.{Hit, Renderable}
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.World
 import scaladelray.material.SingleColorMaterial
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
@@ -28,6 +27,7 @@ import scaladelray.math.Ray
 import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class SingleColorMaterialSpec extends FunSpec {
 
@@ -35,7 +35,7 @@ class SingleColorMaterialSpec extends FunSpec {
     it( "should return the color that has been passed to the constructor" ) {
       val m = SingleColorMaterial( Color( 1, 1, 1 ) )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -54,7 +54,7 @@ class SingleColorMaterialSpec extends FunSpec {
     it( "should not call the tracer" ) {
       val m = SingleColorMaterial( Color( 1, 1, 1 ) )
 
-      val w = World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
@@ -82,7 +82,7 @@ class SingleColorMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val w = new World( Color( 0, 0, 0 ), Set(), Color( 0, 0, 0 ), Set() + l )
+      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )

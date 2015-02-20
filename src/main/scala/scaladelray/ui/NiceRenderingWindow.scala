@@ -28,12 +28,12 @@ import scala.concurrent.duration._
 import akka.pattern.ask
 import javax.imageio.ImageIO
 import scala.swing.GridBagPanel.Fill
-import scaladelray.World
 import scaladelray.rendering.{Render, RenderingActor}
 import scala.collection.mutable
 import akka.remote.RemoteScope
 import com.typesafe.config.ConfigFactory
 import scala.language.reflectiveCalls
+import scaladelray.world.World
 
 case class StartRendering()
 
