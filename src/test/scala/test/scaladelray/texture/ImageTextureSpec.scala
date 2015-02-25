@@ -26,10 +26,10 @@ class ImageTextureSpec extends FunSpec {
     it( "should return the color of the pixel when the texture coordinate corresponds exactly to the middle of the pixel" ) {
       val t = ImageTexture( "texture-example.bmp" )
 
-      val c00 = t( TexCoord2D( 0.25, 0.25 ) )
-      val c10 = t( TexCoord2D( 0.75, 0.25 ) )
-      val c01 = t( TexCoord2D( 0.25, 0.75 ) )
-      val c11 = t( TexCoord2D( 0.75, 0.75 ) )
+      val c00 = t( TexCoord2D( 0, 0 ) )
+      val c10 = t( TexCoord2D( 1, 0 ) )
+      val c01 = t( TexCoord2D( 0, 1 ) )
+      val c11 = t( TexCoord2D( 1, 1 ) )
       assert( c00 == Color( 0, 0, 1 ) )
       assert( c10 == Color( 1, 1, 0 ) )
       assert( c01 == Color( 1, 0, 0 ) )

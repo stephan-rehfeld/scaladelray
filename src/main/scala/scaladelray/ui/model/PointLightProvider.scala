@@ -18,7 +18,7 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.Color
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.Point3
 import javax.swing.event.TableModelListener
 import scaladelray.light.{PointLight, LightDescription}
 import java.lang
@@ -72,7 +72,7 @@ class PointLightProvider extends LightDescriptionProvider with TableModel {
     case 1 =>
       row match {
         case 0 =>
-          "" + color.r + " " + color.g + " " + color.b
+          color
         case 1 =>
           "" + position.x + " " + position.y + " " + position.z
         case 2 =>
@@ -90,8 +90,7 @@ class PointLightProvider extends LightDescriptionProvider with TableModel {
     try {
       row match {
         case 0 =>
-          val v = obj.asInstanceOf[String].split( " " )
-          color = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          color = obj.asInstanceOf[Color]
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
           position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )

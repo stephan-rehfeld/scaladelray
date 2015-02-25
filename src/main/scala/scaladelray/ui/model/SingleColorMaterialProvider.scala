@@ -55,7 +55,7 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
     case 1 =>
       row match {
         case 0 =>
-          "" + color.r + " " + color.g + " " + color.b
+          color
       }
   }
 
@@ -63,8 +63,7 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
     try {
       row match {
         case 0 =>
-          val v = obj.asInstanceOf[String].split( " " )
-          color = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          color = obj.asInstanceOf[Color]
       }
     } catch {
       case _ : Throwable =>

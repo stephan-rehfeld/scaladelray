@@ -87,7 +87,7 @@ class WorldProvider extends TableModel {
     case 1 =>
       row match {
         case 0 =>
-          "" + ambientLight.r + " " + ambientLight.g + " " + ambientLight.b
+          ambientLight
         case 1 =>
           new java.lang.Double( indexOfRefraction )
       }
@@ -97,8 +97,7 @@ class WorldProvider extends TableModel {
     try {
       row match {
         case 0 =>
-          val v = obj.asInstanceOf[String].split( " " )
-          ambientLight = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          ambientLight = obj.asInstanceOf[Color]
         case 1 =>
           indexOfRefraction = obj.asInstanceOf[String].toDouble
       }

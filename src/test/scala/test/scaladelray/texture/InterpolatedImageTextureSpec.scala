@@ -26,10 +26,10 @@ class InterpolatedImageTextureSpec extends FunSpec {
     it( "should return the color of the pixel when the texture coordinate corresponds exactly to the middle of the pixel" ) {
       val t = InterpolatedImageTexture( "texture-example.bmp" )
 
-      val c00 = t( TexCoord2D( 0.25, 0.25 ) )
-      val c10 = t( TexCoord2D( 0.75, 0.25 ) )
-      val c01 = t( TexCoord2D( 0.25, 0.75 ) )
-      val c11 = t( TexCoord2D( 0.75, 0.75 ) )
+      val c00 = t( TexCoord2D( 0.0, 0.0 ) )
+      val c10 = t( TexCoord2D( 1.0, 0.0 ) )
+      val c01 = t( TexCoord2D( 0.0, 1.0 ) )
+      val c11 = t( TexCoord2D( 1.0, 1.0 ) )
       assert( c00 == Color( 0, 0, 1 ) )
       assert( c10 == Color( 1, 1, 0 ) )
       assert( c01 == Color( 1, 0, 0 ) )
@@ -39,10 +39,10 @@ class InterpolatedImageTextureSpec extends FunSpec {
     it( "should interpolate the color of the pixel" ) {
       val t = InterpolatedImageTexture( "texture-example.bmp" )
 
-      val c00 = t( TexCoord2D( 0.5, 0.25 ) )
-      val c10 = t( TexCoord2D( 0.75, 0.5 ) )
-      val c01 = t( TexCoord2D( 0.5, 0.75 ) )
-      val c11 = t( TexCoord2D( 0.25, 0.5 ) )
+      val c00 = t( TexCoord2D( 0.5, 0.0 ) )
+      val c10 = t( TexCoord2D( 1.0, 0.5 ) )
+      val c01 = t( TexCoord2D( 0.5, 1.0 ) )
+      val c11 = t( TexCoord2D( 0.0, 0.5 ) )
 
       assert( c00 == ((Color( 0, 0, 1 )+Color( 1, 1, 0 ))/2) )
       assert( c10 == ((Color( 1, 1, 0 )+Color( 0, 1, 0 ))/2) )
