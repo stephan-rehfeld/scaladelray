@@ -25,8 +25,8 @@ case class InterpolatedImageTexture( file : String ) extends Texture with Serial
   private val image = ImageIO.read( new File( file ) )
 
   override def apply(texCoord: TexCoord2D) = {
-    var u = texCoord.u % 1.0
-    var v = texCoord.v % 1.0
+    var u = if(  texCoord.u == 1.0 )  texCoord.u else texCoord.u % 1.0
+    var v = if(  texCoord.v == 1.0 )  texCoord.v else texCoord.v % 1.0
 
     if( u < 0.0 ) u = u + 1.0
     if( v < 0.0 ) v = v + 1.0
