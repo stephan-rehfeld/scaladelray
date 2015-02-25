@@ -81,7 +81,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
   }
 
   def getChildCount( parent: Any ): Int = parent match {
-    case wp : WorldProvider => 3
+    case wp : WorldProvider => 4
     case sbp : SkyboxProvider => 6
     case "Renderables" => worldProvider.renderableProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
