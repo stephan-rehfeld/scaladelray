@@ -20,11 +20,11 @@ import scaladelray.Color
 import scala.collection.mutable
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
-import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.world.World
 
 class WorldProvider extends TableModel {
 
-  var backgroundColor = Color( 0, 0, 0 )
+  var backgroundProvider : Option[BackgroundProvider] = None
   var ambientLight = Color( 0, 0, 0 )
   var renderableProvider = mutable.MutableList[RenderableProvider]()
   var lightDescriptionProvider = mutable.MutableList[LightDescriptionProvider]()
@@ -33,6 +33,8 @@ class WorldProvider extends TableModel {
 
   def remove( obj : Any ) {
     obj match {
+      case bp : BackgroundProvider =>
+        backgroundProvider = None
       case cp : CameraProvider =>
         cameraProvider = None
       case lp : LightDescriptionProvider =>
@@ -44,6 +46,7 @@ class WorldProvider extends TableModel {
       case mp : MaterialProvider =>
         for( v <- renderableProvider ) v.remove( mp )
       case tp : TextureProvider =>
+        if( backgroundProvider.isDefined ) backgroundProvider.get.remove( tp )
         for( v <- renderableProvider ) v.remove( tp )
       case s: String =>
       case _ =>
@@ -54,10 +57,10 @@ class WorldProvider extends TableModel {
     val renderables = for( rp <- renderableProvider ) yield rp.createRenderable
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription
 
-    (cameraProvider.get.createCamera,World( SingleBackgroundColor( backgroundColor ), renderables.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
+    (cameraProvider.get.createCamera,World( backgroundProvider.get.createBackground, renderables.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
   }
 
-  def getRowCount: Int = 3
+  def getRowCount: Int = 2
 
   def getColumnCount: Int = 2
 
@@ -77,19 +80,15 @@ class WorldProvider extends TableModel {
     case 0 =>
       row match {
         case 0 =>
-          "Background color"
-        case 1 =>
           "Ambient light"
-        case 2 =>
+        case 1 =>
           "Index of refraction"
       }
     case 1 =>
       row match {
         case 0 =>
-          "" + backgroundColor.r + " " + backgroundColor.g + " " + backgroundColor.b
-        case 1 =>
           "" + ambientLight.r + " " + ambientLight.g + " " + ambientLight.b
-        case 2 =>
+        case 1 =>
           new java.lang.Double( indexOfRefraction )
       }
   }
@@ -99,11 +98,8 @@ class WorldProvider extends TableModel {
       row match {
         case 0 =>
           val v = obj.asInstanceOf[String].split( " " )
-          backgroundColor = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
-        case 1 =>
-          val v = obj.asInstanceOf[String].split( " " )
           ambientLight = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
-        case 2 =>
+        case 1 =>
           indexOfRefraction = obj.asInstanceOf[String].toDouble
       }
     } catch {
@@ -112,7 +108,7 @@ class WorldProvider extends TableModel {
 
   }
 
-  def isReady = (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && renderableProvider.find( (rp) => !rp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
+  def isReady = (if( backgroundProvider.isDefined ) backgroundProvider.get.isReady else false) && (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && renderableProvider.find( (rp) => !rp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
 
   def addTableModelListener(p1: TableModelListener) {}
 

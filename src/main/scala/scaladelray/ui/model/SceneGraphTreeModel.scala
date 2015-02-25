@@ -26,9 +26,19 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
   def getChild( parent: Any, index: Int ): AnyRef = parent match {
     case wp : WorldProvider =>
       index match {
-        case 0 => if( wp.cameraProvider.isDefined ) wp.cameraProvider.get else "<Camera>"
-        case 1 => "Renderables"
-        case 2 => "Lights"
+        case 0 => if( wp.backgroundProvider.isDefined ) wp.backgroundProvider.get else "<Background>"
+        case 1 => if( wp.cameraProvider.isDefined ) wp.cameraProvider.get else "<Camera>"
+        case 2 => "Renderables"
+        case 3 => "Lights"
+      }
+    case sbp : SkyboxProvider =>
+      index match {
+        case 0 => sbp.frontTextureProvider.getOrElse( "<Front Texture>")
+        case 1 => sbp.backTextureProvider.getOrElse( "<Back Texture>")
+        case 2 => sbp.leftTextureProvider.getOrElse( "<Left Texture>")
+        case 3 => sbp.rightTextureProvider.getOrElse( "<Right Texture>")
+        case 4 => sbp.topTextureProvider.getOrElse( "<Top Texture>")
+        case 5 => sbp.bottomTextureProvider.getOrElse( "<Bottom Texture>")
       }
     case "Renderables" =>
       worldProvider.renderableProvider (index )
@@ -72,6 +82,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
   def getChildCount( parent: Any ): Int = parent match {
     case wp : WorldProvider => 3
+    case sbp : SkyboxProvider => 6
     case "Renderables" => worldProvider.renderableProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
     case pp : PlaneProvider => 1
@@ -91,6 +102,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
   def isLeaf(node: Any): Boolean = node match {
     case wp : WorldProvider => false
+    case sbp : SkyboxProvider => false
+    case "<Background>" => true
     case "<Camera>" => true
     case "Renderables" => worldProvider.renderableProvider.size == 0
     case "Lights" => worldProvider.lightDescriptionProvider.size == 0
@@ -114,12 +127,29 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
   def getIndexOfChild( parent: Any, child: Any ): Int = parent match {
     case wp : WorldProvider =>
       child match {
-        case "<Camera>" => 0
-        case "Renderables" => 1
-        case "Lights" => 2
-        case ocp : OrthograpicCameraProvider => 0
-        case pcp : PerspectiveCameraProvider => 0
-        case dcp : DOFCameraProvider => 0
+        case "<Background>" => 0
+        case "<Camera>" => 1
+        case "Renderables" => 2
+        case "Lights" => 3
+        case bg : BackgroundProvider => 0
+        case ocp : OrthograpicCameraProvider => 1
+        case pcp : PerspectiveCameraProvider => 1
+        case dcp : DOFCameraProvider => 1
+      }
+    case sbp : SkyboxProvider =>
+      child match {
+        case "<Front Texture>" => 0
+        case "<Back Texture>" => 1
+        case "<Left Texture>" => 2
+        case "<Right Texture>" => 3
+        case "<Top Texture>" => 4
+        case "<Bottom Texture>" => 5
+        case tp : TextureProvider => if( sbp.frontTextureProvider.isDefined && sbp.frontTextureProvider.get == tp ) 0
+                                     else if( sbp.backTextureProvider.isDefined && sbp.backTextureProvider.get == tp ) 1
+                                     else if( sbp.leftTextureProvider.isDefined && sbp.leftTextureProvider.get == tp ) 2
+                                     else if( sbp.rightTextureProvider.isDefined && sbp.rightTextureProvider.get == tp ) 3
+                                     else if( sbp.topTextureProvider.isDefined && sbp.topTextureProvider.get == tp ) 4
+                                     else 5
       }
     case "Renderables" => worldProvider.renderableProvider.indexOf( child )
     case "Lights" => worldProvider.lightDescriptionProvider.indexOf( child )

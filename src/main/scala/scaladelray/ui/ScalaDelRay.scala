@@ -300,7 +300,25 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridwidth = 6
     layout( lights ) = c
 
+    val backgroundPopupMenu = new JPopupMenu
 
+    val createSingleBackgroundColorMenuItem = new JMenuItem( "Single Background Color" )
+    createSingleBackgroundColorMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        worldProvider.backgroundProvider = Some( new SingleBackgroundColorProvider)
+        updateUI()
+      }
+    })
+
+    val createSkyboxMenuItem = new JMenuItem( "Skybox" )
+    createSkyboxMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        worldProvider.backgroundProvider = Some( new SkyboxProvider )
+        updateUI()
+      }
+    })
+    backgroundPopupMenu.add( createSingleBackgroundColorMenuItem )
+    backgroundPopupMenu.add( createSkyboxMenuItem )
 
     val cameraPopupMenu = new JPopupMenu
     val createOrthographicCameraMenuItem = new JMenuItem( "Orthographic Camera" )
@@ -508,6 +526,30 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( sbp : SkyboxProvider ) =>
+            selection match {
+              case Some( "<Front Texture>" ) =>
+                sbp.frontTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Back Texture>" ) =>
+                sbp.backTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Left Texture>" ) =>
+                sbp.leftTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Right Texture>" ) =>
+                sbp.rightTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Top Texture>" ) =>
+                sbp.topTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( "<Bottom Texture>" ) =>
+                sbp.bottomTextureProvider = Some( new SingleColorTextureProvider )
+              case Some( tp : TextureProvider ) =>
+                if( sbp.frontTextureProvider.isDefined && sbp.frontTextureProvider.get == tp ) sbp.frontTextureProvider = Some( new SingleColorTextureProvider )
+                if( sbp.backTextureProvider.isDefined && sbp.backTextureProvider.get == tp ) sbp.backTextureProvider = Some( new SingleColorTextureProvider )
+                if( sbp.leftTextureProvider.isDefined && sbp.leftTextureProvider.get == tp ) sbp.leftTextureProvider = Some( new SingleColorTextureProvider )
+                if( sbp.rightTextureProvider.isDefined && sbp.rightTextureProvider.get == tp ) sbp.rightTextureProvider = Some( new SingleColorTextureProvider )
+                if( sbp.topTextureProvider.isDefined && sbp.topTextureProvider.get == tp ) sbp.topTextureProvider = Some( new SingleColorTextureProvider )
+                if( sbp.bottomTextureProvider.isDefined && sbp.bottomTextureProvider.get == tp ) sbp.bottomTextureProvider = Some( new SingleColorTextureProvider )
+              case Some(_) => assert( false, "This should not happen!")
+              case None =>
+            }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -545,6 +587,30 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new ChessboardTextureProvider )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new ChessboardTextureProvider )
+              case Some(_) => assert( false, "This should not happen!")
+              case None =>
+            }
+          case Some( sbp : SkyboxProvider ) =>
+            selection match {
+              case Some( "<Front Texture>" ) =>
+                sbp.frontTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( "<Back Texture>" ) =>
+                sbp.backTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( "<Left Texture>" ) =>
+                sbp.leftTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( "<Right Texture>" ) =>
+                sbp.rightTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( "<Top Texture>" ) =>
+                sbp.topTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( "<Bottom Texture>" ) =>
+                sbp.bottomTextureProvider = Some( new ChessboardTextureProvider )
+              case Some( tp : TextureProvider ) =>
+                if( sbp.frontTextureProvider.isDefined && sbp.frontTextureProvider.get == tp ) sbp.frontTextureProvider = Some( new ChessboardTextureProvider )
+                if( sbp.backTextureProvider.isDefined && sbp.backTextureProvider.get == tp ) sbp.backTextureProvider = Some( new ChessboardTextureProvider )
+                if( sbp.leftTextureProvider.isDefined && sbp.leftTextureProvider.get == tp ) sbp.leftTextureProvider = Some( new ChessboardTextureProvider )
+                if( sbp.rightTextureProvider.isDefined && sbp.rightTextureProvider.get == tp ) sbp.rightTextureProvider = Some( new ChessboardTextureProvider )
+                if( sbp.topTextureProvider.isDefined && sbp.topTextureProvider.get == tp ) sbp.topTextureProvider = Some( new ChessboardTextureProvider )
+                if( sbp.bottomTextureProvider.isDefined && sbp.bottomTextureProvider.get == tp ) sbp.bottomTextureProvider = Some( new ChessboardTextureProvider )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
@@ -588,6 +654,30 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( sbp : SkyboxProvider ) =>
+            selection match {
+              case Some( "<Front Texture>" ) =>
+                sbp.frontTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( "<Back Texture>" ) =>
+                sbp.backTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( "<Left Texture>" ) =>
+                sbp.leftTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( "<Right Texture>" ) =>
+                sbp.rightTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( "<Top Texture>" ) =>
+                sbp.topTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( "<Bottom Texture>" ) =>
+                sbp.bottomTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some( tp : TextureProvider ) =>
+                if( sbp.frontTextureProvider.isDefined && sbp.frontTextureProvider.get == tp ) sbp.frontTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( sbp.backTextureProvider.isDefined && sbp.backTextureProvider.get == tp ) sbp.backTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( sbp.leftTextureProvider.isDefined && sbp.leftTextureProvider.get == tp ) sbp.leftTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( sbp.rightTextureProvider.isDefined && sbp.rightTextureProvider.get == tp ) sbp.rightTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( sbp.topTextureProvider.isDefined && sbp.topTextureProvider.get == tp ) sbp.topTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( sbp.bottomTextureProvider.isDefined && sbp.bottomTextureProvider.get == tp ) sbp.bottomTextureProvider = Some( new ImageTextureProvider( ui ) )
+              case Some(_) => assert( false, "This should not happen!")
+              case None =>
+            }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -625,6 +715,30 @@ object ScalaDelRay extends SimpleSwingApplication {
                 if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
                 if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
                 if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some(_) => assert( false, "This should not happen!")
+              case None =>
+            }
+          case Some( sbp : SkyboxProvider ) =>
+            selection match {
+              case Some( "<Front Texture>" ) =>
+                sbp.frontTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( "<Back Texture>" ) =>
+                sbp.backTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( "<Left Texture>" ) =>
+                sbp.leftTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( "<Right Texture>" ) =>
+                sbp.rightTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( "<Top Texture>" ) =>
+                sbp.topTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( "<Bottom Texture>" ) =>
+                sbp.backTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+              case Some( tp : TextureProvider ) =>
+                if( sbp.frontTextureProvider.isDefined && sbp.frontTextureProvider.get == tp ) sbp.frontTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( sbp.backTextureProvider.isDefined && sbp.backTextureProvider.get == tp ) sbp.backTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( sbp.leftTextureProvider.isDefined && sbp.leftTextureProvider.get == tp ) sbp.leftTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( sbp.rightTextureProvider.isDefined && sbp.rightTextureProvider.get == tp ) sbp.rightTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( sbp.topTextureProvider.isDefined && sbp.topTextureProvider.get == tp ) sbp.topTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( sbp.bottomTextureProvider.isDefined && sbp.bottomTextureProvider.get == tp ) sbp.bottomTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
@@ -668,11 +782,47 @@ object ScalaDelRay extends SimpleSwingApplication {
 
         if( path != null && SwingUtilities.isRightMouseButton( e ) ) {
           path.getLastPathComponent match {
+            case "<Background>" =>
+              backgroundPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case bp : BackgroundProvider =>
+              backgroundPopupMenu.show( e.getComponent, e.getX, e.getY )
+
             case "<Camera>" =>
               cameraPopupMenu.show( e.getComponent, e.getX, e.getY )
 
             case cp : CameraProvider =>
               cameraPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Front Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Back Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Left Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Right Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Top Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Bottom Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
             case "<Anti-Aliasing Sampling Pattern>" =>
               selection = Some( path.getLastPathComponent )
@@ -1206,7 +1356,9 @@ object ScalaDelRay extends SimpleSwingApplication {
   private def createStandardScene : WorldProvider = {
     val worldProvider = new WorldProvider
     worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
-    worldProvider.backgroundColor = Color( 0.1, 0.1, 0.1 )
+    val bp = new SingleBackgroundColorProvider
+    bp.color = Color( 0.1, 0.1, 0.1 )
+    worldProvider.backgroundProvider = Some( bp )
     val cameraProvider = new PerspectiveCameraProvider
     cameraProvider.position = Point3( 0, -0.5, 4.0 )
     cameraProvider.gazeDirection = Vector3( 0, 0, -1 )
