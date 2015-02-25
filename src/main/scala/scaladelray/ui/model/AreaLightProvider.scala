@@ -25,74 +25,74 @@ import java.lang.Double
 
 class AreaLightProvider extends LightDescriptionProvider with TableModel {
 
-  var color = Color( 1, 1, 1 )
-  var position = Point3( 0, 0, 0 )
-  var direction = Vector3( 0, 0, -1 )
-  var upVector = Vector3( 0, 1, 0 )
-  var size = 1.0
-  var samplingPoints = 255
-  var constantAttenuation = 1.0
-  var linearAttenuation = 0.0
-  var quadraticAttenuation = 0.0
+      var color = Color( 1, 1, 1 )
+      var position = Point3( 0, 0, 0 )
+      var direction = Vector3( 0, 0, -1 )
+      var upVector = Vector3( 0, 1, 0 )
+      var size = 1.0
+      var samplingPoints = 255
+      var constantAttenuation = 1.0
+      var linearAttenuation = 0.0
+      var quadraticAttenuation = 0.0
 
 
-  def createLightDescription: LightDescription = new AreaLight( color, position, direction, upVector, size, samplingPoints, constantAttenuation, linearAttenuation, quadraticAttenuation )
+      def createLightDescription: LightDescription = new AreaLight( color, position, direction, upVector, size, samplingPoints, constantAttenuation, linearAttenuation, quadraticAttenuation )
 
-  def getRowCount: Int = 9
+      def getRowCount: Int = 9
 
-  def getColumnCount: Int = 2
+      def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
-    case 0 => "Property"
-    case 1 => "Value"
-  }
+      def getColumnName( column : Int): String = column match {
+      case 0 => "Property"
+      case 1 => "Value"
+      }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+      def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
-    case 0 => false
-    case 1 => true
-  }
+      def isCellEditable(row: Int, column: Int): Boolean = column match {
+      case 0 => false
+      case 1 => true
+      }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
-    case 0 =>
+      def getValueAt(row: Int, column: Int): AnyRef = column match {
+      case 0 =>
       row match {
-        case 0 =>
-          "Color"
-        case 1 =>
-          "Position"
-        case 2 =>
-          "Direction"
-        case 3 =>
-          "Up vector"
-        case 4 =>
-          "Size"
-        case 5 =>
-          "Sampling points"
-        case 6 =>
-          "Constant Attenuation"
-        case 7 =>
-          "Linear Attenuation"
-        case 8 =>
-          "Quadratic Attenuation"
+      case 0 =>
+      "Color"
+      case 1 =>
+      "Position"
+      case 2 =>
+      "Direction"
+      case 3 =>
+      "Up vector"
+      case 4 =>
+      "Size"
+      case 5 =>
+      "Sampling points"
+      case 6 =>
+      "Constant Attenuation"
+      case 7 =>
+      "Linear Attenuation"
+      case 8 =>
+      "Quadratic Attenuation"
 
       }
-    case 1 =>
+      case 1 =>
       row match {
-        case 0 =>
-          "" + color.r + " " + color.g + " " + color.b
-        case 1 =>
-          "" + position.x + " " + position.y + " " + position.z
-        case 2 =>
-          "" + direction.x + " " + direction.y + " " + direction.z
-        case 3 =>
-          "" + upVector.x + " " + upVector.y + " " + upVector.z
-        case 4 =>
-          new Double( size )
-        case 5 =>
-          new Integer( samplingPoints )
-        case 6 =>
-          new Double( constantAttenuation )
+      case 0 =>
+      color
+      case 1 =>
+      "" + position.x + " " + position.y + " " + position.z
+      case 2 =>
+      "" + direction.x + " " + direction.y + " " + direction.z
+      case 3 =>
+      "" + upVector.x + " " + upVector.y + " " + upVector.z
+      case 4 =>
+      new Double( size )
+      case 5 =>
+      new Integer( samplingPoints )
+      case 6 =>
+      new Double( constantAttenuation )
         case 7 =>
           new Double( linearAttenuation )
         case 8 =>
@@ -104,8 +104,7 @@ class AreaLightProvider extends LightDescriptionProvider with TableModel {
     try {
       row match {
         case 0 =>
-          val v = obj.asInstanceOf[String].split( " " )
-          color = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          color = obj.asInstanceOf[Color]
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
           position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )

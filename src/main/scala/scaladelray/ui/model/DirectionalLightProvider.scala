@@ -18,9 +18,8 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.Color
-import scaladelray.math.{Vector3, Point3}
-import scaladelray.light.{DirectionalLight, SpotLight, LightDescription}
-import java.lang.Double
+import scaladelray.math.Vector3
+import scaladelray.light.{DirectionalLight, LightDescription}
 import javax.swing.event.TableModelListener
 
 class DirectionalLightProvider extends LightDescriptionProvider with TableModel {
@@ -58,7 +57,7 @@ class DirectionalLightProvider extends LightDescriptionProvider with TableModel 
     case 1 =>
       row match {
         case 0 =>
-          "" + color.r + " " + color.g + " " + color.b
+          color
         case 1 =>
           "" + direction.x + " " + direction.y + " " + direction.z
       }
@@ -68,8 +67,7 @@ class DirectionalLightProvider extends LightDescriptionProvider with TableModel 
     try {
       row match {
         case 0 =>
-          val v = obj.asInstanceOf[String].split( " " )
-          color = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          color = obj.asInstanceOf[Color]
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
           direction = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )

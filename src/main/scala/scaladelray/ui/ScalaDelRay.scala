@@ -18,9 +18,9 @@ package scaladelray.ui
 
 import scala.swing._
 import scala.swing.GridBagPanel.{Anchor, Fill}
-import javax.swing.table.TableModel
+import javax.swing.table.{TableCellEditor, TableModel}
 import scaladelray.ui.model._
-import javax.swing.{SwingUtilities, JMenuItem, JPopupMenu, JTree}
+import javax.swing._
 import javax.swing.tree.TreeSelectionModel
 import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
@@ -29,13 +29,14 @@ import scala.swing.TabbedPane.Page
 import scala.collection.mutable
 import akka.actor._
 import scala.concurrent.duration._
+import java.net.{SocketException, DatagramPacket, DatagramSocket, InetAddress}
+import scala.language.reflectiveCalls
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scala.Some
+import scala.swing.Action
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
-import java.net.{SocketException, DatagramPacket, DatagramSocket, InetAddress}
-import scala.language.reflectiveCalls
 
 case class StartDiscovery()
 
@@ -761,11 +762,66 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.anchor = Anchor.North
     layout( sceneGraphTreeScrollPane ) = c
 
+    val colorRenderer = new Table.AbstractRenderer[Color, Label](new Label) {
+      def configure(t: Table, sel: Boolean, foc: Boolean, o: Color, row: Int, col: Int) = {
+        component.background = new scala.swing.Color( o.rgbInteger )
+        if( (o.r + o.g + o.b)/3 < 0.5 ) component.foreground = new scala.swing.Color( 255, 255, 255 )
+        component.text = "(%1.2f/ %1.2f/ %1.2f)" format( o.r, o.g, o.b )
+      }
+    }
 
-    val detailsTable = new Table()
+    val detailsTable = new Table() {
+
+      val colorEditor = new AbstractCellEditor with TableCellEditor {
+        val button = new Button( "Editing" )
+        var c = Color( 0, 0, 0 )
+        reactions += {
+          case e: ButtonClicked => {
+            ColorChooser.showDialog( button, "Choose Color", new scala.swing.Color( c.rgbInteger ) ) match {
+              case Some( newColor ) =>
+                c = Color( newColor.getRed().asInstanceOf[Double] / 255.0, newColor.getGreen().asInstanceOf[Double] / 255.0, newColor.getBlue().asInstanceOf[Double] / 255.0 )
+              case None =>
+            }
+            stopCellEditing()
+          }
+        }
+        listenTo(button)
+
+
+        override def getCellEditorValue() = c
+
+        override def getTableCellEditorComponent(table: JTable, value: AnyRef, isSelected: Boolean, row: Int, column: Int) = {
+          c = value.asInstanceOf[Color]
+          button.background = new scala.swing.Color( c.rgbInteger )
+          if( (c.r + c.g + c.b)/3 < 0.5 ) button.foreground = new scala.swing.Color( 255, 255, 255 )
+          button.peer
+        }
+      }
+
+      override def rendererComponent( sel: Boolean, foc: Boolean, row: Int, col: Int ) = {
+        val v = model.getValueAt( peer.convertRowIndexToModel( row ), peer.convertColumnIndexToModel( col ) )
+        v match {
+          case c : Color => colorRenderer.componentFor(this, sel, foc, c, row, col)
+          case _ => super.rendererComponent( sel, foc, row, col )
+        }
+      }
+
+      override def editor(row: Int, column: Int) = {
+        val v = model.getValueAt( peer.convertRowIndexToModel( row ), peer.convertColumnIndexToModel( column ) )
+        v match {
+          case c : Color => colorEditor
+          case _ => super.editor( row, column )
+        }
+      }
+
+
+    }
+
     val detailsTableScrollPane = new ScrollPane {
       contents = detailsTable
     }
+
+
 
     detailsTable.model = DummyTableModel
     c.fill = Fill.Both
