@@ -50,15 +50,14 @@ class SingleBackgroundColorProvider extends BackgroundProvider with TableModel {
     case 1 =>
       rowIndex match {
         case 0 =>
-          "" + color.r + " " + color.g + " " + color.b
+          color
       }
   }
 
   override def setValueAt(aValue: scala.Any, rowIndex: Int, columnIndex: Int): Unit =  try {
     rowIndex match {
       case 0 =>
-        val v = aValue.asInstanceOf[String].split( " " )
-        color = Color( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        color = aValue.asInstanceOf[Color]
     }
   } catch {
     case _ : Throwable =>
