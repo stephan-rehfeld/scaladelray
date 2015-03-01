@@ -17,7 +17,7 @@
 package scaladelray.geometry
 
 import scaladelray.math.{Normal3, Ray}
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{Texture, TexCoord2D}
 
 
 /**
@@ -49,4 +49,8 @@ abstract class Geometry extends Serializable {
    */
   def <-- ( r : Ray ) : Set[GeometryHit]
 
+  /**
+   * An optional normal map. It is assumed that the normal map is in tangent space.
+   */
+  val normalMap : Option[Texture]
 }

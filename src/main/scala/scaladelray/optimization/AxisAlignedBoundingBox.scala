@@ -41,7 +41,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val right = new Node(
     Transform.translate( run ).rotateZ( -math.Pi/2.0 ),
-    Plane()
+    Plane( None )
   )
 
   /**
@@ -49,7 +49,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val top = new Node(
     Transform.translate( run ),
-    Plane()
+    Plane( None )
   )
 
   /**
@@ -57,7 +57,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val front = new Node(
     Transform.translate( run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
-    Plane()
+    Plane( None )
   )
 
   /**
@@ -65,7 +65,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val left =  new Node(
     Transform.translate( lbf ).rotateZ( math.Pi/2.0 ),
-    Plane()
+    Plane( None )
   )
 
   /**
@@ -73,7 +73,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val bottom = new Node(
     Transform.translate( lbf ).rotateX( math.Pi ),
-    Plane()
+    Plane( None )
   )
 
   /**
@@ -81,7 +81,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
    */
   private val far = new Node(
     Transform.translate( lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
-    Plane()
+    Plane( None )
   )
 
   /**

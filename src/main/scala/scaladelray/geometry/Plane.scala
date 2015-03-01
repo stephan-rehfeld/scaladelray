@@ -16,23 +16,35 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Normal3, Ray}
-import scaladelray.texture.TexCoord2D
+import scaladelray.math.{Vector3, Normal3, Ray}
+import scaladelray.texture.{Texture, TexCoord2D}
 
 
 /**
  * An infinite large plane with the normal 0 1 0.
  *
- * @author Stephan Rehfeld
+ * @param normalMap An optional normal map for the plane.
  */
-case class Plane() extends Geometry with Serializable {
+case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializable {
 
    override def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n
      if( h != 0.0 ) {
        val t = ((-r.o.asVector) dot Plane.n) / h
        val p = r( t )
-       Set( GeometryHit( r, this, t, Plane.n, TexCoord2D( p.x, -p.z ) ) )
+       val tangent = Vector3( 1, 0, 0 )
+       val bitangent = Vector3( 0, 0, -1 )
+       val texCoord = TexCoord2D( p.x, -p.z )
+
+       val n = normalMap match {
+         case Some( texture ) =>
+           val c = texture( texCoord )
+           (tangent * c.r + bitangent * c.g + Plane.n * c.b).normalized.asNormal
+         case None =>
+           Plane.n
+       }
+
+       Set( GeometryHit( r, this, t, n, texCoord ) )
      } else
        Set()
    }

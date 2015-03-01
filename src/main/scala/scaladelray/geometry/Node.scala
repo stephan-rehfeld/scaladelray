@@ -27,6 +27,8 @@ import scaladelray.math.{Ray, Transform}
  */
 case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serializable {
 
+  val normalMap = None
+
   override def <--(r: Ray) : Set[GeometryHit] = {
     var hits = Set[GeometryHit]()
     val transformedRay = Ray( t.i * r.o, t.i * r.d )

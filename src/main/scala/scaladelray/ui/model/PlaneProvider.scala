@@ -28,9 +28,10 @@ class PlaneProvider extends RenderableProvider with TableModel {
   var translate = Point3( 0, 0, 0 )
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
+  var normalMapProvider : Option[TextureProvider] = None
 
   override def createRenderable = {
-    val p = Plane()
+    val p = Plane( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     val m = materialProvider.get.createMaterial
     Renderable( t, p, m )
@@ -96,6 +97,7 @@ class PlaneProvider extends RenderableProvider with TableModel {
   def remove(obj: AnyRef) {
     if( materialProvider.isDefined && materialProvider.get == obj ) materialProvider = None
     if( materialProvider.isDefined ) materialProvider.get.remove( obj )
+    if( normalMapProvider.isDefined && normalMapProvider.get == obj ) normalMapProvider = None
   }
 
   def addTableModelListener(p1: TableModelListener) {}
@@ -103,7 +105,7 @@ class PlaneProvider extends RenderableProvider with TableModel {
   def removeTableModelListener(p1: TableModelListener) {}
 
 
-  def isReady: Boolean = if( materialProvider.isDefined ) materialProvider.get.isReady else false
+  def isReady: Boolean = ( materialProvider.isDefined  && materialProvider.get.isReady ) && (normalMapProvider.isEmpty || normalMapProvider.get.isReady )
 
   override def toString: String = "Plane"
 }

@@ -40,7 +40,7 @@ class TriangleProvider extends RenderableProvider with TableModel {
   var texCoordC = TexCoord2D( 1, 0 )
 
   override def createRenderable = {
-    val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC )
+    val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC, None )
     Renderable( Transform(), g, materialProvider.get.createMaterial )
   }
 

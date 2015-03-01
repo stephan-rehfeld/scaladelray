@@ -45,11 +45,20 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Lights" =>
       worldProvider.lightDescriptionProvider( index )
     case pp : PlaneProvider =>
-      if( pp.materialProvider.isDefined ) pp.materialProvider.get else "<Material>"
+      index match {
+        case 0 => if( pp.materialProvider.isDefined ) pp.materialProvider.get else "<Material>"
+        case 1 => if( pp.normalMapProvider.isDefined ) pp.normalMapProvider.get else "<Normal Map>"
+      }
     case sp : SphereProvider =>
-      if( sp.materialProvider.isDefined ) sp.materialProvider.get else "<Material>"
+      index match {
+        case 0 => if( sp.materialProvider.isDefined ) sp.materialProvider.get else "<Material>"
+        case 1 => if( sp.normalMapProvider.isDefined ) sp.normalMapProvider.get else "<Normal Map>"
+      }
     case bp : AxisAlignedBoxProvider =>
-      if( bp.materialProvider.isDefined ) bp.materialProvider.get else "<Material>"
+      index match {
+        case 0 => if( bp.materialProvider.isDefined ) bp.materialProvider.get else "<Material>"
+        case 1 => if( bp.normalMapProvider.isDefined ) bp.normalMapProvider.get else "<Normal Map>"
+      }
     case tp : TriangleProvider =>
       if( tp.materialProvider.isDefined ) tp.materialProvider.get else "<Material>"
     case mp : ModelProvider =>
@@ -85,9 +94,9 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case sbp : SkyboxProvider => 6
     case "Renderables" => worldProvider.renderableProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
-    case pp : PlaneProvider => 1
-    case sp : SphereProvider => 1
-    case bp : AxisAlignedBoxProvider => 1
+    case pp : PlaneProvider => 2
+    case sp : SphereProvider => 2
+    case bp : AxisAlignedBoxProvider => 2
     case tp : TriangleProvider => 1
     case np : NodeProvider => np.childNodes.size
     case mp : ModelProvider => 1
@@ -153,9 +162,27 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       }
     case "Renderables" => worldProvider.renderableProvider.indexOf( child )
     case "Lights" => worldProvider.lightDescriptionProvider.indexOf( child )
-    case pp : PlaneProvider => 0
-    case sp : SphereProvider => 0
-    case bp : AxisAlignedBoxProvider => 0
+    case pp : PlaneProvider =>
+      child match {
+        case "<Material>" => 0
+        case mp : MaterialProvider => 0
+        case "<Normal Map>" => 1
+        case nm : TextureProvider => 1
+      }
+    case sp : SphereProvider =>
+      child match {
+        case "<Material>" => 0
+        case mp : MaterialProvider => 0
+        case "<Normal Map>" => 1
+        case nm : TextureProvider => 1
+      }
+    case bp : AxisAlignedBoxProvider =>
+      child match {
+        case "<Material>" => 0
+        case mp : MaterialProvider => 0
+        case "<Normal Map>" => 1
+        case nm : TextureProvider => 1
+      }
     case tp : TriangleProvider => 0
     case np : NodeProvider => np.childNodes.indexOf( child )
     case mp : ModelProvider => 0

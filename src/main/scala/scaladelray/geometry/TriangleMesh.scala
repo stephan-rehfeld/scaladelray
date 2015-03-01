@@ -18,7 +18,7 @@ package scaladelray.geometry
 
 import scaladelray.Constants
 import scaladelray.math._
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{Texture, TexCoord2D}
 import scaladelray.optimization.Octree
 import scala.Array
 import scala.collection.mutable
@@ -39,8 +39,9 @@ import scala.collection.mutable
  * @param texCoords An array that contains all texture coordinates of the model.
  * @param faces An array that contains the description of the faces of the model. The first value on the tuple is the index of the vertex. The second one is the index of the texture coordinate. The third one is the normal.
  * @param subDivideDecider A function that decides if a node in the octree should be ddecidedinto 8 more bounding boxes.
+ * @param normalMap An optional normal map for the triangle mesh.
  */
-case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) extends Geometry with Serializable {
+case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], texCoords : Array[TexCoord2D], faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ), normalMap : Option[Texture] ) extends Geometry with Serializable {
 
   /**
    * The smalltest and largest x, y, and z values.

@@ -17,7 +17,7 @@
 package scaladelray.geometry
 
 import scaladelray.math.{Mat3x3, Ray, Normal3, Point3}
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{Texture, TexCoord2D}
 import scaladelray.Constants
 
 /**
@@ -33,10 +33,11 @@ import scaladelray.Constants
  * @param at Texture coordinate on the first vertex.
  * @param bt Texture coordinate on the second vertex.
  * @param ct Texture coordinate on the third vertex.
+ * @param normalMap An optional normal map for the triangle.
  */
 case class Triangle  ( a: Point3, b : Point3, c : Point3,
                 an: Normal3, bn : Normal3, cn : Normal3,
-                at: TexCoord2D, bt : TexCoord2D, ct : TexCoord2D ) extends Geometry with Serializable {
+                at: TexCoord2D, bt : TexCoord2D, ct : TexCoord2D, normalMap : Option[Texture] ) extends Geometry with Serializable {
 
   override def <--(r: Ray) = {
     val base = Mat3x3( a.x - b.x, a.x - c.x, r.d.x,

@@ -551,6 +551,12 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( new SingleColorTextureProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.normalMapProvider = Some( new SingleColorTextureProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.normalMapProvider = Some(  new SingleColorTextureProvider )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -615,6 +621,12 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( new ChessboardTextureProvider )
+          case Some( sp : SphereProvider ) =>
+            sp.normalMapProvider = Some( new ChessboardTextureProvider )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.normalMapProvider = Some(  new ChessboardTextureProvider )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -679,6 +691,12 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( new ImageTextureProvider( ui ) )
+          case Some( sp : SphereProvider ) =>
+            sp.normalMapProvider = Some( new ImageTextureProvider( ui ) )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.normalMapProvider = Some(  new ImageTextureProvider( ui ) )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -743,6 +761,12 @@ object ScalaDelRay extends SimpleSwingApplication {
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
+          case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+          case Some( sp : SphereProvider ) =>
+            sp.normalMapProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+          case Some( bp : AxisAlignedBoxProvider ) =>
+            bp.normalMapProvider = Some(  new InterpolatedImageTextureProvider( ui ) )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
@@ -861,6 +885,11 @@ object ScalaDelRay extends SimpleSwingApplication {
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
             case "<Reflection Texture>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case "<Normal Map>" =>
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )

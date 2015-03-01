@@ -17,19 +17,21 @@
 package scaladelray.geometry
 
 import scaladelray.math.{Point3, Ray, Transform}
+import scaladelray.texture.Texture
 
 /**
  * This class represents an axis aligned box. The box has a width, height and depth of 1.
  *
+ * @param normalMap An optional normal map for the box.
  */
-case class AxisAlignedBox() extends Geometry with Serializable {
+case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with Serializable {
 
   /**
    * The right plane of the box.
    */
   private val right = new Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( -math.Pi/2.0 ),
-    Plane()
+    Plane( normalMap )
   )
 
   /**
@@ -37,7 +39,7 @@ case class AxisAlignedBox() extends Geometry with Serializable {
    */
   private val top = new Node(
     Transform.translate( AxisAlignedBox.run ),
-    Plane()
+    Plane( normalMap )
   )
 
   /**
@@ -45,7 +47,7 @@ case class AxisAlignedBox() extends Geometry with Serializable {
    */
   private val front = new Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
-    Plane()
+    Plane( normalMap )
   )
 
   /**
@@ -53,7 +55,7 @@ case class AxisAlignedBox() extends Geometry with Serializable {
    */
   private val left =  new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi/2.0 ),
-    Plane()
+    Plane( normalMap )
   )
 
   /**
@@ -61,7 +63,7 @@ case class AxisAlignedBox() extends Geometry with Serializable {
    */
   private val bottom = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateX( math.Pi ),
-    Plane()
+    Plane( normalMap )
   )
 
   /**
@@ -69,7 +71,7 @@ case class AxisAlignedBox() extends Geometry with Serializable {
    */
   private val far = new Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
-    Plane()
+    Plane( normalMap )
   )
 
   override def <--(r: Ray) = {
