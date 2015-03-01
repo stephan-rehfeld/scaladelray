@@ -686,9 +686,11 @@ object ScalaDelRay extends SimpleSwingApplication {
           case KeyEvent.VK_DELETE =>
             val node = sceneGraphTree.getLastSelectedPathComponent
             if( node != null ) {
+              val s = sceneGraphTree.getSelectionRows
               worldProvider.remove( node )
               updateUI()
               detailsTable.model = DummyTableModel
+              sceneGraphTree.setSelectionRows( s )
             }
           case _ =>
         }
