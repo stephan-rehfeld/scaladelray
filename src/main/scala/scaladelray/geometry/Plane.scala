@@ -39,11 +39,10 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
        val n = normalMap match {
          case Some( texture ) =>
            val c = texture( texCoord )
-           (tangent * c.r + bitangent * c.g + Plane.n * c.b).normalized.asNormal
+           (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + Plane.n * (c.b-0.5)).normalized.asNormal
          case None =>
            Plane.n
        }
-
        Set( GeometryHit( r, this, t, n, texCoord ) )
      } else
        Set()

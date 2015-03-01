@@ -45,7 +45,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
         val n = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord )
-            (tangent * c.r + bitangent * c.g + p.asVector * c.b).normalized.asNormal
+            (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + p.asVector * (c.b-0.5)).normalized.asNormal
           case None =>
             p.asNormal
         }
@@ -60,7 +60,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
         val n1 = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord1 )
-            (tangent1 * c.r + bitangent1 * c.g + p1.asVector * c.b).normalized.asNormal
+            (tangent1 * (c.r-0.5) + bitangent1 * (c.g-0.5) + p1.asVector * (c.b-0.5)).normalized.asNormal
           case None =>
             p1.asNormal
         }
@@ -74,7 +74,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
         val n2 = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord2 )
-            (tangent2 * c.r + bitangent2 * c.g + p2.asVector * c.b).normalized.asNormal
+            (tangent2 * (c.r-0.5) + bitangent2 * (c.g-0.5) + p2.asVector * (c.b-0.5)).normalized.asNormal
           case None =>
             p2.asNormal
         }
