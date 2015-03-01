@@ -17,7 +17,7 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.texture.{InterpolatedImageTexture, ImageTexture, Texture}
+import scaladelray.texture.{InterpolatedImageTexture, Texture}
 import javax.swing.event.{TableModelEvent, TableModelListener}
 import java.io.File
 import scala.collection.mutable
@@ -25,14 +25,16 @@ import scala.collection.mutable
 class InterpolatedImageTextureProvider( tml : TableModelListener ) extends TextureProvider with TableModel {
 
   var fileName = ""
+  var flipHorizontally = false
+  var flipVertically = false
 
   var listener = mutable.Set[TableModelListener]()
 
   listener += tml
 
-  def createTexture: Texture = InterpolatedImageTexture( fileName )
+  def createTexture: Texture = InterpolatedImageTexture( fileName, flipHorizontally, flipVertically )
 
-  def getRowCount: Int = 1
+  def getRowCount: Int = 3
 
   def getColumnCount: Int = 2
 
@@ -47,21 +49,29 @@ class InterpolatedImageTextureProvider( tml : TableModelListener ) extends Textu
 
   def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 => row match {
-      case 0 => "file"
+      case 0 => "File"
+      case 1 => "Flip Horizontally"
+      case 2 => "Flip Vertically"
     }
     case 1 => row match {
       case 0 => fileName
+      case 1 => new java.lang.Boolean( flipHorizontally )
+      case 2 => new java.lang.Boolean( flipVertically )
     }
   }
 
   def setValueAt( obj : Any, row: Int, column: Int) {
-
     row match {
       case 0 =>
         fileName = obj.asInstanceOf[String]
         for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
+      case 1 =>
+        flipHorizontally = obj.asInstanceOf[Boolean]
+        for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
+      case 2 =>
+        flipVertically = obj.asInstanceOf[Boolean]
+        for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
     }
-
   }
 
   def addTableModelListener( l : TableModelListener) {
@@ -72,7 +82,7 @@ class InterpolatedImageTextureProvider( tml : TableModelListener ) extends Textu
     listener -= l
   }
 
-  def isReady: Boolean = (new File( fileName )).exists()
+  def isReady: Boolean = new File( fileName ).exists()
 
   override def toString: String = "Interpolated image texture"
 

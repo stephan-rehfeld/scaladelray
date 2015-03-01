@@ -49,5 +49,47 @@ class InterpolatedImageTextureSpec extends FunSpec {
       assert( c01 == ((Color( 1, 0, 0 )+Color( 0, 1, 0 ))/2) )
       assert( c11 == ((Color( 1, 0, 0 )+Color( 0, 0, 1 ))/2) )
     }
+
+    it( "should be flippable in horizontal direction" ) {
+      val t = InterpolatedImageTexture( "texture-example.bmp", true )
+
+      val c00 = t( TexCoord2D( 0, 0 ) )
+      val c10 = t( TexCoord2D( 1, 0 ) )
+      val c01 = t( TexCoord2D( 0, 1 ) )
+      val c11 = t( TexCoord2D( 1, 1 ) )
+
+      assert( c00 == Color( 1, 1, 0 ) )
+      assert( c10 == Color( 0, 0, 1 ) )
+      assert( c01 == Color( 0, 1, 0 ) )
+      assert( c11 == Color( 1, 0, 0 ) )
+    }
+
+    it( "should be flippable in vertical direction" ) {
+      val t = InterpolatedImageTexture( "texture-example.bmp", false, true )
+
+      val c00 = t( TexCoord2D( 0, 0 ) )
+      val c10 = t( TexCoord2D( 1, 0 ) )
+      val c01 = t( TexCoord2D( 0, 1 ) )
+      val c11 = t( TexCoord2D( 1, 1 ) )
+
+      assert( c00 == Color( 1, 0, 0 ) )
+      assert( c10 == Color( 0, 1, 0 ) )
+      assert( c01 == Color( 0, 0, 1 ) )
+      assert( c11 == Color( 1, 1, 0 ) )
+    }
+
+    it( "should be flippable in horizontal and vertical direction" ) {
+      val t = InterpolatedImageTexture( "texture-example.bmp", true, true )
+
+      val c00 = t( TexCoord2D( 0, 0 ) )
+      val c10 = t( TexCoord2D( 1, 0 ) )
+      val c01 = t( TexCoord2D( 0, 1 ) )
+      val c11 = t( TexCoord2D( 1, 1 ) )
+
+      assert( c00 == Color( 0, 1, 0 ) )
+      assert( c10 == Color( 1, 0, 0 ) )
+      assert( c01 == Color( 1, 1, 0 ) )
+      assert( c11 == Color( 0, 0, 1 ) )
+    }
   }
 }

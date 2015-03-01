@@ -18,6 +18,11 @@ package scaladelray.texture
 
 import scaladelray.Color
 
+/**
+ * A single color texture return the same color regardless of the passed texture coordinate.
+ *
+ * @param color The color that is always returned.
+ */
 case class SingleColorTexture( color : Color ) extends Texture with  Serializable{
   override def apply( texCoord : TexCoord2D ) = color
 }
