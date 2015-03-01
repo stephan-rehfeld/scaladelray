@@ -65,6 +65,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val pp = new PlaneProvider
+          detailsTable.model = pp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -94,6 +95,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val sp = new SphereProvider
+          detailsTable.model = sp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -122,6 +124,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val sp = new AxisAlignedBoxProvider
+          detailsTable.model = sp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -150,6 +153,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val sp = new TriangleProvider
+          detailsTable.model = sp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -179,6 +183,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val sp = new NodeProvider
+          detailsTable.model = sp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -208,6 +213,7 @@ object ScalaDelRay extends SimpleSwingApplication {
       reactions += {
         case ButtonClicked(_) =>
           val sp = new ModelProvider( ui )
+          detailsTable.model = sp
           val node = sceneGraphTree.getLastSelectedPathComponent
           if( node != null ) {
             node match {
@@ -239,6 +245,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         reactions += {
           case ButtonClicked(_) =>
             val sp = new PointLightProvider
+            detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
             updateUI()
         }
@@ -254,6 +261,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         reactions += {
           case ButtonClicked(_) =>
             val sp = new SpotLightProvider
+            detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
             updateUI()
         }
@@ -269,6 +277,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         reactions += {
           case ButtonClicked(_) =>
             val sp = new DirectionalLightProvider
+            detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
             updateUI()
         }
@@ -284,6 +293,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         reactions += {
           case ButtonClicked(_) =>
             val sp = new AreaLightProvider
+            detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
             updateUI()
         }
@@ -307,21 +317,27 @@ object ScalaDelRay extends SimpleSwingApplication {
     val createOrthographicCameraMenuItem = new JMenuItem( "Orthographic Camera" )
     createOrthographicCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
-        worldProvider.cameraProvider = Some( new OrthograpicCameraProvider )
+        val ocp = new OrthograpicCameraProvider
+        worldProvider.cameraProvider = Some( ocp )
+        detailsTable.model = ocp
         updateUI()
       }
     })
     val createPerspectiveCameraMenuItem = new JMenuItem( "Perspective Camera" )
     createPerspectiveCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
-        worldProvider.cameraProvider = Some( new PerspectiveCameraProvider )
+        val pcp = new PerspectiveCameraProvider
+        worldProvider.cameraProvider = Some( pcp )
+        detailsTable.model = pcp
         updateUI()
       }
     })
     val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
     createDOFCameraMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
-        worldProvider.cameraProvider = Some( new DOFCameraProvider )
+        val dofcp = new DOFCameraProvider
+        worldProvider.cameraProvider = Some( dofcp )
+        detailsTable.model = dofcp
         updateUI()
       }
     })
@@ -337,26 +353,28 @@ object ScalaDelRay extends SimpleSwingApplication {
     val regularSamplingPatternMenuItem = new JMenuItem( "Regular sampling pattern" )
     regularSamplingPatternMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val rspp = new RegularSamplingPatternProvider
         selectionParent match {
           case Some( ocp : OrthograpicCameraProvider ) =>
-            ocp.samplingPatternProvider = Some( new RegularSamplingPatternProvider )
+            ocp.samplingPatternProvider = Some( rspp )
           case Some( pcp : PerspectiveCameraProvider ) =>
-            pcp.samplingPatternProvider = Some( new RegularSamplingPatternProvider )
+            pcp.samplingPatternProvider = Some( rspp )
           case Some( dcp : DOFCameraProvider ) =>
             selection match {
               case Some( "<Anti-Aliasing Sampling Pattern>" ) =>
-                dcp.aaSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+                dcp.aaSamplingPatternProvider = Some( rspp )
               case Some( "<Lens Sampling Pattern>" ) =>
-                dcp.lensSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+                dcp.lensSamplingPatternProvider = Some( rspp )
               case Some( spp : SamplingPatternProvider ) =>
-                if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) dcp.aaSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
-                if( dcp.lensSamplingPatternProvider.isDefined && dcp.lensSamplingPatternProvider.get == spp ) dcp.lensSamplingPatternProvider = Some( new RegularSamplingPatternProvider )
+                if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) dcp.aaSamplingPatternProvider = Some( rspp )
+                if( dcp.lensSamplingPatternProvider.isDefined && dcp.lensSamplingPatternProvider.get == spp ) dcp.lensSamplingPatternProvider = Some( rspp )
               case Some( _ ) => assert( false, "This should not happen!")
               case None =>
             }
           case Some( _ ) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = rspp
         updateUI()
       }
     })
@@ -367,20 +385,22 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newSingleColorMaterialMenuItem = new JMenuItem( "Single color material" )
     newSingleColorMaterialMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val scmp =  new SingleColorMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( new SingleColorMaterialProvider )
+            pp.materialProvider = Some( scmp )
           case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( new SingleColorMaterialProvider )
+            sp.materialProvider = Some( scmp)
           case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( new SingleColorMaterialProvider )
+            bp.materialProvider = Some( scmp )
           case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( new SingleColorMaterialProvider )
+            tp.materialProvider = Some( scmp )
           case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( new SingleColorMaterialProvider )
+            mp.materialProvider = Some( scmp )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = scmp
         updateUI()
       }
     })
@@ -388,20 +408,22 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newLambertMaterialMenuItem = new JMenuItem( "Lambert material" )
     newLambertMaterialMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val lmp = new LambertMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( new LambertMaterialProvider )
+            pp.materialProvider = Some( lmp )
           case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( new LambertMaterialProvider )
+            sp.materialProvider = Some( lmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( new LambertMaterialProvider )
+            bp.materialProvider = Some( lmp )
           case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( new LambertMaterialProvider )
+            tp.materialProvider = Some( lmp )
           case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( new LambertMaterialProvider )
+            mp.materialProvider = Some( lmp )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = lmp
         updateUI()
       }
     })
@@ -409,20 +431,22 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newPhongMaterialMenuItem = new JMenuItem( "Phong material" )
     newPhongMaterialMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val pmp = new PhongMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( new PhongMaterialProvider )
+            pp.materialProvider = Some( pmp )
           case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( new PhongMaterialProvider )
+            sp.materialProvider = Some( pmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( new PhongMaterialProvider )
+            bp.materialProvider = Some( pmp )
           case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( new PhongMaterialProvider )
+            tp.materialProvider = Some( pmp )
           case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( new PhongMaterialProvider )
+            mp.materialProvider = Some( pmp )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = pmp
         updateUI()
       }
     })
@@ -430,20 +454,22 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newReflectiveMaterialMenuItem = new JMenuItem( "Reflective material" )
     newReflectiveMaterialMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val rmp = new ReflectiveMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( new ReflectiveMaterialProvider )
+            pp.materialProvider = Some( rmp )
           case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( new ReflectiveMaterialProvider )
+            sp.materialProvider = Some( rmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( new ReflectiveMaterialProvider )
+            bp.materialProvider = Some( rmp )
           case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( new ReflectiveMaterialProvider )
+            tp.materialProvider = Some( rmp )
           case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( new ReflectiveMaterialProvider )
+            mp.materialProvider = Some( rmp )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = rmp
         updateUI()
       }
     })
@@ -451,20 +477,22 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newTransparentMaterialMenuItem = new JMenuItem( "Transparent material" )
     newTransparentMaterialMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val tmp = new TransparentMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( new TransparentMaterialProvider )
+            pp.materialProvider = Some( tmp )
           case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( new TransparentMaterialProvider )
+            sp.materialProvider = Some( tmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( new TransparentMaterialProvider )
+            bp.materialProvider = Some( tmp )
           case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( new TransparentMaterialProvider )
+            tp.materialProvider = Some( tmp )
           case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( new TransparentMaterialProvider )
+            mp.materialProvider = Some( tmp )
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = tmp
         updateUI()
       }
     })
@@ -479,39 +507,41 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newSingleColorTextureMenuItem = new JMenuItem( "Single color texture" )
     newSingleColorTextureMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val sctp = new SingleColorTextureProvider
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+            lp.diffuseTextureProvider = Some( sctp )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+                pp.diffuseTextureProvider = Some( sctp )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new SingleColorTextureProvider )
+                pp.specularTextureProvider = Some( sctp )
               case Some( tp : TextureProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new SingleColorTextureProvider )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( sctp )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( sctp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
+                rp.diffuseTextureProvider = Some( sctp )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new SingleColorTextureProvider )
+                rp.specularTextureProvider = Some( sctp )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new SingleColorTextureProvider )
+                rp.reflectionTextureProvider = Some( sctp )
               case Some( tp : TextureProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new SingleColorTextureProvider )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new SingleColorTextureProvider )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new SingleColorTextureProvider )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( sctp )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( sctp )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( sctp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = sctp
         updateUI()
       }
     })
@@ -519,39 +549,41 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newChessboardTextureMenuItem = new JMenuItem( "Chessboard texture" )
     newChessboardTextureMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val ctp = new ChessboardTextureProvider
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
+            lp.diffuseTextureProvider = Some( ctp )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
+                pp.diffuseTextureProvider = Some( ctp )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new ChessboardTextureProvider )
+                pp.specularTextureProvider = Some( ctp )
               case Some( tp : TextureProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new ChessboardTextureProvider )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( ctp )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( ctp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
+                rp.diffuseTextureProvider = Some( ctp )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new ChessboardTextureProvider )
+                rp.specularTextureProvider = Some( ctp )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new ChessboardTextureProvider )
+                rp.reflectionTextureProvider = Some( ctp )
               case Some( tp : TextureProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new ChessboardTextureProvider )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new ChessboardTextureProvider )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new ChessboardTextureProvider )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( ctp )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( ctp )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( ctp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = ctp
         updateUI()
       }
     })
@@ -559,39 +591,41 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newImageTextureMenuItem = new JMenuItem( "Image texture" )
     newImageTextureMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val itp = new ImageTextureProvider( ui )
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
+            lp.diffuseTextureProvider = Some( itp )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
+                pp.diffuseTextureProvider = Some( itp )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
+                pp.specularTextureProvider = Some( itp )
               case Some( tp : TextureProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( itp )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( itp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
+                rp.diffuseTextureProvider = Some( itp )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
+                rp.specularTextureProvider = Some( itp )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new ImageTextureProvider( ui ) )
+                rp.reflectionTextureProvider = Some( itp )
               case Some( tp : TextureProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new ImageTextureProvider( ui ) )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new ImageTextureProvider( ui ) )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new ImageTextureProvider( ui ) )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( itp )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( itp )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( itp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = itp
         updateUI()
       }
     })
@@ -599,39 +633,41 @@ object ScalaDelRay extends SimpleSwingApplication {
     val newInterpolatedImageTextureMenuItem = new JMenuItem( "Interpolated image texture" )
     newInterpolatedImageTextureMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
+        val iitp = new InterpolatedImageTextureProvider( ui )
         selectionParent match {
           case Some( lp : LambertMaterialProvider ) =>
-            lp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+            lp.diffuseTextureProvider = Some( iitp )
           case Some( pp : PhongMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                pp.diffuseTextureProvider = Some( iitp )
               case Some( "<Specular Texture>" ) =>
-                pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                pp.specularTextureProvider = Some( iitp )
               case Some( tp : TextureProvider ) =>
-                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
-                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) pp.diffuseTextureProvider = Some( iitp )
+                if( pp.specularTextureProvider.isDefined && pp.specularTextureProvider.get == tp ) pp.specularTextureProvider = Some( iitp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some( rp : ReflectiveMaterialProvider ) =>
             selection match {
               case Some( "<Diffuse Texture>" ) =>
-                rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                rp.diffuseTextureProvider = Some( iitp )
               case Some( "<Specular Texture>" ) =>
-                rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                rp.specularTextureProvider = Some( iitp )
               case Some( "<Reflection Texture>" ) =>
-                rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                rp.reflectionTextureProvider = Some( iitp)
               case Some( tp : TextureProvider ) =>
-                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
-                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
-                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( new InterpolatedImageTextureProvider( ui ) )
+                if( rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) rp.diffuseTextureProvider = Some( iitp )
+                if( rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp ) rp.specularTextureProvider = Some( iitp )
+                if( rp.reflectionTextureProvider.isDefined && rp.reflectionTextureProvider.get == tp ) rp.reflectionTextureProvider = Some( iitp )
               case Some(_) => assert( false, "This should not happen!")
               case None =>
             }
           case Some(_) => assert( false, "This should not happen!")
           case None =>
         }
+        detailsTable.model = iitp
         updateUI()
       }
     })
