@@ -36,7 +36,8 @@ class RenderableSpec extends FunSpec {
       val t = Transform.translate( 1, 3, 4 ).scale( 2, 1.5, 4 ).rotateX( math.Pi ).rotateY( math.Pi / 8 ).rotateZ( -math.Pi )
       val ray = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new Geometry {
-        def <--(r: Ray): Set[GeometryHit] = {
+        override val normalMap = None
+        override def <--(r: Ray): Set[GeometryHit] = {
           called = true
           assert( r == Ray( t.i * ray.o, t.i * ray.d ) )
           Set()
@@ -51,7 +52,8 @@ class RenderableSpec extends FunSpec {
       val t = Transform.translate( 1, 3, 4 ).scale( 2, 1.5, 4 ).rotateX( math.Pi ).rotateY( math.Pi / 8 ).rotateZ( -math.Pi )
       val ray = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new Geometry {
-        def <--(r: Ray): Set[GeometryHit] = {
+        override val normalMap = None
+        override def <--(r: Ray): Set[GeometryHit] = {
           Set() + GeometryHit( r, this, 1, Normal3( 0, 1, 0 ), TexCoord2D( 0, 0 ) )
         }
       }

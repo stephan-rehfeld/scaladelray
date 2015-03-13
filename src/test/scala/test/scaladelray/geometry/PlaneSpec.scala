@@ -25,7 +25,7 @@ class PlaneSpec extends FunSpec {
   describe( "A Plane" ) {
     it( "should return one hit for a ray that comes from above the plane and directs downward" ) {
       val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, -1, 0 ) )
-      val p = Plane()
+      val p = Plane( None )
 
       val hits = r --> p
       assert( hits.size == 1 )
@@ -34,14 +34,14 @@ class PlaneSpec extends FunSpec {
 
     it( "should return no hit for a ray that's direction is parallel to the plane but has the origin outside the plane" ) {
       val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, 1 ) )
-      val p = Plane()
+      val p = Plane( None )
 
       val hits = r --> p
       assert( hits.size == 0 )
     }
     it( "should return no hit for a ray that's direction is parallel to the plane and has the origin on the plane" ) {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
-      val p = Plane()
+      val p = Plane( None )
 
       val hits = r --> p
       assert( hits.size == 0 )

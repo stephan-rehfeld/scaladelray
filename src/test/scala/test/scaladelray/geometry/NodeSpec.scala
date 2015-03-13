@@ -33,6 +33,8 @@ class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends G
     hits.toSet
   }
 
+  override val normalMap = None
+
 }
 
 class NodeSpec extends FunSpec {

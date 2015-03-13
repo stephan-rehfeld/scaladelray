@@ -65,7 +65,7 @@ class AreaLightSpec extends FunSpec {
     it( "should return false if an object is between the point and the light" ) {
       val ld = new AreaLight( Color( 1, 1, 1 ),Point3( 0, 0, -2 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 0.01, 255 )
       val l = ld.createLight
-      val s = Sphere()
+      val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null ) )
 

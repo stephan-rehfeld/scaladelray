@@ -83,6 +83,7 @@ class RaySpec extends FunSpec {
       var called = false
 
       val geo = new Geometry {
+        override val normalMap = None
         override def <--(r: Ray) = {
           called = true
           Set()
@@ -151,6 +152,7 @@ class RaySpec extends FunSpec {
       var called = false
 
       val geo = new Geometry {
+        override val normalMap = None
         override def <--(r: Ray) = {
           called = true
           Set()

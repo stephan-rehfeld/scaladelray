@@ -35,7 +35,7 @@ class TriangleSpec extends FunSpec {
   val b = Point3( 1, 0, 0 )
   val c = Point3( 1, 1, 0 )
 
-  val triangle = new Triangle( a, b, c, n1, n2, n3, t1, t2, t3 )
+  val triangle = new Triangle( a, b, c, n1, n2, n3, t1, t2, t3, None )
 
   describe( "A Triangle" ) {
     it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) {

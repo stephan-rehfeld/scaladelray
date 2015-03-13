@@ -21,6 +21,7 @@ import scaladelray.math.Ray
 
 case class GeometryTestAdapter() extends Geometry {
   override def <--(r: Ray): Set[GeometryHit] = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
+  override val normalMap = None
 }
 
 class GeometrySpec {

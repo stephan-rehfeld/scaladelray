@@ -35,7 +35,7 @@ class TriangleMeshSpec extends FunSpec  {
   val b = Point3( 1, 0, 0 )
   val c = Point3( 1, 1, 0 )
 
-  val triangleMesh = TriangleMesh( Array( a, b, c ), Array( n1, n2, n3 ), Array( t1, t2, t3 ), Array( List( (0, Some(0), Some(0) ), (1, Some(1), Some(1) ), (2, Some(2), Some(2) ) ) ), (_,_) => false )
+  val triangleMesh = TriangleMesh( Array( a, b, c ), Array( n1, n2, n3 ), Array( t1, t2, t3 ), Array( List( (0, Some(0), Some(0) ), (1, Some(1), Some(1) ), (2, Some(2), Some(2) ) ) ), (_,_) => false, None )
 
   describe( "A TriangleMesh" ) {
     it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) {
