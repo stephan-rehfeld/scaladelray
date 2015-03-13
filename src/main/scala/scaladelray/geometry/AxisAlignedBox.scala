@@ -46,7 +46,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
    * The front plane of the box.
    */
   private val front = new Node(
-    Transform.translate( AxisAlignedBox.run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
+    Transform.translate( AxisAlignedBox.run ).rotateX( math.Pi/2.0 ),
     Plane( normalMap )
   )
 
@@ -70,7 +70,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
    * The far plane of the box.
    */
   private val far = new Node(
-    Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
+    Transform.translate( AxisAlignedBox.lbf ).rotateX( -math.Pi/2.0 ),
     Plane( normalMap )
   )
 

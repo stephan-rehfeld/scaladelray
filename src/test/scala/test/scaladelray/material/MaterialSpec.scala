@@ -22,13 +22,13 @@ import scaladelray.math.{Point3, Vector3}
 import scaladelray.light.{Light, LightDescription}
 import scaladelray.world.World
 
-class TextureTestAdapter extends Texture {
+class TextureTestAdapter( c : Color ) extends Texture {
 
   var coordinates : Option[TexCoord2D] = None
 
   def apply(texCoord: TexCoord2D): Color = {
     coordinates = Some( texCoord )
-    Color( 0, 0, 0 )
+    c
   }
 
 }

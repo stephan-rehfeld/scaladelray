@@ -36,7 +36,7 @@ class LambertMaterialSpec extends FunSpec {
 
   describe( "A LambertMaterial" ) {
     it( "should retrieve to color from the texture, using texture coordinate in the hit" ) {
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -51,7 +51,7 @@ class LambertMaterialSpec extends FunSpec {
     }
 
     it( "should not call the tracer" ) {
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -79,7 +79,7 @@ class LambertMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -101,7 +101,7 @@ class LambertMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -131,7 +131,7 @@ class LambertMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -157,7 +157,7 @@ class LambertMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new TextureTestAdapter()
+      val t = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = LambertMaterial( t )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )

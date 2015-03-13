@@ -36,9 +36,9 @@ class ReflectiveMaterialSpec extends FunSpec {
   describe( "A ReflectiveMaterial" ) {
 
     it( "should retrieve to color from the texture, using texture coordinate in the hit" ) {
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -59,9 +59,9 @@ class ReflectiveMaterialSpec extends FunSpec {
     }
 
     it( "should call the tracer with the reflected ray" ) {
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
@@ -92,9 +92,9 @@ class ReflectiveMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
@@ -117,9 +117,9 @@ class ReflectiveMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
@@ -149,9 +149,9 @@ class ReflectiveMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
@@ -177,9 +177,9 @@ class ReflectiveMaterialSpec extends FunSpec {
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
       val l2 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new TextureTestAdapter()
-      val t2 = new TextureTestAdapter()
-      val t3 = new TextureTestAdapter()
+      val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
+      val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val m = ReflectiveMaterial( t1, t2, 1, t3 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )

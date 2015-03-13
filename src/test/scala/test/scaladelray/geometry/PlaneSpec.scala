@@ -17,8 +17,10 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Ray, Point3, Vector3}
+import scaladelray.math.{Normal3, Ray, Point3, Vector3}
 import scaladelray.geometry.Plane
+import test.scaladelray.material.TextureTestAdapter
+import scaladelray.Color
 
 class PlaneSpec extends FunSpec {
 
@@ -39,12 +41,76 @@ class PlaneSpec extends FunSpec {
       val hits = r --> p
       assert( hits.size == 0 )
     }
+
     it( "should return no hit for a ray that's direction is parallel to the plane and has the origin on the plane" ) {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
       val p = Plane( None )
 
       val hits = r --> p
       assert( hits.size == 0 )
+    }
+
+    it( "should request the color from the texture that is used as normal map" ) {
+      val t = new TextureTestAdapter( Color( 0, 0, 1 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      r --> p
+      assert( t.coordinates.isDefined )
+    }
+
+    it( "should interpret a blue color of 1 as +z Axis" ) {
+      val t = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n =~= Normal3( 0, 1, 0 ) ) )
+    }
+
+    it( "should interpret a blue color of 0 as -z Axis" ) {
+      val t = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n == Normal3( 0, -1, 0 ) ) )
+    }
+
+    it( "should interpret a red color of 1 as +x Axis" ) {
+      val t = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n =~= Normal3( 1, 0, 0 ) ) )
+    }
+
+    it( "should interpret a red color of 0 as -x Axis" ) {
+      val t = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n =~= Normal3( -1, 0, 0 ) ) )
+    }
+
+    it( "should interpret a green color of 1 as +y Axis" ) {
+      val t = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, -1 ) ) )
+    }
+
+    it( "should interpret a green color of 0 as -y Axis" ) {
+      val t = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
+      assert( t.coordinates.isEmpty )
+      val p = Plane( Some( t ) )
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> p
+      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, 1 ) ) )
     }
   }
 
