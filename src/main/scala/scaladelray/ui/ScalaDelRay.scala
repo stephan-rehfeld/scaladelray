@@ -690,7 +690,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               worldProvider.remove( node )
               updateUI()
               detailsTable.model = DummyTableModel
-              sceneGraphTree.setSelectionRows( s )
+              if( s != null && sceneGraphTree.getPathForRow( s(0) ) != null && sceneGraphTree.getPathForRow( s(0) ).getLastPathComponent != null && sceneGraphTree.getPathForRow( s(0) ).getLastPathComponent.getClass == node.getClass )
+                sceneGraphTree.setSelectionRows( s )
             }
           case _ =>
         }
