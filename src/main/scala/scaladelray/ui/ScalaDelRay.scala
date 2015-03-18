@@ -21,7 +21,7 @@ import scala.swing.GridBagPanel.{Anchor, Fill}
 import javax.swing.table.{TableCellEditor, TableModel}
 import scaladelray.ui.model._
 import javax.swing._
-import javax.swing.tree.TreeSelectionModel
+import javax.swing.tree.{TreePath, TreeModel, TreeSelectionModel}
 import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scaladelray.Constants
@@ -52,7 +52,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
     def tableChanged(e: TableModelEvent) {
-      updateUI()
+      updateUI( None )
     }
 
     val c = new Constraints
@@ -80,7 +80,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += pp
 
           }
-          updateUI()
+          updateUI( Some( pp ) )
       }
     }
 
@@ -110,7 +110,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -139,7 +139,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -168,7 +168,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
 
@@ -198,7 +198,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
 
@@ -228,7 +228,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.geometryProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -247,7 +247,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new PointLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -263,7 +263,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new SpotLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -279,7 +279,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new DirectionalLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -295,7 +295,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new AreaLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -320,7 +320,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val ocp = new OrthograpicCameraProvider
         worldProvider.cameraProvider = Some( ocp )
         detailsTable.model = ocp
-        updateUI()
+        updateUI( Some( ocp ))
       }
     })
     val createPerspectiveCameraMenuItem = new JMenuItem( "Perspective Camera" )
@@ -329,7 +329,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val pcp = new PerspectiveCameraProvider
         worldProvider.cameraProvider = Some( pcp )
         detailsTable.model = pcp
-        updateUI()
+        updateUI( Some( pcp ))
       }
     })
     val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
@@ -338,7 +338,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val dofcp = new DOFCameraProvider
         worldProvider.cameraProvider = Some( dofcp )
         detailsTable.model = dofcp
-        updateUI()
+        updateUI( Some( dofcp ))
       }
     })
 
@@ -375,7 +375,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = rspp
-        updateUI()
+        updateUI( Some( rspp ) )
       }
     })
 
@@ -401,7 +401,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = scmp
-        updateUI()
+        updateUI( Some( scmp ) )
       }
     })
 
@@ -424,7 +424,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = lmp
-        updateUI()
+        updateUI( Some( lmp ) )
       }
     })
 
@@ -447,7 +447,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = pmp
-        updateUI()
+        updateUI( Some( pmp ) )
       }
     })
 
@@ -470,7 +470,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = rmp
-        updateUI()
+        updateUI( Some( rmp ) )
       }
     })
 
@@ -493,7 +493,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = tmp
-        updateUI()
+        updateUI( Some( tmp ) )
       }
     })
 
@@ -542,7 +542,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = sctp
-        updateUI()
+        updateUI( Some( sctp ) )
       }
     })
 
@@ -584,7 +584,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = ctp
-        updateUI()
+        updateUI( Some( ctp ) )
       }
     })
 
@@ -626,7 +626,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = itp
-        updateUI()
+        updateUI( Some( itp ) )
       }
     })
 
@@ -668,7 +668,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = iitp
-        updateUI()
+        updateUI( Some( iitp ) )
       }
     })
 
@@ -679,6 +679,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
     val sceneGraphTree = new JTree
+    sceneGraphTree.setExpandsSelectedPaths( true )
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
     sceneGraphTree.addKeyListener( new KeyListener {
       def keyTyped(e: KeyEvent) {
@@ -688,7 +689,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             if( node != null ) {
               val s = sceneGraphTree.getSelectionRows
               worldProvider.remove( node )
-              updateUI()
+              updateUI( None )
               detailsTable.model = DummyTableModel
               sceneGraphTree.setSelectionRows( s )
             }
@@ -889,9 +890,31 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 4
     layout( renderButton ) = c
 
-    private def updateUI() {
+    private def createPath( root : AnyRef, item : AnyRef, model : TreeModel, path : Vector[AnyRef] ) : Option[Vector[AnyRef]] = {
+      if( root == item )
+        Some( path :+ item )
+      else {
+        for( i <- 0 until model.getChildCount( root ) ) {
+          val newRoot = model.getChild( root, i )
+          val r = createPath( newRoot, item, model, path :+ root )
+          if( r.isDefined ) return r
+          }
+        None
+        }
+      }
+
+
+
+    private def updateUI( newElement : Option[AnyRef] ) {
       sceneGraphTree.updateUI()
       renderButton.enabled = worldProvider.isReady
+      if( newElement.isDefined ) {
+        val model = sceneGraphTree.getModel
+        val root = sceneGraphTree.getModel.getRoot
+        val path = createPath( root, newElement.get, model, Vector[AnyRef]() )
+        if( path.isDefined )
+          sceneGraphTree.setSelectionPath( new TreePath( path.get.toArray  ))
+      }
     }
 
   }
