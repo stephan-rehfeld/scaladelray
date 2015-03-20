@@ -37,6 +37,9 @@ import scala.Some
 import scala.swing.Action
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
+import scala.async.Async.async
 
 case class StartDiscovery()
 
@@ -876,12 +879,25 @@ object ScalaDelRay extends SimpleSwingApplication {
       text = "Render"
       reactions += {
         case ButtonClicked(_) =>
-          val (c,w) = worldProvider.createWorld
-          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
-          window.a ! StartRendering()
 
+          text = "Preparing"
+          enabled = false
+          progressBar.value = 0
+          async {
+            val totalSteps = worldProvider.count.asInstanceOf[Double]
+            var steps = 0.0
+            val (c,w) = worldProvider.createWorld( () => {
+              steps = steps + 1
+              progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
+            })
+            val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
+            window.a ! StartRendering()
+            text = "Render"
+            enabled = true
+          }
       }
     }
+
     c.fill = Fill.Horizontal
     c.ipady = 0
     c.weighty = 0
@@ -889,6 +905,20 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridx = 0
     c.gridy = 4
     layout( renderButton ) = c
+
+    val progressBar = new ProgressBar{
+      min = 0
+      max = 100
+      value = 0
+    }
+
+    c.fill = Fill.Horizontal
+    c.ipady = 0
+    c.weighty = 0
+    c.weightx = 0.5
+    c.gridx = 0
+    c.gridy = 5
+    layout( progressBar ) = c
 
     private def createPath( root : AnyRef, item : AnyRef, model : TreeModel, path : Vector[AnyRef] ) : Option[Vector[AnyRef]] = {
       if( root == item )

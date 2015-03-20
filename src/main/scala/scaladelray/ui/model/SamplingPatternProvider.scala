@@ -20,6 +20,7 @@ import scaladelray.sampling.SamplingPattern
 
 abstract class SamplingPatternProvider {
 
-  def createSamplingPattern : SamplingPattern
+  def createSamplingPattern( l : () => Unit ) : SamplingPattern
+  def count : Int
 
 }

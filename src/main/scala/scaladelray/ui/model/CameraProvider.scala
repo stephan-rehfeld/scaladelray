@@ -20,8 +20,9 @@ import scaladelray.camera.Camera
 
 abstract class CameraProvider {
 
-  def createCamera : ((Int,Int) => Camera)
+  def createCamera( l : () => Unit ) : ((Int,Int) => Camera)
   def remove( obj : AnyRef )
   def isReady : Boolean
+  def count : Int
 
 }

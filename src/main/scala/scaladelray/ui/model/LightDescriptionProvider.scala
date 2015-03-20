@@ -20,7 +20,8 @@ import scaladelray.light.LightDescription
 
 abstract class LightDescriptionProvider {
 
-  def createLightDescription : LightDescription
+  def createLightDescription( l : () => Unit ) : LightDescription
   def isReady : Boolean
+  def count : Int
 
 }

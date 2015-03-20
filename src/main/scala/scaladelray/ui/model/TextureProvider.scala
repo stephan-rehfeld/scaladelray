@@ -19,6 +19,7 @@ package scaladelray.ui.model
 import scaladelray.texture.Texture
 
 abstract class TextureProvider {
-  def createTexture : Texture
+  def createTexture( l : () => Unit ) : Texture
   def isReady : Boolean
+  def count : Int
 }

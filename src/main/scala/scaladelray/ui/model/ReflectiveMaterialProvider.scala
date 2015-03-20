@@ -17,39 +17,43 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.material.{ReflectiveMaterial, PhongMaterial, Material}
+import scaladelray.material.{ReflectiveMaterial, Material}
 import javax.swing.event.TableModelListener
 
 class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
+
   var phongExponent = 1
   var diffuseTextureProvider : Option[TextureProvider] = None
   var specularTextureProvider : Option[TextureProvider] = None
   var reflectionTextureProvider : Option[TextureProvider] = None
 
-  def createMaterial: Material = ReflectiveMaterial( diffuseTextureProvider.get.createTexture, specularTextureProvider.get.createTexture, phongExponent, reflectionTextureProvider.get.createTexture )
+  override def createMaterial( l : () => Unit ) : Material = {
+    l()
+    ReflectiveMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
+  }
 
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
     if( specularTextureProvider.isDefined && specularTextureProvider.get == obj ) specularTextureProvider = None
   }
 
-  def getRowCount: Int = 1
+  override def getRowCount: Int = 1
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -64,7 +68,7 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -78,12 +82,14 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-  def isReady: Boolean = (if( diffuseTextureProvider.isDefined ) diffuseTextureProvider.get.isReady else false) && (if(specularTextureProvider.isDefined) specularTextureProvider.get.isReady else false) && (if( reflectionTextureProvider.isDefined ) reflectionTextureProvider.get.isReady else false)
-
+  override def isReady: Boolean = (if( diffuseTextureProvider.isDefined ) diffuseTextureProvider.get.isReady else false) && (if(specularTextureProvider.isDefined) specularTextureProvider.get.isReady else false) && (if( reflectionTextureProvider.isDefined ) reflectionTextureProvider.get.isReady else false)
 
   override def toString: String = "Reflective material"
+
+  override def count = 1 + diffuseTextureProvider.get.count + specularTextureProvider.get.count + reflectionTextureProvider.get.count
+
 }

@@ -29,13 +29,14 @@ class NodeProvider extends GeometryProvider with TableModel {
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  def createGeometry: Geometry = {
-    val cn = for( n <- childNodes ) yield n.createGeometry
+  override def createGeometry( l : () => Unit ) : Geometry = {
+    l()
+    val cn = for( n <- childNodes ) yield n.createGeometry( l )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, cn:_*  )
   }
 
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     obj match {
       case gp : GeometryProvider =>
         if( childNodes.contains( gp ) ) childNodes = childNodes.filterNot( _ == gp ) else for( v <- childNodes ) v.remove( gp )
@@ -43,23 +44,23 @@ class NodeProvider extends GeometryProvider with TableModel {
     }
   }
 
-  def getRowCount: Int = 3
+  override def getRowCount: Int = 3
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -80,7 +81,7 @@ class NodeProvider extends GeometryProvider with TableModel {
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -99,12 +100,13 @@ class NodeProvider extends GeometryProvider with TableModel {
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-
-  def isReady: Boolean = childNodes.find( (gp) => !gp.isReady ).isEmpty
+  override def isReady: Boolean = childNodes.find( (gp) => !gp.isReady ).isEmpty
 
   override def toString: String = "Node"
+
+  override def count = 1 + childNodes.foldLeft( 0 )( (v : Int, gp : GeometryProvider) => v + gp.count )
 }

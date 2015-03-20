@@ -49,30 +49,31 @@ class WorldProvider extends TableModel {
     }
   }
 
-  def createWorld = {
-    val geometries = for( gp <- geometryProvider ) yield gp.createGeometry
-    val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription
+  def createWorld( l : () => Unit ) = {
+    l()
+    val geometries = for( gp <- geometryProvider ) yield gp.createGeometry( l )
+    val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription( l )
 
-    (cameraProvider.get.createCamera,World( backgroundColor, geometries.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
+    (cameraProvider.get.createCamera( l ),World( backgroundColor, geometries.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
   }
 
-  def getRowCount: Int = 3
+  override def getRowCount: Int = 3
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -93,7 +94,7 @@ class WorldProvider extends TableModel {
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -111,9 +112,11 @@ class WorldProvider extends TableModel {
 
   def isReady = (if( cameraProvider.isDefined ) cameraProvider.get.isReady else false) && geometryProvider.find( (gp) => !gp.isReady ).isEmpty && lightDescriptionProvider.find( (lp) => !lp.isReady ).isEmpty
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
   override def toString: String = "World"
+
+  def count = 1 + this.geometryProvider.foldLeft( 0 )( (v : Int, gp : GeometryProvider) => v + gp.count ) +  this.lightDescriptionProvider.foldLeft( 0 )( (v : Int, ldp : LightDescriptionProvider) => v + ldp.count ) + this.cameraProvider.get.count
 }

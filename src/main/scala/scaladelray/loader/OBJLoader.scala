@@ -55,7 +55,9 @@ class OBJLoader extends JavaTokenParsers {
    * @return The parsed vertex as [[scaladelray.math.Point3]].
    */
   private def vertex : Parser[Point3] = "v"~floatingPointNumber~floatingPointNumber~floatingPointNumber~opt( floatingPointNumber ) ^^ {
-    case "v"~x~y~z~w => Point3( x.toDouble, y.toDouble, z.toDouble )
+    case "v"~x~y~z~w =>
+      l()
+      Point3( x.toDouble, y.toDouble, z.toDouble )
   }
 
   /**
@@ -65,7 +67,9 @@ class OBJLoader extends JavaTokenParsers {
    * @return The parsed normal as [[scaladelray.math.Normal3]].
    */
   private def normal : Parser[Normal3] = "vn"~floatingPointNumber~floatingPointNumber~floatingPointNumber ^^ {
-    case "vn"~x~y~z => Normal3( x.toDouble, y.toDouble, z.toDouble )
+    case "vn"~x~y~z =>
+      l()
+      Normal3( x.toDouble, y.toDouble, z.toDouble )
   }
 
   /**
@@ -74,10 +78,12 @@ class OBJLoader extends JavaTokenParsers {
    *
    * 3D textures are currently not supported, so the third number is ignored.
    *
-   * @return The parsed texture coordinate as [[scaladelray.math.TexCoord2D]].
+   * @return The parsed texture coordinate as [[scaladelray.texture.TexCoord2D]].
    */
   private def texCoord : Parser[TexCoord2D] = "vt"~floatingPointNumber~opt( floatingPointNumber )~opt( floatingPointNumber ) ^^ {
-    case "vt"~u~v~w => TexCoord2D( u.toDouble, v.get.toDouble )
+    case "vt"~u~v~w =>
+      l()
+      TexCoord2D( u.toDouble, v.get.toDouble )
   }
 
   /**
@@ -89,7 +95,9 @@ class OBJLoader extends JavaTokenParsers {
    */
   // Order matters
   private def face : Parser[List[(Int,Option[Int],Option[Int])]] = "f"~rep( vertexAndNormal | vertexTexCoordNormal | vertexAndTexCoord | vertexOnly ) ^^ {
-    case "f"~x => x
+    case "f"~x =>
+      l()
+      x
   }
 
   /**
@@ -100,7 +108,9 @@ class OBJLoader extends JavaTokenParsers {
   def any: Parser[String] = """.*""".r
 
   private def comment : Parser[String] = "#"~any ^^ {
-    case "#"~x => x
+    case "#"~x =>
+      l()
+      x
   }
 
   /**
@@ -109,7 +119,9 @@ class OBJLoader extends JavaTokenParsers {
    * @return A tuple that contains the index of the vertex and [[scala.None]] for all other indices.
    */
   private def vertexOnly : Parser[(Int,Option[Int],Option[Int])] = wholeNumber ^^ {
-    case v => (v.toInt,None,None)
+    case v =>
+      l()
+      (v.toInt,None,None)
   }
 
   /**
@@ -129,7 +141,9 @@ class OBJLoader extends JavaTokenParsers {
    * @return A tuple that contains the index of the vertex and the normal but [[scala.None]] for the texture coordinate.
    */
   private def vertexAndNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"//"~wholeNumber ^^ {
-    case v~"//"~vn => (v.toInt,None,Some(vn.toInt))
+    case v~"//"~vn =>
+      l()
+      (v.toInt,None,Some(vn.toInt))
   }
 
   /**
@@ -139,7 +153,9 @@ class OBJLoader extends JavaTokenParsers {
    * @return A tuple that contains all indices.
    */
   private def vertexTexCoordNormal : Parser[(Int,Option[Int],Option[Int])] = wholeNumber~"/"~wholeNumber~"/"~wholeNumber ^^ {
-    case v~"/"~vt~"/"~vn => (v.toInt,Some(vt.toInt),Some(vn.toInt))
+    case v~"/"~vt~"/"~vn =>
+      l()
+      (v.toInt,Some(vt.toInt),Some(vn.toInt))
   }
 
   /**
@@ -209,17 +225,25 @@ class OBJLoader extends JavaTokenParsers {
   private var lastWasFace = true
 
   /**
+   * A handler function that is called twice for each line that has been read.
+   */
+  private var l : () => Unit = () => {}
+
+  /**
    * This method loads a model from a OBJ file and returns the loaded geometry as triangle mesh.
    *
    * @param fileName The name of the file that contains the model.
    * @param material The material that should be applied to the loaded model.
    * @param fastLoad Loads the model faster but may consumes more memory.
+   * @param l A function that is called twice for each line that has been read.
    * @return The loaded model as triangle mesh.
    */
-  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : TriangleMesh = {
+  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean, l : () => Unit = l ) : TriangleMesh = {
 
     assert( fileName != null, "The parameter 'fileName' must not be 'null'!" )
     assert( material != null, "The parameter 'material' must not be 'null'!" )
+
+    this.l = l
 
     this.fastLoad = fastLoad
 
@@ -229,22 +253,24 @@ class OBJLoader extends JavaTokenParsers {
     val parseResult = parseAll( objFile, reader )
     val result = parseResult.get
 
-    for( line <- result ) line match {
-      case v : Point3 =>
-        processData( verticesBuffer, v )
+    for( line <- result ) {
+      l()
+      line match {
+        case v : Point3 =>
+          processData( verticesBuffer, v )
 
-      case n : Normal3 =>
-        processData( normalsBuffer, n )
+        case n : Normal3 =>
+          processData( normalsBuffer, n )
 
-      case t : TexCoord2D =>
-        processData( texCoordsBuffer, t )
+        case t : TexCoord2D =>
+          processData( texCoordsBuffer, t )
 
-      case (f : List[(Int,Option[Int],Option[Int])] @unchecked) =>
-        lastWasFace = true
-        facesBuffer += f
+        case (f : List[(Int,Option[Int],Option[Int])] @unchecked) =>
+          lastWasFace = true
+          facesBuffer += f
 
-      case _ =>
-
+        case _ =>
+      }
     }
 
     constructFromBuffer()

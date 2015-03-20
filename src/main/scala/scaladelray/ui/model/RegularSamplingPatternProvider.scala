@@ -21,25 +21,29 @@ import scaladelray.sampling.SamplingPattern
 import javax.swing.event.TableModelListener
 
 class RegularSamplingPatternProvider extends SamplingPatternProvider with TableModel {
+
   var x = 1
   var y = 1
 
-  def createSamplingPattern: SamplingPattern = SamplingPattern.regularPattern( x, y )
+  override def createSamplingPattern( l : () => Unit ) : SamplingPattern = {
+    l()
+    SamplingPattern.regularPattern( x, y )
+  }
 
-  def getRowCount: Int = 2
+  override def getRowCount: Int = 2
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName(column: Int): String = column match {
+  override def getColumnName(column: Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(p1: Int): Class[_] = classOf[String]
+  override def getColumnClass(p1: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column == 1
+  override def isCellEditable(row: Int, column: Int): Boolean = column == 1
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 => row match {
       case 0 => "x"
       case 1 => "y"
@@ -50,7 +54,7 @@ class RegularSamplingPatternProvider extends SamplingPatternProvider with TableM
     }
   }
 
-  def setValueAt( obj : Any, row: Int, column: Int) {
+  override def setValueAt( obj : Any, row: Int, column: Int) {
 
    row match {
      case 0 => x = obj.asInstanceOf[String].toInt
@@ -59,9 +63,11 @@ class RegularSamplingPatternProvider extends SamplingPatternProvider with TableM
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
   override def toString: String = "Regular sampling pattern"
+
+  override def count = 1
 }

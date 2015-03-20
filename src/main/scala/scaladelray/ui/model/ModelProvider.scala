@@ -43,14 +43,15 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
     (maxRecursions == -1 || recursion < maxRecursions) && (facesLimit == -1 || faces > facesLimit)
 
 
-  def createGeometry: Geometry = {
+  override def createGeometry( l : () => Unit ) : Geometry = {
+    l()
     val loader = new OBJLoader
-    val m = loader.load( fileName, materialProvider.get.createMaterial, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad )
+    val m = loader.load( fileName, materialProvider.get.createMaterial( l ), subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad, l )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     new Node( t, m  )
   }
 
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     obj match {
       case mp : MaterialProvider =>
         if( materialProvider.isDefined && materialProvider.get == mp ) materialProvider = None
@@ -59,23 +60,23 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
     if( materialProvider.isDefined ) materialProvider.get.remove( obj )
   }
 
-  def getRowCount: Int = 7
+  override def getRowCount: Int = 7
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -112,7 +113,7 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -141,18 +142,20 @@ class ModelProvider( tml : TableModelListener ) extends GeometryProvider with Ta
   }
 
 
-  def isReady: Boolean = {
+  override def isReady: Boolean = {
     (if( materialProvider.isDefined ) materialProvider.get.isReady else false) && new File( fileName ).exists() && !(octreeRecursionDepth == -1 && octreeFacesLimit == -1)
   }
 
-  def addTableModelListener( l : TableModelListener) {
+  override def addTableModelListener( l : TableModelListener) {
     listener += l
   }
 
-  def removeTableModelListener( l : TableModelListener) {
+  override def removeTableModelListener( l : TableModelListener) {
     listener -= l
   }
 
   override def toString: String = "Model"
+
+  override def count = 1 + io.Source.fromFile( fileName ).getLines().size * 2 + materialProvider.get.count
 
 }

@@ -20,7 +20,8 @@ import scaladelray.geometry.Geometry
 
 abstract class GeometryProvider {
 
-  def createGeometry : Geometry
+  def createGeometry( l : () => Unit ) : Geometry
   def remove( obj : AnyRef )
   def isReady : Boolean
+  def count : Int
 }

@@ -25,28 +25,30 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
 
-  def createMaterial: Material = SingleColorMaterial( color )
+  override def createMaterial( l : () => Unit ): Material = {
+    l()
+    SingleColorMaterial( color )
+  }
 
+  override def remove(obj: AnyRef) {}
 
-  def remove(obj: AnyRef) {}
+  override def getRowCount: Int = 1
 
-  def getRowCount: Int = 1
+  override def getColumnCount: Int = 2
 
-  def getColumnCount: Int = 2
-
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -59,7 +61,7 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -71,12 +73,13 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-
-  def isReady: Boolean = true
+  override def isReady: Boolean = true
 
   override def toString: String = "Single color material"
+
+  override def count = 1
 }

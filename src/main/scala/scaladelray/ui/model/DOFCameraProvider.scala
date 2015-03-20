@@ -32,25 +32,28 @@ class DOFCameraProvider extends CameraProvider with TableModel {
   var aaSamplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
   var lensSamplingPatternProvider : Option[SamplingPatternProvider] = None
 
-  def createCamera = DOFCamera( position, gazeDirection, upVector, _, _, angle, focalLength, lensRadius, aaSamplingPatternProvider.get.createSamplingPattern, lensSamplingPatternProvider.get.createSamplingPattern )
+  override def createCamera( l : () => Unit ) = {
+    l()
+    DOFCamera( position, gazeDirection, upVector, _, _, angle, focalLength, lensRadius, aaSamplingPatternProvider.get.createSamplingPattern( l ), lensSamplingPatternProvider.get.createSamplingPattern( l ) )
+  }
 
-  def getRowCount: Int = 6
+  override def getRowCount: Int = 6
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -83,8 +86,7 @@ class DOFCameraProvider extends CameraProvider with TableModel {
       }
   }
 
-
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -108,17 +110,19 @@ class DOFCameraProvider extends CameraProvider with TableModel {
     }
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     if( aaSamplingPatternProvider.isDefined && obj == aaSamplingPatternProvider.get ) aaSamplingPatternProvider = None
     if( lensSamplingPatternProvider.isDefined && obj == lensSamplingPatternProvider.get ) lensSamplingPatternProvider = None
   }
 
-  def isReady: Boolean = aaSamplingPatternProvider.isDefined && lensSamplingPatternProvider.isDefined
+  override def isReady: Boolean = aaSamplingPatternProvider.isDefined && lensSamplingPatternProvider.isDefined
 
   override def toString: String = "DOF Camera"
+
+  override def count = 1 + aaSamplingPatternProvider.get.count + lensSamplingPatternProvider.get.count
+
 }

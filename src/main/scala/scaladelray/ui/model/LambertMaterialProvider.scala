@@ -24,37 +24,40 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   var diffuseTextureProvider : Option[TextureProvider] = None
 
-  def createMaterial: Material = LambertMaterial( diffuseTextureProvider.get.createTexture )
+  override def createMaterial( l : () => Unit ) : Material = {
+    l()
+    LambertMaterial( diffuseTextureProvider.get.createTexture( l ) )
+  }
 
-
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
   }
 
-  def getRowCount: Int = 0
+  override def getRowCount: Int = 0
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = false
+  override def isCellEditable(row: Int, column: Int): Boolean = false
 
-  def getValueAt(row: Int, column: Int): AnyRef = ""
+  override def getValueAt(row: Int, column: Int): AnyRef = ""
 
-  def setValueAt(obj: Any, row: Int, column: Int) {}
+  override def setValueAt(obj: Any, row: Int, column: Int) {}
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-
-  def isReady: Boolean = if( diffuseTextureProvider.isDefined ) diffuseTextureProvider.get.isReady else false
+  override def isReady: Boolean = if( diffuseTextureProvider.isDefined ) diffuseTextureProvider.get.isReady else false
 
   override def toString: String = "Lambert material"
+
+  override def count = 1 + diffuseTextureProvider.get.count
 
 }

@@ -23,3 +23,5 @@ libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.9"
 libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.3.9"
 
 libraryDependencies += "com.typesafe" % "config" % "1.2.1"
+
+libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.2"
