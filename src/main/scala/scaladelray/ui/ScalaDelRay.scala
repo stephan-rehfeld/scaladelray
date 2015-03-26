@@ -40,6 +40,7 @@ import scaladelray.Color
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 import scala.async.Async.async
+import scala.util.Random
 
 case class StartDiscovery()
 
@@ -1348,95 +1349,143 @@ object ScalaDelRay extends SimpleSwingApplication {
 
   }
 
-
-
   private def createStandardScene : WorldProvider = {
     val worldProvider = new WorldProvider
     worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
     worldProvider.backgroundColor = Color( 0.1, 0.1, 0.1 )
+
     val cameraProvider = new PerspectiveCameraProvider
-    cameraProvider.position = Point3( 0, -0.5, 4.0 )
+    cameraProvider.position = Point3( -1.52, 1.49, 4.37 )
     cameraProvider.gazeDirection = Vector3( 0, 0, -1 )
+    cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].x = 5
+    cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].y = 5
+    cameraProvider.angle = 60.0 / 180.0 * Math.PI
+    worldProvider.cameraProvider = Some( cameraProvider )
+
+    val bottomPlaneProvider = new PlaneProvider
+    val bottomPlaneLambertMaterialProvider = new LambertMaterialProvider
+    val bottomPlaneDiffuseTextureProvider = new SingleColorTextureProvider
+    bottomPlaneDiffuseTextureProvider.color = Color( 1, 1, 1 )
+    bottomPlaneLambertMaterialProvider.diffuseTextureProvider = Some( bottomPlaneDiffuseTextureProvider )
+    bottomPlaneProvider.materialProvider = Some( bottomPlaneLambertMaterialProvider )
+    worldProvider.geometryProvider += bottomPlaneProvider
+
+    val topPlaneProvider = new PlaneProvider
+    topPlaneProvider.translate = Point3( 0, 3, 0 )
+    topPlaneProvider.rotate = Vector3( Math.PI, 0, 0 )
+    val topPlaneLambertMaterialProvider = new LambertMaterialProvider
+    val topPlaneDiffuseTextureProvider = new SingleColorTextureProvider
+    topPlaneDiffuseTextureProvider.color = Color( 1, 1, 1 )
+    topPlaneLambertMaterialProvider.diffuseTextureProvider = Some( topPlaneDiffuseTextureProvider )
+    topPlaneProvider.materialProvider = Some( topPlaneLambertMaterialProvider )
+    worldProvider.geometryProvider += topPlaneProvider
+
+    val leftPlaneProvider = new PlaneProvider
+    leftPlaneProvider.translate = Point3( -3.04, 0, 0 )
+    leftPlaneProvider.rotate = Vector3( 0, 0, -Math.PI / 2.0 )
+    val leftPlaneLambertMaterialProvider = new LambertMaterialProvider
+    val leftPlaneDiffuseTextureProvider = new SingleColorTextureProvider
+    leftPlaneDiffuseTextureProvider.color = Color( 1, 0, 0 )
+    leftPlaneLambertMaterialProvider.diffuseTextureProvider = Some( leftPlaneDiffuseTextureProvider )
+    leftPlaneProvider.materialProvider = Some( leftPlaneLambertMaterialProvider )
+    worldProvider.geometryProvider += leftPlaneProvider
+
+    val rightPlaneProvider = new PlaneProvider
+    rightPlaneProvider.translate = Point3( 0, 0, 0 )
+    rightPlaneProvider.rotate = Vector3( 0, 0, Math.PI / 2.0 )
+    val rightPlaneLambertMaterialProvider = new LambertMaterialProvider
+    val rightPlaneDiffuseTextureProvider = new SingleColorTextureProvider
+    rightPlaneDiffuseTextureProvider.color = Color( 0, 1, 0 )
+    rightPlaneLambertMaterialProvider.diffuseTextureProvider = Some( rightPlaneDiffuseTextureProvider )
+    rightPlaneProvider.materialProvider = Some( rightPlaneLambertMaterialProvider )
+    worldProvider.geometryProvider += rightPlaneProvider
+
+    val backPlaneProvider = new PlaneProvider
+    backPlaneProvider.translate = Point3( 0, 0, -3.06 )
+    backPlaneProvider.rotate = Vector3( Math.PI / 2.0, 0, 0 )
+    val backPlaneLambertMaterialProvider = new LambertMaterialProvider
+    val backPlaneDiffuseTextureProvider = new SingleColorTextureProvider
+    backPlaneDiffuseTextureProvider.color = Color( 1, 1, 1 )
+    backPlaneLambertMaterialProvider.diffuseTextureProvider = Some( backPlaneDiffuseTextureProvider )
+    backPlaneProvider.materialProvider = Some( backPlaneLambertMaterialProvider )
+    worldProvider.geometryProvider += backPlaneProvider
+
+    val shortBoxProvider = new AxisAlignedBoxProvider
+    shortBoxProvider.scale = Vector3( 0.92, 0.9, 1.28 )
+    shortBoxProvider.rotate = Vector3( 0, -22.0 / 180.0 * Math.PI, 0 )
+    shortBoxProvider.translate = Point3( -1.025, 0.45, -0.925 )
+    val shortBoxLambertMaterialProvider = new LambertMaterialProvider
+    val shortBoxDiffuseTextureProvider = new SingleColorTextureProvider
+    shortBoxDiffuseTextureProvider.color = Color( 0.5, 0.5, 0.5 )
+    shortBoxLambertMaterialProvider.diffuseTextureProvider = Some( shortBoxDiffuseTextureProvider )
+    shortBoxProvider.materialProvider = Some( shortBoxLambertMaterialProvider )
+    worldProvider.geometryProvider += shortBoxProvider
+
+    val tallBoxProvider = new AxisAlignedBoxProvider
+    tallBoxProvider.scale = Vector3( 0.92, 1.80, 1.28 )
+    tallBoxProvider.rotate = Vector3( 0, 17.24 / 180.0 * Math.PI, 0 )
+    tallBoxProvider.translate = Point3( -2.0125, 0.9, -1.8825 )
+    val tallBoxLambertMaterialProvider = new LambertMaterialProvider
+    val tallBoxDiffuseTextureProvider = new SingleColorTextureProvider
+    tallBoxDiffuseTextureProvider.color = Color( 0.5, 0.5, 0.5 )
+    tallBoxLambertMaterialProvider.diffuseTextureProvider = Some( tallBoxDiffuseTextureProvider )
+    tallBoxProvider.materialProvider = Some( tallBoxLambertMaterialProvider )
+    worldProvider.geometryProvider += tallBoxProvider
+
+    val areaLightProvider = new AreaLightProvider
+    areaLightProvider.position = Point3( -1.52, 2.95, -1.52 )
+    areaLightProvider.direction = Vector3( 0, -1, 0 )
+    areaLightProvider.upVector = Vector3( 0, 0, -1 )
+    areaLightProvider.size = 0.71
+    areaLightProvider.samplingPoints = 16
+
+    worldProvider.lightDescriptionProvider += areaLightProvider
+
+    worldProvider
+  }
+
+  private def createSpheresScene : WorldProvider = {
+    val worldProvider = new WorldProvider
+    worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
+    worldProvider.backgroundColor = Color( 0.1, 0.1, 0.1 )
+    val cameraProvider = new PerspectiveCameraProvider
+    cameraProvider.position = Point3( 4, 3.0, 10.0 )
+    cameraProvider.gazeDirection = Point3( 4, 3.0, 10.0 ).asVector * -1
     cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].x = 5
     cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].y = 5
 
     worldProvider.cameraProvider = Some( cameraProvider )
 
-    val sphere1Provider = new SphereProvider
-    sphere1Provider.translate = Point3( -1, -1, 0 )
+    val r = new Random
 
-    val sphere1ReflectiveMaterial = new ReflectiveMaterialProvider
-    sphere1ReflectiveMaterial.phongExponent = 64
-    val sphere1DiffuseColorTexture = new SingleColorTextureProvider
-    sphere1DiffuseColorTexture.color = Color( 0.25, 0.01, 0.01 )
-    val sphere1SpecularColorTexture = new SingleColorTextureProvider
-    sphere1SpecularColorTexture.color = Color( 0.5, 0.5, 0.5 )
-    val sphere1MirrorColorTexture = new SingleColorTextureProvider
-    sphere1MirrorColorTexture.color = Color( 0.75, 0.75, 0.75 )
-    sphere1ReflectiveMaterial.diffuseTextureProvider = Some( sphere1DiffuseColorTexture )
-    sphere1ReflectiveMaterial.specularTextureProvider = Some( sphere1SpecularColorTexture )
-    sphere1ReflectiveMaterial.reflectionTextureProvider = Some( sphere1MirrorColorTexture )
-    sphere1Provider.materialProvider = Some( sphere1ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere1Provider
-
-    val sphere2Provider = new SphereProvider
-    sphere2Provider.translate = Point3( 1, -1, 0 )
-
-    val sphere2ReflectiveMaterial = new ReflectiveMaterialProvider
-    sphere2ReflectiveMaterial.phongExponent = 64
-    val sphere2DiffuseColorTexture = new SingleColorTextureProvider
-    sphere2DiffuseColorTexture.color = Color( 0.01, 0.25, 0.01 )
-    val sphere2SpecularColorTexture = new SingleColorTextureProvider
-    sphere2SpecularColorTexture.color = Color( 0.5, 0.5, 0.5 )
-    val sphere2MirrorColorTexture = new SingleColorTextureProvider
-    sphere2MirrorColorTexture.color = Color( 0.75, 0.75, 0.75 )
-    sphere2ReflectiveMaterial.diffuseTextureProvider = Some( sphere2DiffuseColorTexture )
-    sphere2ReflectiveMaterial.specularTextureProvider = Some( sphere2SpecularColorTexture )
-    sphere2ReflectiveMaterial.reflectionTextureProvider = Some( sphere2MirrorColorTexture )
-    sphere2Provider.materialProvider = Some( sphere2ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere2Provider
-
-    val sphere3Provider = new SphereProvider
-    sphere3Provider.translate = Point3( 0, 0.707, 0 )
-
-    val sphere3ReflectiveMaterial = new ReflectiveMaterialProvider
-    sphere3ReflectiveMaterial.phongExponent = 64
-    val sphere3DiffuseColorTexture = new SingleColorTextureProvider
-    sphere3DiffuseColorTexture.color = Color( 0.01, 0.01, 0.25 )
-    val sphere3SpecularColorTexture = new SingleColorTextureProvider
-    sphere3SpecularColorTexture.color = Color( 0.5, 0.5, 0.5 )
-    val sphere3MirrorColorTexture = new SingleColorTextureProvider
-    sphere3MirrorColorTexture.color = Color( 0.75, 0.75, 0.75 )
-    sphere3ReflectiveMaterial.diffuseTextureProvider = Some( sphere3DiffuseColorTexture )
-    sphere3ReflectiveMaterial.specularTextureProvider = Some( sphere3SpecularColorTexture )
-    sphere3ReflectiveMaterial.reflectionTextureProvider = Some( sphere3MirrorColorTexture )
-    sphere3Provider.materialProvider = Some( sphere3ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere3Provider
-
-    val sphere4Provider = new SphereProvider
-    sphere4Provider.translate = Point3( 0, 0.0, -0.707 )
-
-    val sphere4ReflectiveMaterial = new ReflectiveMaterialProvider
-    sphere4ReflectiveMaterial.phongExponent = 64
-    val sphere4DiffuseColorTexture = new SingleColorTextureProvider
-    sphere4DiffuseColorTexture.color = Color( 0.25, 0.25, 0.01 )
-    val sphere4SpecularColorTexture = new SingleColorTextureProvider
-    sphere4SpecularColorTexture.color = Color( 0.5, 0.5, 0.5 )
-    val sphere4MirrorColorTexture = new SingleColorTextureProvider
-    sphere4MirrorColorTexture.color = Color( 0.75, 0.75, 0.75 )
-    sphere4ReflectiveMaterial.diffuseTextureProvider = Some( sphere4DiffuseColorTexture )
-    sphere4ReflectiveMaterial.specularTextureProvider = Some( sphere4SpecularColorTexture )
-    sphere4ReflectiveMaterial.reflectionTextureProvider = Some( sphere4MirrorColorTexture )
-    sphere4Provider.materialProvider = Some( sphere4ReflectiveMaterial )
-    worldProvider.geometryProvider += sphere4Provider
-
+    for( x <- 0 to 10 ) {
+      for( y <- 0 to 10 ) {
+        for( z <- 0 to 10 ) {
+          val sphereProvider = new SphereProvider
+          val sphereReflectiveMaterial = new ReflectiveMaterialProvider
+          sphereReflectiveMaterial.phongExponent = 64
+          val sphereDiffuseColorTexture = new SingleColorTextureProvider
+          sphereDiffuseColorTexture.color = Color( r.nextDouble() * 0.25, r.nextDouble() * 0.25, r.nextDouble() * 0.25 )
+          val sphereSpecularColorTexture = new SingleColorTextureProvider
+          sphereSpecularColorTexture.color = Color( 0.5, 0.5, 0.5 )
+          val sphereMirrorColorTexture = new SingleColorTextureProvider
+          sphereMirrorColorTexture.color = Color( 0.75, 0.75, 0.75 )
+          sphereReflectiveMaterial.diffuseTextureProvider = Some( sphereDiffuseColorTexture )
+          sphereReflectiveMaterial.specularTextureProvider = Some( sphereSpecularColorTexture )
+          sphereReflectiveMaterial.reflectionTextureProvider = Some( sphereMirrorColorTexture )
+          sphereProvider.materialProvider = Some( sphereReflectiveMaterial )
+          sphereProvider.scale = Vector3( 0.25, 0.25, 0.25 )
+          sphereProvider.translate = Point3( x - 5, y - 5, z - 5 )
+          worldProvider.geometryProvider += sphereProvider
+        }
+      }
+    }
 
     val pointLightProvider = new PointLightProvider
-    pointLightProvider.position = Point3( 0, -0.5, 1.5 )
+    pointLightProvider.position = Point3( 0, 0, 10 )
     pointLightProvider.color = Color( 1.5, 1.5, 1.5 )
 
     worldProvider.lightDescriptionProvider += pointLightProvider
-
 
     worldProvider
   }
