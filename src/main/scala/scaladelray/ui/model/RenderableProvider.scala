@@ -20,7 +20,8 @@ import scaladelray.rendering.Renderable
 
 abstract class RenderableProvider {
 
-  def createRenderable : Renderable
+  def createRenderable( l : () => Unit ) : Renderable
   def remove( obj : AnyRef )
   def isReady : Boolean
+  def count : Int
 }

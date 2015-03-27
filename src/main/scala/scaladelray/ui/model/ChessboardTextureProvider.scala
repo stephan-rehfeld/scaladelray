@@ -21,26 +21,29 @@ import javax.swing.event.TableModelListener
 import scaladelray.texture.{ChessboardTexture, Texture}
 
 class ChessboardTextureProvider extends TextureProvider with TableModel {
+
   var x = 1
   var y = 1
 
+  override def createTexture( l : () => Unit ) : Texture = {
+    l()
+    ChessboardTexture( x, y )
+  }
 
-  def createTexture: Texture = ChessboardTexture( x, y )
+  override def getRowCount: Int = 2
 
-  def getRowCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnCount: Int = 2
-
-  def getColumnName(column: Int): String = column match {
+  override def getColumnName(column: Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(p1: Int): Class[_] = classOf[String]
+  override def getColumnClass(p1: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column == 1
+  override def isCellEditable(row: Int, column: Int): Boolean = column == 1
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 => row match {
       case 0 => "x"
       case 1 => "y"
@@ -51,7 +54,7 @@ class ChessboardTextureProvider extends TextureProvider with TableModel {
     }
   }
 
-  def setValueAt( obj : Any, row: Int, column: Int) {
+  override def setValueAt( obj : Any, row: Int, column: Int) {
 
     row match {
       case 0 => x = obj.asInstanceOf[String].toInt
@@ -60,12 +63,14 @@ class ChessboardTextureProvider extends TextureProvider with TableModel {
 
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-
-  def isReady: Boolean = true
+  override def isReady: Boolean = true
 
   override def toString: String = "Chessboard texture"
+
+  override def count = 1
+
 }

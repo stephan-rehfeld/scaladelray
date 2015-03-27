@@ -21,7 +21,7 @@ import scala.swing.GridBagPanel.{Anchor, Fill}
 import javax.swing.table.{TableCellEditor, TableModel}
 import scaladelray.ui.model._
 import javax.swing._
-import javax.swing.tree.TreeSelectionModel
+import javax.swing.tree.{TreePath, TreeModel, TreeSelectionModel}
 import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
 import scaladelray.Constants
@@ -37,6 +37,10 @@ import scala.Some
 import scala.swing.Action
 import scala.swing.event.ButtonClicked
 import scaladelray.Color
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
+import scala.async.Async.async
+import scala.util.Random
 
 case class StartDiscovery()
 
@@ -52,7 +56,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
     def tableChanged(e: TableModelEvent) {
-      updateUI()
+      updateUI( None )
     }
 
     val c = new Constraints
@@ -80,7 +84,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += pp
 
           }
-          updateUI()
+          updateUI( Some( pp ) )
       }
     }
 
@@ -110,7 +114,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -139,7 +143,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -168,7 +172,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
 
@@ -198,7 +202,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
 
@@ -228,7 +232,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             worldProvider.renderableProvider += sp
 
           }
-          updateUI()
+          updateUI( Some( sp ) )
       }
     }
     c.fill = Fill.Horizontal
@@ -247,7 +251,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new PointLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -263,7 +267,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new SpotLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -279,7 +283,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new DirectionalLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -295,7 +299,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             val sp = new AreaLightProvider
             detailsTable.model = sp
             worldProvider.lightDescriptionProvider += sp
-            updateUI()
+            updateUI( Some( sp ) )
         }
       }
       c.fill = Fill.Horizontal
@@ -317,7 +321,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     createSingleBackgroundColorMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
         worldProvider.backgroundProvider = Some( new SingleBackgroundColorProvider)
-        updateUI()
+        updateUI( Some( worldProvider.backgroundProvider ) )
       }
     })
 
@@ -325,7 +329,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     createSkyboxMenuItem.addActionListener( new ActionListener {
       def actionPerformed(e: ActionEvent) {
         worldProvider.backgroundProvider = Some( new SkyboxProvider )
-        updateUI()
+        updateUI( Some( worldProvider.backgroundProvider ) )
       }
     })
     backgroundPopupMenu.add( createSingleBackgroundColorMenuItem )
@@ -338,7 +342,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val ocp = new OrthograpicCameraProvider
         worldProvider.cameraProvider = Some( ocp )
         detailsTable.model = ocp
-        updateUI()
+        updateUI( Some( ocp ))
       }
     })
     val createPerspectiveCameraMenuItem = new JMenuItem( "Perspective Camera" )
@@ -347,7 +351,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val pcp = new PerspectiveCameraProvider
         worldProvider.cameraProvider = Some( pcp )
         detailsTable.model = pcp
-        updateUI()
+        updateUI( Some( pcp ))
       }
     })
     val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
@@ -356,7 +360,7 @@ object ScalaDelRay extends SimpleSwingApplication {
         val dofcp = new DOFCameraProvider
         worldProvider.cameraProvider = Some( dofcp )
         detailsTable.model = dofcp
-        updateUI()
+        updateUI( Some( dofcp ))
       }
     })
 
@@ -393,7 +397,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = rspp
-        updateUI()
+        updateUI( Some( rspp ) )
       }
     })
 
@@ -419,7 +423,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = scmp
-        updateUI()
+        updateUI( Some( scmp ) )
       }
     })
 
@@ -442,7 +446,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = lmp
-        updateUI()
+        updateUI( Some( lmp ) )
       }
     })
 
@@ -465,7 +469,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = pmp
-        updateUI()
+        updateUI( Some( pmp ) )
       }
     })
 
@@ -488,7 +492,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = rmp
-        updateUI()
+        updateUI( Some( rmp ) )
       }
     })
 
@@ -511,7 +515,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = tmp
-        updateUI()
+        updateUI( Some( tmp ) )
       }
     })
 
@@ -590,7 +594,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = sctp
-        updateUI()
+        updateUI( Some( sctp ) )
       }
     })
 
@@ -662,7 +666,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = ctp
-        updateUI()
+        updateUI( Some( ctp ) )
       }
     })
 
@@ -734,7 +738,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = itp
-        updateUI()
+        updateUI( Some( itp ) )
       }
     })
 
@@ -806,7 +810,7 @@ object ScalaDelRay extends SimpleSwingApplication {
           case None =>
         }
         detailsTable.model = iitp
-        updateUI()
+        updateUI( Some( iitp ) )
       }
     })
 
@@ -817,6 +821,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
 
     val sceneGraphTree = new JTree
+    sceneGraphTree.setExpandsSelectedPaths( true )
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
     sceneGraphTree.addKeyListener( new KeyListener {
       def keyTyped(e: KeyEvent) {
@@ -826,7 +831,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             if( node != null ) {
               val s = sceneGraphTree.getSelectionRows
               worldProvider.remove( node )
-              updateUI()
+              updateUI( None )
               detailsTable.model = DummyTableModel
               sceneGraphTree.setSelectionRows( s )
             }
@@ -1054,12 +1059,24 @@ object ScalaDelRay extends SimpleSwingApplication {
       text = "Render"
       reactions += {
         case ButtonClicked(_) =>
-          val (c,w) = worldProvider.createWorld
-          val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
-          window.a ! StartRendering()
-
+          text = "Preparing"
+          enabled = false
+          progressBar.value = 0
+          async {
+            val totalSteps = worldProvider.count.asInstanceOf[Double]
+            var steps = 0.0
+            val (c,w) = worldProvider.createWorld( () => {
+              steps = steps + 1
+              progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
+            })
+            val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
+            window.a ! StartRendering()
+            text = "Render"
+            enabled = true
+          }
       }
     }
+
     c.fill = Fill.Horizontal
     c.ipady = 0
     c.weighty = 0
@@ -1068,9 +1085,45 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 4
     layout( renderButton ) = c
 
-    private def updateUI() {
+    val progressBar = new ProgressBar{
+      min = 0
+      max = 100
+      value = 0
+    }
+
+    c.fill = Fill.Horizontal
+    c.ipady = 0
+    c.weighty = 0
+    c.weightx = 0.5
+    c.gridx = 0
+    c.gridy = 5
+    layout( progressBar ) = c
+
+    private def createPath( root : AnyRef, item : AnyRef, model : TreeModel, path : Vector[AnyRef] ) : Option[Vector[AnyRef]] = {
+      if( root == item )
+        Some( path :+ item )
+      else {
+        for( i <- 0 until model.getChildCount( root ) ) {
+          val newRoot = model.getChild( root, i )
+          val r = createPath( newRoot, item, model, path :+ root )
+          if( r.isDefined ) return r
+          }
+        None
+        }
+      }
+
+
+
+    private def updateUI( newElement : Option[AnyRef] ) {
       sceneGraphTree.updateUI()
       renderButton.enabled = worldProvider.isReady
+      if( newElement.isDefined ) {
+        val model = sceneGraphTree.getModel
+        val root = sceneGraphTree.getModel.getRoot
+        val path = createPath( root, newElement.get, model, Vector[AnyRef]() )
+        if( path.isDefined )
+          sceneGraphTree.setSelectionPath( new TreePath( path.get.toArray  ))
+      }
     }
 
   }
@@ -1474,8 +1527,6 @@ object ScalaDelRay extends SimpleSwingApplication {
 
   }
 
-
-
   private def createStandardScene : WorldProvider = {
     val worldProvider = new WorldProvider
     worldProvider.ambientLight = Color( 0.1, 0.1, 0.1 )
@@ -1564,7 +1615,6 @@ object ScalaDelRay extends SimpleSwingApplication {
     pointLightProvider.color = Color( 1.5, 1.5, 1.5 )
 
     worldProvider.lightDescriptionProvider += pointLightProvider
-
 
     worldProvider
   }

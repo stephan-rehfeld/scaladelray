@@ -20,8 +20,9 @@ import scaladelray.material.Material
 
 abstract class MaterialProvider {
 
-  def createMaterial : Material
+  def createMaterial( l : () => Unit ) : Material
   def remove( obj : AnyRef )
   def isReady : Boolean
+  def count : Int
 
 }

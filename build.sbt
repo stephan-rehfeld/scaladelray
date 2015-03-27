@@ -1,8 +1,8 @@
 name := "ScalaDelRay"
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 scalacOptions ++= Seq("-feature", "-language:postfixOps")
 
@@ -23,3 +23,5 @@ libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.9"
 libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.3.9"
 
 libraryDependencies += "com.typesafe" % "config" % "1.2.1"
+
+libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.2"

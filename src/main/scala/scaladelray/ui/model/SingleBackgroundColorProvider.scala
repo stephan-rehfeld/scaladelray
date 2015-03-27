@@ -67,11 +67,16 @@ class SingleBackgroundColorProvider extends BackgroundProvider with TableModel {
 
   override def removeTableModelListener(l: TableModelListener): Unit = {}
 
-  override def createBackground: Background = new SingleBackgroundColor( color )
+  override def createBackground( l : () => Unit ) : Background = {
+    l()
+    new SingleBackgroundColor( color )
+  }
 
   override def isReady: Boolean = true
 
   override def remove( obj : AnyRef ) {}
 
   override def toString: String = "Single Color Background"
+
+  override def count = 1
 }

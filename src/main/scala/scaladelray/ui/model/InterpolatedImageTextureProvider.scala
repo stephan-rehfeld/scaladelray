@@ -31,23 +31,26 @@ class InterpolatedImageTextureProvider( tml : TableModelListener ) extends Textu
   var listener = mutable.Set[TableModelListener]()
 
   listener += tml
+ 
+  override def createTexture( l : () => Unit ) : Texture = {
+    l()
+    InterpolatedImageTexture( fileName, flipHorizontally, flipVertically )
+  }
 
-  def createTexture: Texture = InterpolatedImageTexture( fileName, flipHorizontally, flipVertically )
+  override def getRowCount: Int = 3
 
-  def getRowCount: Int = 3
+  override def getColumnCount: Int = 2
 
-  def getColumnCount: Int = 2
-
-  def getColumnName(column: Int): String = column match {
+  override def getColumnName(column: Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(p1: Int): Class[_] = classOf[String]
+  override def getColumnClass(p1: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column == 1
+  override def isCellEditable(row: Int, column: Int): Boolean = column == 1
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 => row match {
       case 0 => "File"
       case 1 => "Flip Horizontally"
@@ -60,7 +63,7 @@ class InterpolatedImageTextureProvider( tml : TableModelListener ) extends Textu
     }
   }
 
-  def setValueAt( obj : Any, row: Int, column: Int) {
+  override def setValueAt( obj : Any, row: Int, column: Int) {
     row match {
       case 0 =>
         fileName = obj.asInstanceOf[String]
@@ -74,16 +77,18 @@ class InterpolatedImageTextureProvider( tml : TableModelListener ) extends Textu
     }
   }
 
-  def addTableModelListener( l : TableModelListener) {
+  override def addTableModelListener( l : TableModelListener) {
     listener += l
   }
 
-  def removeTableModelListener( l : TableModelListener) {
+  override def removeTableModelListener( l : TableModelListener) {
     listener -= l
   }
 
-  def isReady: Boolean = new File( fileName ).exists()
+  override def isReady: Boolean = new File( fileName ).exists()
 
   override def toString: String = "Interpolated image texture"
+
+  override def count = 1
 
 }

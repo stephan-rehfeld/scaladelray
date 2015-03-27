@@ -17,7 +17,7 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.camera.{OrthographicCamera, Camera}
+import scaladelray.camera.OrthographicCamera
 import javax.swing.event.TableModelListener
 import scaladelray.math.{Vector3, Point3}
 
@@ -29,25 +29,28 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
   var size = 1.0
   var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
 
-  def createCamera = OrthographicCamera( position, gazeDirection, upVector, _, _, size, samplingPatternProvider.get.createSamplingPattern )
+  override def createCamera( l : () => Unit ) = {
+    l()
+    OrthographicCamera( position, gazeDirection, upVector, _, _, size, samplingPatternProvider.get.createSamplingPattern( l ) )
+  }
 
-  def getRowCount: Int = 4
+  override def getRowCount: Int = 4
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -72,8 +75,7 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
       }
   }
 
-
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -93,16 +95,17 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
     }
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
   }
 
-
-  def isReady: Boolean = samplingPatternProvider.isDefined
+  override def isReady: Boolean = samplingPatternProvider.isDefined
 
   override def toString: String = "Orthographic Camera"
+
+  override def count = 1 + samplingPatternProvider.get.count
 }

@@ -30,30 +30,31 @@ class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
   var rotate = Vector3( 0, 0, 0 )
   var normalMapProvider : Option[TextureProvider] = None
 
-  override def createRenderable = {
-    val aab = new AxisAlignedBox( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture ) else None )
+  override def createRenderable( l : () => Unit ) = {
+    l()
+    val aab = new AxisAlignedBox( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val m = materialProvider.get.createMaterial
+    val m = materialProvider.get.createMaterial( l )
     Renderable( t, aab, m )
   }
 
-  def getRowCount: Int = 3
+  override def getRowCount: Int = 3
 
-  def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-  def getColumnName( column : Int): String = column match {
+  override def getColumnName( column : Int): String = column match {
     case 0 => "Property"
     case 1 => "Value"
   }
 
-  def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-  def isCellEditable(row: Int, column: Int): Boolean = column match {
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
     case 0 => false
     case 1 => true
   }
 
-  def getValueAt(row: Int, column: Int): AnyRef = column match {
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 =>
       row match {
         case 0 =>
@@ -74,7 +75,7 @@ class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
       }
   }
 
-  def setValueAt(obj: Any, row: Int, column: Int) {
+  override def setValueAt(obj: Any, row: Int, column: Int) {
     try {
       row match {
         case 0 =>
@@ -93,17 +94,19 @@ class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
 
   }
 
-  def remove(obj: AnyRef) {
+  override def remove(obj: AnyRef) {
     if( materialProvider.isDefined && materialProvider.get == obj ) materialProvider = None
     if( materialProvider.isDefined ) materialProvider.get.remove( obj )
     if( normalMapProvider.isDefined && normalMapProvider.get == obj ) normalMapProvider = None
   }
 
-  def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-  def isReady: Boolean = ( materialProvider.isDefined  && materialProvider.get.isReady ) && (normalMapProvider.isEmpty || normalMapProvider.get.isReady )
+  override def isReady: Boolean = ( materialProvider.isDefined  && materialProvider.get.isReady ) && (normalMapProvider.isEmpty || normalMapProvider.get.isReady )
 
-  def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
   override def toString: String = "Box"
+
+  override def count = 1 + materialProvider.get.count + (if( normalMapProvider.isDefined ) normalMapProvider.get.count else 0)
 }

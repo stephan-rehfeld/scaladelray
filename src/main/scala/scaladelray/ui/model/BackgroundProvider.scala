@@ -20,8 +20,8 @@ import scaladelray.world.Background
 
 abstract class BackgroundProvider {
 
-  def createBackground : Background
+  def createBackground( l : () => Unit ) : Background
   def isReady : Boolean
   def remove( obj : AnyRef )
-
+  def count : Int
 }

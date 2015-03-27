@@ -53,8 +53,13 @@ class SkyboxProvider extends BackgroundProvider with TableModel {
 
   override def removeTableModelListener(l: TableModelListener): Unit = {}
 
-  override def createBackground: Background = new Skybox( frontTextureProvider.get.createTexture, backTextureProvider.get.createTexture, leftTextureProvider.get.createTexture, rightTextureProvider.get.createTexture, topTextureProvider.get.createTexture, bottomTextureProvider.get.createTexture )
+  override def createBackground( l : () => Unit ) : Background = {
+    l()
+    new Skybox( frontTextureProvider.get.createTexture( l ), backTextureProvider.get.createTexture( l ), leftTextureProvider.get.createTexture( l ), rightTextureProvider.get.createTexture( l ), topTextureProvider.get.createTexture( l ), bottomTextureProvider.get.createTexture( l ) )
+  }
+
   override def isReady: Boolean = frontTextureProvider.isDefined && frontTextureProvider.get.isReady && backTextureProvider.isDefined && backTextureProvider.get.isReady && leftTextureProvider.isDefined && leftTextureProvider.get.isReady && rightTextureProvider.isDefined && rightTextureProvider.get.isReady && topTextureProvider.isDefined && topTextureProvider.get.isReady && bottomTextureProvider.isDefined && bottomTextureProvider.get.isReady
+
   override def remove( obj : AnyRef ) {
     if( frontTextureProvider.isDefined && frontTextureProvider.get == obj ) frontTextureProvider = None
     if( backTextureProvider.isDefined && backTextureProvider.get == obj ) backTextureProvider = None
@@ -67,4 +72,5 @@ class SkyboxProvider extends BackgroundProvider with TableModel {
 
   override def toString: String = "Skybox"
 
+  override def count: Int = 1 + frontTextureProvider.get.count + backTextureProvider.get.count + leftTextureProvider.get.count + rightTextureProvider.get.count + topTextureProvider.get.count + bottomTextureProvider.get.count
 }

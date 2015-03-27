@@ -24,85 +24,91 @@ import javax.swing.event.TableModelListener
 
 class PerspectiveCameraProvider extends CameraProvider with TableModel {
 
-    var position = Point3( 0, 0, 0 )
-    var gazeDirection = Vector3( 0, 0, -1 )
-    var upVector = Vector3( 0, 1, 0 )
-    var angle = math.Pi / 4.0
-    var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
+  var position = Point3( 0, 0, 0 )
+  var gazeDirection = Vector3( 0, 0, -1 )
+  var upVector = Vector3( 0, 1, 0 )
+  var angle = math.Pi / 4.0
+  var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
 
-    def createCamera = PerspectiveCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern )
+  override def createCamera( l : () => Unit ) = {
+    l()
+    PerspectiveCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern( l ) )
+  }
 
-    def getRowCount: Int = 4
+  override def getRowCount: Int = 4
 
-    def getColumnCount: Int = 2
+  override def getColumnCount: Int = 2
 
-    def getColumnName( column : Int): String = column match {
-      case 0 => "Property"
-      case 1 => "Value"
-    }
+  override def getColumnName( column : Int): String = column match {
+    case 0 => "Property"
+    case 1 => "Value"
+  }
 
-    def getColumnClass(row: Int): Class[_] = classOf[String]
+  override def getColumnClass(row: Int): Class[_] = classOf[String]
 
-    def isCellEditable(row: Int, column: Int): Boolean = column match {
-      case 0 => false
-      case 1 => true
-    }
+  override def isCellEditable(row: Int, column: Int): Boolean = column match {
+    case 0 => false
+    case 1 => true
+  }
 
-    def getValueAt(row: Int, column: Int): AnyRef = column match {
-      case 0 =>
-        row match {
-          case 0 =>
-            "Position"
-          case 1 =>
-            "Gaze direction"
-          case 2 =>
-            "Up vector"
-          case 3 =>
-            "Angle"
-        }
-      case 1 =>
-        row match {
-          case 0 =>
-            "" + position.x + " " + position.y + " " + position.z
-          case 1 =>
-            "" + gazeDirection.x + " " + gazeDirection.y + " " + gazeDirection.z
-          case 2 =>
-            "" + upVector.x + " " + upVector.y + " " + upVector.z
-          case 3 =>
-            new java.lang.Double( math.toDegrees( angle ) )
-        }
-    }
-
-
-    def setValueAt(obj: Any, row: Int, column: Int) {
-      try {
-        row match {
-          case 0 =>
-            val v = obj.asInstanceOf[String].split( " " )
-            position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
-          case 1 =>
-            val v = obj.asInstanceOf[String].split( " " )
-            gazeDirection = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
-          case 2 =>
-            val v = obj.asInstanceOf[String].split( " " )
-            upVector = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
-          case 3 =>
-            angle = math.toRadians( obj.asInstanceOf[String].toDouble )
-        }
-      } catch {
-        case _ : Throwable =>
+  override def getValueAt(row: Int, column: Int): AnyRef = column match {
+    case 0 =>
+      row match {
+        case 0 =>
+          "Position"
+        case 1 =>
+          "Gaze direction"
+        case 2 =>
+          "Up vector"
+        case 3 =>
+          "Angle"
       }
+    case 1 =>
+      row match {
+        case 0 =>
+          "" + position.x + " " + position.y + " " + position.z
+        case 1 =>
+          "" + gazeDirection.x + " " + gazeDirection.y + " " + gazeDirection.z
+        case 2 =>
+          "" + upVector.x + " " + upVector.y + " " + upVector.z
+        case 3 =>
+          new java.lang.Double( math.toDegrees( angle ) )
+      }
+  }
+
+
+  override def setValueAt(obj: Any, row: Int, column: Int) {
+    try {
+      row match {
+        case 0 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        case 1 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          gazeDirection = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        case 2 =>
+          val v = obj.asInstanceOf[String].split( " " )
+          upVector = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+        case 3 =>
+          angle = math.toRadians( obj.asInstanceOf[String].toDouble )
+      }
+    } catch {
+      case _ : Throwable =>
     }
+  }
 
-    def addTableModelListener(p1: TableModelListener) {}
+  override def addTableModelListener(p1: TableModelListener) {}
 
-    def removeTableModelListener(p1: TableModelListener) {}
+  override def removeTableModelListener(p1: TableModelListener) {}
 
-    def remove(obj: AnyRef) {
-      if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
-    }
+  override def remove(obj: AnyRef) {
+    if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
+  }
 
-    def isReady: Boolean = samplingPatternProvider.isDefined
+  override def isReady: Boolean = samplingPatternProvider.isDefined
 
-    override def toString: String = "Perspective Camera"
+  override def toString: String = "Perspective Camera"
+
+  override def count = 1 + samplingPatternProvider.get.count
+
 }
