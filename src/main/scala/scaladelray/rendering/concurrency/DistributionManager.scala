@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
+package scaladelray.rendering.concurrency
 
-import scaladelray.world.World
-import scaladelray.camera.Camera
-import scaladelray.HDRImage
-import scaladelray.rendering.concurrency.DistributionManager
+/**
+ * DistributionManager is the abstract base class for any service that manages the distribution of rendering tasks.
+ * Tasks can be performed sequentially, concurrently on the local machine (e.g. SMP or CMP systems), concurrently
+ * across local network (clustering), or to a cloud.
+ */
+abstract class DistributionManager {
 
-class RayCasting extends Algorithm {
-  def render(w: World, c: Camera, l: Option[(HDRImage) => Unit], dm: Option[DistributionManager]): HDRImage = ???
 }

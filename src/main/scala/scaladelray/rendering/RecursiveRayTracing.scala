@@ -16,6 +16,11 @@
 
 package scaladelray.rendering
 
-class RecursiveRayTracing extends Algorithm {
+import scaladelray.world.World
+import scaladelray.camera.Camera
+import scaladelray.HDRImage
+import scaladelray.rendering.concurrency.DistributionManager
 
+class RecursiveRayTracing extends Algorithm {
+  def render(w: World, c: Camera, l: Option[(HDRImage) => Unit], dm: Option[DistributionManager]): HDRImage = ???
 }
