@@ -26,9 +26,9 @@ import scaladelray.world.World
 case class LightBlendingMaterial( bright : Texture, dark : Texture ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
-    val colorBright = bright( hit.texCoord2D )
-    val colorDark = dark( hit.texCoord2D )
-    val normal = hit.n
+    val colorBright = bright( hit.sp.t )
+    val colorDark = dark( hit.sp.t )
+    val normal = hit.sp.n
     val p =  hit.ray( hit.t )
     val lights = for( light <- world.lightDescriptions ) yield light.createLight
     if ( lights.size == 0 )

@@ -31,6 +31,7 @@ import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
 import scaladelray.rendering.Hit
 import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.geometry.SurfacePoint
 
 class LambertMaterialSpec extends FunSpec {
 
@@ -42,7 +43,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -57,7 +58,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -85,7 +86,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -107,7 +108,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -137,7 +138,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -163,7 +164,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -183,7 +184,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 0, 0 ) )
     }
@@ -197,7 +198,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 0, 1, -1 ).normalized, Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
     }
@@ -215,7 +216,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
     }
@@ -233,7 +234,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.5 ) )
     }
@@ -251,7 +252,7 @@ class LambertMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) =~= (Color( 1, 1, 1 ) * Math.cos( Math.PI / 4 )) )
     }

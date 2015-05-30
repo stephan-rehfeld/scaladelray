@@ -54,18 +54,18 @@ class TriangleSpec extends FunSpec {
 
 
       for( h <- h1 ) {
-        assert( h.n == n1 )
-        assert( h.texCoord2D == t1 )
+        assert( h.sp.n == n1 )
+        assert( h.sp.t == t1 )
       }
 
       for( h <- h2 ) {
-        assert( h.n == n2 )
-        assert( h.texCoord2D == t2 )
+        assert( h.sp.n == n2 )
+        assert( h.sp.t == t2 )
       }
 
       for( h <- h3 ) {
-        assert( h.n == n3 )
-        assert( h.texCoord2D == t3 )
+        assert( h.sp.n == n3 )
+        assert( h.sp.t == t3 )
       }
 
     }
@@ -84,18 +84,18 @@ class TriangleSpec extends FunSpec {
       assert( h3.nonEmpty )
 
       for( h <- h1 ) {
-        assert( h.n == (n1 + n2) * 0.5 )
-        assert( h.texCoord2D == (t1 + t2) * 0.5 )
+        assert( h.sp.n == (n1 + n2) * 0.5 )
+        assert( h.sp.t == (t1 + t2) * 0.5 )
       }
 
       for( h <- h2 ) {
-        assert( h.n == (n2 + n3 ) * 0.5  )
-        assert( h.texCoord2D == (t2 + t3) * 0.5 )
+        assert( h.sp.n == (n2 + n3 ) * 0.5  )
+        assert( h.sp.t == (t2 + t3) * 0.5 )
       }
 
       for( h <- h3 ) {
-        assert( h.n == (n3 + n1) * 0.5 )
-        assert( h.texCoord2D == (t3 + t1) * 0.5 )
+        assert( h.sp.n == (n3 + n1) * 0.5 )
+        assert( h.sp.t == (t3 + t1) * 0.5 )
       }
     }
 
@@ -108,8 +108,8 @@ class TriangleSpec extends FunSpec {
       assert( h.nonEmpty )
 
       for( hit <- h ) {
-        assert( hit.n =~= (n1 + n2 + n3 ) * (1.0/3.0)  )
-        assert( hit.texCoord2D == (t1 + t2 + t3) * (1.0/3.0) )
+        assert( hit.sp.n =~= (n1 + n2 + n3 ) * (1.0/3.0)  )
+        assert( hit.sp.t == (t1 + t2 + t3) * (1.0/3.0) )
       }
 
     }

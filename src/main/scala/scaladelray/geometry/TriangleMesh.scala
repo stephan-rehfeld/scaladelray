@@ -184,7 +184,7 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
 
       if( !(beta < 0.0 || gamma < 0.0 || beta + gamma > 1.0 || t < Constants.EPSILON) ) {
         val alpha = 1 - beta - gamma
-        hits += GeometryHit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
+        hits += GeometryHit( r, this, t, SurfacePoint( r( t ), an * alpha + bn * beta + cn * gamma, Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), at * alpha + bt * beta + ct * gamma ) )
       }
     }
     hits.toSet

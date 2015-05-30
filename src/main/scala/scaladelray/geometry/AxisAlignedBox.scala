@@ -96,7 +96,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
       if( p.x >= AxisAlignedBox.lbf.x && p.x <= AxisAlignedBox.run.x && p.y >= AxisAlignedBox.lbf.y && p.y <= AxisAlignedBox.run.y ) hits = hits + hit
     }
 
-    for( hit <- hits ) yield GeometryHit( hit.ray, this, hit.t, hit.n, hit.texCoord2D )
+    for( hit <- hits ) yield GeometryHit( hit.ray, this, hit.t, hit.sp )
 
   }
 

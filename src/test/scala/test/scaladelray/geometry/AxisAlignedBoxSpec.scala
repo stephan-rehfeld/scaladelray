@@ -159,7 +159,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, 1 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
 
     it( "should interpret a blue color of 0 as -z Axis" ) {
@@ -168,7 +168,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, -1 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
 
     it( "should interpret a red color of 1 as +x Axis" ) {
@@ -177,7 +177,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n == Normal3( 1, 0, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n == Normal3( 1, 0, 0 ) ) )
     }
 
     it( "should interpret a red color of 0 as -x Axis" ) {
@@ -186,7 +186,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n == Normal3( -1, 0, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n == Normal3( -1, 0, 0 ) ) )
     }
 
     it( "should interpret a green color of 1 as +y Axis" ) {
@@ -195,7 +195,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 1, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
 
     it( "should interpret a green color of 0 as -y Axis" ) {
@@ -204,7 +204,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val aab = AxisAlignedBox( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, -1, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, -1, 0 ) ) )
     }
 
   }

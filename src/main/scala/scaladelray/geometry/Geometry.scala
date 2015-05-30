@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Normal3, Ray}
+import scaladelray.math.{Vector3, Point3, Normal3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 
@@ -28,10 +28,20 @@ import scaladelray.texture.{Texture, TexCoord2D}
  * @param ray The ray that hits the geometry.
  * @param geometry The geometry hit by the ray.
  * @param t The t value of the hit.
- * @param n The normal of the hit.
- * @param texCoord2D The texture coordinate of the hit.
+ * @param sp The surface point at the intersection.
  */
-case class GeometryHit( ray : Ray, geometry : Geometry, t : Double, n : Normal3, texCoord2D : TexCoord2D ) extends Serializable
+case class GeometryHit( ray : Ray, geometry : Geometry, t : Double, sp : SurfacePoint ) extends Serializable
+
+/**
+ * An instance of this class describes a point on a surface in space with all its attributes.
+ *
+ * @param p Location of the point in space
+ * @param n The normal at the point
+ * @param tan The tangent at the point.
+ * @param biTan The bitangent at the point.
+ * @param t The texture coordinate at the point.
+ */
+case class SurfacePoint( p : Point3, n : Normal3, tan : Vector3, biTan : Vector3, t : TexCoord2D ) extends Serializable
 
 /**
  * The base class for all geometries.

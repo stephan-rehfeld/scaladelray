@@ -49,7 +49,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
           case None =>
             p.asNormal
         }
-        Set( GeometryHit( r, this, t, n, texCoord ) )
+        Set( GeometryHit( r, this, t, SurfacePoint( r(t), n, tangent, bitangent, texCoord ) ) )
 
       case _ =>
         val t1 = (-two + scala.math.sqrt( four ))/ (2 * one)
@@ -79,7 +79,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
             p2.asNormal
         }
 
-        Set() + GeometryHit( r, this, t1, n1, texCoord1 ) + GeometryHit( r, this, t2, n2, texCoord2 )
+        Set() + GeometryHit( r, this, t1, SurfacePoint( r(t1), n1, tangent1, bitangent1, texCoord1 ) ) + GeometryHit( r, this, t2, SurfacePoint( r(t2), n2, tangent2, bitangent2, texCoord2 ) )
     }
   }
 

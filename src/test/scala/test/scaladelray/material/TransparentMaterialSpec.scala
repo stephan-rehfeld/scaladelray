@@ -17,13 +17,19 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.material.TransparentMaterial
-import scaladelray.Color
-import scaladelray.math.{Transform, Vector3, Point3, Ray}
+import scaladelray.math._
+import scaladelray.geometry.SurfacePoint
 import test.scaladelray.geometry.GeometryTestAdapter
+import scaladelray.world.World
+import scaladelray.math.Vector3
+import scaladelray.math.Point3
+import scaladelray.material.TransparentMaterial
+import scaladelray.math.Ray
+import scaladelray.world.SingleBackgroundColor
+import scaladelray.rendering.Renderable
+import scaladelray.Color
 import scaladelray.texture.TexCoord2D
-import scaladelray.rendering.{Renderable, Hit}
-import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.rendering.Hit
 
 class TransparentMaterialSpec extends FunSpec {
 
@@ -36,7 +42,8 @@ class TransparentMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
+
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
 
       var called = 0
 

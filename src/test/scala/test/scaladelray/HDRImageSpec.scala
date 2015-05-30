@@ -18,10 +18,8 @@ package test.scaladelray
 
 import scala.util.Random
 import scaladelray.{Color, HDRImage}
+import org.scalatest.FunSpec
 
-/**
- * Created by Stephan Rehfeld on 20.05.15.
- */
 class HDRImageSpec extends FunSpec {
 
   describe( "A HDRImage" ) {

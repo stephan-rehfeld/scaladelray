@@ -17,6 +17,7 @@
 package test.scaladelray
 
 import scaladelray.{Constants, Color}
+import org.scalatest.FunSpec
 
 class ColorSpec extends FunSpec {
 

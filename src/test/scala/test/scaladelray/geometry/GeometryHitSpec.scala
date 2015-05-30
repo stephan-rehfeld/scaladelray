@@ -18,26 +18,24 @@ package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
 import scaladelray.math.{Normal3, Ray, Point3, Vector3}
-import scaladelray.geometry.GeometryHit
+import scaladelray.geometry.{SurfacePoint, GeometryHit}
 import scaladelray.texture.TexCoord2D
 
-class HitSpec extends FunSpec {
+class GeometryHitSpec extends FunSpec {
 
-  describe( "A Hit" ) {
-    it( "should consume a ray, geometry, t, normal, and texture coordinate as constructor parameter and provider them as value") {
+  describe( "A GeometryHit" ) {
+    it( "should consume a ray, geometry, t, and surface point as constructor parameter and provider them as value") {
       val r = Ray( Point3( 3, 5, 7 ), Vector3( 11, 13, 17 ) )
       val g = new GeometryTestAdapter()
       val t = 8.15
-      val n = Normal3( 3, 5, 7 )
-      val tc = TexCoord2D( 2, 3 )
+      val sp = SurfacePoint( r( t ), Normal3( 1, 0, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 2, 3 ) )
 
-      val hit = GeometryHit( r, g, t, n ,tc )
+      val hit = GeometryHit( r, g, t, sp )
 
       assert( hit.ray == r )
       assert( hit.geometry == g )
       assert( hit.t == t )
-      assert( hit.n == n )
-      assert( hit.texCoord2D == tc )
+      assert( hit.sp == sp)
 
     }
   }

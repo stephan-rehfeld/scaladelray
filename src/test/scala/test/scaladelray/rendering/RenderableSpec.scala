@@ -18,8 +18,7 @@ package test.scaladelray.rendering
 
 import org.scalatest.FunSpec
 import scaladelray.math._
-import scaladelray.geometry.Geometry
-import scaladelray.geometry.GeometryHit
+import scaladelray.geometry.{SurfacePoint, Geometry, GeometryHit}
 import scaladelray.material.SingleColorMaterial
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
@@ -54,7 +53,7 @@ class RenderableSpec extends FunSpec {
       val g = new Geometry {
         override val normalMap = None
         override def <--(r: Ray): Set[GeometryHit] = {
-          Set() + GeometryHit( r, this, 1, Normal3( 0, 1, 0 ), TexCoord2D( 0, 0 ) )
+          Set() + GeometryHit( r, this, 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) ) )
         }
       }
       val renderable = Renderable( t, g, SingleColorMaterial( Color( 0, 0, 0 ) ) )
@@ -63,7 +62,7 @@ class RenderableSpec extends FunSpec {
       assert( hits.head.t == 1 )
       assert( hits.head.ray == ray )
       assert( hits.head.renderable == renderable )
-      assert( hits.head.n == (t.i.transposed * Normal3( 0, 1, 0 )).normalized )
+      assert( hits.head.sp.n == (t.i.transposed * Normal3( 0, 1, 0 )).normalized )
     }
   }
 

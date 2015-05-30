@@ -30,6 +30,7 @@ import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.geometry.SurfacePoint
 
 class PhongMaterialSpec extends FunSpec {
 
@@ -42,7 +43,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -62,7 +63,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -92,7 +93,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -115,7 +116,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -147,7 +148,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -174,7 +175,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -196,7 +197,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) )
     }
@@ -212,9 +213,10 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Vector3( 0, 1, 1 ).normalized.asNormal, tc )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.n ) dot -r.d , 0 ) )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+
+      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 0 ) )
     }
 
     it( "should use the information if the light illuminates the surface to calculate the color" ) {
@@ -232,7 +234,8 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
     }
@@ -252,7 +255,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.0 ) )
     }
@@ -271,7 +274,7 @@ class PhongMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 0, 1 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) * Math.cos( Math.PI / 4 ) )
     }

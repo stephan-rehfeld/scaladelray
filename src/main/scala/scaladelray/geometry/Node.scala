@@ -35,7 +35,7 @@ case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serial
     for( node <- nodes ) {
       hits = hits | (transformedRay --> node )
     }
-    for( hit <- hits ) yield GeometryHit( r, hit.geometry, hit.t, (t.i.transposed * hit.n).normalized, hit.texCoord2D )
+    for( hit <- hits ) yield GeometryHit( r, hit.geometry, hit.t, SurfacePoint( t.m * hit.sp.p, (t.i.transposed * hit.sp.n).normalized, (t.i.transposed * hit.sp.tan).normalized, (t.i.transposed * hit.sp.biTan).normalized,  hit.sp.t ) )
   }
 
 }

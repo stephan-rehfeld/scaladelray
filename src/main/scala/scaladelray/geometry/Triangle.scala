@@ -16,9 +16,13 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Mat3x3, Ray, Normal3, Point3}
+import scaladelray.math._
 import scaladelray.texture.{Texture, TexCoord2D}
 import scaladelray.Constants
+import scaladelray.math.Point3
+import scaladelray.math.Ray
+import scaladelray.math.Normal3
+import scaladelray.math.Mat3x3
 
 /**
  * This class represents a triangle. The vertices can freely be set. Furthermore, the normal and texture coordinate of
@@ -54,7 +58,7 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
       Set()
     } else {
       val alpha = 1 - beta - gamma
-      Set() + GeometryHit( r, this, t, an * alpha + bn * beta + cn * gamma, at * alpha + bt * beta + ct * gamma )
+      Set() + GeometryHit( r, this, t, SurfacePoint( r( t ), an * alpha + bn * beta + cn * gamma, Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), at * alpha + bt * beta + ct * gamma ) )
     }
 
   }

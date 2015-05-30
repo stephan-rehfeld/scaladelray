@@ -16,12 +16,11 @@
 
 package scaladelray.rendering
 
-import scaladelray.math.{Normal3, Ray, Transform, Transformable}
-import scaladelray.geometry.Geometry
+import scaladelray.math.{Ray, Transform, Transformable}
+import scaladelray.geometry.{SurfacePoint, Geometry}
 import scaladelray.material.Material
-import scaladelray.texture.TexCoord2D
 
-case class Hit( ray : Ray, renderable : Renderable, t : Double, n : Normal3, texCoord2D : TexCoord2D )
+case class Hit( ray : Ray, renderable : Renderable, t : Double, sp : SurfacePoint )
 
 /**
  * A renderable combines a transformation with a geometry and a material.
@@ -35,7 +34,7 @@ case class Renderable( override val t : Transform, geometry : Geometry, material
   def <-- ( r : Ray ) : Set[Hit] = {
     val ri = down( r )
     val geoHits = ri --> geometry
-    for( h <- geoHits ) yield Hit( r, this, h.t, up( h.n ), h.texCoord2D )
+    for( h <- geoHits ) yield Hit( r, this, h.t, SurfacePoint( up( h.sp.p ), up( h.sp.n ), up( h.sp.tan.asNormal ).asVector, up( h.sp.biTan.asNormal ).asVector, h.sp.t ) )
   }
 
 }

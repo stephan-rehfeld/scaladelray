@@ -43,7 +43,8 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
          case None =>
            Plane.n
        }
-       Set( GeometryHit( r, this, t, n, texCoord ) )
+
+       Set( GeometryHit( r, this, t,  SurfacePoint( r(t), n, tangent, bitangent, texCoord ) ) )
      } else
        Set()
    }

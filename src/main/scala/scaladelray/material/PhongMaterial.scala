@@ -33,9 +33,9 @@ case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, p
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
 
-    val diffuseColor = diffuseTexture( hit.texCoord2D )
-    val specularColor = specularTexture( hit.texCoord2D )
-    val normal = hit.n
+    val diffuseColor = diffuseTexture( hit.sp.t )
+    val specularColor = specularTexture( hit.sp.t )
+    val normal = hit.sp.n
     val p =  hit.ray( hit.t )
     var c = world.ambientLight * diffuseColor
     val e = (hit.ray.d * -1).normalized

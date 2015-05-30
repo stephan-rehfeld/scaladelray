@@ -30,8 +30,8 @@ import scaladelray.world.World
 case class LambertMaterial( texture : Texture ) extends Material with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
-    val color = texture( hit.texCoord2D )
-    val normal = hit.n
+    val color = texture( hit.sp.t )
+    val normal = hit.sp.n
     val p =  hit.ray( hit.t )
     var c = world.ambientLight * color
     val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight

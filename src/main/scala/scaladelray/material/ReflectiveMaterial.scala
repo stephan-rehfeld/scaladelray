@@ -32,11 +32,11 @@ import scaladelray.world.World
  */
 case class ReflectiveMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int, reflectionTexture : Texture ) extends Material with Serializable {
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
-    val diffuseColor = diffuseTexture( hit.texCoord2D )
-    val specularColor = specularTexture( hit.texCoord2D )
-    val reflectionColor = reflectionTexture( hit.texCoord2D )
+    val diffuseColor = diffuseTexture( hit.sp.t )
+    val specularColor = specularTexture( hit.sp.t )
+    val reflectionColor = reflectionTexture( hit.sp.t )
 
-    val normal = hit.n
+    val normal = hit.sp.n
     val p =  hit.ray( hit.t )
     var c = world.ambientLight * diffuseColor
     val e = (hit.ray.d * -1).normalized

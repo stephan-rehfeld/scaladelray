@@ -28,6 +28,7 @@ import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
 import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.geometry.SurfacePoint
 
 class SingleColorMaterialSpec extends FunSpec {
 
@@ -39,7 +40,8 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -58,7 +60,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -86,7 +88,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, Normal3( 0, 1, 0 ), tc )
+      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 

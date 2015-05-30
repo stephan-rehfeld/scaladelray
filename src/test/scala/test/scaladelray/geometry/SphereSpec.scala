@@ -163,7 +163,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, 1 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
 
     it( "should interpret a blue color of 0 as -z Axis" ) {
@@ -172,7 +172,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 0, -1 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
 
     it( "should interpret a red color of 1 as +x Axis" ) {
@@ -181,7 +181,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( 1, 0, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
     }
 
     it( "should interpret a red color of 0 as -x Axis" ) {
@@ -190,7 +190,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( -1, 0, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
     }
 
     it( "should interpret a green color of 1 as +y Axis" ) {
@@ -199,7 +199,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, 1, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
 
     it( "should interpret a green color of 0 as -y Axis" ) {
@@ -208,7 +208,7 @@ class SphereSpec extends FunSpec {
       val s = Sphere( Some( t ) )
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> s
-      assert( hits.exists( (h) => h.n =~= Normal3( 0, -1, 0 ) ) )
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, -1, 0 ) ) )
     }
 
   }
