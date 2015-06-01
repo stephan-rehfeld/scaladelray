@@ -27,8 +27,22 @@ import scaladelray.math.Vector3
  */
 abstract class BSDF {
 
+  /**
+   * This function returns how much light is transported between both points and directions.
+   *
+   * @param pIn The point on the surface where the incident ray intersects the geometry.
+   * @param dIn The direction of the incident ray.
+   * @param pOut The point where the ray leaves the surface.
+   * @param dOut The direction in which the ray leaved the surface.
+   * @return The amount of light that is transported between both points and directions.
+   */
   def apply( pIn : SurfacePoint, dIn : Vector3, pOut : SurfacePoint, dOut : Vector3 ) : Double
 
 
+  /**
+   * A function to determine if a value is positive.
+   * @param v Returns true if v is positive.
+   * @return True if v is positive.
+   */
   protected def isPositive( v : Double ) = v > 0.0
 }
