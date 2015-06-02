@@ -23,17 +23,23 @@ import scaladelray.rendering.Hit
 import scaladelray.world.World
 
 /**
- * A perfectly diffuse reflecting material.
+ * A material that reflects the light diffuse, specular, and like a mirror.
  *
- * @param texture The texture that is used to determine the color.
+ * @param diffuseTexture The texture for the diffuse reflection.
+ * @param specularTexture The texture for the specular reflection.
+ * @param phongExponent The phong exponent.
+ * @param reflectionTexture The texture for the mirror reflection.
  */
-case class LambertMaterial( texture : Texture ) extends Material with Serializable {
-
+case class ReflectiveOldMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int, reflectionTexture : Texture ) extends OldMaterial with Serializable {
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
-    val color = texture( hit.sp.t )
+    val diffuseColor = diffuseTexture( hit.sp.t )
+    val specularColor = specularTexture( hit.sp.t )
+    val reflectionColor = reflectionTexture( hit.sp.t )
+
     val normal = hit.sp.n
     val p =  hit.ray( hit.t )
-    var c = world.ambientLight * color
+    var c = world.ambientLight * diffuseColor
+    val e = (hit.ray.d * -1).normalized
     val lights = for( lightDescription <- world.lightDescriptions ) yield lightDescription.createLight
     for( light <- lights ) {
       val illuminates = light.illuminates( p, world )
@@ -41,14 +47,17 @@ case class LambertMaterial( texture : Texture ) extends Material with Serializab
       val intensity = light.intensity( p )
       var c2 = Color( 0, 0, 0 )
       for( i <- 0 until light.samplingPoints ) {
-        if( illuminates(i) ) {
-          val l = directionFrom(i)
-          c2 = c2 + light.color * color * math.max(0, normal dot l) * intensity( i )
+        if( illuminates( i ) ) {
+          val l = directionFrom( i )
+          val r = l.reflectOn( normal )
+          val in = intensity( i )
+          c2 = c2 + light.color * diffuseColor * math.max(0, normal dot l) * in + light.color * specularColor * scala.math.pow( scala.math.max( 0, r dot e ), phongExponent ) * in
         }
       }
       c2 = c2 / light.samplingPoints
       c = c + c2
     }
-    c
+    val ray = Ray(p, hit.ray.d.normalized * -1 reflectOn normal)
+    c + reflectionColor * tracer( ray, world )
   }
 }

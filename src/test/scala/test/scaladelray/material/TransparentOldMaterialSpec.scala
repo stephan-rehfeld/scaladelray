@@ -23,7 +23,7 @@ import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.world.World
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
-import scaladelray.material.TransparentMaterial
+import scaladelray.material.TransparentOldMaterial
 import scaladelray.math.Ray
 import scaladelray.world.SingleBackgroundColor
 import scaladelray.rendering.Renderable
@@ -31,12 +31,12 @@ import scaladelray.Color
 import scaladelray.texture.TexCoord2D
 import scaladelray.rendering.Hit
 
-class TransparentMaterialSpec extends FunSpec {
+class TransparentOldMaterialSpec extends FunSpec {
 
-  describe( "A TransparentMaterial" ) {
+  describe( "A TransparentOldMaterial" ) {
 
     it( "should call the tracer twice, once with the reflected and with the refracted ray" ) {
-      val m = TransparentMaterial( 1.0 )
+      val m = TransparentOldMaterial( 1.0 )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )

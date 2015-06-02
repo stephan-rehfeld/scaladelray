@@ -17,16 +17,16 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.material.{LambertMaterial, Material}
+import scaladelray.material.{LambertOldMaterial, OldMaterial}
 import javax.swing.event.TableModelListener
 
 class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   var diffuseTextureProvider : Option[TextureProvider] = None
 
-  override def createMaterial( l : () => Unit ) : Material = {
+  override def createMaterial( l : () => Unit ) : OldMaterial = {
     l()
-    LambertMaterial( diffuseTextureProvider.get.createTexture( l ) )
+    LambertOldMaterial( diffuseTextureProvider.get.createTexture( l ) )
   }
 
   override def remove(obj: AnyRef) {

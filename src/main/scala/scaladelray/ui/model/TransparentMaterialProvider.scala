@@ -17,7 +17,7 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.material.{TransparentMaterial, Material}
+import scaladelray.material.{TransparentOldMaterial, OldMaterial}
 import javax.swing.event.TableModelListener
 import java.lang.Double
 
@@ -25,9 +25,9 @@ class TransparentMaterialProvider extends MaterialProvider with TableModel {
 
   var indexOfRefraction = 1.5
 
-  override def createMaterial( l : () => Unit ) : Material = {
+  override def createMaterial( l : () => Unit ) : OldMaterial = {
     l()
-    TransparentMaterial( indexOfRefraction )
+    TransparentOldMaterial( indexOfRefraction )
   }
 
   override def remove(obj: AnyRef) {}

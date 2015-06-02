@@ -22,7 +22,7 @@ import scaladelray.rendering.Hit
 import scaladelray.world.World
 
 
-case class TransparentMaterial( indexOfRefraction : Double ) extends Material with Serializable {
+case class TransparentOldMaterial( indexOfRefraction : Double ) extends OldMaterial with Serializable {
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
     val normal = hit.sp.n
     val p =  hit.ray( hit.t )

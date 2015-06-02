@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 import scaladelray.math._
 import scaladelray.rendering.{Hit, Renderable}
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.material.SingleColorMaterial
+import scaladelray.material.SingleColorOldMaterial
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.math.Ray
@@ -30,11 +30,11 @@ import scaladelray.math.Normal3
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.geometry.SurfacePoint
 
-class SingleColorMaterialSpec extends FunSpec {
+class SingleColorOldMaterialSpec extends FunSpec {
 
-  describe( "A SingleColorMaterial" ) {
+  describe( "A SingleColorOldMaterial" ) {
     it( "should return the color that has been passed to the constructor" ) {
-      val m = SingleColorMaterial( Color( 1, 1, 1 ) )
+      val m = SingleColorOldMaterial( Color( 1, 1, 1 ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -54,7 +54,7 @@ class SingleColorMaterialSpec extends FunSpec {
     }
 
     it( "should not call the tracer" ) {
-      val m = SingleColorMaterial( Color( 1, 1, 1 ) )
+      val m = SingleColorOldMaterial( Color( 1, 1, 1 ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
@@ -80,7 +80,7 @@ class SingleColorMaterialSpec extends FunSpec {
       val directionFromData = Vector3( 0, 1, 0 ) :: Nil
       val intensityData = 1.0 :: Nil
 
-      val m = SingleColorMaterial( Color( 1, 1, 1 ) )
+      val m = SingleColorOldMaterial( Color( 1, 1, 1 ) )
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 

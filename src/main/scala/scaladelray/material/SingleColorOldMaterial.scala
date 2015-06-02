@@ -27,7 +27,7 @@ import scaladelray.world.World
  *
  * @param color The color of the material
  */
-case class SingleColorMaterial( color : Color ) extends Material with Serializable {
+case class SingleColorOldMaterial( color : Color ) extends OldMaterial with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
 

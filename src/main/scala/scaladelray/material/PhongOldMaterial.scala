@@ -29,7 +29,7 @@ import scaladelray.world.World
  * @param specularTexture The texture for the specular reflection.
  * @param phongExponent The phong exponent.
  */
-case class PhongMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int ) extends Material with Serializable {
+case class PhongOldMaterial( diffuseTexture : Texture, specularTexture : Texture, phongExponent : Int ) extends OldMaterial with Serializable {
 
   override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) : Color = {
 

@@ -21,6 +21,6 @@ import scaladelray.math.Ray
 import scaladelray.rendering.Hit
 import scaladelray.world.World
 
-abstract class Material {
+abstract class OldMaterial {
   def colorFor( hit : Hit, world : World, tracer : ((Ray,World) => Color) ) : Color
 }

@@ -19,7 +19,7 @@ package scaladelray.optimization
 import scaladelray.geometry.{GeometryHit, Plane, Node}
 import scaladelray.math.{Point3, Ray, Transform}
 import scaladelray.Color
-import scaladelray.material.SingleColorMaterial
+import scaladelray.material.SingleColorOldMaterial
 
 /**
  * This class represents an axis aligned bounding box. It is used by the [[scaladelray.geometry.TriangleMesh]] to speed
@@ -34,7 +34,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * A dummy material for the planes of the AABB.
    */
-  private val material = SingleColorMaterial( Color( 0, 0, 0 ) )
+  private val material = SingleColorOldMaterial( Color( 0, 0, 0 ) )
 
   /**
    * The right plane of the AABB.

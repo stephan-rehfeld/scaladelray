@@ -17,7 +17,7 @@
 package scaladelray.loader
 
 import akka.actor.{Props, ActorSystem, ActorRef, Actor}
-import scaladelray.material.Material
+import scaladelray.material.OldMaterial
 import scaladelray.geometry.Geometry
 import scala.concurrent.Await
 import akka.pattern.ask
@@ -125,7 +125,7 @@ object ResourceManager {
    * @param subDivideDecider The sub devide decider for the octree.
    * @param fastLoad Flag to perform faster loading, typically by not eliminating duplicated vertices.
    */
-  def preLoad( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) {
+  def preLoad( fileName : String, material : OldMaterial, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) {
     getResourceManager ! ResourceManager.LoadResource( fileName, subDivideDecider, fastLoad )
   }
 
@@ -137,7 +137,7 @@ object ResourceManager {
    * @param fastLoad Flag to perform faster loading, typically by not eliminating duplicated vertices.
    * @return Either the loaded geometry or a [[scaladelray.loader.ResourceManager.UnknownResourceFormat]] object.
    */
-  def load( fileName : String, material : Material, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : Either[Geometry,UnknownResourceFormat] = {
+  def load( fileName : String, material : OldMaterial, subDivideDecider : ((Int,Int) => Boolean ), fastLoad : Boolean ) : Either[Geometry,UnknownResourceFormat] = {
     implicit val timeout = Timeout(500 seconds)
     val future = getResourceManager ? ResourceManager.LoadResource( fileName, subDivideDecider, fastLoad )
     val result = Await.result(future, timeout.duration )

@@ -16,7 +16,7 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.{SingleColorMaterial, Material}
+import scaladelray.material.{SingleColorOldMaterial, OldMaterial}
 import scaladelray.Color
 import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
@@ -25,9 +25,9 @@ class SingleColorMaterialProvider extends MaterialProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
 
-  override def createMaterial( l : () => Unit ): Material = {
+  override def createMaterial( l : () => Unit ): OldMaterial = {
     l()
-    SingleColorMaterial( color )
+    SingleColorOldMaterial( color )
   }
 
   override def remove(obj: AnyRef) {}
