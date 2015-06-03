@@ -42,7 +42,8 @@ class TriangleProvider extends RenderableProvider with TableModel {
   override def createRenderable( l : () => Unit ) = {
     l()
     val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC, None )
-    Renderable( Transform(), g, materialProvider.get.createMaterial( l ) )
+    val (m,o) = materialProvider.get.createMaterial( l )
+    Renderable( Transform(), g, o, m )
   }
 
   override def getRowCount: Int = 9

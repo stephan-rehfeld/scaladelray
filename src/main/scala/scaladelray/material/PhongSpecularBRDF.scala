@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package scaladelray.material
 
-import scaladelray.Color
-import scaladelray.math.Ray
-import scaladelray.rendering.Hit
-import scaladelray.world.World
+import scaladelray.geometry.SurfacePoint
+import scaladelray.math.Vector3
 
 /**
- * A single color material always returns the same color, regardless of lighting conditions.
- * It is primarily used for testing and not in real scene.
+ * A phong specular BRDF.
  *
- * @param color The color of the material
+ * @param exponent The phong exponent.
  */
-case class SingleColorOldMaterial( color : Color ) extends OldMaterial with Serializable {
+case class PhongSpecularBRDF( exponent : Double ) extends BRDF {
 
-  override def colorFor( hit: Hit, world : World, tracer : ((Ray,World) => Color) ) = color
+  override def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double = {
+    val r = (-dIn).reflectOn(p.n)
+    math.pow( r dot dOut, exponent )
+  }
 
 }

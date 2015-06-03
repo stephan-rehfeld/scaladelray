@@ -40,7 +40,6 @@ import scaladelray.Color
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 import scala.async.Async.async
-import scala.util.Random
 
 case class StartDiscovery()
 
@@ -404,28 +403,6 @@ object ScalaDelRay extends SimpleSwingApplication {
     samplingPatternPopupMenu.add( regularSamplingPatternMenuItem )
 
     val materialPopupMenu = new JPopupMenu
-    val newSingleColorMaterialMenuItem = new JMenuItem( "Single color material" )
-    newSingleColorMaterialMenuItem.addActionListener( new ActionListener {
-      def actionPerformed(e: ActionEvent) {
-        val scmp =  new SingleColorMaterialProvider
-        selectionParent match {
-          case Some( pp : PlaneProvider ) =>
-            pp.materialProvider = Some( scmp )
-          case Some( sp : SphereProvider ) =>
-            sp.materialProvider = Some( scmp)
-          case Some( bp : AxisAlignedBoxProvider ) =>
-            bp.materialProvider = Some( scmp )
-          case Some( tp : TriangleProvider ) =>
-            tp.materialProvider = Some( scmp )
-          case Some( mp : ModelProvider ) =>
-            mp.materialProvider = Some( scmp )
-          case Some(_) => assert( false, "This should not happen!")
-          case None =>
-        }
-        detailsTable.model = scmp
-        updateUI( Some( scmp ) )
-      }
-    })
 
     val newLambertMaterialMenuItem = new JMenuItem( "Lambert material" )
     newLambertMaterialMenuItem.addActionListener( new ActionListener {
@@ -519,7 +496,6 @@ object ScalaDelRay extends SimpleSwingApplication {
       }
     })
 
-    materialPopupMenu.add( newSingleColorMaterialMenuItem )
     materialPopupMenu.add( newLambertMaterialMenuItem )
     materialPopupMenu.add( newPhongMaterialMenuItem )
     materialPopupMenu.add( newReflectiveMaterialMenuItem )

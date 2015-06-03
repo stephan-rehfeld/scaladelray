@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
+package scaladelray.material
 
-import scaladelray.world.World
-import scaladelray.camera.Camera
-import scaladelray.HDRImage
+import scaladelray.geometry.SurfacePoint
+import scaladelray.math.Vector3
 
-class RecursiveRayTracing extends Algorithm {
-  override def render(w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit]): HDRImage = ???
+case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
+
+  override def apply( p : SurfacePoint, dIn : Vector3, eta : Double, dOut : Vector3 ) : Double = {
+    // TODO: Implement
+    1.0
+  }
+
 }

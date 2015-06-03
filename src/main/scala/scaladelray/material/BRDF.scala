@@ -25,7 +25,7 @@ import scaladelray.math.Vector3
  */
 abstract class BRDF extends BSDF {
 
-  override def apply( pIn: SurfacePoint, dIn: Vector3, pOut: SurfacePoint, dOut: Vector3 ) : Double = {
+  override def apply( pIn: SurfacePoint, dIn: Vector3, eta : Double, pOut: SurfacePoint, dOut: Vector3 ) : Double = {
     if( pIn != pOut || isPositive(pIn.n dot dIn) != isPositive(pIn.n dot dOut) ) 0.0 else apply( pIn, dIn, dOut )
   }
 

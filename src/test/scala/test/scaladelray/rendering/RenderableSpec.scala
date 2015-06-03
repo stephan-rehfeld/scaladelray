@@ -19,13 +19,13 @@ package test.scaladelray.rendering
 import org.scalatest.FunSpec
 import scaladelray.math._
 import scaladelray.geometry.{SurfacePoint, Geometry, GeometryHit}
-import scaladelray.material.SingleColorOldMaterial
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.math.Ray
 import scaladelray.rendering.Renderable
 import scaladelray.Color
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.material.{Material, LambertOldMaterial}
 
 class RenderableSpec extends FunSpec {
 
@@ -42,7 +42,7 @@ class RenderableSpec extends FunSpec {
           Set()
         }
       }
-      val renderable = Renderable( t, g, SingleColorOldMaterial( Color( 0, 0, 0 ) ) )
+      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
       ray --> renderable
       assert( called )
     }
@@ -56,7 +56,7 @@ class RenderableSpec extends FunSpec {
           Set() + GeometryHit( r, this, 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) ) )
         }
       }
-      val renderable = Renderable( t, g, SingleColorOldMaterial( Color( 0, 0, 0 ) ) )
+      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
       val hits = ray --> renderable
       assert( hits.size == 1 )
       assert( hits.head.t == 1 )

@@ -32,11 +32,12 @@ abstract class BSDF {
    *
    * @param pIn The point on the surface where the incident ray intersects the geometry.
    * @param dIn The direction of the incident ray.
+   * @param eta The index of refraction of the media, where the light comes from.
    * @param pOut The point where the ray leaves the surface.
    * @param dOut The direction in which the ray leaved the surface.
    * @return The amount of light that is transported between both points and directions.
    */
-  def apply( pIn : SurfacePoint, dIn : Vector3, pOut : SurfacePoint, dOut : Vector3 ) : Double
+  def apply( pIn : SurfacePoint, dIn : Vector3, eta : Double, pOut : SurfacePoint, dOut : Vector3 ) : Double
 
 
   /**

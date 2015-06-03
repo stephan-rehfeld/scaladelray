@@ -33,8 +33,8 @@ class PlaneProvider extends RenderableProvider with TableModel {
   override def createRenderable( l : () => Unit ) = {
     val p = Plane( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val m = materialProvider.get.createMaterial( l )
-    Renderable( t, p, m )
+    val (m,o) = materialProvider.get.createMaterial( l )
+    Renderable( t, p, o, m )
   }
 
   override def getRowCount: Int = 3

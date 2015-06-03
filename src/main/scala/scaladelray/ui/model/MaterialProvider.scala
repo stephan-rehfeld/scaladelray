@@ -16,11 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.OldMaterial
+import scaladelray.material.{Material, OldMaterial}
 
 abstract class MaterialProvider {
 
-  def createMaterial( l : () => Unit ) : OldMaterial
+  def createMaterial( l : () => Unit ) : (Material,OldMaterial)
   def remove( obj : AnyRef )
   def isReady : Boolean
   def count : Int

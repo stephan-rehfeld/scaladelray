@@ -48,8 +48,8 @@ class ModelProvider( tml : TableModelListener ) extends RenderableProvider with 
     val loader = new OBJLoader
     val m = loader.load( fileName, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad, l )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val mat = materialProvider.get.createMaterial( l )
-    Renderable( t, m, mat )
+    val (mat,old) = materialProvider.get.createMaterial( l )
+    Renderable( t, m, old, mat )
   }
 
   override def remove(obj: AnyRef) {

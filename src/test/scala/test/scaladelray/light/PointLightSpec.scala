@@ -23,6 +23,7 @@ import scaladelray.light.PointLight
 import scaladelray.geometry.Sphere
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.material.Material
 
 class PointLightSpec extends FunSpec {
 
@@ -63,7 +64,7 @@ class PointLightSpec extends FunSpec {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null ) )
+      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

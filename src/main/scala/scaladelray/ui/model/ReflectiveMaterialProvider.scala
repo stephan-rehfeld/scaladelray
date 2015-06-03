@@ -17,8 +17,11 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.material.{ReflectiveOldMaterial, OldMaterial}
+import scaladelray.material._
 import javax.swing.event.TableModelListener
+import scaladelray.material.LambertBRDF
+import scaladelray.material.Material
+import scaladelray.material.ReflectiveOldMaterial
 
 class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
@@ -27,9 +30,11 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
   var specularTextureProvider : Option[TextureProvider] = None
   var reflectionTextureProvider : Option[TextureProvider] = None
 
-  override def createMaterial( l : () => Unit ) : OldMaterial = {
+  override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    ReflectiveOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
+    val o = ReflectiveOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
+    val m = Material( None, (1.0/3.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (1.0/3.0, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (1.0/3.0, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
+    (m,o)
   }
 
   override def remove(obj: AnyRef) {

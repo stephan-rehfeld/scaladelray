@@ -18,7 +18,9 @@ package scaladelray.ui.model
 
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
-import scaladelray.material.{PhongOldMaterial, OldMaterial}
+import scaladelray.material._
+import scaladelray.material.Material
+import scaladelray.material.PhongOldMaterial
 
 class PhongMaterialProvider extends MaterialProvider with TableModel {
 
@@ -26,9 +28,11 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
   var diffuseTextureProvider : Option[TextureProvider] = None
   var specularTextureProvider : Option[TextureProvider] = None
 
-  override def createMaterial( l : () => Unit ) : OldMaterial = {
+  override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    PhongOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent )
+    val o = PhongOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent )
+    val m  = Material( None, (0.5, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.5, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
+    (m,o)
   }
 
   override def remove(obj: AnyRef) {

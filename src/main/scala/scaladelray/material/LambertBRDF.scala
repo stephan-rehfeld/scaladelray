@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
+package scaladelray.material
 
-import scaladelray.world.World
-import scaladelray.camera.Camera
-import scaladelray.HDRImage
+import scaladelray.geometry.SurfacePoint
+import scaladelray.math.Vector3
 
-class RecursiveRayTracing extends Algorithm {
-  override def render(w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit]): HDRImage = ???
+/**
+ * A Lambert BRDF describes surface that reflects the light in all direction in a diffuse way.
+ *
+ */
+case class LambertBRDF() extends BRDF {
+
+  override def apply( p: SurfacePoint, dIn: Vector3, dOut: Vector3 ): Double = 1.0 / math.Pi
+
 }

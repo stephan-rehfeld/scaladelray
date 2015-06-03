@@ -17,17 +17,21 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
-import scaladelray.material.{TransparentOldMaterial, OldMaterial}
+import scaladelray.material.{PerfectTransparentBTDF, Material, TransparentOldMaterial, OldMaterial}
 import javax.swing.event.TableModelListener
 import java.lang.Double
+import scaladelray.texture.SingleColorTexture
+import scaladelray.Color
 
 class TransparentMaterialProvider extends MaterialProvider with TableModel {
 
   var indexOfRefraction = 1.5
 
-  override def createMaterial( l : () => Unit ) : OldMaterial = {
+  override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    TransparentOldMaterial( indexOfRefraction )
+    val o = TransparentOldMaterial( indexOfRefraction )
+    val m = Material( None, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( indexOfRefraction ) ) )
+    (m,o)
   }
 
   override def remove(obj: AnyRef) {}

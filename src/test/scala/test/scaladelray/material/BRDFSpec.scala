@@ -39,7 +39,7 @@ class BRDFSpec extends FunSpec {
       val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
       val sp2 = SurfacePoint( Point3( 1, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
-      assert( brdf( sp1, Vector3( 0, 1, 0 ), sp2, Vector3( 0, 1, 0 ) ) == 0.0 )
+      assert( brdf( sp1, Vector3( 0, 1, 0 ), 1.0, sp2, Vector3( 0, 1, 0 ) ) == 0.0 )
       assert( !brdf.called )
     }
 
@@ -49,7 +49,7 @@ class BRDFSpec extends FunSpec {
       val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
       val sp2 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
-      assert( brdf( sp1, Vector3( 0, 1, 0 ), sp2, Vector3( 0, -1, 0 ) ) == 0.0 )
+      assert( brdf( sp1, Vector3( 0, 1, 0 ), 1.0, sp2, Vector3( 0, -1, 0 ) ) == 0.0 )
       assert( !brdf.called )
     }
 
@@ -59,7 +59,7 @@ class BRDFSpec extends FunSpec {
       val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
       val sp2 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
-      assert( brdf( sp1, Vector3( 0, 1, 0 ), sp2, Vector3( 0, 1, 0 ) ) == 1.0 )
+      assert( brdf( sp1, Vector3( 0, 1, 0 ), 1.0, sp2, Vector3( 0, 1, 0 ) ) == 1.0 )
       assert( brdf.called )
     }
   }

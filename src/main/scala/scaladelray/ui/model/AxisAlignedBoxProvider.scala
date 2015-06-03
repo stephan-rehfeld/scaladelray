@@ -34,8 +34,8 @@ class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
     l()
     val aab = new AxisAlignedBox( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val m = materialProvider.get.createMaterial( l )
-    Renderable( t, aab, m )
+    val (m,o) = materialProvider.get.createMaterial( l )
+    Renderable( t, aab, o, m )
   }
 
   override def getRowCount: Int = 3

@@ -18,8 +18,6 @@ package test.scaladelray.loader
 
 import org.scalatest.FunSpec
 import scaladelray.loader.ResourceManager
-import scaladelray.material.SingleColorOldMaterial
-import scaladelray.Color
 import scaladelray.math.{Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 import scaladelray.geometry.TriangleMesh
@@ -50,7 +48,7 @@ class ResourceManagerSpec extends FunSpec  {
 
   describe( "A ResourceManager" ) {
     it( "should be able to load a OBJ file") {
-      val e = ResourceManager.load( "cube-v-vt-vn.obj", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false )
+      val e = ResourceManager.load( "cube-v-vt-vn.obj", (recursions,faces) => recursions < 0, false )
       assert( e.isLeft )
       val g = e.left.get
       assert( g.isInstanceOf[TriangleMesh] )
@@ -105,23 +103,23 @@ class ResourceManagerSpec extends FunSpec  {
 
     it( "should load a resource asynchronously") {
       val start = System.nanoTime()
-      ResourceManager.preLoad( "assets/bunny.obj", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, true )
+      ResourceManager.preLoad( "assets/bunny.obj", (recursions,faces) => recursions < 0, true )
       val end = System.nanoTime()
       assert( (end - start) < 1000000000 )
     }
 
     it( "should cache loaded resources" ) {
-      ResourceManager.preLoad( "assets/bunny.obj", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, true )
+      ResourceManager.preLoad( "assets/bunny.obj", (recursions,faces) => recursions < 0, true )
       Thread.sleep( 60000 )
       val start = System.nanoTime()
-      val e1 = ResourceManager.load( "assets/bunny.obj", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, true )
+      val e1 = ResourceManager.load( "assets/bunny.obj", (recursions,faces) => recursions < 0, true )
       val end = System.nanoTime()
       assert( (end - start) < 1000000000 )
       assert( e1.isLeft )
       val g1 = e1.left.get
 
 
-      val e2 = ResourceManager.load( "assets/bunny.obj", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, true )
+      val e2 = ResourceManager.load( "assets/bunny.obj", (recursions,faces) => recursions < 0, true )
       assert( e2.isLeft )
       val g2 = e2.left.get
 
@@ -132,7 +130,7 @@ class ResourceManagerSpec extends FunSpec  {
       ResourceManager.deleteCache()
     }
     it( "should report it if a file type is not supported support a file type" )  {
-      assert( ResourceManager.load( "empty.ply", SingleColorOldMaterial( Color( 0, 0, 0 ) ), (recursions,faces) => recursions < 0, false ).isRight )
+      assert( ResourceManager.load( "empty.ply", (recursions,faces) => recursions < 0, false ).isRight )
     }
   }
 

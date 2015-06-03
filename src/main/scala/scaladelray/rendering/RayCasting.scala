@@ -19,8 +19,29 @@ package scaladelray.rendering
 import scaladelray.world.World
 import scaladelray.camera.Camera
 import scaladelray.HDRImage
-import scaladelray.rendering.concurrency.DistributionManager
+import scala.collection.mutable
 
 class RayCasting extends Algorithm {
-  def render(w: World, c: Camera, l: Option[(HDRImage) => Unit], dm: Option[DistributionManager]): HDRImage = ???
+
+  override def render( w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit] ): HDRImage = {
+
+    val lightEmitting = mutable.Set[Renderable]()
+
+    for( g <- w.objects ) {
+      if( g.material.isEmissive ) lightEmitting += g
+    }
+
+
+    HDRImage( width, height )
+    // For all light emitting objects
+      // Translate them to light source
+    // For all pixels
+      // Find intersection with smallest positive t.
+      // Determine lighting
+      // For all BSDFs
+    // Return image
+
+
+  }
+
 }

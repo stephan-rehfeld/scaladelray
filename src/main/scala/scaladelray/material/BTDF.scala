@@ -21,13 +21,12 @@ import scaladelray.math.Vector3
 
 /**
  * A Bidirectional transmittance distribution function describes how the light is transmitted from one
- * media to another. It is assumed that the directions are on different sides of the material and that
- * the in and out point are the same.
+ * media to another and reflected. It is assumed that the in and output are the same.
  */
 abstract class BTDF extends BSDF {
 
-  override def apply( pIn: SurfacePoint, dIn: Vector3, pOut: SurfacePoint, dOut: Vector3) : Double = {
-    if( pIn != pOut || isPositive(pIn.n dot dIn) == isPositive(pIn.n dot dOut)  ) 0.0 else apply( pIn, dIn, dOut )
+  override def apply( pIn: SurfacePoint, dIn: Vector3, eta : Double,  pOut: SurfacePoint, dOut: Vector3 ) : Double = {
+    if( pIn != pOut ) 0.0 else apply( pIn, dIn, eta, dOut )
 
   }
 
@@ -36,9 +35,11 @@ abstract class BTDF extends BSDF {
    *
    * @param p The point on the surface.
    * @param dIn The incident direction.
-   * @param dOut The direction of the transmission.
-   * @return The amount of light that is trasmitted between both directions at this point.
+   * @param eta The index of refraction of the media, where the light comes from.
+   * @param dOut The direction of the transmission or the reflection
+
+   * @return The amount of light that is transmitted or reflected between both directions at this point.
    */
-  def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double
+  def apply( p : SurfacePoint, dIn : Vector3, eta : Double, dOut : Vector3 ) : Double
 
 }

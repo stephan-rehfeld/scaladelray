@@ -23,7 +23,7 @@ import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
 import scaladelray.math.Ray
-import scaladelray.material.PhongOldMaterial
+import scaladelray.material.{PhongSpecularBRDF, LambertBRDF, Material, PhongOldMaterial}
 import scaladelray.texture.SingleColorTexture
 import scaladelray.Color
 import scaladelray.texture.TexCoord2D
@@ -38,14 +38,15 @@ class PhongOldMaterialSpec extends FunSpec {
     it( "should retrieve to color from the texture, using texture coordinate in the hit" ) {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( t1.coordinates.isDefined )
       assert( t1.coordinates.get == tc )
@@ -57,13 +58,14 @@ class PhongOldMaterialSpec extends FunSpec {
     it( "should not call the tracer" ) {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -72,7 +74,7 @@ class PhongOldMaterialSpec extends FunSpec {
         Color( 0, 0, 0 )
       }
 
-      m.colorFor( h, w, tracer )
+      o.colorFor( h, w, tracer )
 
       assert( !called )
     }
@@ -87,15 +89,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.createLightCalled )
       assert( l2.createLightCalled )
@@ -111,14 +114,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
+
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.illuminatesPoint.isDefined )
       assert( l1.illuminatesPoint.get == r( h.t ) )
@@ -141,16 +146,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
-
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.directionPoint.isDefined )
       assert( l1.directionPoint.get == r( h.t ) )
@@ -169,15 +174,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.intensityPoint.isDefined )
       assert( l1.intensityPoint.get == r( h.t ) )
@@ -191,15 +197,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) )
     }
 
     it( "should use the normal of the hit to calculate the color" ) {
@@ -207,16 +214,17 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 0 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 0 ) )
     }
 
     it( "should use the information if the light illuminates the surface to calculate the color" ) {
@@ -228,16 +236,17 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
     }
 
     it( "should use the intensity returned by the light to calculate to color" ) {
@@ -249,15 +258,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.0 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.0 ) )
     }
 
     it( "should use the direction returned by the light to calculate to color" ) {
@@ -269,14 +279,16 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
-      val m = PhongOldMaterial( t1, t2, 1 )
+      val o = PhongOldMaterial( t1, t2, 1 )
+      val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
+
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) * Math.cos( Math.PI / 4 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) * Math.cos( Math.PI / 4 ) )
     }
 
   }

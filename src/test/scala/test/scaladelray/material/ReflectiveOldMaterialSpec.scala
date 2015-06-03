@@ -19,18 +19,24 @@ package test.scaladelray.material
 import org.scalatest.FunSpec
 import scaladelray.math._
 import scaladelray.light.PointLight
-import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.material._
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
-import scaladelray.material.ReflectiveOldMaterial
 import scaladelray.math.Ray
+import scaladelray.world.SingleBackgroundColor
+import scaladelray.material.ReflectiveOldMaterial
+import scaladelray.texture.TexCoord2D
+import scaladelray.rendering.Hit
+import scaladelray.geometry.SurfacePoint
+import scaladelray.material.LambertBRDF
+import scaladelray.world.World
+import scaladelray.material.PhongSpecularBRDF
+import scaladelray.material.Material
+import scaladelray.rendering.Renderable
 import scaladelray.texture.SingleColorTexture
 import scaladelray.Color
-import scaladelray.texture.TexCoord2D
 import scaladelray.math.Normal3
-import scaladelray.world.{SingleBackgroundColor, World}
-import scaladelray.geometry.SurfacePoint
 
 class ReflectiveOldMaterialSpec extends FunSpec {
 
@@ -40,15 +46,17 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
+
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( t1.coordinates.isDefined )
       assert( t1.coordinates.get == tc )
@@ -64,13 +72,15 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
+
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -81,7 +91,7 @@ class ReflectiveOldMaterialSpec extends FunSpec {
         Color( 0, 0, 0 )
       }
 
-      m.colorFor( h, w, tracer )
+      o.colorFor( h, w, tracer )
 
       assert( called )
     }
@@ -97,15 +107,17 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
+
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.createLightCalled )
       assert( l2.createLightCalled )
@@ -122,15 +134,17 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
+
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.illuminatesPoint.isDefined )
       assert( l1.illuminatesPoint.get == r( h.t ) )
@@ -154,15 +168,16 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.directionPoint.isDefined )
       assert( l1.directionPoint.get == r( h.t ) )
@@ -182,15 +197,16 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t2 = new TextureTestAdapter( Color( 0, 0, 0 ) )
       val t3 = new TextureTestAdapter( Color( 0, 0, 0 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
 
-      m.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
+      o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
       assert( l1.intensityPoint.isDefined )
       assert( l1.intensityPoint.get == r( h.t ) )
@@ -205,16 +221,17 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
       SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1, 1, 1 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1, 1, 1 ) )
     }
 
     it( "should use the normal of the hit to calculate the color" ) {
@@ -223,15 +240,16 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 1 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 1 ) )
     }
 
     it( "should use the information if the light illuminates the surface to calculate the color" ) {
@@ -244,16 +262,17 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0, 0, 1 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0, 0, 1 ) )
     }
 
     it( "should use the intensity returned by the light to calculate to color" ) {
@@ -266,15 +285,16 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0.5, 0.5, 1 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) == Color( 0.5, 0.5, 1 ) )
     }
 
     it( "should use the direction returned by the light to calculate to color" ) {
@@ -287,14 +307,16 @@ class ReflectiveOldMaterialSpec extends FunSpec {
       val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
       val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
       val t3 = new SingleColorTexture( Color( 0, 0, 1 ) )
-      val m = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val o = ReflectiveOldMaterial( t1, t2, 1, t3 )
+      val m = Material( None, (1.0/3.0, t1, LambertBRDF() ), (1.0/3.0, t2, PhongSpecularBRDF( 1 ) ), (1.0/3.0,t3, PerfectReflectiveBRDF() ) )
+
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ).normalized, Vector3( 0, 1, 0 ), tc ) )
 
-      assert( m.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) =~= Color( 1 * Math.cos( Math.PI / 4 ), 1 * Math.cos( Math.PI / 4 ), 1 )  )
+      assert( o.colorFor( h, w, (_,_) => Color( 1, 1, 1 ) ) =~= Color( 1 * Math.cos( Math.PI / 4 ), 1 * Math.cos( Math.PI / 4 ), 1 )  )
     }
 
   }

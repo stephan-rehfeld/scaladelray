@@ -23,12 +23,12 @@ import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.world.World
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
-import scaladelray.material.TransparentOldMaterial
+import scaladelray.material.{PerfectTransparentBTDF, Material, TransparentOldMaterial}
 import scaladelray.math.Ray
 import scaladelray.world.SingleBackgroundColor
 import scaladelray.rendering.Renderable
 import scaladelray.Color
-import scaladelray.texture.TexCoord2D
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.rendering.Hit
 
 class TransparentOldMaterialSpec extends FunSpec {
@@ -36,14 +36,15 @@ class TransparentOldMaterialSpec extends FunSpec {
   describe( "A TransparentOldMaterial" ) {
 
     it( "should call the tracer twice, once with the reflected and with the refracted ray" ) {
-      val m = TransparentOldMaterial( 1.0 )
+      val o = TransparentOldMaterial( 1.0 )
+      val m = Material( None, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( 1.0 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
 
       var called = 0
 
@@ -54,7 +55,7 @@ class TransparentOldMaterialSpec extends FunSpec {
         Color( 0, 0, 0 )
       }
 
-      m.colorFor( h, w, tracer )
+      o.colorFor( h, w, tracer )
 
       assert( called == 2 )
     }

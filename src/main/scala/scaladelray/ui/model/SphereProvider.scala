@@ -34,8 +34,8 @@ class SphereProvider extends RenderableProvider with TableModel {
     l()
     val s = Sphere( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val m = materialProvider.get.createMaterial( l )
-    Renderable( t, s, m )
+    val (m,o) = materialProvider.get.createMaterial( l )
+    Renderable( t, s, o, m )
   }
 
   override def getRowCount: Int = 3

@@ -19,13 +19,12 @@ package scaladelray.rendering
 import scaladelray.world.World
 import scaladelray.camera.Camera
 import scaladelray.HDRImage
-import scaladelray.rendering.concurrency.DistributionManager
 
 /**
  * Algorithm is the abstract base class for ray tracing based algorithms.
  */
 abstract class Algorithm {
 
-  def render( w : World, c : Camera, l : Option[(HDRImage) => Unit], dm : Option[DistributionManager] ) : HDRImage
+  def render( w : World, c : Camera, width : Int, height : Int, l : Option[(HDRImage) => Unit] ) : HDRImage
 
 }
