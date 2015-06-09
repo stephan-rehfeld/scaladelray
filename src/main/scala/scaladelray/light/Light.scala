@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering.raycasting.light
+package scaladelray.light
 
 import scaladelray.Color
 import scaladelray.math.{Vector3, Point3}

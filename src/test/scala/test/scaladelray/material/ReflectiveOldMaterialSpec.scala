@@ -36,7 +36,7 @@ import scaladelray.rendering.Renderable
 import scaladelray.texture.SingleColorTexture
 import scaladelray.Color
 import scaladelray.math.Normal3
-import scaladelray.rendering.raycasting.light.PointLight
+import scaladelray.light.PointLight
 
 class ReflectiveOldMaterialSpec extends FunSpec {
 

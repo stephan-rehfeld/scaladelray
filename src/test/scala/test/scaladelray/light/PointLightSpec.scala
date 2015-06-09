@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-package test.scaladelray.rendering.raycasting.light
+package test.scaladelray.light
 
 import org.scalatest.FunSpec
+import scaladelray.math.{Transform, Ray, Point3}
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Transform, Ray, Vector3, Point3}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
-import scaladelray.rendering.raycasting.light.DirectionalLight
+import scaladelray.light.PointLight
 
+class PointLightSpec extends FunSpec {
 
-class DirectionalLightSpec extends FunSpec {
+  describe( "A PointLight" ) {
+    it( "should radiate in all directions." ) {
 
-  describe( "A DirectionalLight" ) {
-    it( "should radiate all points" ) {
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
       for( p <- points )
         for( b <- l.illuminates( p, w ) )
           assert( b )
+
     }
 
     it( "should return itself when createLight is called." ) {
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
       assert( l == l.createLight )
     }
 
@@ -54,39 +55,70 @@ class DirectionalLightSpec extends FunSpec {
           Set[Hit]()
         }
       }
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
       l.illuminates( Point3( 3, 3, 3 ), w )
       assert( called )
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
+      val p = Point3( 0, 0, 2 )
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
-      for( d <- directions ) {
-        val l = new DirectionalLight( Color( 1, 1, 1 ), d )
-        val p = (d * 2).asPoint
-        for( b <- l.illuminates( p, w ) )
-          assert( !b )
+
+      for( b <- l.illuminates( p, w ) )
+        assert( !b )
+    }
+
+    it( "should calculate the constant attenuation correctly") {
+      val pl = Point3( 0, 0, 0 )
+      val p = Point3( 1, 0, 0 )
+
+      val l = new PointLight( Color( 1, 1, 1 ), pl )
+
+      for( i <- l.intensity( p ) ) {
+        assert( i == 1 )
       }
     }
 
 
+    it( "should calculate the linear attenuation correctly") {
+      val pl = Point3( 0, 0, 0 )
+      val p = Point3( 2, 0, 0 )
+
+      val l = new PointLight( Color( 1, 1, 1 ), pl, true, 0, 0.5 )
+
+      for( i <- l.intensity( p ) ) {
+        assert( i == 1 / (2*0.5) )
+      }
+    }
+
+    it( "should calculate the quadratic attenuation correctly") {
+      val pl = Point3( 0, 0, 0 )
+      val p = Point3( 2, 0, 0 )
+
+      val l = new PointLight( Color( 1, 1, 1 ), pl, true, 0, 0, 0.5 )
+
+      for( i <- l.intensity( p ) ) {
+        assert( i == 1/(2*2*0.5) )
+      }
+    }
+
     it( "should only have one sampling point") {
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       assert( l.samplingPoints == 1 )
     }
-    it( "should always return the same direction") {
 
-      val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
-      val points = for( d <- directions ) yield d.asPoint
+    it( "should calculate the direction correctly") {
 
-      for( d <- directions )
-        for( p <- points ) {
-          val l = new DirectionalLight( Color( 1, 1, 1 ), d )
-          for( dd <- l.directionFrom( p ) ) assert( dd == -d )
-        }
+      val pl = Point3( 0, 0, 0 )
+      val p = Point3( 3, -2, -4 )
 
+      val d = (pl - p).normalized
+
+      val l = new PointLight( Color( 1, 1, 1 ), pl )
+
+      for( dd <- l.directionFrom( p ) ) assert( dd == d )
     }
   }
 

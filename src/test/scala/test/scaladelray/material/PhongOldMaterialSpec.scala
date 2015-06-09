@@ -30,7 +30,7 @@ import scaladelray.math.Normal3
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.geometry.SurfacePoint
-import scaladelray.rendering.raycasting.light.PointLight
+import scaladelray.light.PointLight
 
 class PhongOldMaterialSpec extends FunSpec {
 

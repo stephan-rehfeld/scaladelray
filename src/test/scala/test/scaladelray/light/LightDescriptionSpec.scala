@@ -17,9 +17,8 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
-import scaladelray.light.LightDescription
+import scaladelray.light.{Light, LightDescription}
 import scaladelray.Color
-import scaladelray.rendering.raycasting.light.Light
 
 class LightDescriptionSpec extends FunSpec  {
   describe( "A LightDescription" ) {

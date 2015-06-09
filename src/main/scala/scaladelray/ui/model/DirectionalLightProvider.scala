@@ -19,9 +19,8 @@ package scaladelray.ui.model
 import javax.swing.table.TableModel
 import scaladelray.Color
 import scaladelray.math.Vector3
-import scaladelray.light.LightDescription
+import scaladelray.light.{DirectionalLight, LightDescription}
 import javax.swing.event.TableModelListener
-import scaladelray.rendering.raycasting.light.DirectionalLight
 
 class DirectionalLightProvider extends LightDescriptionProvider with TableModel {
 

@@ -22,7 +22,7 @@ import scaladelray.{Color, Constants, HDRImage}
 import scala.collection.mutable
 import scaladelray.rendering.{Renderable, Algorithm}
 import scaladelray.geometry.Sphere
-import scaladelray.rendering.raycasting.light.Light
+import scaladelray.light.Light
 
 class RayCasting( ambient : Color ) extends Algorithm {
 
@@ -46,8 +46,9 @@ class RayCasting( ambient : Color ) extends Algorithm {
     }
 
     val img = HDRImage( width, height )
-    for { x <- width
-          y <- height
+
+    for { x <- 0 until width
+          y <- 0 until height
     } {
       val ray = c( x, y ).head
       for( r <- w.objects ) {
@@ -76,6 +77,7 @@ class RayCasting( ambient : Color ) extends Algorithm {
       // For all BSDFs
     // Return image
 
+    img
 
   }
 

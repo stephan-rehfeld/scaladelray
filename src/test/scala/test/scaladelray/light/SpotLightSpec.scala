@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.scaladelray.rendering.raycasting.light
+package test.scaladelray.light
 
 import org.scalatest.FunSpec
 import scaladelray.Color
@@ -23,7 +23,7 @@ import scaladelray.math.{Transform, Ray, Vector3, Point3}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
-import scaladelray.rendering.raycasting.light.SpotLight
+import scaladelray.light.SpotLight
 
 class SpotLightSpec extends FunSpec {
 
