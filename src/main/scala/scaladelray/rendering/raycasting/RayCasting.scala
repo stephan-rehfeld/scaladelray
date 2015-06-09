@@ -18,27 +18,58 @@ package scaladelray.rendering.raycasting
 
 import scaladelray.world.World
 import scaladelray.camera.Camera
-import scaladelray.HDRImage
+import scaladelray.{Color, Constants, HDRImage}
 import scala.collection.mutable
 import scaladelray.rendering.{Renderable, Algorithm}
+import scaladelray.geometry.Sphere
+import scaladelray.rendering.raycasting.light.Light
 
-class RayCasting extends Algorithm {
+class RayCasting( ambient : Color ) extends Algorithm {
 
   override def render( w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit] ): HDRImage = {
 
     val lightEmitting = mutable.Set[Renderable]()
 
-    for( g <- w.objects ) {
-      if( g.material.isEmissive ) lightEmitting += g
+    for( r <- w.objects ) {
+      if( r.material.isEmissive ) lightEmitting += r
     }
 
-    for( g <- lightEmitting ) {
+    val lights = List[Light]()
 
-    }
-
-    HDRImage( width, height )
     // For all light emitting objects
-      // Translate them to light source
+    // Translate them to light source
+    for( r <- lightEmitting ) {
+      r.geometry match {
+        case s : Sphere =>
+
+      }
+    }
+
+    val img = HDRImage( width, height )
+    for { x <- width
+          y <- height
+    } {
+      val ray = c( x, y ).head
+      for( r <- w.objects ) {
+        val hits = (ray --> w).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
+        if( hits.isEmpty ) {
+          w.background( ray )
+        } else {
+          val hit = hits.head
+          var c = Color( 0, 0, 0 )
+          if( c != ambient ) {
+            for( (_, texture, _ ) <- hit.renderable.material.bsdfs ) {
+              c = c + texture( hit.sp.t ) * ambient
+            }
+          }
+          for( light <- lights ) {
+            for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
+              c = c + light.color * texture( hit.sp.t ) * bsdf( hit.sp, light.directionFrom( hit.sp.p ).head, 1.0, hit.sp, ray.d ) * w
+            }
+          }
+        }
+      }
+    }
     // For all pixels
       // Find intersection with smallest positive t.
       // Determine lighting

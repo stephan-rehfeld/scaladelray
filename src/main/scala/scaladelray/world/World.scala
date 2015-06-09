@@ -22,7 +22,7 @@ import scaladelray.Color
 import scaladelray.math.Ray
 
 
-case class World( background : Background, objects : Set[Renderable], ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
+case class World( background : Background, objects : Set[Renderable], @deprecated ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
 
   def <--( r : Ray ) : Set[Hit] = {
     var hits = Set[Hit]()

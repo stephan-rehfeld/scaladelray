@@ -30,7 +30,7 @@ case class Hit( ray : Ray, renderable : Renderable, t : Double, sp : SurfacePoin
  * @param oldMaterial The material of the renderable.
  * @param material The material of the renderable.
  */
-case class Renderable( override val t : Transform, geometry : Geometry, oldMaterial : OldMaterial, material : Material ) extends Transformable( t ) {
+case class Renderable( override val t : Transform, geometry : Geometry, @deprecated oldMaterial : OldMaterial, material : Material ) extends Transformable( t ) {
 
   def <-- ( r : Ray ) : Set[Hit] = {
     val ri = down( r )
