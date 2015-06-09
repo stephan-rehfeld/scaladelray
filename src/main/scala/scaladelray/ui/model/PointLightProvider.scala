@@ -20,9 +20,10 @@ import javax.swing.table.TableModel
 import scaladelray.Color
 import scaladelray.math.Point3
 import javax.swing.event.TableModelListener
-import scaladelray.light.{PointLight, LightDescription}
+import scaladelray.light.LightDescription
 import java.lang
 import java.lang.Double
+import scaladelray.rendering.raycasting.light.PointLight
 
 class PointLightProvider extends LightDescriptionProvider with TableModel {
 

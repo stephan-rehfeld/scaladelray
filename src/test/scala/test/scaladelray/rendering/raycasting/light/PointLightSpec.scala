@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package test.scaladelray.light
+package test.scaladelray.rendering.raycasting.light
 
 import org.scalatest.FunSpec
 import scaladelray.math.{Transform, Ray, Point3}
 import scaladelray.Color
-import scaladelray.light.PointLight
 import scaladelray.geometry.Sphere
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
+import scaladelray.rendering.raycasting.light.PointLight
 
 class PointLightSpec extends FunSpec {
 

@@ -18,7 +18,6 @@ package test.scaladelray.material
 
 import org.scalatest.FunSpec
 import scaladelray.math._
-import scaladelray.light.PointLight
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.math.Vector3
 import scaladelray.math.Point3
@@ -31,6 +30,7 @@ import scaladelray.math.Normal3
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.geometry.SurfacePoint
+import scaladelray.rendering.raycasting.light.PointLight
 
 class PhongOldMaterialSpec extends FunSpec {
 

@@ -43,7 +43,7 @@ class BTDFSpec extends FunSpec {
       assert( !btdf.called )
     }
 
-    it( "should call the reduced apply function if in and out points are the same and in and out direction is one the same side of the surface" ) {
+    it( "should call the reduced apply function if in and out points are the same and in and out direction is on the same side of the surface" ) {
       val btdf = BTDFTestAdapter()
 
       val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )

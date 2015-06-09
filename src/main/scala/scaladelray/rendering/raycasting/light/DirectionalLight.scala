@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package scaladelray.light
+package scaladelray.rendering.raycasting.light
 
 import scaladelray.{Constants, Color}
 import scaladelray.math.{Ray, Point3, Vector3}
 import scaladelray.world.World
+import scaladelray.light.LightDescription
 
 /**
  * The directional light represents the light of the sun. It behaves like a point light with an infinite distance.
  *
  * Because a directional light is a simple light, it implements [[scaladelray.light.LightDescription]] and also is
- * a [[scaladelray.light.Light]]. It returns itself when createLight is called.
+ * a [[scaladelray.rendering.raycasting.light.Light]]. It returns itself when createLight is called.
  *
  * @param color The color of the light.
  * @param direction The direction of the light.

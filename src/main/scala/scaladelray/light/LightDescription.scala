@@ -17,6 +17,7 @@
 package scaladelray.light
 
 import scaladelray.Color
+import scaladelray.rendering.raycasting.light.Light
 
 /**
  * A light description creates a instance of a light whenever createLight is called. This is necessary if a random

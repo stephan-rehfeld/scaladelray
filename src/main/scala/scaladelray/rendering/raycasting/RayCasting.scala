@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
+package scaladelray.rendering.raycasting
 
 import scaladelray.world.World
 import scaladelray.camera.Camera
 import scaladelray.HDRImage
 import scala.collection.mutable
+import scaladelray.rendering.{Renderable, Algorithm}
 
 class RayCasting extends Algorithm {
 
@@ -31,6 +32,9 @@ class RayCasting extends Algorithm {
       if( g.material.isEmissive ) lightEmitting += g
     }
 
+    for( g <- lightEmitting ) {
+
+    }
 
     HDRImage( width, height )
     // For all light emitting objects

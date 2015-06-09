@@ -18,7 +18,6 @@ package test.scaladelray.material
 
 import org.scalatest.FunSpec
 import scaladelray.math._
-import scaladelray.light.PointLight
 import scaladelray.material._
 import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.math.Vector3
@@ -37,6 +36,7 @@ import scaladelray.rendering.Renderable
 import scaladelray.texture.SingleColorTexture
 import scaladelray.Color
 import scaladelray.math.Normal3
+import scaladelray.rendering.raycasting.light.PointLight
 
 class ReflectiveOldMaterialSpec extends FunSpec {
 

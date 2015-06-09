@@ -19,9 +19,10 @@ package scaladelray.ui.model
 import javax.swing.table.TableModel
 import scaladelray.Color
 import scaladelray.math.{Vector3, Point3}
-import scaladelray.light.{SpotLight, LightDescription}
+import scaladelray.light.LightDescription
 import java.lang.Double
 import javax.swing.event.TableModelListener
+import scaladelray.rendering.raycasting.light.SpotLight
 
 class SpotLightProvider extends LightDescriptionProvider with TableModel {
 

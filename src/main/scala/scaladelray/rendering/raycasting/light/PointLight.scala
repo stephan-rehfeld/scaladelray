@@ -14,41 +14,42 @@
  * limitations under the License.
  */
 
-package scaladelray.light
+package scaladelray.rendering.raycasting.light
 
 import scaladelray.{Constants, Color}
-import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.math.{Ray, Point3}
 import scaladelray.world.World
+import scaladelray.light.LightDescription
+
 
 /**
- * A point lights illuminates the scene similar to a point light, but only within a specified angle.
- * Because a spot light is a simple light, it implements [[scaladelray.light.LightDescription]] and also is
- * a [[scaladelray.light.Light]]. It returns itself when createLight is called.
+ * A point lights illuminates the scene from a single point in all directions.
+ * Because a point light is a simple light, it implements [[scaladelray.light.LightDescription]] and also is
+ * a [[scaladelray.rendering.raycasting.light.Light]]. It returns itself when createLight is called.
  *
  * @param color The color of the light.
- * @param position The position of the light.
- * @param direction The main direction of the light.
- * @param halfAngle The half angle of the light.
+ * @param position The position of the point light.
+ * @param castsShadows A flag if the lights casts a shadow.
  * @param constantAttenuation The constant attenuation.
  * @param linearAttenuation The linear attenuation.
  * @param quadraticAttenuation The quadratic attenuation.
  */
-class SpotLight( color : Color, position : Point3, direction : Vector3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
-  override def illuminates( point: Point3, world : World ) = {
-    val w = math.acos( (point - position).normalized dot direction) <= halfAngle
-    if( w ) {
+class PointLight( color : Color, position : Point3, castsShadows : Boolean = true, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
+
+  override def illuminates(point: Point3, world : World) = {
+    if( castsShadows ) {
       val ray = Ray( point, (position - point).normalized )
       val hits = (ray --> world).filter( _.t > Constants.EPSILON ).toList
-      ( hits.isEmpty || (hits.sortWith(  _.t < _.t ).head.t > ray( position ) ) ) :: Nil
+      (hits.isEmpty || (hits.sortWith(  _.t < _.t ).head.t > ray( position ) ) ) :: Nil
     } else {
-      w :: Nil
+      true :: Nil
     }
-  }
-  override def directionFrom( point : Point3 ) = {
-    (position - point).normalized :: Nil
+
   }
 
-  override def intensity( point: Point3 ) = {
+  override def directionFrom( point : Point3 ) = (position - point).normalized :: Nil
+
+  override def intensity(point: Point3)  = {
     val distance = (point - position).magnitude
     (1 / (constantAttenuation + linearAttenuation * distance + quadraticAttenuation * distance * distance)) :: Nil
   }

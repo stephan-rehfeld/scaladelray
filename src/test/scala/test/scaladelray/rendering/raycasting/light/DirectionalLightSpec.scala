@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package test.scaladelray.light
+package test.scaladelray.rendering.raycasting.light
 
 import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.light.DirectionalLight
 import scaladelray.math.{Transform, Ray, Vector3, Point3}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
+import scaladelray.rendering.raycasting.light.DirectionalLight
 
 
 class DirectionalLightSpec extends FunSpec {

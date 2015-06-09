@@ -20,6 +20,7 @@ import scaladelray.math.{Ray, Vector3, Point3}
 import scaladelray.{Constants, Color}
 import scaladelray.sampling.SamplingPattern
 import scaladelray.world.World
+import scaladelray.rendering.raycasting.light.Light
 
 /**
  * A rectangular area light with random sampling points. As a complex light, this only is a light description. A new
