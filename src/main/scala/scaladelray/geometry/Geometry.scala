@@ -63,4 +63,25 @@ abstract class Geometry extends Serializable {
    * An optional normal map. It is assumed that the normal map is in tangent space.
    */
   val normalMap : Option[Texture]
+
+  /**
+   * The center point of the geometry.
+   */
+  val center : Point3
+
+  /**
+   * The lower bottom far point of the geometry.
+   */
+  val lbf : Point3
+
+  /**
+   * The right upper near point of the geometry.
+   */
+  val run : Point3
+
+  /**
+   * The main axis of the geometry
+   */
+  val axis : Vector3
+
 }

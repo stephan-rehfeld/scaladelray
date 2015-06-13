@@ -16,23 +16,17 @@
 
 package scaladelray.material
 
+import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
-import scaladelray.Color
 
 /**
- * An emission describes how the material emits light to the scene.
+ * A directional emission only emits within a single direction
+ *
+ * @param c The color of the emitted light.
  */
-abstract class Emission {
+case class DirectionalEmission( c : Color ) extends Emission {
 
-  /**
-   * Returns the light that is emitted at the surface point in the direction.
-   *
-   * @param sp The point on the surface.
-   * @param d The direction.
-   *
-   * @return The light that is emitted from the point in the direction.
-   */
-  def apply( sp: SurfacePoint, d : Vector3 ) : Color
+  override def apply( sp: SurfacePoint, d : Vector3 ) = if( sp.n.asVector.normalized =~= d.normalized ) c else Color( 0, 0, 0 )
 
 }

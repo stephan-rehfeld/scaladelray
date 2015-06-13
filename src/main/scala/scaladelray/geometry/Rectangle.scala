@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Normal3, Vector3, Ray}
+import scaladelray.math.{Point3, Normal3, Vector3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 /**
@@ -49,6 +49,14 @@ case class Rectangle( normalMap : Option[Texture] ) extends Geometry with Serial
     } else
       Set()
   }
+
+  override val center = Point3( 0, 0, 0 )
+
+  override val lbf = Point3( -0.5, 0, -0.5 )
+
+  override val run = Point3( 0.5, 0, 0.5 )
+
+  override val axis = Rectangle.n.asVector
 }
 
 /**

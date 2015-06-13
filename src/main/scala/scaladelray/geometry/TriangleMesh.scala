@@ -56,20 +56,14 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
                if(p.z>v._6)p.z else v._6)
             } )
 
-  /**
-   * The geometrical center of the object. The average of all vertices of the model.
-   */
-  val center = vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size
 
-  /**
-   * The left bottom far point of the bounding box of the model.
-   */
-  val lbf = Point3( minX, minY, minZ )
+  override val center = (vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size).asPoint
 
-  /**
-   * The right upper near point of the bounding box of the model.
-   */
-  val run = Point3( maxX, maxY, maxZ )
+  override val lbf = Point3( minX, minY, minZ )
+
+  override val run = Point3( maxX, maxY, maxZ )
+
+  override val axis = Vector3( 0, 1, 0 )
 
   /**
    * The octree to enhance rendering performance.

@@ -21,18 +21,16 @@ import scaladelray.math.Vector3
 import scaladelray.Color
 
 /**
- * An emission describes how the material emits light to the scene.
+ * The spot emission emits light only within a given angle.
+ *
+ * @param c The color of the light source.
+ * @param halfAngle The half angle within the light is emitted.
  */
-abstract class Emission {
+case class SpotEmission( c : Color, halfAngle : Double ) extends Emission {
 
-  /**
-   * Returns the light that is emitted at the surface point in the direction.
-   *
-   * @param sp The point on the surface.
-   * @param d The direction.
-   *
-   * @return The light that is emitted from the point in the direction.
-   */
-  def apply( sp: SurfacePoint, d : Vector3 ) : Color
+  require( halfAngle > 0, "The halfAngle must be larger than 0." )
+  require( halfAngle <= math.Pi / 2.0, "The halfAngle must not be larger than 90 degrees.")
+
+  override def apply( sp: SurfacePoint, d : Vector3 ) = if( math.acos(  sp.n dot d ) <= halfAngle ) c else Color( 0, 0, 0 )
 
 }

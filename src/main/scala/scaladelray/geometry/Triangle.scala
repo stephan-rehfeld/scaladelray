@@ -62,4 +62,12 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
     }
 
   }
+
+  override val center = ((a.asVector + b.asVector + c.asVector) / 3.0).asPoint
+
+  override val lbf = Point3( math.min( a.x, math.min( b.x, c.x ) ), math.min( a.y, math.min( b.y, c.y ) ), math.min( a.z, math.min( b.z, c.z ) ) )
+
+  override val run = Point3( math.max( a.x, math.max( b.x, c.x ) ), math.max( a.y, math.max( b.y, c.y ) ), math.max( a.z, math.max( b.z, c.z ) ) )
+
+  override val axis = (an + bn + cn).asVector / 3.0
 }

@@ -17,7 +17,7 @@
 package scaladelray.geometry
 
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.math.{Normal3, Vector3, Ray}
+import scaladelray.math.{Point3, Normal3, Vector3, Ray}
 
 /**
  * A disc with the diameter of 1.
@@ -49,6 +49,14 @@ case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializabl
     } else
       Set()
   }
+
+  override val center = Point3( 0, 0, 0 )
+
+  override val lbf = Point3( -0.5, 0, -0.5 )
+
+  override val run = Point3( 0.5, 0, 0.5 )
+
+  override val axis = Disc.n.asVector
 }
 
 /**

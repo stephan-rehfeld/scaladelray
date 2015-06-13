@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Ray, Transform}
+import scaladelray.math.{Vector3, Point3, Ray, Transform}
 
 
 /**
@@ -27,7 +27,7 @@ import scaladelray.math.{Ray, Transform}
  */
 case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serializable {
 
-  val normalMap = None
+  override val normalMap = None
 
   override def <--(r: Ray) : Set[GeometryHit] = {
     var hits = Set[GeometryHit]()
@@ -38,4 +38,12 @@ case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serial
     for( hit <- hits ) yield GeometryHit( r, hit.geometry, hit.t, SurfacePoint( t.m * hit.sp.p, (t.i.transposed * hit.sp.n).normalized, (t.i.transposed * hit.sp.tan).normalized, (t.i.transposed * hit.sp.biTan).normalized,  hit.sp.t ) )
   }
 
+
+  override val center: Point3 = (nodes.foldLeft( Vector3( 0, 0, 0 ) )( (v,g) => v + g.center.asVector ) / nodes.size).asPoint
+
+  override val lbf: Point3 = nodes.foldLeft( Point3( Double.MaxValue, Double.MaxValue, Double.MaxValue ) )( (v,g) => Point3( math.min( v.x, g.lbf.x ), math.min( v.y, g.lbf.y ), math.min( v.z, g.lbf.z ) ) )
+
+  override val run: Point3 = nodes.foldLeft( Point3( Double.MinValue, Double.MinValue, Double.MinValue ) )( (v,g) => Point3( math.max( v.x, g.run.x ), math.max( v.y, g.run.y ), math.max( v.z, g.run.z ) ) )
+
+  override val axis = nodes.foldLeft( Vector3( 0, 0, 0 ) )( (v,g) => v + g.axis ) / nodes.size
 }

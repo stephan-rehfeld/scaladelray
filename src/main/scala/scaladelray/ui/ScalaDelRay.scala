@@ -40,6 +40,7 @@ import scaladelray.Color
 import scala.concurrent.ExecutionContext
 import ExecutionContext.Implicits.global
 import scala.async.Async.async
+import scaladelray.rendering.raycasting.RayCasting
 
 case class StartDiscovery()
 
@@ -1147,9 +1148,42 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 0
     c.weighty = 0
     c.weightx = 0.5
+    c.gridwidth = 4
     c.gridx = 0
     c.gridy = 4
     layout( renderButton ) = c
+
+    val newRenderButton = new Button {
+      text = "New Render"
+      reactions += {
+        case ButtonClicked(_) =>
+          text = "Preparing"
+          enabled = false
+          progressBar.value = 0
+          async {
+            val totalSteps = worldProvider.count.asInstanceOf[Double]
+            var steps = 0.0
+            val (c,w) = worldProvider.createWorld( () => {
+              steps = steps + 1
+              progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
+            })
+            val a = new RayCasting( Color( 0, 0, 0 ) )
+            val img = a.render( w, c( renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt ), renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt, None )
+
+            text = "New Render"
+            enabled = true
+          }
+      }
+    }
+
+    c.fill = Fill.Horizontal
+    c.ipady = 0
+    c.weighty = 0
+    c.weightx = 0.5
+    c.gridwidth = 4
+    c.gridx = 4
+    c.gridy = 4
+    layout( newRenderButton ) = c
 
     val progressBar = new ProgressBar{
       min = 0
@@ -1161,6 +1195,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 0
     c.weighty = 0
     c.weightx = 0.5
+    c.gridwidth = 8
     c.gridx = 0
     c.gridy = 5
     layout( progressBar ) = c

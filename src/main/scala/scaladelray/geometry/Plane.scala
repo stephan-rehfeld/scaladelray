@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Vector3, Normal3, Ray}
+import scaladelray.math.{Point3, Vector3, Normal3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 
@@ -49,6 +49,13 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
        Set()
    }
 
+  override val center = Point3( 0, 0, 0 )
+
+  override val lbf = Point3( Double.NegativeInfinity, Double.NegativeInfinity, Double.NegativeInfinity )
+
+  override val run = Point3( Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity )
+
+  override val axis: Vector3 = Plane.n.asVector
 }
 
 /**

@@ -38,4 +38,24 @@ case class Renderable( override val t : Transform, geometry : Geometry, @depreca
     for( h <- geoHits ) yield Hit( r, this, h.t, SurfacePoint( up( h.sp.p ), up( h.sp.n ), up( h.sp.tan.asNormal ).asVector, up( h.sp.biTan.asNormal ).asVector, h.sp.t ) )
   }
 
+  /**
+   * The center point of the geometry.
+   */
+  val center = up( geometry.center )
+
+  /**
+   * The lower bottom far point of the geometry.
+   */
+  val lbf = up( geometry.lbf )
+
+  /**
+   * The right upper near point of the geometry.
+   */
+  val run = up( geometry.run )
+
+  /**
+   * The axis of the geometry
+   */
+  val axis = up( geometry.axis )
+
 }

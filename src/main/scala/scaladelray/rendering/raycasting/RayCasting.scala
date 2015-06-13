@@ -21,30 +21,26 @@ import scaladelray.camera.Camera
 import scaladelray.{Color, Constants, HDRImage}
 import scala.collection.mutable
 import scaladelray.rendering.{Renderable, Algorithm}
-import scaladelray.geometry.Sphere
-import scaladelray.rendering.raycasting.light.Light
+import scaladelray.rendering.raycasting.light.{DirectionalLight, SpotLight, PointLight, Light}
+import scaladelray.material.{DirectionalEmission, SpotEmission, SimpleEmission}
 
 class RayCasting( ambient : Color ) extends Algorithm {
 
   override def render( w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit] ): HDRImage = {
 
-    val lightEmitting = mutable.Set[Renderable]()
+    var lights = mutable.HashMap[Light, Renderable]()
 
     for( r <- w.objects ) {
-      if( r.material.isEmissive ) lightEmitting += r
-    }
-
-    var lights = List[Light]()
-
-    // For all light emitting objects
-    // Translate them to light source
-    for( r <- lightEmitting ) {
-      r.geometry match {
-        case s : Sphere =>
-
-
+      if( r.material.isEmissive ) r.material.e.get match {
+        case simple : SimpleEmission =>
+          lights += (PointLight( simple.c, r.center ) -> r )
+        case spot : SpotEmission =>
+          lights += (SpotLight( spot.c, r.center, r.axis, spot.halfAngle ) -> r)
+        case directional : DirectionalEmission =>
+          lights += (DirectionalLight( directional.c, r.axis) -> r)
       }
     }
+
 
     val img = HDRImage( width, height )
 
@@ -58,28 +54,31 @@ class RayCasting( ambient : Color ) extends Algorithm {
           w.background( ray )
         } else {
           val hit = hits.head
-          var c = Color( 0, 0, 0 )
-          if( c != ambient ) {
-            for( (_, texture, _ ) <- hit.renderable.material.bsdfs ) {
-              c = c + texture( hit.sp.t ) * ambient
+          if( hit.renderable.material.isEmissive ) {
+            img.set( x, y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
+          } else {
+            var c = Color( 0, 0, 0 )
+            if( c != ambient ) {
+              for( (_, texture, _ ) <- hit.renderable.material.bsdfs ) {
+                c = c + texture( hit.sp.t ) * ambient
+              }
             }
-          }
-          for( light <- lights ) {
-            for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
-              c = c + light.c * texture( hit.sp.t ) * bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, ray.d ) * w
+            for( (light,renderable) <- lights ) {
+              for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
+                val cr = texture( hit.sp.t )
+                val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, ray.d )
+                val lightIntensity = light.intensity( hit.sp.p )
+                val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
+
+                c = c + light.c * cr * bsdfItensity * w * lightIntensity * cos
+              }
             }
+            img.set( x, y, c )
           }
         }
       }
     }
-    // For all pixels
-      // Find intersection with smallest positive t.
-      // Determine lighting
-      // For all BSDFs
-    // Return image
-
     img
-
   }
 
 }
