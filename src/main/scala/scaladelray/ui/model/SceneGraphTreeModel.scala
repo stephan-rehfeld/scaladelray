@@ -54,6 +54,11 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case 0 => if( dp.materialProvider.isDefined ) dp.materialProvider.get else "<Material>"
         case 1 => if( dp.normalMapProvider.isDefined ) dp.normalMapProvider.get else "<Normal Map>"
       }
+    case rp : RectangleProvider =>
+      index match {
+        case 0 => if( rp.materialProvider.isDefined ) rp.materialProvider.get else "<Material>"
+        case 1 => if( rp.normalMapProvider.isDefined ) rp.normalMapProvider.get else "<Normal Map>"
+      }
     case sp : SphereProvider =>
       index match {
         case 0 => if( sp.materialProvider.isDefined ) sp.materialProvider.get else "<Material>"
@@ -101,6 +106,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Lights" => worldProvider.lightDescriptionProvider.size
     case pp : PlaneProvider => 2
     case dp : DiscProvider => 2
+    case rp : RectangleProvider => 2
     case sp : SphereProvider => 2
     case bp : AxisAlignedBoxProvider => 2
     case tp : TriangleProvider => 1
@@ -124,6 +130,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Lights" => worldProvider.lightDescriptionProvider.size == 0
     case pp : PlaneProvider => false
     case dp : DiscProvider => false
+    case rp : RectangleProvider => false
     case sp : SphereProvider => false
     case bp : AxisAlignedBoxProvider => false
     case tp : TriangleProvider => false
@@ -177,6 +184,13 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case nm : TextureProvider => 1
       }
     case dp : DiscProvider =>
+      child match {
+        case "<Material>" => 0
+        case mp : MaterialProvider => 0
+        case "<Normal Map>" => 1
+        case nm : TextureProvider => 1
+      }
+    case rp : RectangleProvider =>
       child match {
         case "<Material>" => 0
         case mp : MaterialProvider => 0

@@ -123,6 +123,36 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newDiscButton ) = c
 
+    val newRectangleButton = new Button {
+      text = "Rectangle"
+      reactions += {
+        case ButtonClicked(_) =>
+          val rp = new RectangleProvider
+          detailsTable.model = rp
+          val node = sceneGraphTree.getLastSelectedPathComponent
+          if( node != null ) {
+            node match {
+              case np : NodeProvider =>
+                np.childNodes += rp
+
+              case _ =>
+                worldProvider.renderableProvider += rp
+
+            }
+          } else {
+            worldProvider.renderableProvider += rp
+
+          }
+          updateUI( Some( rp ) )
+      }
+    }
+
+    c.fill = Fill.Horizontal
+    c.weightx = 0.5
+    c.gridx = 2
+    c.gridy = 0
+    layout( newRectangleButton ) = c
+
     val newSphereButton = new Button {
       text = "Sphere"
       reactions += {
@@ -148,7 +178,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 2
+    c.gridx = 3
     c.gridy = 0
     layout( newSphereButton ) = c
 
@@ -177,7 +207,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 3
+    c.gridx = 4
     c.gridy = 0
     layout( newBoxButton ) = c
 
@@ -207,7 +237,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 4
+    c.gridx = 5
     c.gridy = 0
     layout( newTriangleButton ) = c
 
@@ -237,7 +267,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 5
+    c.gridx = 6
     c.gridy = 0
     layout( newNodeButton ) = c
 
@@ -266,7 +296,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 6
+    c.gridx = 7
     c.gridy = 0
     layout( newModelButton ) = c
 
@@ -341,7 +371,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.weightx = 0.5
     c.gridx = 0
     c.gridy = 1
-    c.gridwidth = 7
+    c.gridwidth = 8
     layout( lights ) = c
 
     val backgroundPopupMenu = new JPopupMenu
@@ -443,6 +473,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             pp.materialProvider = Some( lmp )
           case Some( pp : DiscProvider ) =>
             pp.materialProvider = Some( lmp )
+          case Some( pp : RectangleProvider ) =>
+            pp.materialProvider = Some( lmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( lmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -493,6 +525,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             pp.materialProvider = Some( rmp )
           case Some( pp : DiscProvider ) =>
             pp.materialProvider = Some( rmp )
+          case Some( pp : RectangleProvider ) =>
+            pp.materialProvider = Some( rmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( rmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -517,6 +551,8 @@ object ScalaDelRay extends SimpleSwingApplication {
           case Some( pp : PlaneProvider ) =>
             pp.materialProvider = Some( tmp )
           case Some( pp : DiscProvider ) =>
+            pp.materialProvider = Some( tmp )
+          case Some( pp : RectangleProvider ) =>
             pp.materialProvider = Some( tmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( tmp )
@@ -602,6 +638,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             pp.normalMapProvider = Some( sctp )
           case Some( pp : DiscProvider ) =>
             pp.normalMapProvider = Some( sctp )
+          case Some( pp : RectangleProvider ) =>
+            pp.normalMapProvider = Some( sctp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( sctp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -675,6 +713,8 @@ object ScalaDelRay extends SimpleSwingApplication {
           case Some( pp : PlaneProvider ) =>
             pp.normalMapProvider = Some( ctp )
           case Some( pp : DiscProvider ) =>
+            pp.normalMapProvider = Some( ctp )
+          case Some( pp : RectangleProvider ) =>
             pp.normalMapProvider = Some( ctp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( ctp )
@@ -750,6 +790,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             pp.normalMapProvider = Some( itp )
           case Some( pp : DiscProvider ) =>
             pp.normalMapProvider = Some( itp )
+          case Some( pp : RectangleProvider ) =>
+            pp.normalMapProvider = Some( itp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( itp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -823,6 +865,8 @@ object ScalaDelRay extends SimpleSwingApplication {
           case Some( pp : PlaneProvider ) =>
             pp.normalMapProvider = Some( iitp )
           case Some( pp : DiscProvider ) =>
+            pp.normalMapProvider = Some( iitp )
+          case Some( pp : RectangleProvider ) =>
             pp.normalMapProvider = Some( iitp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( iitp )
@@ -1000,7 +1044,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 300
     c.weightx = 0.0
     c.weighty = 0.5
-    c.gridwidth = 7
+    c.gridwidth = 8
     c.gridx = 0
     c.gridy = 2
     c.anchor = Anchor.North
@@ -1072,7 +1116,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 100
     c.weighty = 0.5
     c.anchor = Anchor.PageEnd
-    c.gridwidth = 7
+    c.gridwidth = 8
     c.gridx = 0
     c.gridy = 3
     layout( detailsTableScrollPane ) = c
@@ -1153,7 +1197,7 @@ object ScalaDelRay extends SimpleSwingApplication {
   def top = new MainFrame {
     title = "ScalaDelRay"
     contents = ui
-    size = new Dimension( 500, 700 )
+    size = new Dimension( 600, 800 )
     resizable = false
     menuBar = new MenuBar
     val fileMenu = new Menu( "FILE" )

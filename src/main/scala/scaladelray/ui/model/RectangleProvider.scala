@@ -18,11 +18,11 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.geometry.Disc
+import scaladelray.geometry.Rectangle
 import scaladelray.rendering.Renderable
 import javax.swing.event.TableModelListener
 
-class DiscProvider extends RenderableProvider with TableModel {
+class RectangleProvider extends RenderableProvider with TableModel {
 
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
@@ -31,7 +31,7 @@ class DiscProvider extends RenderableProvider with TableModel {
   var normalMapProvider : Option[TextureProvider] = None
 
   override def createRenderable( l : () => Unit ) = {
-    val p = Disc( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
+    val p = Rectangle( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     val (m,o) = materialProvider.get.createMaterial( l )
     Renderable( t, p, o, m )
@@ -105,7 +105,7 @@ class DiscProvider extends RenderableProvider with TableModel {
 
   override def isReady: Boolean = ( materialProvider.isDefined  && materialProvider.get.isReady ) && (normalMapProvider.isEmpty || normalMapProvider.get.isReady )
 
-  override def toString: String = "Disc"
+  override def toString: String = "Rectangle"
 
   override def count = 1 + materialProvider.get.count + (if( normalMapProvider.isDefined ) normalMapProvider.get.count else 0)
 }
