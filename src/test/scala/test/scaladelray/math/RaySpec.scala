@@ -88,6 +88,10 @@ class RaySpec extends FunSpec {
           called = true
           Set()
         }
+        override val center = Point3( 0, 0, 0 )
+        override val lbf = Point3( 0, 0, 0 )
+        override val run = Point3( 0, 0, 0 )
+        override val axis = Vector3( 0, 0, 0 )
       }
 
       r --> geo
@@ -157,6 +161,10 @@ class RaySpec extends FunSpec {
           called = true
           Set()
         }
+        override val center = Point3( 0, 0, 0 )
+        override val lbf = Point3( 0, 0, 0 )
+        override val run = Point3( 0, 0, 0 )
+        override val axis = Vector3( 0, 0, 0 )
       }
 
       r --> geo

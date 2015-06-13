@@ -35,6 +35,11 @@ class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends G
 
   override val normalMap = None
 
+  override val center = Point3( 0, 0, 0 )
+  override val lbf = Point3( -1, -1, -1 )
+  override val run = Point3( 1, 1, 1 )
+  override val axis = Vector3( 0, 1, 0 )
+
 }
 
 class NodeSpec extends FunSpec {

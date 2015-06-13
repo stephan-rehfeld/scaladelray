@@ -41,6 +41,10 @@ class RenderableSpec extends FunSpec {
           assert( r == Ray( t.i * ray.o, t.i * ray.d ) )
           Set()
         }
+        override val center = Point3( 0, 0, 0 )
+        override val lbf = Point3( 0, 0, 0 )
+        override val run = Point3( 0, 0, 0 )
+        override val axis = Vector3( 0, 0, 0 )
       }
       val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
       ray --> renderable
@@ -55,6 +59,10 @@ class RenderableSpec extends FunSpec {
         override def <--(r: Ray): Set[GeometryHit] = {
           Set() + GeometryHit( r, this, 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) ) )
         }
+        override val center = Point3( 0, 0, 0 )
+        override val lbf = Point3( 0, 0, 0 )
+        override val run = Point3( 0, 0, 0 )
+        override val axis = Vector3( 0, 0, 0 )
       }
       val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
       val hits = ray --> renderable
