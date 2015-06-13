@@ -22,7 +22,7 @@ import scaladelray.{Color, Constants, HDRImage}
 import scala.collection.mutable
 import scaladelray.rendering.{Renderable, Algorithm}
 import scaladelray.geometry.Sphere
-import scaladelray.light.Light
+import scaladelray.rendering.raycasting.light.Light
 
 class RayCasting( ambient : Color ) extends Algorithm {
 
@@ -34,13 +34,14 @@ class RayCasting( ambient : Color ) extends Algorithm {
       if( r.material.isEmissive ) lightEmitting += r
     }
 
-    val lights = List[Light]()
+    var lights = List[Light]()
 
     // For all light emitting objects
     // Translate them to light source
     for( r <- lightEmitting ) {
       r.geometry match {
         case s : Sphere =>
+
 
       }
     }
@@ -65,7 +66,7 @@ class RayCasting( ambient : Color ) extends Algorithm {
           }
           for( light <- lights ) {
             for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
-              c = c + light.color * texture( hit.sp.t ) * bsdf( hit.sp, light.directionFrom( hit.sp.p ).head, 1.0, hit.sp, ray.d ) * w
+              c = c + light.c * texture( hit.sp.t ) * bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, ray.d ) * w
             }
           }
         }

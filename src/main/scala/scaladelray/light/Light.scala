@@ -33,7 +33,7 @@ trait Light extends Serializable {
   val color : Color
 
   /**
-   * Return the number of sampling points of the light.
+   * Returns the number of sampling points of the light.
    *
    * @return The number of the sampling points of the light.
    */
