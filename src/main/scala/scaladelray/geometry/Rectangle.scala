@@ -16,22 +16,22 @@
 
 package scaladelray.geometry
 
-import scaladelray.texture.{TexCoord2D, Texture}
 import scaladelray.math.{Normal3, Vector3, Ray}
+import scaladelray.texture.{Texture, TexCoord2D}
 
 /**
- * A disc with the diameter of 1.
+ * A rectangle.
  *
- * @param normalMap An optional normal map for the disc.
+ * @param normalMap An optional normal map for the rectangle.
  */
-case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializable {
+case class Rectangle( normalMap : Option[Texture] ) extends Geometry with Serializable {
 
   override def <-- ( r : Ray ) = {
-    val h = r.d dot Disc.n
+    val h = r.d dot Rectangle.n
     if( h != 0.0 ) {
-      val t = ((-r.o.asVector) dot Disc.n) / h
+      val t = ((-r.o.asVector) dot Rectangle.n) / h
       val p = r( t )
-      if( math.sqrt( p.x * p.x + p.z * p.z ) <= Disc.r ) {
+      if( p.x >= -Rectangle.e && p.x < Rectangle.e && p.z >= -Rectangle.e && p.z < Rectangle.e ) {
         val tangent = Vector3( 1, 0, 0 )
         val bitangent = Vector3( 0, 0, -1 )
         val texCoord = TexCoord2D( p.x + 0.5, -p.z + 0.5 )
@@ -39,7 +39,7 @@ case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializabl
         val n = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord )
-            (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + Disc.n * (c.b-0.5)).normalized.asNormal
+            (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + Rectangle.n * (c.b-0.5)).normalized.asNormal
           case None =>
             Disc.n
         }
@@ -52,9 +52,9 @@ case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializabl
 }
 
 /**
- * The companion object of the disc. It contains the standard normal and radius of a disc.
+ * The companion object of the rectangle. It contains the standard normal and length of edges.
  */
-object Disc {
+object Rectangle {
 
   /**
    * The standard normal of all discs.
@@ -62,7 +62,8 @@ object Disc {
   val n = Normal3( 0.0, 1.0, 0.0 )
 
   /**
-   * The standard radius of all discs.
+   * The standard half length of the edges.
    */
-  val r = 0.5
+  val e = 0.5
+
 }
