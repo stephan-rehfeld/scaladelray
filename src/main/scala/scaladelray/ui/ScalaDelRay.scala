@@ -93,6 +93,36 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.gridy = 0
     layout( newPlaneButton ) = c
 
+    val newDiscButton = new Button {
+      text = "Disc"
+      reactions += {
+        case ButtonClicked(_) =>
+          val dp = new DiscProvider
+          detailsTable.model = dp
+          val node = sceneGraphTree.getLastSelectedPathComponent
+          if( node != null ) {
+            node match {
+              case np : NodeProvider =>
+                np.childNodes += dp
+
+              case _ =>
+                worldProvider.renderableProvider += dp
+
+            }
+          } else {
+            worldProvider.renderableProvider += dp
+
+          }
+          updateUI( Some( dp ) )
+      }
+    }
+
+    c.fill = Fill.Horizontal
+    c.weightx = 0.5
+    c.gridx = 1
+    c.gridy = 0
+    layout( newDiscButton ) = c
+
     val newSphereButton = new Button {
       text = "Sphere"
       reactions += {
@@ -118,7 +148,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 1
+    c.gridx = 2
     c.gridy = 0
     layout( newSphereButton ) = c
 
@@ -147,7 +177,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 2
+    c.gridx = 3
     c.gridy = 0
     layout( newBoxButton ) = c
 
@@ -177,7 +207,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 3
+    c.gridx = 4
     c.gridy = 0
     layout( newTriangleButton ) = c
 
@@ -207,7 +237,7 @@ object ScalaDelRay extends SimpleSwingApplication {
 
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 4
+    c.gridx = 5
     c.gridy = 0
     layout( newNodeButton ) = c
 
@@ -236,7 +266,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     }
     c.fill = Fill.Horizontal
     c.weightx = 0.5
-    c.gridx = 5
+    c.gridx = 6
     c.gridy = 0
     layout( newModelButton ) = c
 
@@ -311,7 +341,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.weightx = 0.5
     c.gridx = 0
     c.gridy = 1
-    c.gridwidth = 6
+    c.gridwidth = 7
     layout( lights ) = c
 
     val backgroundPopupMenu = new JPopupMenu
@@ -411,6 +441,8 @@ object ScalaDelRay extends SimpleSwingApplication {
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
             pp.materialProvider = Some( lmp )
+          case Some( pp : DiscProvider ) =>
+            pp.materialProvider = Some( lmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( lmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -433,6 +465,8 @@ object ScalaDelRay extends SimpleSwingApplication {
         val pmp = new PhongMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( pmp )
+          case Some( pp : DiscProvider ) =>
             pp.materialProvider = Some( pmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( pmp )
@@ -457,6 +491,8 @@ object ScalaDelRay extends SimpleSwingApplication {
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
             pp.materialProvider = Some( rmp )
+          case Some( pp : DiscProvider ) =>
+            pp.materialProvider = Some( rmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( rmp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -479,6 +515,8 @@ object ScalaDelRay extends SimpleSwingApplication {
         val tmp = new TransparentMaterialProvider
         selectionParent match {
           case Some( pp : PlaneProvider ) =>
+            pp.materialProvider = Some( tmp )
+          case Some( pp : DiscProvider ) =>
             pp.materialProvider = Some( tmp )
           case Some( sp : SphereProvider ) =>
             sp.materialProvider = Some( tmp )
@@ -562,6 +600,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             }
           case Some( pp : PlaneProvider ) =>
             pp.normalMapProvider = Some( sctp )
+          case Some( pp : DiscProvider ) =>
+            pp.normalMapProvider = Some( sctp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( sctp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -633,6 +673,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               case None =>
             }
           case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( ctp )
+          case Some( pp : DiscProvider ) =>
             pp.normalMapProvider = Some( ctp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( ctp )
@@ -706,6 +748,8 @@ object ScalaDelRay extends SimpleSwingApplication {
             }
           case Some( pp : PlaneProvider ) =>
             pp.normalMapProvider = Some( itp )
+          case Some( pp : DiscProvider ) =>
+            pp.normalMapProvider = Some( itp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( itp )
           case Some( bp : AxisAlignedBoxProvider ) =>
@@ -777,6 +821,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               case None =>
             }
           case Some( pp : PlaneProvider ) =>
+            pp.normalMapProvider = Some( iitp )
+          case Some( pp : DiscProvider ) =>
             pp.normalMapProvider = Some( iitp )
           case Some( sp : SphereProvider ) =>
             sp.normalMapProvider = Some( iitp )
@@ -954,7 +1000,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 300
     c.weightx = 0.0
     c.weighty = 0.5
-    c.gridwidth = 6
+    c.gridwidth = 7
     c.gridx = 0
     c.gridy = 2
     c.anchor = Anchor.North
@@ -1026,7 +1072,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 100
     c.weighty = 0.5
     c.anchor = Anchor.PageEnd
-    c.gridwidth = 6
+    c.gridwidth = 7
     c.gridx = 0
     c.gridy = 3
     layout( detailsTableScrollPane ) = c

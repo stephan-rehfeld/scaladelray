@@ -49,6 +49,11 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case 0 => if( pp.materialProvider.isDefined ) pp.materialProvider.get else "<Material>"
         case 1 => if( pp.normalMapProvider.isDefined ) pp.normalMapProvider.get else "<Normal Map>"
       }
+    case dp : DiscProvider =>
+      index match {
+        case 0 => if( dp.materialProvider.isDefined ) dp.materialProvider.get else "<Material>"
+        case 1 => if( dp.normalMapProvider.isDefined ) dp.normalMapProvider.get else "<Normal Map>"
+      }
     case sp : SphereProvider =>
       index match {
         case 0 => if( sp.materialProvider.isDefined ) sp.materialProvider.get else "<Material>"
@@ -95,6 +100,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Renderables" => worldProvider.renderableProvider.size
     case "Lights" => worldProvider.lightDescriptionProvider.size
     case pp : PlaneProvider => 2
+    case dp : DiscProvider => 2
     case sp : SphereProvider => 2
     case bp : AxisAlignedBoxProvider => 2
     case tp : TriangleProvider => 1
@@ -117,6 +123,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Renderables" => worldProvider.renderableProvider.size == 0
     case "Lights" => worldProvider.lightDescriptionProvider.size == 0
     case pp : PlaneProvider => false
+    case dp : DiscProvider => false
     case sp : SphereProvider => false
     case bp : AxisAlignedBoxProvider => false
     case tp : TriangleProvider => false
@@ -163,6 +170,13 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case "Renderables" => worldProvider.renderableProvider.indexOf( child )
     case "Lights" => worldProvider.lightDescriptionProvider.indexOf( child )
     case pp : PlaneProvider =>
+      child match {
+        case "<Material>" => 0
+        case mp : MaterialProvider => 0
+        case "<Normal Map>" => 1
+        case nm : TextureProvider => 1
+      }
+    case dp : DiscProvider =>
       child match {
         case "<Material>" => 0
         case mp : MaterialProvider => 0
