@@ -1169,7 +1169,7 @@ object ScalaDelRay extends SimpleSwingApplication {
             })
             val a = new RayCasting( Color( 0, 0, 0 ) )
             val img = a.render( w, c( renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt ), renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt, None )
-
+            val windows = new HDRImageWindow( img )
             text = "New Render"
             enabled = true
           }
