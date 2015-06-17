@@ -28,7 +28,7 @@ case class PhongSpecularBRDF( exponent : Double ) extends BRDF {
 
   override def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double = {
     val r = (-dIn).reflectOn(p.n)
-    math.pow( r dot dOut, exponent )
+    math.pow( r dot dOut, exponent ) / math.Pi
   }
 
 }

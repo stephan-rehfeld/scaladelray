@@ -1247,8 +1247,6 @@ object ScalaDelRay extends SimpleSwingApplication {
 
           val c = new Constraints
 
-
-
           val widthLabel = new Label( "Width:")
 
           c.fill = Fill.Horizontal

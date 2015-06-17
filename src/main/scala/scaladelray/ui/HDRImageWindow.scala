@@ -21,30 +21,37 @@ import java.awt.{Graphics2D, Dimension}
 import java.awt.image.BufferedImage
 import scaladelray.HDRImage
 
-class HDRImageWindow( img : HDRImage ) extends Frame {
-
+class HDRImageWindow( private var _img : HDRImage ) extends Frame {
 
 
   title = "WindowedRayTracer"
-  minimumSize = new Dimension( img.width, img.height )
-  size = new Dimension( img.width, img.height )
+  minimumSize = new Dimension( _img.width, _img.height )
+  size = new Dimension( _img.width, _img.height )
   resizable = false
   visible = true
 
+  val w = new BrightnessAdjustmentWindow( _img, this )
+
   contents = new Component {
     override def paintComponent( g: Graphics2D ) = {
-      val image = new BufferedImage(img.width, img.height, BufferedImage.TYPE_INT_ARGB)
+      val image = new BufferedImage(_img.width, _img.height, BufferedImage.TYPE_INT_ARGB)
+
       val model = image.getColorModel
       val raster = image.getRaster
-
       for {
-        x <- 0 until img.width
-        y <- 0 until img.height} {
-          val c = img( x, y )
-          val color = new java.awt.Color( c.r.asInstanceOf[Float], c.g.asInstanceOf[Float], c.b.asInstanceOf[Float] )
-          raster.setDataElements(x, img.height-1-y, model.getDataElements(color.getRGB, null))
+        x <- 0 until _img.width
+        y <- 0 until _img.height} {
+          val c = _img( x, y )
+          val color = new java.awt.Color( math.min(c.r.asInstanceOf[Float], 1.0f), math.min(c.g.asInstanceOf[Float], 1.0f), math.min(c.b.asInstanceOf[Float], 1.0f) )
+          raster.setDataElements(x, _img.height-1-y, model.getDataElements(color.getRGB, null))
       }
       g.drawImage(image, 0, 0, null)
     }
+  }
+
+  def img = _img
+  def img_=( aImg : HDRImage ) {
+    _img = aImg
+    this.repaint()
   }
 }
