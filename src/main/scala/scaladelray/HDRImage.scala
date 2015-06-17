@@ -66,6 +66,11 @@ case class HDRImage( width : Int, height : Int ) {
     d( x )( y ) = c
   }
 
+  /**
+   * Returns the minimum value of r, g, or b.
+   *
+   * @return The minimum of r, g, or b.
+   */
   def min : Double = {
     var v = Double.MaxValue
     for{
@@ -80,6 +85,11 @@ case class HDRImage( width : Int, height : Int ) {
     v
   }
 
+  /**
+   * Returns the maximum of r, g, or b.
+   *
+   * @return The maximum of r, g, or b.
+   */
   def max : Double = {
     var v = Double.MinValue
     for{
