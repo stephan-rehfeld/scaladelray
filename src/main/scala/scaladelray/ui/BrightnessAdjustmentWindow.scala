@@ -30,39 +30,22 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
   resizable = false
   visible = true
 
-  val (min,max) = this.calcMinMax()
+  val min = img.min
+  val max = img.max
 
-  private def calcMinMax() : (Double,Double) = {
-    var min = Double.MaxValue
-    var max = Double.MinValue
+  private var newMin = min
+  private var newMax = max
 
-    for {
-      x <- 0 until img.width
-      y <- 0 until img.height
-    } {
-      val c = img( x, y )
-
-      val b = (c.r + c.g + c.b) / 3.0
-      min = math.min( min, b )
-      max = math.max( max, b )
-    }
-    (min,max)
-  }
-
-  private var b = 0.0
-  private var w = 1.0
-  private var o = 0.0
-
-  private def adjust( i : HDRImage, black : Double, white : Double, offset : Double ) : HDRImage = {
+  private def adjust( i : HDRImage, oldMin : Double, oldMax : Double, newMin : Double, newMax : Double ) : HDRImage = {
     val newImage = new HDRImage( i.width, i.height )
     for{
       x <- 0 until newImage.width
       y <- 0 until newImage.height
     } {
       val c = i( x, y )
-      val r = (c.r - black) / (white-black) + offset
-      val g = (c.g - black) / (white-black) + offset
-      val b = (c.b - black) / (white-black) + offset
+      val r = (c.r - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
+      val g = (c.g - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
+      val b = (c.b - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
       newImage.set( x, y, Color( math.max(0,r), math.max(0,g), math.max(0,b)) )
 
     }
@@ -86,7 +69,7 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.gridwidth = 2
     layout( originalHistogram ) = c
 
-    val origMinLabel = new Label( "Min:")
+    val origMinLabel = new Label( "Original Min:")
 
     c.fill = Fill.Horizontal
     c.weightx = 0.3
@@ -102,10 +85,10 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.weightx = 0.7
     c.gridx = 1
     c.gridy = 1
-    c.gridwidth = 0
+    c.gridwidth = 1
     layout( origMin ) = c
 
-    val origMaxLabel = new Label( "Max:")
+    val origMaxLabel = new Label( "Original Max:")
 
     c.fill = Fill.Horizontal
     c.weightx = 0.3
@@ -121,33 +104,43 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.weightx = 0.7
     c.gridx = 1
     c.gridy = 2
-    c.gridwidth = 0
+    c.gridwidth = 1
     layout( origMax ) = c
 
-    val blackLabel = new Label( "Black:")
+
+    val mapToLabel = new Label( "Map to")
+
+    c.fill = Fill.Horizontal
+    c.weightx = 0.7
+    c.gridx = 0
+    c.gridy = 3
+    c.gridwidth = 2
+    layout( mapToLabel ) = c
+
+    val newMinLabel = new Label( "New Min:")
 
     c.fill = Fill.Horizontal
     c.weightx = 0.3
     c.gridx = 0
-    c.gridy = 3
+    c.gridy = 4
     c.gridwidth = 1
-    layout( blackLabel ) = c
+    layout( newMinLabel ) = c
 
-    val black = new TextField( b.toString )  {
+    val newMin = new TextField( BrightnessAdjustmentWindow.this.newMin.toString )  {
       listenTo( this )
       reactions += {
         case e : EditDone =>
           try {
             val v = text.toDouble
-            if( v >= 0.0 && v <= w ) {
-              b = v
-              val newImage = adjust( img, b, w, o )
+            if( v <= BrightnessAdjustmentWindow.this.newMax ) {
+              BrightnessAdjustmentWindow.this.newMin = v
+              val newImage = adjust( img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
               resultHistogram.img = newImage
               p.img = newImage
             } else
-              text = b.toString
+              text = BrightnessAdjustmentWindow.this.newMin.toString
           } catch {
-            case _ : Throwable => text = b.toString
+            case _ : Throwable => text = BrightnessAdjustmentWindow.this.newMin.toString
           }
       }
     }
@@ -156,35 +149,37 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.fill = Fill.Horizontal
     c.weightx = 0.7
     c.gridx = 1
-    c.gridy = 3
-    c.gridwidth = 0
-    layout( black ) = c
+    c.gridy = 4
+    c.gridwidth = 1
+    layout( newMin ) = c
 
-    val whiteLabel = new Label( "White:")
+    val newMaxLabel = new Label( "New Max:")
 
     c.fill = Fill.Horizontal
     c.weightx = 0.3
     c.gridx = 0
-    c.gridy = 4
+    c.gridy = 5
     c.gridwidth = 1
-    layout( whiteLabel ) = c
+    layout( newMaxLabel ) = c
 
-    val white = new TextField( w.toString ) {
+    val white = new TextField( BrightnessAdjustmentWindow.this.newMax.toString ) {
       listenTo( this )
       reactions += {
         case e : EditDone =>
           try {
             val v = text.toDouble
-            if( v >= 0.0 && v >=  b ) {
-              w = v
-              val newImage = adjust( img, b, w, o )
+            if( v >=  BrightnessAdjustmentWindow.this.newMin ) {
+              BrightnessAdjustmentWindow.this.newMax = v
+              val newImage = adjust( img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
               resultHistogram.img = newImage
               p.img = newImage
             } else
-              text = w.toString
+              text = BrightnessAdjustmentWindow.this.newMax.toString
 
           } catch {
-            case _ : Throwable => text = w.toString
+            case t : Throwable =>
+              t.printStackTrace()
+              text = BrightnessAdjustmentWindow.this.newMax.toString
           }
       }
     }
@@ -192,44 +187,9 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.fill = Fill.Horizontal
     c.weightx = 0.7
     c.gridx = 1
-    c.gridy = 4
+    c.gridy = 5
     c.gridwidth = 0
     layout( white ) = c
-
-    val offSetLabel = new Label( "Offset:")
-
-    c.fill = Fill.Horizontal
-    c.weightx = 0.3
-    c.gridx = 0
-    c.gridy = 5
-    c.gridwidth = 1
-    layout( offSetLabel ) = c
-
-    val offset = new TextField( o.toString ) {
-      listenTo( this )
-      reactions += {
-        case e : EditDone =>
-          try {
-            val v = text.toDouble
-            if( v >= 0.0 ) {
-              o = v
-              val newImage = adjust( img, b, w, o )
-              resultHistogram.img = newImage
-              p.img = newImage
-            } else
-              text = o.toString
-          } catch {
-            case _ : Throwable => text = o.toString
-          }
-      }
-    }
-
-    c.fill = Fill.Horizontal
-    c.weightx = 0.7
-    c.gridx = 1
-    c.gridy = 5
-    c.gridwidth = 0
-    layout( offset ) = c
 
     val resultHistogram = new HistogramComponent( img )
 

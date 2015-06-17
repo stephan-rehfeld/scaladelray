@@ -65,4 +65,32 @@ case class HDRImage( width : Int, height : Int ) {
     require( y < height, "The y coordinate must be smaller than the height of the image!" )
     d( x )( y ) = c
   }
+
+  def min : Double = {
+    var v = Double.MaxValue
+    for{
+      x <- 0 until width
+      y <- 0 until height
+    } {
+      val c = this( x,y )
+      v = scala.math.min( c.r, v )
+      v = scala.math.min( c.g, v )
+      v = scala.math.min( c.b, v )
+    }
+    v
+  }
+
+  def max : Double = {
+    var v = Double.MinValue
+    for{
+      x <- 0 until width
+      y <- 0 until height
+    } {
+      val c = this( x,y )
+      v = scala.math.max( c.r, v )
+      v = scala.math.max( c.g, v )
+      v = scala.math.max( c.b, v )
+    }
+    v
+  }
 }
