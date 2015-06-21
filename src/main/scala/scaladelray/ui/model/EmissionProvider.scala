@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,10 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.{Material, OldMaterial}
+import scaladelray.material.Emission
 
-abstract class MaterialProvider {
+trait EmissionProvider {
 
-  var emission : Option[EmissionProvider] = None
-  def createMaterial( l : () => Unit ) : (Material,OldMaterial)
-  def remove( obj : AnyRef )
-  def isReady : Boolean
-  def count : Int
+  def createEmission : Emission
 
 }

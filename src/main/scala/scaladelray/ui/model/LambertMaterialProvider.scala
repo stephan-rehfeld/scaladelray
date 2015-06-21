@@ -26,8 +26,9 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
     val o = LambertOldMaterial( diffuseTextureProvider.get.createTexture( l ) )
-    val m = Material( None, (1.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ) )
+    val m = Material( e, (1.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ) )
     (m,o)
   }
 

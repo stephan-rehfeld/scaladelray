@@ -18,6 +18,7 @@ package scaladelray.ui.model
 
 import javax.swing.tree.{TreePath, TreeModel}
 import javax.swing.event.TreeModelListener
+import scaladelray.material.Emission
 
 class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
@@ -85,17 +86,22 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case 1 => if( dcp.lensSamplingPatternProvider.isDefined ) dcp.lensSamplingPatternProvider.get else "<Lens Sampling Pattern>"
       }
     case lp : LambertMaterialProvider =>
-      if( lp.diffuseTextureProvider.isDefined ) lp.diffuseTextureProvider.get else "<Diffuse Texture>"
+      index match {
+        case 0 => if( lp.diffuseTextureProvider.isDefined ) lp.diffuseTextureProvider.get else "<Diffuse Texture>"
+        case 1 => if( lp.emission.isDefined ) lp.emission.get else "<Emission>"
+      }
     case pp : PhongMaterialProvider =>
       index match {
         case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
         case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
+        case 2 => if( pp.emission.isDefined ) pp.emission.get else "<Emission>"
       }
     case pp : ReflectiveMaterialProvider =>
       index match {
         case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
         case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
         case 2 => if( pp.reflectionTextureProvider.isDefined ) pp.reflectionTextureProvider.get else "<Reflection Texture>"
+        case 3 => if( pp.emission.isDefined ) pp.emission.get else "<Emission>"
       }
   }
 
@@ -115,9 +121,9 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case ocp : OrthograpicCameraProvider => 1
     case pcp : PerspectiveCameraProvider => 1
     case dcp : DOFCameraProvider => 2
-    case lp : LambertMaterialProvider => 1
-    case pp : PhongMaterialProvider => 2
-    case rp : ReflectiveMaterialProvider => 3
+    case lp : LambertMaterialProvider => 2
+    case pp : PhongMaterialProvider => 3
+    case rp : ReflectiveMaterialProvider => 4
     case _ => 0
   }
 
@@ -223,22 +229,33 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case spp : SamplingPatternProvider =>
           if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) 0 else 1
       }
-    case lp : LambertMaterialProvider => 0
+    case lp : LambertMaterialProvider =>
+      child match {
+        case "<Diffuse Texture>" => 0
+        case "<Emission>" => 1
+        case tp : TextureProvider => 0
+        case e : Emission => 1
+
+      }
     case pp : PhongMaterialProvider =>
       child match {
         case "<Diffuse Texture>" => 0
         case "<Specular Texture>" => 1
+        case "<Emission>" => 2
         case tp : TextureProvider =>
           if(pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) 0 else 1
+        case e : Emission => 2
       }
     case rp : ReflectiveMaterialProvider =>
       child match {
         case "<Diffuse Texture>" => 0
         case "<Specular Texture>" => 1
         case "<Reflection Texture>" => 2
+        case "<Emission>" => 3
         case tp : TextureProvider =>
           if(rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) {0}
           else if(rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp) 1 else 2
+        case e : Emission => 2
       }
 
   }

@@ -29,8 +29,9 @@ class TransparentMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
     val o = TransparentOldMaterial( indexOfRefraction )
-    val m = Material( None, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( indexOfRefraction ) ) )
+    val m = Material( e, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( indexOfRefraction ) ) )
     (m,o)
   }
 

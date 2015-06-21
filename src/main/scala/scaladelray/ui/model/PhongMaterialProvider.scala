@@ -30,8 +30,9 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
     val o = PhongOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent )
-    val m  = Material( None, (0.5, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.5, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
+    val m  = Material( e, (0.5, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.5, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
     (m,o)
   }
 
