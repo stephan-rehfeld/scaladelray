@@ -23,7 +23,6 @@ import scala.collection.mutable
 import scaladelray.rendering.{Renderable, Algorithm}
 import scaladelray.rendering.raycasting.light.{DirectionalLight, SpotLight, PointLight, Light}
 import scaladelray.material.{DirectionalEmission, SpotEmission, SimpleEmission}
-import scaladelray.math.Point3
 
 class RayCasting( ambient : Color ) extends Algorithm {
 
@@ -41,9 +40,6 @@ class RayCasting( ambient : Color ) extends Algorithm {
           lights += (DirectionalLight( directional.c, r.axis) -> r)
       }
     }
-
-    // TODO: REMOVE
-    lights += (PointLight( Color( 1, 1, 1), Point3( 0, -0.5, 4 ) ) -> null )
 
     val img = HDRImage( width, height )
 
@@ -67,7 +63,7 @@ class RayCasting( ambient : Color ) extends Algorithm {
               }
             }
             for( (light,renderable) <- lights ) {
-              for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
+              if( light.illuminates( hit.sp.p ) ) for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
                 val cr = texture( hit.sp.t )
                 val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
                 val lightIntensity = light.intensity( hit.sp.p )
