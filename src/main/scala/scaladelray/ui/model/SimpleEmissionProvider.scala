@@ -18,11 +18,60 @@ package scaladelray.ui.model
 
 import scaladelray.material.{SimpleEmission, Emission}
 import scaladelray.Color
+import javax.swing.table.TableModel
+import javax.swing.event.TableModelListener
 
-class SimpleEmissionProvider extends EmissionProvider {
+class SimpleEmissionProvider extends EmissionProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
 
-  override def createEmission: Emission = SimpleEmission( color )
+  override def createEmission( l : () => Unit ): Emission = {
+    l()
+    SimpleEmission( color )
+  }
 
+  override def remove( obj : AnyRef ) {}
+  override def isReady = true
+  override def count = 1
+
+  override def getRowCount: Int = 1
+
+  override def getColumnCount: Int = 2
+
+  override def getColumnName( columnIndex: Int ): String = columnIndex match {
+    case 0 => "Property"
+    case 1 => "Value"
+  }
+
+  override def getColumnClass(columnIndex: Int): Class[_] = classOf[String]
+
+  override def isCellEditable( rowIndex: Int, columnIndex: Int ): Boolean = columnIndex match {
+    case 0 => false
+    case 1 => true
+  }
+
+  override def getValueAt(rowIndex: Int, columnIndex: Int): AnyRef = columnIndex match {
+    case 0 => rowIndex match {
+      case 0 => "Color"
+    }
+    case 1 => rowIndex match {
+      case 0 => color
+    }
+  }
+
+  override def setValueAt( aValue: scala.Any, rowIndex: Int, columnIndex: Int) {
+    try {
+      rowIndex match {
+        case 0 => color = aValue.asInstanceOf[Color]
+      }
+    } catch {
+      case _ : Throwable =>
+    }
+  }
+
+  override def addTableModelListener(l: TableModelListener) {}
+
+  override def removeTableModelListener(l: TableModelListener) {}
+
+  override def toString: String = "Simple emission"
 }

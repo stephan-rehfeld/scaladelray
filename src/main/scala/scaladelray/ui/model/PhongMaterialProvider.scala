@@ -30,7 +30,7 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l )  ) else None
     val o = PhongOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent )
     val m  = Material( e, (0.5, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.5, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
     (m,o)
@@ -39,6 +39,7 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
   override def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
     if( specularTextureProvider.isDefined && specularTextureProvider.get == obj ) specularTextureProvider = None
+    if( emission.isDefined && emission.get == obj ) emission = None
   }
 
   override def getRowCount: Int = 1
@@ -92,6 +93,6 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
 
   override def toString: String = "Phong material"
 
-  override def count = 1 + diffuseTextureProvider.get.count + specularTextureProvider.get.count
+  override def count = 1 + diffuseTextureProvider.get.count + specularTextureProvider.get.count + (if( emission.isDefined ) emission.get.count else 0)
 
 }

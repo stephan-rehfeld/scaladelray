@@ -18,7 +18,6 @@ package scaladelray.ui.model
 
 import javax.swing.tree.{TreePath, TreeModel}
 import javax.swing.event.TreeModelListener
-import scaladelray.material.Emission
 
 class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
@@ -234,7 +233,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "<Diffuse Texture>" => 0
         case "<Emission>" => 1
         case tp : TextureProvider => 0
-        case e : Emission => 1
+        case e : EmissionProvider => 1
 
       }
     case pp : PhongMaterialProvider =>
@@ -244,7 +243,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "<Emission>" => 2
         case tp : TextureProvider =>
           if(pp.diffuseTextureProvider.isDefined && pp.diffuseTextureProvider.get == tp ) 0 else 1
-        case e : Emission => 2
+        case e : EmissionProvider => 2
       }
     case rp : ReflectiveMaterialProvider =>
       child match {
@@ -255,7 +254,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case tp : TextureProvider =>
           if(rp.diffuseTextureProvider.isDefined && rp.diffuseTextureProvider.get == tp ) {0}
           else if(rp.specularTextureProvider.isDefined && rp.specularTextureProvider.get == tp) 1 else 2
-        case e : Emission => 2
+        case e : EmissionProvider => 2
       }
 
   }

@@ -32,7 +32,7 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
     val o = ReflectiveOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
     val m = Material( e, (1.0/3.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (1.0/3.0, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (1.0/3.0, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
     (m,o)
@@ -41,6 +41,7 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
   override def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
     if( specularTextureProvider.isDefined && specularTextureProvider.get == obj ) specularTextureProvider = None
+    if( emission.isDefined && emission.get == obj ) emission = None
   }
 
   override def getRowCount: Int = 1
@@ -96,6 +97,6 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
   override def toString: String = "Reflective material"
 
-  override def count = 1 + diffuseTextureProvider.get.count + specularTextureProvider.get.count + reflectionTextureProvider.get.count
+  override def count = 1 + diffuseTextureProvider.get.count + specularTextureProvider.get.count + reflectionTextureProvider.get.count + (if( emission.isDefined ) emission.get.count else 0)
 
 }

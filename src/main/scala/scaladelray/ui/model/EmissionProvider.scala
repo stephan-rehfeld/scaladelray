@@ -20,6 +20,9 @@ import scaladelray.material.Emission
 
 trait EmissionProvider {
 
-  def createEmission : Emission
+  def createEmission(  l : () => Unit ) : Emission
+  def remove( obj : AnyRef )
+  def isReady : Boolean
+  def count : Int
 
 }

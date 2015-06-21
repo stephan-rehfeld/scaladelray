@@ -26,7 +26,7 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
     val o = LambertOldMaterial( diffuseTextureProvider.get.createTexture( l ) )
     val m = Material( e, (1.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ) )
     (m,o)
@@ -34,6 +34,7 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   override def remove(obj: AnyRef) {
     if( diffuseTextureProvider.isDefined && diffuseTextureProvider.get == obj ) diffuseTextureProvider = None
+    if( emission.isDefined && emission.get == obj ) emission = None
   }
 
   override def getRowCount: Int = 0
@@ -61,6 +62,6 @@ class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   override def toString: String = "Lambert material"
 
-  override def count = 1 + diffuseTextureProvider.get.count
+  override def count = 1 + diffuseTextureProvider.get.count + (if( emission.isDefined ) emission.get.count else 0)
 
 }

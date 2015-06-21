@@ -887,6 +887,56 @@ object ScalaDelRay extends SimpleSwingApplication {
     newTexturePopupMenu.add( newInterpolatedImageTextureMenuItem )
 
 
+    val newEmissionPopupMenu = new JPopupMenu
+    val newSimpleEmissionMenuItem = new JMenuItem( "Simple emission" )
+    newSimpleEmissionMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        val e = new SimpleEmissionProvider
+        selectionParent match {
+          case Some( mp : MaterialProvider ) =>
+            mp.emission = Some( e )
+          case Some(_) => assert( false, "This should not happen!")
+          case None =>
+        }
+        detailsTable.model = e
+        updateUI( Some( e ) )
+      }
+    })
+
+    val newSpotEmissionMenuItem = new JMenuItem( "Spot emission" )
+    newSpotEmissionMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        val e = new SpotEmissionProvider
+        selectionParent match {
+          case Some( mp : MaterialProvider ) =>
+            mp.emission = Some( e )
+          case Some(_) => assert( false, "This should not happen!")
+          case None =>
+        }
+        detailsTable.model = e
+        updateUI( Some( e ) )
+      }
+    })
+
+    val newDirectionalEmissionMenuItem = new JMenuItem( "Directional emission" )
+    newDirectionalEmissionMenuItem.addActionListener( new ActionListener {
+      def actionPerformed(e: ActionEvent) {
+        val e = new DirectionalEmissionProvider
+        selectionParent match {
+          case Some( mp : MaterialProvider ) =>
+            mp.emission = Some( e )
+          case Some(_) => assert( false, "This should not happen!")
+          case None =>
+        }
+        detailsTable.model = e
+        updateUI( Some( e ) )
+      }
+    })
+
+    newEmissionPopupMenu.add( newSimpleEmissionMenuItem )
+    newEmissionPopupMenu.add( newSpotEmissionMenuItem )
+    newEmissionPopupMenu.add( newDirectionalEmissionMenuItem )
+
     val sceneGraphTree = new JTree
     sceneGraphTree.setExpandsSelectedPaths( true )
     sceneGraphTree.setModel( new SceneGraphTreeModel( worldProvider ) )
@@ -1010,6 +1060,15 @@ object ScalaDelRay extends SimpleSwingApplication {
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
+            case "<Emission>" =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newEmissionPopupMenu.show( e.getComponent, e.getX, e.getY )
+
+            case ep : EmissionProvider =>
+              selection = Some( path.getLastPathComponent )
+              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
+              newEmissionPopupMenu.show( e.getComponent, e.getX, e.getY )
 
             case _ =>
           }

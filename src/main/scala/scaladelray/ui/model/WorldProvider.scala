@@ -48,6 +48,8 @@ class WorldProvider extends TableModel {
       case tp : TextureProvider =>
         if( backgroundProvider.isDefined ) backgroundProvider.get.remove( tp )
         for( v <- renderableProvider ) v.remove( tp )
+      case ep : EmissionProvider =>
+        for( v <- renderableProvider ) v.remove( ep )
       case s: String =>
       case _ =>
     }

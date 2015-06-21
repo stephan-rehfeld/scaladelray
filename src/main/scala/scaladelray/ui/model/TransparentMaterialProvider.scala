@@ -29,13 +29,15 @@ class TransparentMaterialProvider extends MaterialProvider with TableModel {
 
   override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
     l()
-    val e = if( this.emission.isDefined ) Some( emission.get.createEmission ) else None
+    val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
     val o = TransparentOldMaterial( indexOfRefraction )
     val m = Material( e, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( indexOfRefraction ) ) )
     (m,o)
   }
 
-  override def remove(obj: AnyRef) {}
+  override def remove(obj: AnyRef) {
+    if( emission.isDefined && emission.get == obj ) emission = None
+  }
 
   override def getRowCount: Int = 1
 
@@ -90,6 +92,6 @@ class TransparentMaterialProvider extends MaterialProvider with TableModel {
 
   override def toString: String = "Transparent material"
 
-  override def count = 1
+  override def count = 1 + (if( emission.isDefined ) emission.get.count else 0)
 
 }
