@@ -26,8 +26,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
   def getChild( parent: Any, index: Int ): AnyRef = parent match {
     case wp : WorldProvider =>
       index match {
-        case 0 => if( wp.backgroundProvider.isDefined ) wp.backgroundProvider.get else "<Background>"
-        case 1 => if( wp.cameraProvider.isDefined ) wp.cameraProvider.get else "<Camera>"
+        case 0 => wp.backgroundProvider.getOrElse( "<Background>" )
+        case 1 => wp.cameraProvider.getOrElse( "<Camera>" )
         case 2 => "Renderables"
         case 3 => "Lights"
       }
@@ -46,61 +46,61 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       worldProvider.lightDescriptionProvider( index )
     case pp : PlaneProvider =>
       index match {
-        case 0 => if( pp.materialProvider.isDefined ) pp.materialProvider.get else "<Material>"
-        case 1 => if( pp.normalMapProvider.isDefined ) pp.normalMapProvider.get else "<Normal Map>"
+        case 0 => pp.materialProvider.getOrElse( "<Material>" )
+        case 1 => pp.normalMapProvider.getOrElse( "<Normal Map>" )
       }
     case dp : DiscProvider =>
       index match {
-        case 0 => if( dp.materialProvider.isDefined ) dp.materialProvider.get else "<Material>"
-        case 1 => if( dp.normalMapProvider.isDefined ) dp.normalMapProvider.get else "<Normal Map>"
+        case 0 => dp.materialProvider.getOrElse( "<Material>" )
+        case 1 => dp.normalMapProvider.getOrElse( "<Normal Map>" )
       }
     case rp : RectangleProvider =>
       index match {
-        case 0 => if( rp.materialProvider.isDefined ) rp.materialProvider.get else "<Material>"
-        case 1 => if( rp.normalMapProvider.isDefined ) rp.normalMapProvider.get else "<Normal Map>"
+        case 0 => rp.materialProvider.getOrElse( "<Material>" )
+        case 1 => rp.normalMapProvider.getOrElse( "<Normal Map>" )
       }
     case sp : SphereProvider =>
       index match {
-        case 0 => if( sp.materialProvider.isDefined ) sp.materialProvider.get else "<Material>"
-        case 1 => if( sp.normalMapProvider.isDefined ) sp.normalMapProvider.get else "<Normal Map>"
+        case 0 => sp.materialProvider.getOrElse( "<Material>" )
+        case 1 => sp.normalMapProvider.getOrElse( "<Normal Map>" )
       }
     case bp : AxisAlignedBoxProvider =>
       index match {
-        case 0 => if( bp.materialProvider.isDefined ) bp.materialProvider.get else "<Material>"
-        case 1 => if( bp.normalMapProvider.isDefined ) bp.normalMapProvider.get else "<Normal Map>"
+        case 0 => bp.materialProvider.getOrElse( "<Material>" )
+        case 1 => bp.normalMapProvider.getOrElse( "<Normal Map>" )
       }
     case tp : TriangleProvider =>
-      if( tp.materialProvider.isDefined ) tp.materialProvider.get else "<Material>"
+      tp.materialProvider.getOrElse( "<Material>" )
     case mp : ModelProvider =>
-      if( mp.materialProvider.isDefined ) mp.materialProvider.get else "<Material>"
+      mp.materialProvider.getOrElse( "<Material>" )
     case np : NodeProvider =>
       np.childNodes(index)
     case ocp : OrthograpicCameraProvider =>
-      if( ocp.samplingPatternProvider.isDefined ) ocp.samplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
+      ocp.samplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
     case pcp : PerspectiveCameraProvider =>
-      if( pcp.samplingPatternProvider.isDefined ) pcp.samplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
+      pcp.samplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
     case dcp : DOFCameraProvider =>
       index match {
-        case 0 => if( dcp.aaSamplingPatternProvider.isDefined ) dcp.aaSamplingPatternProvider.get else "<Anti-Aliasing Sampling Pattern>"
-        case 1 => if( dcp.lensSamplingPatternProvider.isDefined ) dcp.lensSamplingPatternProvider.get else "<Lens Sampling Pattern>"
+        case 0 => dcp.aaSamplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
+        case 1 => dcp.lensSamplingPatternProvider.getOrElse( "<Lens Sampling Pattern>" )
       }
     case lp : LambertMaterialProvider =>
       index match {
-        case 0 => if( lp.diffuseTextureProvider.isDefined ) lp.diffuseTextureProvider.get else "<Diffuse Texture>"
-        case 1 => if( lp.emission.isDefined ) lp.emission.get else "<Emission>"
+        case 0 => lp.diffuseTextureProvider.getOrElse( "<Diffuse Texture>" )
+        case 1 => lp.emission.getOrElse( "<Emission>" )
       }
     case pp : PhongMaterialProvider =>
       index match {
-        case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
-        case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
-        case 2 => if( pp.emission.isDefined ) pp.emission.get else "<Emission>"
+        case 0 => pp.diffuseTextureProvider.getOrElse( "<Diffuse Texture>" )
+        case 1 => pp.specularTextureProvider.getOrElse( "<Specular Texture>" )
+        case 2 => pp.emission.getOrElse( "<Emission>" )
       }
     case pp : ReflectiveMaterialProvider =>
       index match {
-        case 0 => if( pp.diffuseTextureProvider.isDefined ) pp.diffuseTextureProvider.get else "<Diffuse Texture>"
-        case 1 => if( pp.specularTextureProvider.isDefined ) pp.specularTextureProvider.get else "<Specular Texture>"
-        case 2 => if( pp.reflectionTextureProvider.isDefined ) pp.reflectionTextureProvider.get else "<Reflection Texture>"
-        case 3 => if( pp.emission.isDefined ) pp.emission.get else "<Emission>"
+        case 0 => pp.diffuseTextureProvider.getOrElse( "<Diffuse Texture>" )
+        case 1 => pp.specularTextureProvider.getOrElse( "<Specular Texture>" )
+        case 2 => pp.reflectionTextureProvider.getOrElse( "<Reflection Texture>" )
+        case 3 => pp.emission.getOrElse( "<Emission>" )
       }
   }
 
