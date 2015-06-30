@@ -28,6 +28,13 @@ class TexCoord2DSpec extends FunSpec {
 
       assert( (t1+t2) == TexCoord2D( 2+5, 3+7) )
     }
+
+    it( "should have a method to subtract two texture coordinates" ) {
+      val t1 = TexCoord2D( 2, 3 )
+      val t2 = TexCoord2D( 5, 7 )
+
+      assert( (t1-t2) == TexCoord2D( 2-5, 3-7) )
+    }
     it( "should have a method to multiply the texture coordinate with a scalar value" ) {
       val t1 = TexCoord2D( 2, 3 )
 

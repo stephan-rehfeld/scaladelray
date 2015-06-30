@@ -35,6 +35,14 @@ case class TexCoord2D( u : Double, v : Double ) {
   def +( t : TexCoord2D ) = TexCoord2D( u + t.u, v + t.v )
 
   /**
+   * This function subtracts two texture coordinates and returns the result.
+   *
+   * @param t The other texture coordinate.
+   * @return The difference between both texture coordinates.
+   */
+  def -( t : TexCoord2D ) = TexCoord2D( u - t.u, v - t.v )
+
+  /**
    * This method multiplies the texture coordinate with a value and returns the product.
    *
    * @param n The other value.

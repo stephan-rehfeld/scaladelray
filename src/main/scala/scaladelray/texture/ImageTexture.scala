@@ -26,10 +26,11 @@ import scaladelray.Color
  * to flip the image horizontally and vertically.
  *
  * @param file The name of the file that contains the image.
+ * @param angle Rotation angle of the texture.
  * @param flipHorizontally Flag if the image should be flipped horizontally.
  * @param flipVertically Flag if the image should be flipped vertically.
  */
-case class ImageTexture( file : String, flipHorizontally : Boolean = false, flipVertically : Boolean = false ) extends Texture with Serializable {
+case class ImageTexture( file : String, angle : Double = 0.0, flipHorizontally : Boolean = false, flipVertically : Boolean = false ) extends Texture with Serializable {
 
   /**
    * The image.
@@ -37,9 +38,11 @@ case class ImageTexture( file : String, flipHorizontally : Boolean = false, flip
   private val image = ImageIO.read( new File( file ) )
 
   override def apply(texCoord: TexCoord2D) = {
-    var t = ImageTexture.normalize( texCoord )
+    var t = TexCoord2D( math.cos( angle ) * texCoord.u + (-math.sin( angle )) * texCoord.v, math.sin( angle ) * texCoord.u + math.cos( angle ) * texCoord.v )
+    t = ImageTexture.normalize( t )
     if( flipHorizontally ) t = ImageTexture.flipHorizontally( t )
     if( flipVertically ) t = ImageTexture.flipVertically( t )
+
     val x = (image.getWidth-1) * t.u
     val y = (image.getHeight-1) - ((image.getHeight-1) * t.v)
     val argb = image.getRGB(math.round( x ).asInstanceOf[Int], math.round( y ).asInstanceOf[Int])

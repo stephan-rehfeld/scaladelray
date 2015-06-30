@@ -25,6 +25,7 @@ import scala.collection.mutable
 class ImageTextureProvider( tml : TableModelListener ) extends TextureProvider with TableModel {
 
   var fileName = ""
+  var angle = 0.0
   var flipHorizontally = false
   var flipVertically = false
 
@@ -34,11 +35,11 @@ class ImageTextureProvider( tml : TableModelListener ) extends TextureProvider w
 
   override def createTexture( l : () => Unit ) : Texture = {
     l()
-    ImageTexture( fileName, flipHorizontally, flipVertically )
+    ImageTexture( fileName, angle, flipHorizontally, flipVertically )
   }
 
 
-  override def getRowCount: Int = 3
+  override def getRowCount: Int = 4
 
   override def getColumnCount: Int = 2
 
@@ -54,13 +55,15 @@ class ImageTextureProvider( tml : TableModelListener ) extends TextureProvider w
   override def getValueAt(row: Int, column: Int): AnyRef = column match {
     case 0 => row match {
       case 0 => "File"
-      case 1 => "Flip Horizontally"
-      case 2 => "Flip Vertically"
+      case 1 => "Rotate"
+      case 2 => "Flip Horizontally"
+      case 3 => "Flip Vertically"
     }
     case 1 => row match {
       case 0 => fileName
-      case 1 => new java.lang.Boolean( flipHorizontally )
-      case 2 => new java.lang.Boolean( flipVertically )
+      case 1 => new java.lang.Double( math.toDegrees( angle ) )
+      case 2 => new java.lang.Boolean( flipHorizontally )
+      case 3 => new java.lang.Boolean( flipVertically )
     }
   }
 
@@ -70,9 +73,12 @@ class ImageTextureProvider( tml : TableModelListener ) extends TextureProvider w
         fileName = obj.asInstanceOf[String]
         for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
       case 1 =>
-        flipHorizontally = obj.asInstanceOf[Boolean]
+        angle = math.toRadians( obj.asInstanceOf[String].toDouble )
         for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
       case 2 =>
+        flipHorizontally = obj.asInstanceOf[Boolean]
+        for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
+      case 3 =>
         flipVertically = obj.asInstanceOf[Boolean]
         for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )
     }

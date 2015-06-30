@@ -43,6 +43,8 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
                 an: Normal3, bn : Normal3, cn : Normal3,
                 at: TexCoord2D, bt : TexCoord2D, ct : TexCoord2D, normalMap : Option[Texture] ) extends Geometry with Serializable {
 
+  val (tan, biTan) = calcTanAndBiTan()
+
   override def <--(r: Ray) = {
     val base = Mat3x3( a.x - b.x, a.x - c.x, r.d.x,
                        a.y - b.y, a.y - c.y, r.d.y,
@@ -58,7 +60,17 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
       Set()
     } else {
       val alpha = 1 - beta - gamma
-      Set() + GeometryHit( r, this, t, SurfacePoint( r( t ), an * alpha + bn * beta + cn * gamma, Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), at * alpha + bt * beta + ct * gamma ) )
+      var n = an * alpha + bn * beta + cn * gamma
+      val texCoord = at * alpha + bt * beta + ct * gamma
+
+      n = normalMap match {
+        case Some( texture ) =>
+          val c = texture( texCoord )
+          (tan * (c.r-0.5) + biTan * (c.g-0.5) + n * (c.b-0.5)).normalized.asNormal
+        case None =>
+          n
+      }
+      Set() + GeometryHit( r, this, t, SurfacePoint( r( t ), n, tan, biTan, texCoord ) )
     }
 
   }
@@ -70,4 +82,23 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
   override val run = Point3( math.max( a.x, math.max( b.x, c.x ) ), math.max( a.y, math.max( b.y, c.y ) ), math.max( a.z, math.max( b.z, c.z ) ) )
 
   override val axis = (an + bn + cn).asVector / 3.0
+
+  private def calcTanAndBiTan() : (Vector3,Vector3) = {
+    val ab = b - a
+    val ac = c - a
+
+    val abt = bt - at
+    val act = ct - at
+
+    val r = 1.0 / (abt.u * act.v - act.u * abt.v)
+
+    val tan = Vector3( (act.v*ab.x-abt.v*ac.x) * r,
+                       (act.v*ab.y-abt.v*ac.y) * r,
+                       (act.v*ab.z-abt.v*ac.z) * r )
+    val biTan = Vector3( (abt.u*ac.x-act.u*ac.x) * r,
+                         (abt.u*ac.y-act.u*ac.y) * r,
+                         (abt.u*ac.z-act.u*ac.z) * r
+    )
+    (tan,biTan)
+  }
 }
