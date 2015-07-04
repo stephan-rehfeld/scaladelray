@@ -112,6 +112,23 @@ class PlaneSpec extends FunSpec {
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
+
+    it( "should return the same tangent and bitangent for any ray" ) {
+      val p = Plane( None )
+      for{
+        ox <- 0 to 20
+        oy <- 0 to 20
+        oz <- 0 to 20
+        dx <- 0 to 20
+        dy <- 0 to 20
+        dz <- 0 to 20
+      } {
+        val r = Ray( Point3( -1.0 + ox * 0.1, -1.0 + oy * 0.1, -1.0 + oz * 0.1 ), Vector3( -1.0 + dx * 0.1, -1.0 + dy * 0.1, -1.0 + dz * 0.1 ) )
+        val hits = r --> p
+        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+      }
+
+    }
   }
 
 }

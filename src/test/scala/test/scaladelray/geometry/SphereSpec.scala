@@ -77,8 +77,6 @@ class SphereSpec extends FunSpec {
       assert( hits.exists( _.t == 4  ) )
     }
 
-
-
     it( "should return two hit points for a ray that comes from inside the sphere and directs to the back" ) {
       val s = Sphere( None )
       val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
@@ -210,6 +208,22 @@ class SphereSpec extends FunSpec {
       val hits = r --> s
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, -1, 0 ) ) )
     }
+
+    it( "should calculate the tangent and bitangent correctly" ) {
+      val s = Sphere( None )
+      val data = (Point3(0,0,2),Vector3(0,0,-1),Vector3(1,0,0),Vector3(0,1,0) ) ::
+                 (Point3(0,0,-2),Vector3(0,0,1),Vector3(-1,0,0),Vector3(0,1,0) ) ::
+                 (Point3(2,0,0),Vector3(-1,0,0),Vector3(0,0,-1),Vector3(0,1,0) ) ::
+                 (Point3(-2,0,0),Vector3(-1,0,0),Vector3(0,0,1),Vector3(0,1,0) ) :: Nil
+      for( (o,d,tan,biTan) <- data ) {
+        val r = Ray( o, d )
+        val hits = r --> s
+        println( hits )
+        assert( hits.exists( (h) => h.sp.tan =~= tan && h.sp.biTan =~= biTan ) )
+        assert( hits.exists( (h) => h.sp.tan =~= -tan && h.sp.biTan =~= biTan ) )
+      }
+    }
+
 
   }
 

@@ -51,7 +51,7 @@ class InterpolatedImageTextureSpec extends FunSpec {
     }
 
     it( "should be flippable in horizontal direction" ) {
-      val t = InterpolatedImageTexture( "texture-example.bmp", true )
+      val t = InterpolatedImageTexture( "texture-example.bmp", 0, true )
 
       val c00 = t( TexCoord2D( 0, 0 ) )
       val c10 = t( TexCoord2D( 1, 0 ) )
@@ -65,7 +65,7 @@ class InterpolatedImageTextureSpec extends FunSpec {
     }
 
     it( "should be flippable in vertical direction" ) {
-      val t = InterpolatedImageTexture( "texture-example.bmp", false, true )
+      val t = InterpolatedImageTexture( "texture-example.bmp", 0, false, true )
 
       val c00 = t( TexCoord2D( 0, 0 ) )
       val c10 = t( TexCoord2D( 1, 0 ) )
@@ -79,7 +79,7 @@ class InterpolatedImageTextureSpec extends FunSpec {
     }
 
     it( "should be flippable in horizontal and vertical direction" ) {
-      val t = InterpolatedImageTexture( "texture-example.bmp", true, true )
+      val t = InterpolatedImageTexture( "texture-example.bmp", 0, true, true )
 
       val c00 = t( TexCoord2D( 0, 0 ) )
       val c10 = t( TexCoord2D( 1, 0 ) )

@@ -51,9 +51,9 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
 
   override val center = Point3( 0, 0, 0 )
 
-  override val lbf = Point3( Double.NegativeInfinity, Double.NegativeInfinity, Double.NegativeInfinity )
+  override val lbf = Point3( Double.NegativeInfinity, 0.0, Double.NegativeInfinity )
 
-  override val run = Point3( Double.PositiveInfinity, Double.PositiveInfinity, Double.PositiveInfinity )
+  override val run = Point3( Double.PositiveInfinity, 0.0, Double.PositiveInfinity )
 
   override val axis: Vector3 = Plane.n.asVector
 }
