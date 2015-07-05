@@ -17,10 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
-import scaladelray.geometry.AxisAlignedBox
 import test.scaladelray.material.TextureTestAdapter
+
 import scaladelray.Color
+import scaladelray.geometry.AxisAlignedBox
+import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 
 
 class AxisAlignedBoxSpec extends FunSpec {
@@ -205,6 +206,23 @@ class AxisAlignedBoxSpec extends FunSpec {
       val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, -1, 0 ) ) )
+    }
+
+    it( "should calculate the tangent and bitangent correcly" ) {
+      val data = (Point3( 0, 0, 2 ), Vector3( 0, 0, -1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ) ) :: //front
+                 (Point3( 2, 0, 0 ), Vector3( -1, 0, 0 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ) ) :: //right
+                 (Point3( 0, 0, -2 ), Vector3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, -1, 0 ) ) :: // far
+                 (Point3( -2, 0, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), Vector3( 0, 0, -1 ) ) :: // left
+                 (Point3( 0, 2, 0 ), Vector3( 0, -1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ) ) :: // top
+                 (Point3( 0, -2, 0 ), Vector3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, 1 ) ) :: Nil // bottom
+
+      val aab = AxisAlignedBox( None )
+
+      for( (o,d,tan,biTan) <- data ) {
+        val hits = Ray( o, d ) --> aab
+        assert( hits.exists( (h) => h.sp.tan =~= tan && h.sp.biTan =~= biTan ) )
+      }
+
     }
 
   }
