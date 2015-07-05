@@ -17,10 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Vector3, Point3, Ray}
-import scaladelray.geometry.Rectangle
 import test.scaladelray.material.TextureTestAdapter
+
 import scaladelray.Color
+import scaladelray.geometry.Rectangle
+import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 
 class RectangleSpec extends FunSpec {
 
@@ -122,6 +123,26 @@ class RectangleSpec extends FunSpec {
       val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
+    }
+
+    it( "should return the same tangent and bitangent for any ray that hits the rectangle" ) {
+      val rec = Rectangle( None )
+      val res = 20
+      val step = Rectangle.e / res
+      for{
+        ox <- 0 to res
+        oy <- 0 to res
+        oz <- 0 to res
+        dx <- 0 to res
+        dz <- 0 to res
+      } {
+        val o = Point3( -Rectangle.e + ox * step, -Rectangle.e + oy * step, -Rectangle.e + oz * step )
+        val d = (Point3( -Rectangle.e + dx * step, 0, -Rectangle.e + dz * step ) - o).normalized
+        val r = Ray( o, d )
+        val hits = r --> rec
+        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+      }
+
     }
   }
 

@@ -17,10 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Ray, Point3, Vector3}
-import scaladelray.geometry.Plane
 import test.scaladelray.material.TextureTestAdapter
+
 import scaladelray.Color
+import scaladelray.geometry.Plane
+import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 
 class PlaneSpec extends FunSpec {
 
@@ -113,7 +114,7 @@ class PlaneSpec extends FunSpec {
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
 
-    it( "should return the same tangent and bitangent for any ray" ) {
+    it( "should return the same tangent and bitangent for any ray that hits the plane" ) {
       val p = Plane( None )
       for{
         ox <- 0 to 20

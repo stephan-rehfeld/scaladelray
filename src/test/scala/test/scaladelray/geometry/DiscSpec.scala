@@ -17,10 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Vector3, Point3, Ray}
-import scaladelray.geometry.Disc
 import test.scaladelray.material.TextureTestAdapter
+
 import scaladelray.Color
+import scaladelray.geometry.Disc
+import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 
 class DiscSpec extends FunSpec {
 
@@ -122,6 +123,24 @@ class DiscSpec extends FunSpec {
       val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
+    }
+
+    it( "should return the same tangent and bitangent for any ray that hits the disc" ) {
+      val disc = Disc( None )
+      for{
+        ox <- 0 to 20
+        oy <- 0 to 20
+        oz <- 0 to 20
+        rad <- 0 to 20
+        theta <- 0 to 20
+      } {
+        val o = Point3( -1.0 + ox * 0.1, -1.0 + oy * 0.1, -1.0 + oz * 0.1 )
+        val d = (Point3( math.sin( theta * math.Pi / 10.0  ) * rad * Disc.r / 20.0, 0,  math.cos( theta * math.Pi / 10.0  ) * rad * Disc.r / 20.0 ) - o).normalized
+        val r = Ray( o, d )
+        val hits = r --> disc
+        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+      }
+
     }
   }
 

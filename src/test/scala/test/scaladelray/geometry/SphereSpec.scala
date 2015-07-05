@@ -17,10 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Vector3, Point3, Ray}
-import scaladelray.geometry.Sphere
 import test.scaladelray.material.TextureTestAdapter
+
 import scaladelray.Color
+import scaladelray.geometry.Sphere
+import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 
 class SphereSpec extends FunSpec {
   describe( "A Sphere" ) {
@@ -214,11 +215,22 @@ class SphereSpec extends FunSpec {
       val data = (Point3(0,0,2),Vector3(0,0,-1),Vector3(1,0,0),Vector3(0,1,0) ) ::
                  (Point3(0,0,-2),Vector3(0,0,1),Vector3(-1,0,0),Vector3(0,1,0) ) ::
                  (Point3(2,0,0),Vector3(-1,0,0),Vector3(0,0,-1),Vector3(0,1,0) ) ::
-                 (Point3(-2,0,0),Vector3(-1,0,0),Vector3(0,0,1),Vector3(0,1,0) ) :: Nil
+                 (Point3(-2,0,0),Vector3(-1,0,0),Vector3(0,0,1),Vector3(0,1,0) ) ::
+                 (Point3(2,0,2),Vector3(-1,0,-1).normalized,Vector3(1,0,-1).normalized,Vector3(0,1,0) ) ::
+                 (Point3(2,0,-2),Vector3(-1,0,1).normalized,Vector3(-1,0,-1).normalized,Vector3(0,1,0) ) ::
+                 (Point3(-2,0,-2),Vector3(1,0,1).normalized,Vector3(-1,0,1).normalized,Vector3(0,1,0) ) ::
+                 (Point3(-2,0,2),Vector3(1,0,-1).normalized,Vector3(1,0,1).normalized,Vector3(0,1,0) ) ::
+                 (Point3(0,2,2),Vector3(0,-1,-1).normalized,Vector3(1,0,0).normalized,Vector3(0,1,-1).normalized ) ::
+                 (Point3(0,-2,2),Vector3(0,1,-1).normalized,Vector3(1,0,0).normalized,Vector3(0,1,1).normalized ) ::
+                 (Point3(2,2,0),Vector3(-1,-1,0).normalized,Vector3(0,0,-1).normalized,Vector3(-1,1,0).normalized ) ::
+                 (Point3(2,-2,0),Vector3(-1,1,0).normalized,Vector3(0,0,-1).normalized,Vector3(1,1,0).normalized ) ::
+                 (Point3(0,2,-2),Vector3(0,-1,1).normalized,Vector3(-1,0,0).normalized,Vector3(0,1,1).normalized ) ::
+                 (Point3(0,-2,-2),Vector3(0,1,1).normalized,Vector3(-1,0,0).normalized,Vector3(0,1,-1).normalized ) ::
+                 (Point3(-2,2,0),Vector3(1,-1,0).normalized,Vector3(0,0,1).normalized,Vector3(1,1,0).normalized ) ::
+                 (Point3(-2,-2,0),Vector3(1,1,0).normalized,Vector3(0,0,1).normalized,Vector3(-1,1,0).normalized ) :: Nil
       for( (o,d,tan,biTan) <- data ) {
         val r = Ray( o, d )
         val hits = r --> s
-        println( hits )
         assert( hits.exists( (h) => h.sp.tan =~= tan && h.sp.biTan =~= biTan ) )
         assert( hits.exists( (h) => h.sp.tan =~= -tan && h.sp.biTan =~= biTan ) )
       }
