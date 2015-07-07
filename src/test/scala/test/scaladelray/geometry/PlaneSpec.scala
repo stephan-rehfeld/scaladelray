@@ -130,6 +130,26 @@ class PlaneSpec extends FunSpec {
       }
 
     }
+
+    it( "should have a center point of 0/0/0" ) {
+      val p = Plane( None )
+      assert( p.center == Point3( 0, 0, 0 ) )
+    }
+
+    it( "should have a lbf point of -Inf/0/-Inf" ) {
+      val p = Plane( None )
+      assert( p.lbf == Point3(Double.NegativeInfinity, 0, Double.NegativeInfinity))
+    }
+
+    it( "should have a run point of Inf/0/Inf" ) {
+      val p = Plane( None )
+      assert( p.run == Point3( Double.PositiveInfinity, 0, Double.PositiveInfinity ) )
+    }
+
+    it( "should have a main axis of 0/1/0" ) {
+      val p = Plane( None )
+      assert( p.axis == Vector3( 0, 1, 0 ) )
+    }
   }
 
 }

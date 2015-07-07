@@ -16,13 +16,9 @@
 
 package scaladelray.geometry
 
-import scaladelray.math._
-import scaladelray.texture.{Texture, TexCoord2D}
 import scaladelray.Constants
-import scaladelray.math.Point3
-import scaladelray.math.Ray
-import scaladelray.math.Normal3
-import scaladelray.math.Mat3x3
+import scaladelray.math.{Mat3x3, Normal3, Point3, Ray, _}
+import scaladelray.texture.{TexCoord2D, Texture}
 
 /**
  * This class represents a triangle. The vertices can freely be set. Furthermore, the normal and texture coordinate of
@@ -81,7 +77,7 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
 
   override val run = Point3( math.max( a.x, math.max( b.x, c.x ) ), math.max( a.y, math.max( b.y, c.y ) ), math.max( a.z, math.max( b.z, c.z ) ) )
 
-  override val axis = (an + bn + cn).asVector / 3.0
+  override val axis = ((an + bn + cn).asVector / 3.0).normalized
 
   private def calcTanAndBiTan() : (Vector3,Vector3) = {
     val ab = b - a

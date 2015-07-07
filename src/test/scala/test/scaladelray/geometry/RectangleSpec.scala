@@ -144,6 +144,26 @@ class RectangleSpec extends FunSpec {
       }
 
     }
+
+    it( "should have a center point of 0/0/0" ) {
+      val rec = Rectangle( None )
+      assert( rec.center == Point3( 0, 0, 0 ) )
+    }
+
+    it( "should have a lbf point of -0.5/0/-0.5" ) {
+      val rec = Rectangle( None )
+      assert( rec.lbf == Point3(-0.5, 0, -0.5))
+    }
+
+    it( "should have a run point of 0.5/0/0.5" ) {
+      val rec = Rectangle( None )
+      assert( rec.run == Point3( 0.5, 0, 0.5 ) )
+    }
+
+    it( "should have a main axis of 0/1/0" ) {
+      val rec = Rectangle( None )
+      assert( rec.axis == Vector3( 0, 1, 0 ) )
+    }
   }
 
 }

@@ -225,6 +225,26 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     }
 
+    it( "should have a center point of 0/0/0" ) {
+      val aab = AxisAlignedBox( None )
+      assert( aab.center == Point3( 0, 0, 0 ) )
+    }
+
+    it( "should have a  point of -0.5/-0.5/-0.5" ) {
+      val aab = AxisAlignedBox(None)
+      assert(aab.lbf == Point3(-0.5, -0.5, -0.5))
+    }
+
+    it( "should have a lbf run point of 0.5/0.5/0.5" ) {
+      val aab = AxisAlignedBox( None )
+      assert( aab.run == Point3( 0.5, 0.5, 0.5 ) )
+    }
+
+    it( "should have a main axis of 0/1/0" ) {
+      val aab = AxisAlignedBox( None )
+      assert( aab.axis == Vector3( 0, 1, 0 ) )
+    }
+
   }
 
 }

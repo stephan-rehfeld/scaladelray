@@ -142,6 +142,27 @@ class DiscSpec extends FunSpec {
       }
 
     }
+
+    it( "should have a center point of 0/0/0" ) {
+      val disc = Disc( None )
+      assert( disc.center == Point3( 0, 0, 0 ) )
+    }
+
+    it( "should have a lbf point of -0.5/0/-0.5" ) {
+      val disc = Disc( None )
+      assert( disc.lbf == Point3(-0.5, 0, -0.5))
+    }
+
+    it( "should have a run point of 0.5/0/0.5" ) {
+      val disc = Disc( None )
+      assert( disc.run == Point3( 0.5, 0, 0.5 ) )
+    }
+
+    it( "should have a main axis of 0/1/0" ) {
+      val disc = Disc( None )
+      assert( disc.axis == Vector3( 0, 1, 0 ) )
+    }
+
   }
 
 }

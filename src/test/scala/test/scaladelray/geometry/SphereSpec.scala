@@ -236,6 +236,25 @@ class SphereSpec extends FunSpec {
       }
     }
 
+    it( "should have a center point of 0/0/0" ) {
+      val s = Sphere( None )
+      assert( s.center == Point3( 0, 0, 0 ) )
+    }
+
+    it( "should have a lbf point of -1/-1/-1" ) {
+      val s = Sphere( None )
+      assert( s.lbf == Point3( -1, -1, -1 ))
+    }
+
+    it( "should have a run point of 1/1/1" ) {
+      val s = Sphere( None )
+      assert( s.run == Point3( 1, 1, 1 ) )
+    }
+
+    it( "should have a main axis of 0/1/0" ) {
+      val s = Sphere( None )
+      assert( s.axis == Vector3( 0, 1, 0 ) )
+    }
 
   }
 
