@@ -18,9 +18,9 @@ package scaladelray.ui.model
 
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
-import scaladelray.material._
-import scaladelray.material.Material
-import scaladelray.material.PhongOldMaterial
+
+import scaladelray.material.{Material, PhongOldMaterial, _}
+import scaladelray.material.bsdf.{LambertBRDF, PhongSpecularBRDF}
 
 class PhongMaterialProvider extends MaterialProvider with TableModel {
 

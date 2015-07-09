@@ -16,13 +16,13 @@
 
 package scaladelray.rendering.raycasting
 
-import scaladelray.world.World
-import scaladelray.camera.Camera
-import scaladelray.{Color, Constants, HDRImage}
 import scala.collection.mutable
-import scaladelray.rendering.{Renderable, Algorithm}
-import scaladelray.rendering.raycasting.light.{DirectionalLight, SpotLight, PointLight, Light}
-import scaladelray.material.{DirectionalEmission, SpotEmission, SimpleEmission}
+import scaladelray.camera.Camera
+import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
+import scaladelray.rendering.raycasting.light.{DirectionalLight, Light, PointLight, SpotLight}
+import scaladelray.rendering.{Algorithm, Renderable}
+import scaladelray.world.World
+import scaladelray.{Color, Constants, HDRImage}
 
 class RayCasting( ambient : Color ) extends Algorithm {
 

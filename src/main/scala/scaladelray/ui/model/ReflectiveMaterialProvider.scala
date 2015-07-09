@@ -16,12 +16,11 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.material._
 import javax.swing.event.TableModelListener
-import scaladelray.material.LambertBRDF
-import scaladelray.material.Material
-import scaladelray.material.ReflectiveOldMaterial
+import javax.swing.table.TableModel
+
+import scaladelray.material.{Material, ReflectiveOldMaterial, _}
+import scaladelray.material.bsdf.{LambertBRDF, PerfectReflectiveBRDF, PhongSpecularBRDF}
 
 class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 

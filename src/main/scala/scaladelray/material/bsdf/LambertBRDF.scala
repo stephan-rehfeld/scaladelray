@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
 
 /**
- * A phong specular BRDF.
+ * A Lambert BRDF describes surface that reflects the light in all direction in a diffuse way.
  *
- * @param exponent The phong exponent.
  */
-case class PhongSpecularBRDF( exponent : Double ) extends BRDF {
+case class LambertBRDF() extends BRDF {
 
-  override def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double = {
-    val r = (-dIn).reflectOn(p.n)
-    math.pow( r dot dOut, exponent ) / math.Pi
-  }
+  override def apply( p: SurfacePoint, dIn: Vector3, dOut: Vector3 ): Double = 1.0 / math.Pi
 
 }

@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
 
-/**
- * A Lambert BRDF describes surface that reflects the light in all direction in a diffuse way.
- *
- */
-case class LambertBRDF() extends BRDF {
+case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
 
-  override def apply( p: SurfacePoint, dIn: Vector3, dOut: Vector3 ): Double = 1.0 / math.Pi
+  override def apply( p : SurfacePoint, dIn : Vector3, eta : Double, dOut : Vector3 ) : Double = {
+    // TODO: Implement
+    1.0
+  }
 
 }

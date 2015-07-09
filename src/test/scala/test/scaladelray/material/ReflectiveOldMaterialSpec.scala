@@ -17,26 +17,17 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.math._
-import scaladelray.material._
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
-import scaladelray.math.Ray
-import scaladelray.world.SingleBackgroundColor
-import scaladelray.material.ReflectiveOldMaterial
-import scaladelray.texture.TexCoord2D
-import scaladelray.rendering.Hit
-import scaladelray.geometry.SurfacePoint
-import scaladelray.material.LambertBRDF
-import scaladelray.world.World
-import scaladelray.material.PhongSpecularBRDF
-import scaladelray.material.Material
-import scaladelray.rendering.Renderable
-import scaladelray.texture.SingleColorTexture
+
 import scaladelray.Color
-import scaladelray.math.Normal3
+import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
+import scaladelray.material.{Material, ReflectiveOldMaterial}
+import scaladelray.material.bsdf.{LambertBRDF, PerfectReflectiveBRDF, PhongSpecularBRDF}
+import scaladelray.math.{Normal3, Point3, Ray, Vector3, _}
+import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class ReflectiveOldMaterialSpec extends FunSpec {
 

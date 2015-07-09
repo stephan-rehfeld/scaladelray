@@ -16,11 +16,12 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.{SpotEmission, Emission}
-import scaladelray.Color
-import javax.swing.table.TableModel
-import javax.swing.event.TableModelListener
 import java.lang.Double
+import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.Color
+import scaladelray.material.emission.{Emission, SpotEmission}
 
 class SpotEmissionProvider extends EmissionProvider with TableModel {
 

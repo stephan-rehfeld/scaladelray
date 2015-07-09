@@ -17,20 +17,17 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.math._
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
-import scaladelray.math.Ray
-import scaladelray.material.{PhongSpecularBRDF, LambertBRDF, Material, PhongOldMaterial}
-import scaladelray.texture.SingleColorTexture
+
 import scaladelray.Color
-import scaladelray.texture.TexCoord2D
-import scaladelray.math.Normal3
-import scaladelray.rendering.{Hit, Renderable}
-import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
+import scaladelray.material.bsdf.{LambertBRDF, PhongSpecularBRDF}
+import scaladelray.material.{Material, PhongOldMaterial}
+import scaladelray.math.{Normal3, Point3, Ray, Vector3, _}
+import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class PhongOldMaterialSpec extends FunSpec {
 

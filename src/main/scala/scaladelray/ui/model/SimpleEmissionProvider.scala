@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.{SimpleEmission, Emission}
-import scaladelray.Color
-import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.Color
+import scaladelray.material.emission.{Emission, SimpleEmission}
 
 class SimpleEmissionProvider extends EmissionProvider with TableModel {
 

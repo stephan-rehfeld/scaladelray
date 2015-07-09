@@ -14,16 +14,23 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.emission
 
+import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
 
-case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
+/**
+ * The spot emission emits light only within a given angle.
+ *
+ * @param c The color of the light source.
+ * @param halfAngle The half angle within the light is emitted.
+ */
+case class SpotEmission( c : Color, halfAngle : Double ) extends Emission {
 
-  override def apply( p : SurfacePoint, dIn : Vector3, eta : Double, dOut : Vector3 ) : Double = {
-    // TODO: Implement
-    1.0
-  }
+  require( halfAngle > 0, "The halfAngle must be larger than 0." )
+  require( halfAngle <= math.Pi / 2.0, "The halfAngle must not be larger than 90 degrees.")
+
+  override def apply( sp: SurfacePoint, d : Vector3 ) = if( math.acos(  sp.n dot d ) <= halfAngle ) c else Color( 0, 0, 0 )
 
 }

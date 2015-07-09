@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint

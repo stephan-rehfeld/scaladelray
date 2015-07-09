@@ -17,21 +17,17 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.math._
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
-import scaladelray.math.Ray
-import scaladelray.rendering.Renderable
-import scaladelray.material.{LambertBRDF, Material, LambertOldMaterial}
-import scaladelray.texture.SingleColorTexture
+
 import scaladelray.Color
-import scaladelray.texture.TexCoord2D
-import scaladelray.math.Normal3
-import scaladelray.rendering.Hit
-import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
+import scaladelray.material.bsdf.LambertBRDF
+import scaladelray.material.{LambertOldMaterial, Material}
+import scaladelray.math.{Normal3, Point3, Ray, Vector3, _}
+import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class LambertOldMaterialSpec extends FunSpec {
 

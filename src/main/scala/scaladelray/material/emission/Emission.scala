@@ -14,13 +14,25 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.emission
 
+import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
 
-case class PerfectReflectiveBRDF() extends BRDF {
+/**
+ * An emission describes how the material emits light to the scene.
+ */
+abstract class Emission {
 
-  override def apply( p: SurfacePoint, dIn: Vector3, dOut: Vector3 ): Double = if( (-dIn).reflectOn( p.n ) =~= dOut ) 1.0 else 0.0
+  /**
+   * Returns the light that is emitted at the surface point in the direction.
+   *
+   * @param sp The point on the surface.
+   * @param d The direction.
+   *
+   * @return The light that is emitted from the point in the direction.
+   */
+  def apply( sp: SurfacePoint, d : Vector3 ) : Color
 
 }

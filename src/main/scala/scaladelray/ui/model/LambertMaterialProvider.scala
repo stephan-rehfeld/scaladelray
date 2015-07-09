@@ -16,9 +16,11 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.material.{LambertBRDF, Material, LambertOldMaterial, OldMaterial}
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.material.bsdf.LambertBRDF
+import scaladelray.material.{LambertOldMaterial, Material, OldMaterial}
 
 class LambertMaterialProvider extends MaterialProvider with TableModel {
 

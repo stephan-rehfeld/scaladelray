@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3

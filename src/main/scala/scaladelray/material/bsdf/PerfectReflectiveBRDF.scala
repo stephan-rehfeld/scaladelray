@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.bsdf
 
-import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
 
-/**
- * A simple emission emits light in all directions from a point.
- *
- * @param c The color of the light.
- */
-case class SimpleEmission( c : Color ) extends Emission {
+case class PerfectReflectiveBRDF() extends BRDF {
 
-  override def apply( sp: SurfacePoint, d : Vector3 ) = c
+  override def apply( p: SurfacePoint, dIn: Vector3, dOut: Vector3 ): Double = if( (-dIn).reflectOn( p.n ) =~= dOut ) 1.0 else 0.0
 
 }

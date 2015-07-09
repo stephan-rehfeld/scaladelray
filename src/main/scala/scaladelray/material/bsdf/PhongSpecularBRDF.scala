@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package scaladelray.material
+package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Vector3
-import scaladelray.Color
 
 /**
- * An emission describes how the material emits light to the scene.
+ * A phong specular BRDF.
+ *
+ * @param exponent The phong exponent.
  */
-abstract class Emission {
+case class PhongSpecularBRDF( exponent : Double ) extends BRDF {
 
-  /**
-   * Returns the light that is emitted at the surface point in the direction.
-   *
-   * @param sp The point on the surface.
-   * @param d The direction.
-   *
-   * @return The light that is emitted from the point in the direction.
-   */
-  def apply( sp: SurfacePoint, d : Vector3 ) : Color
+  override def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double = {
+    val r = (-dIn).reflectOn(p.n)
+    math.pow( r dot dOut, exponent ) / math.Pi
+  }
 
 }

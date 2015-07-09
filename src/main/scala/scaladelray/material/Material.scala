@@ -16,6 +16,8 @@
 
 package scaladelray.material
 
+import scaladelray.material.bsdf.BSDF
+import scaladelray.material.emission.Emission
 import scaladelray.texture.Texture
 
 /**

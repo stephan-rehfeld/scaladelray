@@ -16,12 +16,14 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.material.{PerfectTransparentBTDF, Material, TransparentOldMaterial, OldMaterial}
-import javax.swing.event.TableModelListener
 import java.lang.Double
-import scaladelray.texture.SingleColorTexture
+import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
 import scaladelray.Color
+import scaladelray.material.bsdf.PerfectTransparentBTDF
+import scaladelray.material.{Material, OldMaterial, TransparentOldMaterial}
+import scaladelray.texture.SingleColorTexture
 
 class TransparentMaterialProvider extends MaterialProvider with TableModel {
 

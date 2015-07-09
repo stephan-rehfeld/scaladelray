@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.{DirectionalEmission, Emission}
-import scaladelray.Color
-import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.Color
+import scaladelray.material.emission.{DirectionalEmission, Emission}
 
 class DirectionalEmissionProvider extends EmissionProvider with TableModel {
 

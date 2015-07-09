@@ -17,19 +17,16 @@
 package test.scaladelray.material
 
 import org.scalatest.FunSpec
-import scaladelray.math._
-import scaladelray.geometry.SurfacePoint
 import test.scaladelray.geometry.GeometryTestAdapter
-import scaladelray.world.World
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
-import scaladelray.material.{PerfectTransparentBTDF, Material, TransparentOldMaterial}
-import scaladelray.math.Ray
-import scaladelray.world.SingleBackgroundColor
-import scaladelray.rendering.Renderable
+
 import scaladelray.Color
+import scaladelray.geometry.SurfacePoint
+import scaladelray.material.bsdf.PerfectTransparentBTDF
+import scaladelray.material.{Material, TransparentOldMaterial}
+import scaladelray.math.{Point3, Ray, Vector3, _}
+import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
-import scaladelray.rendering.Hit
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class TransparentOldMaterialSpec extends FunSpec {
 

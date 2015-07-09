@@ -16,7 +16,7 @@
 
 package scaladelray.ui.model
 
-import scaladelray.material.Emission
+import scaladelray.material.emission.Emission
 
 trait EmissionProvider {
 
