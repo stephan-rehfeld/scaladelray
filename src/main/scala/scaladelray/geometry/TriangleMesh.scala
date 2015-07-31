@@ -16,12 +16,11 @@
 
 package scaladelray.geometry
 
+import scala.collection.mutable
 import scaladelray.Constants
 import scaladelray.math._
-import scaladelray.texture.{Texture, TexCoord2D}
 import scaladelray.optimization.Octree
-import scala.Array
-import scala.collection.mutable
+import scaladelray.texture.{TexCoord2D, Texture}
 
 /**
  * An instance of this class represents a triangle mesh geometry. An octree is created to enhance rendering performance.
@@ -64,6 +63,37 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
   override val run = Point3( maxX, maxY, maxZ )
 
   override val axis = Vector3( 0, 1, 0 )
+
+  val tanAndBitans = if( faces.forall( (f) => f.size == 3 && f.forall( (v) => v._2.isDefined && v._3.isDefined )  ) ) {
+    for( face <- faces ) yield {
+      val a = vertices( face(0)._1 )
+      val b = vertices( face(1)._1 )
+      val c = vertices( face(2)._1 )
+
+      val at = texCoords( face(0)._2.get )
+      val bt = texCoords( face(1)._2.get )
+      val ct = texCoords( face(2)._2.get )
+
+      val ab = b - a
+      val ac = c - a
+
+      val abt = bt - at
+      val act = ct - at
+
+      val r = 1.0 / (abt.u * act.v - act.u * abt.v)
+
+      val tan = Vector3( (act.v*ab.x-abt.v*ac.x) * r,
+        (act.v*ab.y-abt.v*ac.y) * r,
+        (act.v*ab.z-abt.v*ac.z) * r )
+      val biTan = Vector3( (abt.u*ac.x-act.u*ac.x) * r,
+        (abt.u*ac.y-act.u*ac.y) * r,
+        (abt.u*ac.z-act.u*ac.z) * r
+      )
+      (tan,biTan)
+    }
+  } else {
+    new Array[(Vector3,Vector3)](0)
+  }
 
   /**
    * The octree to enhance rendering performance.
@@ -176,9 +206,25 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
       val gamma = base.replaceCol2( vec ).determinant / base.determinant
       val t = base.replaceCol3( vec ).determinant / base.determinant
 
+
+      val (tan,biTan) = if( !tanAndBitans.isEmpty ) {
+        tanAndBitans( faces.indexOf( face ) )
+      } else {
+        ((b-a).normalized,(c-a).normalized)
+      }
+
       if( !(beta < 0.0 || gamma < 0.0 || beta + gamma > 1.0 || t < Constants.EPSILON) ) {
         val alpha = 1 - beta - gamma
-        hits += GeometryHit( r, this, t, SurfacePoint( r( t ), an * alpha + bn * beta + cn * gamma, Vector3( 0, 0, 0 ), Vector3( 0, 0, 0 ), at * alpha + bt * beta + ct * gamma ) )
+        var n = an * alpha + bn * beta + cn * gamma
+        val texCoord = at * alpha + bt * beta + ct * gamma
+        n = normalMap match {
+          case Some( texture ) =>
+            val c = texture( texCoord )
+            (tan * (c.r-0.5) + biTan * (c.g-0.5) + n * (c.b-0.5)).normalized.asNormal
+          case None =>
+            n
+        }
+        hits += GeometryHit( r, this, t, SurfacePoint( r( t ), n, tan, biTan, texCoord ) )
       }
     }
     hits.toSet
