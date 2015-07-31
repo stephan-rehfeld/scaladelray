@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.geometry.Sphere
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.geometry.Sphere
+import scaladelray.math.{Point3, Transform, Vector3}
 import scaladelray.rendering.Renderable
 
 class SphereProvider extends RenderableProvider with TableModel {
@@ -35,7 +36,7 @@ class SphereProvider extends RenderableProvider with TableModel {
     val s = Sphere( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     val (m,o) = materialProvider.get.createMaterial( l )
-    Renderable( t, s, o, m )
+    Set( Renderable( t, s, o, m ) )
   }
 
   override def getRowCount: Int = 3

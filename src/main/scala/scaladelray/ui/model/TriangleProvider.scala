@@ -16,12 +16,13 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.math.{Normal3, Transform, Point3}
-import scaladelray.geometry.Triangle
 import javax.swing.event.TableModelListener
-import scaladelray.texture.TexCoord2D
+import javax.swing.table.TableModel
+
+import scaladelray.geometry.Triangle
+import scaladelray.math.{Normal3, Point3, Transform}
 import scaladelray.rendering.Renderable
+import scaladelray.texture.TexCoord2D
 
 class TriangleProvider extends RenderableProvider with TableModel {
 
@@ -43,7 +44,7 @@ class TriangleProvider extends RenderableProvider with TableModel {
     l()
     val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC, None )
     val (m,o) = materialProvider.get.createMaterial( l )
-    Renderable( Transform(), g, o, m )
+    Set( Renderable( Transform(), g, o, m ) )
   }
 
   override def getRowCount: Int = 9

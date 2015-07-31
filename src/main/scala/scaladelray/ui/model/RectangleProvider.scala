@@ -16,11 +16,12 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.geometry.Rectangle
-import scaladelray.rendering.Renderable
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.geometry.Rectangle
+import scaladelray.math.{Point3, Transform, Vector3}
+import scaladelray.rendering.Renderable
 
 class RectangleProvider extends RenderableProvider with TableModel {
 
@@ -34,7 +35,7 @@ class RectangleProvider extends RenderableProvider with TableModel {
     val p = Rectangle( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     val (m,o) = materialProvider.get.createMaterial( l )
-    Renderable( t, p, o, m )
+    Set( Renderable( t, p, o, m ) )
   }
 
   override def getRowCount: Int = 3

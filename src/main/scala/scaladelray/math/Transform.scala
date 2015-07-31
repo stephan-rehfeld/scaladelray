@@ -102,6 +102,15 @@ class Transform private ( val m : Mat4x4, val i : Mat4x4 ) extends Serializable 
     new Transform( m * t.m, t.i * i )
   }
 
+  /**
+   * Multiplies two transforms.
+   *
+   * @param t The rhs.
+   * @return The multiplied transforms.
+   */
+  def *( t : Transform ) = new Transform( t.m * m, i * t.i )
+
+
   override def equals( obj: Any ) =
     obj match {
       case t : Transform =>
@@ -220,7 +229,6 @@ object Transform {
             0.0,                0.0,               1.0, 0.0,
             0.0,                0.0,               0.0, 1.0 )
   )
-
 
   def apply() = new Transform(
     Mat4x4( 1.0, 0.0, 0.0, 0.0,

@@ -16,10 +16,12 @@
 
 package scaladelray.ui.model
 
-import scaladelray.math.{Vector3, Point3}
-import scala.collection.mutable
-import javax.swing.table.TableModel
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scala.collection.mutable
+import scaladelray.math.{Point3, Transform, Vector3}
+import scaladelray.rendering.Renderable
 
 class NodeProvider extends RenderableProvider with TableModel {
 
@@ -28,16 +30,15 @@ class NodeProvider extends RenderableProvider with TableModel {
   var scale = Vector3( 1, 1, 1 )
   var rotate = Vector3( 0, 0, 0 )
 
-  // TODO: Repair node creator
-  override def createRenderable( l : () => Unit ) = ???
-  /*{
-   l()
-   
-    val cn = for( n <- childNodes ) yield n.createRenderable
-    val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    //new Node( t, cn:_*  )
-    null
-  }*/
+  override def createRenderable( l : () => Unit ) = {
+    l()
+    (for( n <- childNodes ) yield {
+      for( r <- n.createRenderable( l ) ) yield {
+        val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
+        Renderable( t * r.t, r.geometry, r.oldMaterial, r.material )
+      }
+    }).flatten.toSet
+  }
 
   override def remove(obj: AnyRef) {
     obj match {

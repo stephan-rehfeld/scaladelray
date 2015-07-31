@@ -16,12 +16,13 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.math.{Transform, Vector3, Point3}
-import scaladelray.loader.OBJLoader
-import javax.swing.event.{TableModelEvent, TableModelListener}
 import java.io.File
+import javax.swing.event.{TableModelEvent, TableModelListener}
+import javax.swing.table.TableModel
+
 import scala.collection.mutable
+import scaladelray.loader.OBJLoader
+import scaladelray.math.{Point3, Transform, Vector3}
 import scaladelray.rendering.Renderable
 
 class ModelProvider( tml : TableModelListener ) extends RenderableProvider with TableModel {
@@ -49,7 +50,7 @@ class ModelProvider( tml : TableModelListener ) extends RenderableProvider with 
     val m = loader.load( fileName, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad, l )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
     val (mat,old) = materialProvider.get.createMaterial( l )
-    Renderable( t, m, old, mat )
+    Set( Renderable( t, m, old, mat ) )
   }
 
   override def remove(obj: AnyRef) {

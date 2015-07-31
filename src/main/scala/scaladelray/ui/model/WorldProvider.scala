@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.Color
-import scala.collection.mutable
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
+
+import scala.collection.mutable
+import scaladelray.Color
 import scaladelray.world.World
 
 class WorldProvider extends TableModel {
@@ -57,7 +58,7 @@ class WorldProvider extends TableModel {
 
   def createWorld( l : () => Unit ) = {
     l()
-    val renderables = for( rp <- renderableProvider ) yield rp.createRenderable( l )
+    val renderables = (for( rp <- renderableProvider ) yield rp.createRenderable( l )).flatten
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription( l )
 
     (cameraProvider.get.createCamera( l ),World( backgroundProvider.get.createBackground( l ), renderables.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
