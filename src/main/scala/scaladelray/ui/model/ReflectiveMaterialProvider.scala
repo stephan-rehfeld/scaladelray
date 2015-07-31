@@ -19,8 +19,8 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
-import scaladelray.material.{Material, ReflectiveOldMaterial, _}
 import scaladelray.material.bsdf.{LambertBRDF, PerfectReflectiveBRDF, PhongSpecularBRDF}
+import scaladelray.material.{Material, ReflectiveOldMaterial, _}
 
 class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
@@ -33,7 +33,7 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
     l()
     val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
     val o = ReflectiveOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
-    val m = Material( e, (1.0/3.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (1.0/3.0, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (1.0/3.0, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
+    val m = Material( e, (0.25, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.25, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (0.5, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
     (m,o)
   }
 

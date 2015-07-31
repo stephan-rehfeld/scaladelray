@@ -27,18 +27,17 @@ import akka.actor._
 
 import scala.async.Async.async
 import scala.collection.mutable
-import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.language.reflectiveCalls
 import scala.swing.GridBagPanel.{Anchor, Fill}
 import scala.swing.TabbedPane.Page
-import scala.swing.{Action, _}
 import scala.swing.event.ButtonClicked
-import scaladelray.{Color, Constants}
+import scala.swing.{Action, _}
 import scaladelray.math.{Point3, Vector3}
-import scaladelray.rendering.raycasting.RayCasting
+import scaladelray.rendering.recursiveraytracing.RecursiveRaytracing
 import scaladelray.ui.model._
+import scaladelray.{Color, Constants}
 
 case class StartDiscovery()
 
@@ -1224,7 +1223,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               steps = steps + 1
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
-            val a = new RayCasting( Color( 0, 0, 0 ), w )
+            //val a = new RayCasting( Color( 0, 0, 0 ), w )
+            val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 2 )
 
             val window = new HDRNiceRenderingWindow( c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), clusterNodes.toList, a  )
             window.a ! StartRendering()

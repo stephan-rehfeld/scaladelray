@@ -47,33 +47,31 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
           y <- rect.y until rect.y + rect.height
     } {
       val ray = c( x, y ).head
-      for( r <- world.objects ) {
-        val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
-        if( hits.isEmpty ) {
-          world.background( ray )
+      val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
+      if( hits.isEmpty ) {
+        world.background( ray )
+      } else {
+        val hit = hits.head
+        if( hit.renderable.material.isEmissive ) {
+          img.set( x -rect.x, y - rect.y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
         } else {
-          val hit = hits.head
-          if( hit.renderable.material.isEmissive ) {
-            img.set( x -rect.x, y - rect.y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
-          } else {
-            var c = Color( 0, 0, 0 )
-            if( c != ambient ) {
-              for( (_, texture, _ ) <- hit.renderable.material.bsdfs ) {
-                c = c + texture( hit.sp.t ) * ambient
-              }
+          var c = Color( 0, 0, 0 )
+          if( c != ambient ) {
+            for( (_, texture, _ ) <- hit.renderable.material.bsdfs ) {
+              c = c + texture( hit.sp.t ) * ambient
             }
-            for( (light,renderable) <- lights ) {
-              if( light.illuminates( hit.sp.p ) ) for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
-                val cr = texture( hit.sp.t )
-                val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
-                val lightIntensity = light.intensity( hit.sp.p )
-                val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
-
-                c = c + light.c * cr * bsdfItensity * w * lightIntensity * cos
-              }
-            }
-            img.set( x-rect.x, y-rect.y, c )
           }
+          for( (light,renderable) <- lights ) {
+            if( light.illuminates( hit.sp.p ) ) for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
+              val cr = texture( hit.sp.t )
+              val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
+              val lightIntensity = light.intensity( hit.sp.p )
+              val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
+
+              c = c + light.c * cr * bsdfItensity * w * lightIntensity * cos
+            }
+          }
+          img.set( x-rect.x, y-rect.y, c )
         }
       }
     }
