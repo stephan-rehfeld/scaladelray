@@ -16,10 +16,9 @@
 
 package scaladelray.rendering
 
-import scaladelray.world.World
-import scaladelray.camera.Camera
 import scaladelray.HDRImage
+import scaladelray.camera.Camera
 
 class RecursiveRayTracing extends Algorithm {
-  override def render(w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit]): HDRImage = ???
+  override def render( c : Camera, rect : HDRImage.Rectangle ) : HDRImage = ???
 }

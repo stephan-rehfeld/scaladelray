@@ -104,3 +104,8 @@ case class HDRImage( width : Int, height : Int ) {
     v
   }
 }
+
+object HDRImage {
+  case class Size( width : Int, height : Int )
+  case class Rectangle( x : Int, y : Int, width : Int, height : Int )
+}

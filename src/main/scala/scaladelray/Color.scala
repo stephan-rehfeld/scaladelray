@@ -28,9 +28,9 @@ package scaladelray
  * @param b The blue color channel. Must be at least 0.
  */
 case class Color( r : Double, g : Double, b : Double ) extends Serializable {
-  require( r >= 0.0, "The parameter 'r' must be at least 0" )
-  require( g >= 0.0, "The parameter 'g' must be at least 0" )
-  require( b >= 0.0, "The parameter 'b' must be at least 0" )
+  require( r >= 0.0, "The parameter 'r' must be at least 0! Passed: " + r )
+  require( g >= 0.0, "The parameter 'g' must be at least 0! Passed: " + g )
+  require( b >= 0.0, "The parameter 'b' must be at least 0! Passed: " + b )
 
   /**
    * The color converted to an ARGB integer. Values larger than 0 are just capped.

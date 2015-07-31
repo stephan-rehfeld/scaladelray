@@ -24,37 +24,37 @@ import scaladelray.rendering.{Algorithm, Renderable}
 import scaladelray.world.World
 import scaladelray.{Color, Constants, HDRImage}
 
-class RayCasting( ambient : Color ) extends Algorithm {
+class RayCasting( ambient : Color, world : World  ) extends Algorithm {
 
-  override def render( w: World, c: Camera, width: Int, height: Int, l: Option[(HDRImage) => Unit] ): HDRImage = {
+  var lights = mutable.HashMap[Light, Renderable]()
 
-    var lights = mutable.HashMap[Light, Renderable]()
-
-    for( r <- w.objects ) {
-      if( r.material.isEmissive ) r.material.e.get match {
-        case simple : SimpleEmission =>
-          lights += (PointLight( simple.c, r.center ) -> r )
-        case spot : SpotEmission =>
-          lights += (SpotLight( spot.c, r.center, r.axis, spot.halfAngle ) -> r)
-        case directional : DirectionalEmission =>
-          lights += (DirectionalLight( directional.c, r.axis) -> r)
-      }
+  for( r <- world.objects ) {
+    if( r.material.isEmissive ) r.material.e.get match {
+      case simple : SimpleEmission =>
+        lights += (PointLight( simple.c, r.center ) -> r )
+      case spot : SpotEmission =>
+        lights += (SpotLight( spot.c, r.center, r.axis, spot.halfAngle ) -> r)
+      case directional : DirectionalEmission =>
+        lights += (DirectionalLight( directional.c, r.axis) -> r)
     }
+  }
 
-    val img = HDRImage( width, height )
+  override def render( c : Camera, rect : HDRImage.Rectangle ) : HDRImage = {
 
-    for { x <- 0 until width
-          y <- 0 until height
+    val img = HDRImage( rect.width, rect.height )
+
+    for { x <- rect.x until rect.x + rect.width
+          y <- rect.y until rect.y + rect.height
     } {
       val ray = c( x, y ).head
-      for( r <- w.objects ) {
-        val hits = (ray --> w).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
+      for( r <- world.objects ) {
+        val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
         if( hits.isEmpty ) {
-          w.background( ray )
+          world.background( ray )
         } else {
           val hit = hits.head
           if( hit.renderable.material.isEmissive ) {
-            img.set( x, y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
+            img.set( x -rect.x, y - rect.y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
           } else {
             var c = Color( 0, 0, 0 )
             if( c != ambient ) {
@@ -72,7 +72,7 @@ class RayCasting( ambient : Color ) extends Algorithm {
                 c = c + light.c * cr * bsdfItensity * w * lightIntensity * cos
               }
             }
-            img.set( x, y, c )
+            img.set( x-rect.x, y-rect.y, c )
           }
         }
       }

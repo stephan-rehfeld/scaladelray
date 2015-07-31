@@ -16,31 +16,29 @@
 
 package scaladelray.ui
 
-import scala.swing._
-import scala.swing.GridBagPanel.{Anchor, Fill}
-import javax.swing.table.{TableCellEditor, TableModel}
-import scaladelray.ui.model._
-import javax.swing._
-import javax.swing.tree.{TreePath, TreeModel, TreeSelectionModel}
-import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
 import java.awt.event._
-import scaladelray.Constants
-import scala.swing.TabbedPane.Page
-import scala.collection.mutable
+import java.net.{DatagramPacket, DatagramSocket, InetAddress, SocketException}
+import javax.swing._
+import javax.swing.event.{TableModelEvent, TableModelListener, TreeSelectionEvent, TreeSelectionListener}
+import javax.swing.table.{TableCellEditor, TableModel}
+import javax.swing.tree.{TreeModel, TreePath, TreeSelectionModel}
+
 import akka.actor._
-import scala.concurrent.duration._
-import java.net.{SocketException, DatagramPacket, DatagramSocket, InetAddress}
-import scala.language.reflectiveCalls
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
-import scala.Some
-import scala.swing.Action
-import scala.swing.event.ButtonClicked
-import scaladelray.Color
-import scala.concurrent.ExecutionContext
-import ExecutionContext.Implicits.global
+
 import scala.async.Async.async
+import scala.collection.mutable
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+import scala.language.reflectiveCalls
+import scala.swing.GridBagPanel.{Anchor, Fill}
+import scala.swing.TabbedPane.Page
+import scala.swing.{Action, _}
+import scala.swing.event.ButtonClicked
+import scaladelray.{Color, Constants}
+import scaladelray.math.{Point3, Vector3}
 import scaladelray.rendering.raycasting.RayCasting
+import scaladelray.ui.model._
 
 case class StartDiscovery()
 
@@ -1226,9 +1224,10 @@ object ScalaDelRay extends SimpleSwingApplication {
               steps = steps + 1
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
-            val a = new RayCasting( Color( 0, 0, 0 ) )
-            val img = a.render( w, c( renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt ), renderingWindowsSize.getWidth.toInt, renderingWindowsSize.getHeight.toInt, None )
-            val windows = new HDRImageWindow( img )
+            val a = new RayCasting( Color( 0, 0, 0 ), w )
+
+            val window = new HDRNiceRenderingWindow( c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), clusterNodes.toList, a  )
+            window.a ! StartRendering()
             text = "New Render"
             enabled = true
           }

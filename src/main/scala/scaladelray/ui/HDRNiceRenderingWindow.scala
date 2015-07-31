@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2015 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,19 +33,19 @@ import scala.concurrent.{Await, Future}
 import scala.language.reflectiveCalls
 import scala.swing.GridBagPanel.Fill
 import scala.swing._
+import scaladelray.HDRImage
 import scaladelray.camera.Camera
-import scaladelray.rendering.{Render, RenderingActor}
-import scaladelray.world.World
+import scaladelray.rendering.{Algorithm, HDRRender, HDRRenderingActor}
 
-case class StartRendering()
 
-class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int, recursionDepth : Int, clusterNodes : List[(String,Int,Int)] ) extends Frame {
+class HDRNiceRenderingWindow( camera : (Int,Int) => Camera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
 
   title = "Rendering"
   size = s
   minimumSize = s
   resizable = false
   visible = true
+
 
   implicit val timeout = Timeout(5 hours)
 
@@ -67,15 +67,23 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
 
   private val actorSystem = if( clusterNodes.isEmpty ) ActorSystem("Rendering") else ActorSystem("Rendering",config)
 
-
+  val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
 
   val targets = createRenderNodes
 
-  val image = new BufferedImage(s.width, s.height, BufferedImage.TYPE_INT_ARGB)
-  val model = image.getColorModel
-  val raster = image.getRaster
-  val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
+  val originalHDRImage = HDRImage( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
+  val _adjustedHDRImage = HDRImage( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
 
+  def adjustedHDRImage = _adjustedHDRImage
+  def adjustedHDRImage_=( newImage : HDRImage ) {
+    for{
+      x <- 0 until newImage.width
+      y <- 0 until newImage.height
+    } _adjustedHDRImage.set( x, y, newImage( x, y ) )
+    win.repaint()
+  }
+
+  val brightnessAdjustmentWindow = new BrightnessAdjustmentWindow( originalHDRImage, this )
 
 
   menuBar = new MenuBar
@@ -86,7 +94,18 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
     if( result == FileChooser.Result.Approve ) {
       val file = fsd.selectedFile
       val extension = file.getName.split( '.' ).last
-      ImageIO.write( image, extension, file )
+      val awtImage = new BufferedImage( _adjustedHDRImage.width,  _adjustedHDRImage.height, BufferedImage.TYPE_INT_ARGB)
+
+      val model = awtImage.getColorModel
+      val raster = awtImage.getRaster
+      for {
+        x <- 0 until _adjustedHDRImage.width
+        y <- 0 until _adjustedHDRImage.height } {
+        val c = _adjustedHDRImage( x, y )
+        val color = new java.awt.Color( math.min(c.r.asInstanceOf[Float], 1.0f), math.min(c.g.asInstanceOf[Float], 1.0f), math.min(c.b.asInstanceOf[Float], 1.0f) )
+        raster.setDataElements(x, _adjustedHDRImage.height-1-y, model.getDataElements(color.getRGB, null))
+      }
+      ImageIO.write( awtImage, extension, file )
 
     }
   })
@@ -103,8 +122,20 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
       case msg : StartRendering =>
         var futures = scala.collection.mutable.MutableList[Future[Any]]()
 
-        for( i <- 0 until s.height ) {
-          val ftr = targets ? Render( 0, i, s.width,  i+1, cam )
+        /*for( i <- 0 until s.height ) {
+          val ftr = targets ? HDRRender( HDRImage.Rectangle( 0, i, s.width,  i+1) , cam )
+          futures += ftr
+        }*/
+        val tiles = 10
+        val tileWidth = originalHDRImage.width / tiles
+        val tileHeight = originalHDRImage.height / tiles
+
+        for {
+          tileX <- 0 until tiles
+          tileY <- 0 until tiles
+        } {
+
+          val ftr = targets ? HDRRender( HDRImage.Rectangle( tileX * tileWidth, tileY * tileHeight, tileWidth, tileHeight) , cam )
           futures += ftr
         }
 
@@ -154,17 +185,18 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
         }))
 
         for( future <- futures ) {
-          val pixel = Await.result( future, timeout.duration ).asInstanceOf[List[(Int,Int,Int)]]
+          val (tileRectangle,tileImage) = Await.result( future, timeout.duration ).asInstanceOf[(HDRImage.Rectangle,HDRImage)]
 
-          for( (x,y,c) <- pixel ) {
-            raster.setDataElements(x, s.height-1-y, model.getDataElements(c, null))
-            win.repaint()
+          for { x <- tileRectangle.x until tileRectangle.x + tileRectangle.width
+                y <- tileRectangle.y until tileRectangle.y + tileRectangle.height
+          } {
+            originalHDRImage.set( x, y, tileImage( x - tileRectangle.x, y - tileRectangle.y ) )
+
           }
+          brightnessAdjustmentWindow.img = originalHDRImage
+
 
           futuresResolved = futuresResolved + 1
-
-
-
 
         }
         infoWindow.infoUI.estimatedInfoLabel.text = infoWindow.infoUI.timeInfoLabel.text
@@ -178,7 +210,18 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
   contents = new Component {
     override def paintComponent( g: Graphics2D ) = {
       super.paintComponent( g )
-      g.drawImage(image, 0, 0, null)
+      val awtImage = new BufferedImage( _adjustedHDRImage.width,  _adjustedHDRImage.height, BufferedImage.TYPE_INT_ARGB)
+
+      val model = awtImage.getColorModel
+      val raster = awtImage.getRaster
+      for {
+        x <- 0 until _adjustedHDRImage.width
+        y <- 0 until _adjustedHDRImage.height } {
+        val c = _adjustedHDRImage( x, y )
+        val color = new java.awt.Color( math.min(c.r.asInstanceOf[Float], 1.0f), math.min(c.g.asInstanceOf[Float], 1.0f), math.min(c.b.asInstanceOf[Float], 1.0f) )
+        raster.setDataElements(x, _adjustedHDRImage.height-1-y, model.getDataElements(color.getRGB, null))
+      }
+      g.drawImage(awtImage, 0, 0, null)
     }
   }
 
@@ -251,13 +294,13 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
     val targets = mutable.MutableList[ActorRef]()
 
     for( i <- 1 to Runtime.getRuntime.availableProcessors() ) {
-      targets += actorSystem.actorOf( Props( classOf[RenderingActor], world, 0, recursionDepth ) )
+      targets += actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ) )
     }
 
     for( (hostname,port,threads) <- clusterNodes ) {
       val address = Address("akka.tcp", "renderNode", hostname, port )
       for( i <- 1 to threads ) {
-        targets += actorSystem.actorOf( Props( classOf[RenderingActor], world, 0, recursionDepth ).withDeploy(Deploy(scope = RemoteScope(address))) )
+        targets += actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ).withDeploy(Deploy(scope = RemoteScope(address))) )
       }
     }
 
@@ -265,3 +308,4 @@ class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dime
 
   }
 }
+

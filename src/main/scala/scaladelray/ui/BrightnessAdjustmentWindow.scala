@@ -16,13 +16,14 @@
 
 package scaladelray.ui
 
-import scala.swing.{TextField, Label, GridBagPanel, Frame}
 import java.awt.Dimension
-import scaladelray.{Color, HDRImage}
+
 import scala.swing.GridBagPanel.Fill
 import scala.swing.event.EditDone
+import scala.swing.{Frame, GridBagPanel, Label, TextField}
+import scaladelray.{Color, HDRImage}
 
-class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends Frame {
+class BrightnessAdjustmentWindow( private var _img : HDRImage, p : HDRNiceRenderingWindow ) extends Frame {
 
   title = "Histogram"
   minimumSize = new Dimension( 400, 600 )
@@ -30,36 +31,56 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
   resizable = false
   visible = true
 
-  val min = img.min
-  val max = img.max
+  var min = _img.min
+  var max = _img.max
 
-  private var newMin = min
-  private var newMax = max
+  private var newMin = 0.0
+  private var newMax = 1.0
 
-  private def adjust( i : HDRImage, oldMin : Double, oldMax : Double, newMin : Double, newMax : Double ) : HDRImage = {
-    val newImage = new HDRImage( i.width, i.height )
-    for{
-      x <- 0 until newImage.width
-      y <- 0 until newImage.height
-    } {
-      val c = i( x, y )
-      val r = (c.r - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
-      val g = (c.g - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
-      val b = (c.b - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
-      newImage.set( x, y, Color( math.max(0,r), math.max(0,g), math.max(0,b)) )
+  def img = _img
+  def img_=( newImage : HDRImage ) {
+    _img = newImage
+    min = _img.min
+    max = _img.max
+    panel.origMin.text = min.toString
+    panel.origMax.text = max.toString
 
-    }
-    newImage
+    val newAdjustedImage = adjust( _img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
+    panel.resultHistogram.img = newAdjustedImage
+    p.adjustedHDRImage = newAdjustedImage
+    this.repaint()
   }
 
-  contents = new GridBagPanel {
+  private def adjust( i : HDRImage, oldMin : Double, oldMax : Double, newMin : Double, newMax : Double ) : HDRImage = {
+    if( oldMax > oldMin) {
+      val newImage = new HDRImage( i.width, i.height )
+      for{
+        x <- 0 until newImage.width
+        y <- 0 until newImage.height
+      } {
+        val c = i( x, y )
+        val r = (c.r - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
+        val g = (c.g - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
+        val b = (c.b - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin
+        newImage.set( x, y, Color( math.max(0,r), math.max(0,g), math.max(0,b)) )
+
+      }
+      newImage
+    } else {
+      i
+    }
+
+  }
+
+
+  val panel = new GridBagPanel {
     val c = new Constraints
     val shouldFill = true
 
     if( shouldFill ) c.fill = Fill.Horizontal
 
 
-    val originalHistogram = new HistogramComponent( img )
+    val originalHistogram = new HistogramComponent( _img )
 
     c.fill = Fill.Both
     c.weightx = 0.5
@@ -134,9 +155,9 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
             val v = text.toDouble
             if( v <= BrightnessAdjustmentWindow.this.newMax ) {
               BrightnessAdjustmentWindow.this.newMin = v
-              val newImage = adjust( img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
+              val newImage = adjust( _img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
               resultHistogram.img = newImage
-              p.img = newImage
+              p.adjustedHDRImage = newImage
             } else
               text = BrightnessAdjustmentWindow.this.newMin.toString
           } catch {
@@ -170,9 +191,9 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
             val v = text.toDouble
             if( v >=  BrightnessAdjustmentWindow.this.newMin ) {
               BrightnessAdjustmentWindow.this.newMax = v
-              val newImage = adjust( img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
+              val newImage = adjust( _img, min, max, BrightnessAdjustmentWindow.this.newMin, BrightnessAdjustmentWindow.this.newMax )
               resultHistogram.img = newImage
-              p.img = newImage
+              p.adjustedHDRImage = newImage
             } else
               text = BrightnessAdjustmentWindow.this.newMax.toString
 
@@ -191,7 +212,7 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     c.gridwidth = 0
     layout( white ) = c
 
-    val resultHistogram = new HistogramComponent( img )
+    val resultHistogram = new HistogramComponent( _img )
 
     c.fill = Fill.Both
     c.weightx = 0.5
@@ -202,5 +223,7 @@ class BrightnessAdjustmentWindow( img : HDRImage, p : HDRImageWindow ) extends F
     layout( resultHistogram ) = c
 
   }
+
+  contents = panel
 
 }

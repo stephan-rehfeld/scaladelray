@@ -16,9 +16,27 @@
 
 package scaladelray.rendering
 
+import akka.actor.SupervisorStrategy.{Escalate, Stop}
+import akka.actor.{Actor, ActorKilledException, OneForOneStrategy, SupervisorStrategy}
+
+import scala.concurrent.duration._
 import scaladelray.HDRImage
 import scaladelray.camera.Camera
 
-class DiffuseRayTracing extends Algorithm {
-  override def render( c : Camera, rect : HDRImage.Rectangle ) : HDRImage = ???
+case class HDRRender( rect : HDRImage.Rectangle, cam : Camera )
+
+class HDRRenderingActor( cam : Camera, algorithm : Algorithm ) extends Actor {
+
+
+  override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+    case _: ActorKilledException  => Stop
+    case _: Exception             => Escalate
+  }
+
+  def receive = {
+    case msg : HDRRender =>
+      sender ! (msg.rect,algorithm.render( cam, msg.rect ))
+
+  }
+
 }

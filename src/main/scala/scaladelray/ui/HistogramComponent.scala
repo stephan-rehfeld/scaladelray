@@ -16,8 +16,9 @@
 
 package scaladelray.ui
 
-import scala.swing.Component
 import java.awt.Graphics2D
+
+import scala.swing.Component
 import scaladelray.HDRImage
 
 class HistogramComponent( private var _img : HDRImage ) extends Component {
@@ -26,8 +27,8 @@ class HistogramComponent( private var _img : HDRImage ) extends Component {
   private val max = 1.0 // Double.MinValue
 
   def img = _img
-  def img_=( aImg : HDRImage ) {
-    _img = aImg
+  def img_=( newImage : HDRImage ) {
+    _img = newImage
     this.repaint()
   }
 
