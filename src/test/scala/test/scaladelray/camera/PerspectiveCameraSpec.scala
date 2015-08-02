@@ -16,9 +16,10 @@
 
 package test.scaladelray.camera
 
-import scaladelray.math.{Ray, Vector3, Point3}
-import scaladelray.camera.PerspectiveCamera
 import org.scalatest.FunSpec
+
+import scaladelray.camera.PerspectiveCamera
+import scaladelray.math.{Point3, Ray, Vector3}
 import scaladelray.sampling.SamplingPattern
 
 class PerspectiveCameraSpec extends FunSpec {
@@ -28,7 +29,7 @@ class PerspectiveCameraSpec extends FunSpec {
       assert( cam( 511, 383 ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
     }
 
-    it( "should calculate the correct amount of rays for the given sampling pattern" ) {
+    it( "should calculate the correct number of rays for the given sampling pattern" ) {
       val cam1 = new PerspectiveCamera( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), Vector3( 0, 1, 0 ), 400, 400, math.Pi / 4 )
       assert( cam1( 0, 0 ).size == 1 )
 

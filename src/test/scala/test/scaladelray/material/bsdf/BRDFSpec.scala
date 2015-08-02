@@ -36,7 +36,7 @@ case class BRDFTestAdapter() extends BRDF {
 class BRDFSpec extends FunSpec {
 
   describe( "A BRDF" ) {
-    it( "should return 0.0 if the in and out points are different" ) {
+    it( "should return 0.0 if the in and out surface points are different" ) {
       val brdf = BRDFTestAdapter()
 
       val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
