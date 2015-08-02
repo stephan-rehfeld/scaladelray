@@ -62,13 +62,13 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
             }
           }
           for( (light,renderable) <- lights ) {
-            if( light.illuminates( hit.sp.p ) ) for( (w, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
+            if( light.illuminates( hit.sp.p ) ) for( (weight, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
               val cr = texture( hit.sp.t )
               val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
               val lightIntensity = light.intensity( hit.sp.p )
               val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
 
-              c = c + light.c * cr * bsdfItensity * w * lightIntensity * cos
+              c = c + light.c * cr * bsdfItensity * weight * lightIntensity * cos
             }
           }
           img.set( x-rect.x, y-rect.y, c )

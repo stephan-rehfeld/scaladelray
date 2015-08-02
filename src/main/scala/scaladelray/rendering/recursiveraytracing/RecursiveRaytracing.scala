@@ -21,7 +21,7 @@ import scaladelray.camera.Camera
 import scaladelray.material.bsdf.{PerfectReflectiveBRDF, PerfectTransparentBTDF}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.math.Ray
-import scaladelray.rendering.raycasting.light.{DirectionalLight, Light, PointLight, SpotLight}
+import scaladelray.rendering.recursiveraytracing.light.{DirectionalLight, Light, PointLight, SpotLight}
 import scaladelray.rendering.{Algorithm, Renderable}
 import scaladelray.world.World
 import scaladelray.{Color, Constants, HDRImage}
@@ -35,11 +35,11 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
   for( r <- world.objects ) {
     if( r.material.isEmissive ) r.material.e.get match {
       case simple : SimpleEmission =>
-        lights += (PointLight( simple.c, r.center ) -> r )
+        lights += (PointLight( r, simple.c, r.center ) -> r )
       case spot : SpotEmission =>
-        lights += (SpotLight( spot.c, r.center, r.axis, spot.halfAngle ) -> r)
+        lights += (SpotLight( r, spot.c, r.center, r.axis, spot.halfAngle ) -> r)
       case directional : DirectionalEmission =>
-        lights += (DirectionalLight( directional.c, r.axis) -> r)
+        lights += (DirectionalLight( r, directional.c, r.axis) -> r)
     }
   }
 
@@ -59,34 +59,34 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
               c = c + texture(hit.sp.t) * ambient
             }
           }
-          for ((w, texture, bsdf) <- hit.renderable.material.bsdfs) {
+          for ((weight, texture, bsdf) <- hit.renderable.material.bsdfs) {
             val cr = texture(hit.sp.t)
             bsdf match {
               case perfectReflectiveBRDF: PerfectReflectiveBRDF =>
                 val outGoingDirection = (-ray.d).reflectOn(hit.sp.n)
                 val bsdfItensity = bsdf(hit.sp, outGoingDirection, 1.0, hit.sp, -ray.d)
                 val incomingReflectionColor = trace(Ray(hit.sp.p, outGoingDirection), recursionsLeft - 1)
-                c = c + cr * bsdfItensity * w * incomingReflectionColor
+                c = c + cr * bsdfItensity * weight * incomingReflectionColor
               case perfectTransparentBTDF : PerfectTransparentBTDF =>
                 val reflected = perfectTransparentBTDF.reflectedRay( -ray.d, hit.sp.n )
                 val bsdfItensity = bsdf(hit.sp, reflected, 1.0, hit.sp, -ray.d)
                 val incomingReflectionColor = trace(Ray(hit.sp.p, reflected), recursionsLeft - 1)
-                c = c + cr * bsdfItensity * w * incomingReflectionColor
+                c = c + cr * bsdfItensity * weight * incomingReflectionColor
                 perfectTransparentBTDF.refractedRay( -ray.d, hit.sp.n, world.indexOfRefraction ) match {
                   case Some( refracted ) =>
                     val bsdfItensity = bsdf(hit.sp, refracted, 1.0, hit.sp, -ray.d)
                     println( "Refracted intensity: " + bsdfItensity )
                     val incomingRefractionColor = trace(Ray(hit.sp.p, refracted), recursionsLeft - 1)
-                    c = c + cr * bsdfItensity * w * incomingRefractionColor
+                    c = c + cr * bsdfItensity * weight * incomingRefractionColor
                   case _ =>
                 }
               case _ =>
                 for ((light, renderable) <- lights) {
-                  if (light.illuminates(hit.sp.p)) {
+                  if (light.illuminates(hit.sp.p, world )) {
                     val bsdfItensity = bsdf(hit.sp, light.directionFrom(hit.sp.p), 1.0, hit.sp, -ray.d)
                     val lightIntensity = light.intensity(hit.sp.p)
                     val cos = hit.sp.n dot light.directionFrom(hit.sp.p)
-                    c = c + light.c * cr * bsdfItensity * w * lightIntensity * math.max( 0, cos )
+                    c = c + light.c * cr * bsdfItensity * weight * lightIntensity * math.max( 0, cos )
                   }
                 }
             }
