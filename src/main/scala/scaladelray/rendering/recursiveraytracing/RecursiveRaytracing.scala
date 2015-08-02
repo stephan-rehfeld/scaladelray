@@ -68,7 +68,18 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
                 val incomingReflectionColor = trace(Ray(hit.sp.p, outGoingDirection), recursionsLeft - 1)
                 c = c + cr * bsdfItensity * w * incomingReflectionColor
               case perfectTransparentBTDF : PerfectTransparentBTDF =>
-
+                val reflected = perfectTransparentBTDF.reflectedRay( -ray.d, hit.sp.n )
+                val bsdfItensity = bsdf(hit.sp, reflected, 1.0, hit.sp, -ray.d)
+                val incomingReflectionColor = trace(Ray(hit.sp.p, reflected), recursionsLeft - 1)
+                c = c + cr * bsdfItensity * w * incomingReflectionColor
+                perfectTransparentBTDF.refractedRay( -ray.d, hit.sp.n, world.indexOfRefraction ) match {
+                  case Some( refracted ) =>
+                    val bsdfItensity = bsdf(hit.sp, refracted, 1.0, hit.sp, -ray.d)
+                    println( "Refracted intensity: " + bsdfItensity )
+                    val incomingRefractionColor = trace(Ray(hit.sp.p, refracted), recursionsLeft - 1)
+                    c = c + cr * bsdfItensity * w * incomingRefractionColor
+                  case _ =>
+                }
               case _ =>
                 for ((light, renderable) <- lights) {
                   if (light.illuminates(hit.sp.p)) {

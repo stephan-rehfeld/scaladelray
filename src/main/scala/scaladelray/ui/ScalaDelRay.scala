@@ -1224,7 +1224,7 @@ object ScalaDelRay extends SimpleSwingApplication {
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
             //val a = new RayCasting( Color( 0, 0, 0 ), w )
-            val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 2 )
+            val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 4 )
 
             val window = new HDRNiceRenderingWindow( c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), clusterNodes.toList, a  )
             window.a ! StartRendering()
