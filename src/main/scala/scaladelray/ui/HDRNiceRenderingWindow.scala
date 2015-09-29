@@ -34,11 +34,11 @@ import scala.language.reflectiveCalls
 import scala.swing.GridBagPanel.Fill
 import scala.swing._
 import scaladelray.HDRImage
-import scaladelray.camera.Camera
+import scaladelray.camera.OldCamera
 import scaladelray.rendering.{Algorithm, HDRRender, HDRRenderingActor}
 
 
-class HDRNiceRenderingWindow( camera : (Int,Int) => Camera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
+class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
 
   title = "Rendering"
   size = s

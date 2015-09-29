@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.camera.OrthographicCamera
 import javax.swing.event.TableModelListener
-import scaladelray.math.{Vector3, Point3}
+import javax.swing.table.TableModel
+
+import scaladelray.camera.OrthographicOldCamera
+import scaladelray.math.{Point3, Vector3}
 
 class OrthograpicCameraProvider extends CameraProvider with TableModel {
 
@@ -31,7 +32,7 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
 
   override def createCamera( l : () => Unit ) = {
     l()
-    OrthographicCamera( position, gazeDirection, upVector, _, _, size, samplingPatternProvider.get.createSamplingPattern( l ) )
+    OrthographicOldCamera( position, gazeDirection, upVector, _, _, size, samplingPatternProvider.get.createSamplingPattern( l ) )
   }
 
   override def getRowCount: Int = 4

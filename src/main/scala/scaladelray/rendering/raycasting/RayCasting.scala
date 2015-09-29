@@ -17,7 +17,7 @@
 package scaladelray.rendering.raycasting
 
 import scala.collection.mutable
-import scaladelray.camera.Camera
+import scaladelray.camera.OldCamera
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.rendering.raycasting.light.{DirectionalLight, Light, PointLight, SpotLight}
 import scaladelray.rendering.{Algorithm, Renderable}
@@ -39,7 +39,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
     }
   }
 
-  override def render( c : Camera, rect : HDRImage.Rectangle ) : HDRImage = {
+  override def render( c : OldCamera, rect : HDRImage.Rectangle ) : HDRImage = {
 
     val img = HDRImage( rect.width, rect.height )
 

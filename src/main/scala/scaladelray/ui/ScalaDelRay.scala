@@ -35,7 +35,7 @@ import scala.swing.TabbedPane.Page
 import scala.swing.event.ButtonClicked
 import scala.swing.{Action, _}
 import scaladelray.math.{Point3, Vector3}
-import scaladelray.rendering.raycasting.RayCasting
+import scaladelray.rendering.recursiveraytracing.RecursiveRaytracing
 import scaladelray.ui.model._
 import scaladelray.{Color, Constants}
 
@@ -1223,8 +1223,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               steps = steps + 1
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
-            val a = new RayCasting( Color( 0, 0, 0 ), w )
-            //val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 4 )
+            //val a = new RayCasting( Color( 0, 0, 0 ), w )
+            val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 4 )
 
             val window = new HDRNiceRenderingWindow( c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), clusterNodes.toList, a  )
             window.a ! StartRendering()

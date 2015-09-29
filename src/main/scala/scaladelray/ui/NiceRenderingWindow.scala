@@ -33,13 +33,13 @@ import scala.concurrent.{Await, Future}
 import scala.language.reflectiveCalls
 import scala.swing.GridBagPanel.Fill
 import scala.swing._
-import scaladelray.camera.Camera
+import scaladelray.camera.OldCamera
 import scaladelray.rendering.{Render, RenderingActor}
 import scaladelray.world.World
 
 case class StartRendering()
 
-class NiceRenderingWindow( world : World, camera : (Int,Int) => Camera, s : Dimension, actors : Int, recursionDepth : Int, clusterNodes : List[(String,Int,Int)] ) extends Frame {
+class NiceRenderingWindow( world : World, camera : (Int,Int) => OldCamera, s : Dimension, actors : Int, recursionDepth : Int, clusterNodes : List[(String,Int,Int)] ) extends Frame {
 
   title = "Rendering"
   size = s

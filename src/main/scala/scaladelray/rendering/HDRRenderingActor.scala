@@ -21,11 +21,11 @@ import akka.actor.{Actor, ActorKilledException, OneForOneStrategy, SupervisorStr
 
 import scala.concurrent.duration._
 import scaladelray.HDRImage
-import scaladelray.camera.Camera
+import scaladelray.camera.OldCamera
 
-case class HDRRender( rect : HDRImage.Rectangle, cam : Camera )
+case class HDRRender( rect : HDRImage.Rectangle, cam : OldCamera )
 
-class HDRRenderingActor( cam : Camera, algorithm : Algorithm ) extends Actor {
+class HDRRenderingActor( cam : OldCamera, algorithm : Algorithm ) extends Actor {
 
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {

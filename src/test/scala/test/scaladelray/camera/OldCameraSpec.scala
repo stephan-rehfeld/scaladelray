@@ -16,11 +16,12 @@
 
 package test.scaladelray.camera
 
-import scaladelray.camera.Camera
-import scaladelray.math.{Point3, Vector3, Ray}
 import org.scalatest.FunSpec
 
-class CameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends Camera( e, g, t ) {
+import scaladelray.camera.OldCamera
+import scaladelray.math.{Point3, Ray, Vector3}
+
+class OldCameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends OldCamera( e, g, t ) {
   var called = false
 
   def apply(x: Int, y: Int): Set[Ray] = {
@@ -29,8 +30,8 @@ class CameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends Camera( e, g, 
   }
 }
 
-class CameraSpec extends FunSpec {
-  describe( "A Camera") {
+class OldCameraSpec extends FunSpec {
+  describe( "An OldCamera") {
     it( "should calculate to correct u, v, and w vectors out of e, g, and t" ) {
 
       val e = Point3( 2, 3, 5 )
@@ -41,7 +42,7 @@ class CameraSpec extends FunSpec {
       val u = (t x w).normalized
       val v = w x u
 
-      val cam = new CameraProxy( e, g, t )
+      val cam = new OldCameraProxy( e, g, t )
 
       assert( cam.u == u )
       assert( cam.v == v )
@@ -53,7 +54,7 @@ class CameraSpec extends FunSpec {
       val g = Vector3( 7, 11, 13 )
       val t = Vector3( 17, 19, 23 )
 
-      val cam = new CameraProxy( e, g, t )
+      val cam = new OldCameraProxy( e, g, t )
 
       assert( cam( (100,100) ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
       assert( cam.called )

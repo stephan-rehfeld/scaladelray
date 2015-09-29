@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.math.{Vector3, Point3}
-import scaladelray.camera.DOFCamera
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
+
+import scaladelray.camera.DOFOldCamera
+import scaladelray.math.{Point3, Vector3}
 
 class DOFCameraProvider extends CameraProvider with TableModel {
 
@@ -34,7 +35,7 @@ class DOFCameraProvider extends CameraProvider with TableModel {
 
   override def createCamera( l : () => Unit ) = {
     l()
-    DOFCamera( position, gazeDirection, upVector, _, _, angle, focalLength, lensRadius, aaSamplingPatternProvider.get.createSamplingPattern( l ), lensSamplingPatternProvider.get.createSamplingPattern( l ) )
+    DOFOldCamera( position, gazeDirection, upVector, _, _, angle, focalLength, lensRadius, aaSamplingPatternProvider.get.createSamplingPattern( l ), lensSamplingPatternProvider.get.createSamplingPattern( l ) )
   }
 
   override def getRowCount: Int = 6

@@ -16,10 +16,11 @@
 
 package scaladelray.ui.model
 
-import javax.swing.table.TableModel
-import scaladelray.math.{Vector3, Point3}
-import scaladelray.camera.PerspectiveCamera
 import javax.swing.event.TableModelListener
+import javax.swing.table.TableModel
+
+import scaladelray.camera.PerspectiveOldCamera
+import scaladelray.math.{Point3, Vector3}
 
 
 class PerspectiveCameraProvider extends CameraProvider with TableModel {
@@ -32,7 +33,7 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
 
   override def createCamera( l : () => Unit ) = {
     l()
-    PerspectiveCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern( l ) )
+    PerspectiveOldCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern( l ) )
   }
 
   override def getRowCount: Int = 4

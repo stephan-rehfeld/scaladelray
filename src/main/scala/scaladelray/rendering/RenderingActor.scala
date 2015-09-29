@@ -1,13 +1,14 @@
 package scaladelray.rendering
 
-import scaladelray.camera.Camera
-import scaladelray.{Tracer, Color}
-import akka.actor.{OneForOneStrategy, ActorKilledException, SupervisorStrategy, Actor}
 import akka.actor.SupervisorStrategy.{Escalate, Stop}
-import scala.concurrent.duration._
-import scaladelray.world.World
+import akka.actor.{Actor, ActorKilledException, OneForOneStrategy, SupervisorStrategy}
 
-case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : Camera )
+import scala.concurrent.duration._
+import scaladelray.camera.OldCamera
+import scaladelray.world.World
+import scaladelray.{Color, Tracer}
+
+case class Render( startX : Int, startY : Int, width : Int, height : Int, cam : OldCamera )
 
 class RenderingActor( world : World, id : Int, recursionDepth : Int ) extends Actor {
 

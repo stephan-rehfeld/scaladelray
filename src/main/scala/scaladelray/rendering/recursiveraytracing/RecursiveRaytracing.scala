@@ -17,7 +17,7 @@
 package scaladelray.rendering.recursiveraytracing
 
 import scala.collection.mutable
-import scaladelray.camera.Camera
+import scaladelray.camera.OldCamera
 import scaladelray.material.bsdf.{PerfectReflectiveBRDF, PerfectTransparentBTDF}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.math.Ray
@@ -98,7 +98,7 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
       Color( 0, 0, 0 )
     }
 
-  override def render( c : Camera, rect : HDRImage.Rectangle ) : HDRImage = {
+  override def render( c : OldCamera, rect : HDRImage.Rectangle ) : HDRImage = {
 
     val img = HDRImage( rect.width, rect.height )
 
