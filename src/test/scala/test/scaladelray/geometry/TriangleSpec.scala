@@ -17,7 +17,9 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
+import test.scaladelray.material.TextureTestAdapter
 
+import scaladelray.Color
 import scaladelray.geometry.Triangle
 import scaladelray.math.{Normal3, Point3, Ray, Vector3}
 import scaladelray.texture.TexCoord2D
@@ -264,6 +266,154 @@ class TriangleSpec extends FunSpec {
 
       for( hit <- hits ) assert( hit.sp.biTan =~= Vector3( 0, 0, -1 ) )
 
+    }
+
+
+    it( "should request the color from the texture that is used as normal map" ) {
+      val tex = new TextureTestAdapter( Color( 0, 0, 1 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      r --> t
+      assert( tex.coordinates.isDefined )
+    }
+
+    it( "should interpret a blue color of 1 as +z Axis" ) {
+      val tex = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
+    }
+
+    it( "should interpret a blue color of 0 as -z Axis" ) {
+      val tex = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n == Normal3( 0, -1, 0 ) ) )
+    }
+
+    it( "should interpret a red color of 1 as +x Axis" ) {
+      val tex = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
+    }
+
+    it( "should interpret a red color of 0 as -x Axis" ) {
+      val tex = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
+    }
+
+    it( "should interpret a green color of 1 as +y Axis" ) {
+      val tex = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
+    }
+
+    it( "should interpret a green color of 0 as -y Axis" ) {
+      val tex = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
+      assert( tex.coordinates.isEmpty )
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
+
+      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val hits = r --> t
+      assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
 
   }
