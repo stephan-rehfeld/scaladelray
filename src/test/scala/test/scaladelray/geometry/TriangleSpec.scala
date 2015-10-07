@@ -221,6 +221,51 @@ class TriangleSpec extends FunSpec {
         assert( t.axis =~= ((na.asVector + nb.asVector + nc.asVector) / 3.0).normalized )
       }
     }
+
+    it( "should calculate the tangent correctly" ) {
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, None )
+
+      val r = Ray( Point3( 0.33, 1, -0.33 ), Vector3( 0, -1, 0 ) )
+
+      val hits = r --> t
+
+      for( hit <- hits ) assert( hit.sp.tan =~= Vector3( 1, 0, 0 ) )
+
+    }
+
+    it( "should calculate the bitangent correctly" ) {
+
+      val a = Point3( 0, 0, 0 )
+      val b = Point3( 1, 0, 0 )
+      val c = Point3( 0, 0, -1 )
+
+      val n = Normal3( 0, 1, 0 )
+
+      val ta = TexCoord2D( 0, 0 )
+      val tb = TexCoord2D( 1, 0 )
+      val tc = TexCoord2D( 0, 1 )
+
+      val t = Triangle( a, b, c, n, n, n, ta, tb, tc, None )
+
+      val r = Ray( Point3( 0.33, 1, -0.33 ), Vector3( 0, -1, 0 ) )
+
+      val hits = r --> t
+
+      for( hit <- hits ) assert( hit.sp.biTan =~= Vector3( 0, 0, -1 ) )
+
+    }
+
   }
 
 }
