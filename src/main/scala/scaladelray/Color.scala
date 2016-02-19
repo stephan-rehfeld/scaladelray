@@ -41,10 +41,13 @@ case class Color( r : Double, g : Double, b : Double ) extends Serializable {
   /**
    * This method multiplies each channel of this color with a scalar and returns the result as new color.
    *
-   * @param f The factor for the multiplication.
+   * @param f The factor for the multiplication. Must be at least 0.0.
    * @return The result of the multiplication.
    */
-  def *( f : Double ) = Color( r*f, g*f, b*f )
+  def *( f : Double ) = {
+    require( f >= 0, "The factor must be at least 0.0" );
+    Color( r*f, g*f, b*f )
+  }
 
   /**
    * This method multiplies each channel of this color with the corresponding channel of another color.
@@ -57,10 +60,13 @@ case class Color( r : Double, g : Double, b : Double ) extends Serializable {
   /**
    * This method divides each channel of this color by a scalar and returns the result as new color.
    *
-   * @param f The divisor for the division.
+   * @param f The divisor for the division. Must be larger than 0.0.
    * @return The result of the division.
    */
-  def /( f : Double ) = Color( r/f, g/f, b/f )
+  def /( f : Double ) = {
+    require( f > 0.0, "The parameter 'f' must be larger than 0.0.")
+    Color( r/f, g/f, b/f )
+  }
 
   /**
    * This method adds each channel of this color with the corresponding channel of another color.

@@ -19,15 +19,16 @@ package test.scaladelray.material.bsdf
 import org.scalatest.FunSpec
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.material.bsdf.PerfectReflectiveBRDF
+import scaladelray.material.bsdf.PerfectTransparentBTDF
 import scaladelray.math.{Normal3, Point3, Vector3}
 import scaladelray.texture.TexCoord2D
 
-class PerfectReflectiveBRDFSpec extends FunSpec {
+class PerfectTransparentBTDFSpec extends FunSpec {
 
-  describe("A PerfectReflectiveBRDF") {
-    it("should 1.0 if out is the reflected in direction otherwise 0.0") {
-      val perfectReflectiveBRDF = PerfectReflectiveBRDF()
+  describe("A PerfectTransparentBTDF") {
+
+    it("should be larger than 0 if out is the reflected in direction otherwise 0.0") {
+      val perfectTransparentBTDF = PerfectTransparentBTDF( 1.33 )
       val surfacePoint = SurfacePoint(Point3(0, 0, 0), Normal3(0, 0, 0), Vector3(1, 0, 0), Vector3(0, 0, -1), TexCoord2D(0, 0))
 
       val steps = 6
@@ -43,10 +44,12 @@ class PerfectReflectiveBRDFSpec extends FunSpec {
         val in = Vector3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
         val out = Vector3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
         if (in.reflectOn(surfacePoint.n) =~= out)
-          assert(perfectReflectiveBRDF(surfacePoint, in, 1.0, surfacePoint, out) == 1.0)
+          assert(perfectTransparentBTDF(surfacePoint, in, 1.0, surfacePoint, out) > 0.0 )
         else
-          assert(perfectReflectiveBRDF(surfacePoint, in, 1.0, surfacePoint, out) == 0.0)
+          assert(perfectTransparentBTDF(surfacePoint, in, 1.0, surfacePoint, out) == 0.0)
       }
     }
+
   }
+
 }

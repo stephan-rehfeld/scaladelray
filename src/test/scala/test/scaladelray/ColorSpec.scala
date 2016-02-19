@@ -16,8 +16,9 @@
 
 package test.scaladelray
 
-import scaladelray.{Constants, Color}
 import org.scalatest.FunSpec
+
+import scaladelray.{Color, Constants}
 
 class ColorSpec extends FunSpec {
 
@@ -48,20 +49,20 @@ class ColorSpec extends FunSpec {
       assert( Color( 0, 0, 1 ).rgbInteger == 0xff0000ff )
     }
 
-    it( "should convert throw an exception if r is smaller than 0" ) {
+    it( "should throw an exception if r is smaller than 0" ) {
       intercept[RuntimeException] {
         Color( -10, 0, 0 )
       }
     }
 
 
-    it( "should convert throw an exception if g is smaller than 0" ) {
+    it( "should throw an exception if g is smaller than 0" ) {
       intercept[RuntimeException] {
         Color( 0, -10, 0 )
       }
     }
 
-    it( "should convert throw an exception if b is smaller than 0" ) {
+    it( "should throw an exception if b is smaller than 0" ) {
       intercept[RuntimeException] {
         Color( 0, 0, -10 )
       }
@@ -76,6 +77,13 @@ class ColorSpec extends FunSpec {
       assert( r.b == 0.3 * 0.3 )
     }
 
+    it( "should throw an exception if the parameter for the multiply operator is smaller than 0" ) {
+      val c = Color( 2, 1, 3 )
+      intercept[RuntimeException] {
+        c * -3
+      }
+    }
+
     it( "should have a divide operator for a scalar" ) {
       val c = Color( 1, 0.5, 0.3 )
       val r = c / 0.3
@@ -83,6 +91,17 @@ class ColorSpec extends FunSpec {
       assert( r.r == 1 / 0.3 )
       assert( r.g == 0.5 / 0.3 )
       assert( r.b == 0.3 / 0.3 )
+    }
+
+    it( "should throw an exception if the parameter for the divide operator 0 or smaller" ) {
+      val c = Color( 2, 1, 3 )
+      intercept[RuntimeException] {
+        c / 0
+      }
+
+      intercept[RuntimeException] {
+        c / -3
+      }
     }
 
     it( "should have a multiply operator for another color" ) {

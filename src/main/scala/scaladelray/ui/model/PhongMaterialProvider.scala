@@ -19,8 +19,8 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
-import scaladelray.material.{Material, PhongOldMaterial, _}
 import scaladelray.material.bsdf.{LambertBRDF, PhongSpecularBRDF}
+import scaladelray.material.{Material, PhongOldMaterial, _}
 
 class PhongMaterialProvider extends MaterialProvider with TableModel {
 
@@ -32,7 +32,7 @@ class PhongMaterialProvider extends MaterialProvider with TableModel {
     l()
     val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l )  ) else None
     val o = PhongOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent )
-    val m  = Material( e, (0.5, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.5, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
+    val m  = Material( e, (0.9, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.1, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ) )
     (m,o)
   }
 

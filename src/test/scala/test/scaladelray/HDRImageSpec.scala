@@ -16,9 +16,10 @@
 
 package test.scaladelray
 
+import org.scalatest.FunSpec
+
 import scala.util.Random
 import scaladelray.{Color, HDRImage}
-import org.scalatest.FunSpec
 
 class HDRImageSpec extends FunSpec {
 
@@ -117,6 +118,56 @@ class HDRImageSpec extends FunSpec {
         i.set( x, y, c )
         assert( i( x, y ) == c )
       }
+    }
+
+    it( "should calculate the correct min value of the image" ) {
+      val i = HDRImage( 640, 480 )
+      val r = new Random()
+      for{
+        x <- 0 until i.width
+        y <- 0 until i.height
+      } {
+        val c = Color( r.nextDouble(), r.nextDouble(), r.nextDouble() )
+        i.set( x, y, c )
+        assert( i( x, y ) == c )
+      }
+
+      var min = Double.MaxValue
+      for{
+        x <- 0 until i.width
+        y <- 0 until i.height
+      } {
+        min = scala.math.min( min, i( x, y  ).r )
+        min = scala.math.min( min, i( x, y  ).g )
+        min = scala.math.min( min, i( x, y  ).b )
+      }
+
+      assert( min == i.min )
+    }
+
+    it( "should calculate the correct max value of the image" ) {
+      val i = HDRImage( 640, 480 )
+      val r = new Random()
+      for{
+        x <- 0 until i.width
+        y <- 0 until i.height
+      } {
+        val c = Color( r.nextDouble(), r.nextDouble(), r.nextDouble() )
+        i.set( x, y, c )
+        assert( i( x, y ) == c )
+      }
+
+      var max = Double.MinValue
+      for{
+        x <- 0 until i.width
+        y <- 0 until i.height
+      } {
+        max = scala.math.max( max, i( x, y  ).r )
+        max = scala.math.max( max, i( x, y  ).g )
+        max = scala.math.max( max, i( x, y  ).b )
+      }
+
+      assert( max == i.max )
     }
 
   }
