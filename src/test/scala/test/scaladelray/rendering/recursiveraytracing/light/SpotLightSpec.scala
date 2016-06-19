@@ -39,7 +39,7 @@ class SpotLightSpec extends FunSpec {
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new SpotLight( r, Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
-      val p1 = Point3( 0, 0, -1 )
+      val p1 = Point3( 0, 0, -2 )
 
       assert(  l.illuminates( p1, w ) )
     }

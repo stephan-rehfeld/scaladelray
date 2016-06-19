@@ -38,7 +38,7 @@ class DirectionalLightSpec extends FunSpec {
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new DirectionalLight( r, Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
 
-      val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
+      val points = Point3( 2, 0, 0 ) :: Point3( 0, 2, 0 ) :: Point3( 0, 0, 2 ) :: Point3( -2, 0, 0 ) :: Point3( 0, -2, 0 ) :: Point3( 0, 0, -2 ) :: Nil
 
       for( p <- points )
         assert( l.illuminates( p, w ) )

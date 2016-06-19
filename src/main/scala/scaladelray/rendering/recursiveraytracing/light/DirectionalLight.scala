@@ -33,7 +33,7 @@ case class DirectionalLight( renderable : Renderable, c : Color ,d : Vector3 ) e
 
   private val l = -d.normalized
 
-  override def illuminates(point: Point3, world : World) = (Ray( point, d * -1 ) --> world).exists( (h) => h.t > Constants.EPSILON && h.renderable != renderable )
+  override def illuminates(point: Point3, world : World) = !(Ray( point, d * -1 ) --> world).exists( (h) => h.t > Constants.EPSILON && h.renderable != renderable )
 
   override def directionFrom(p: Point3): Vector3 = l
 

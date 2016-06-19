@@ -39,7 +39,7 @@ case class SpotLight( renderable : Renderable, c : Color,  p : Point3, d : Vecto
   require( halfAngle <= math.Pi / 2.0, "The halfAngle must not be larger than 90 degrees.")
 
   override def illuminates( point: Point3, world : World ) = {
-    val w = math.acos( (p - this.p).normalized dot d) <= halfAngle
+    val w = math.acos( (point - p).normalized dot d) <= halfAngle
     if( w ) {
       val ray = Ray( point, (p - point).normalized )
       val hits = (ray --> world).filter( (h) => h.t > Constants.EPSILON && h.renderable != renderable).toList
