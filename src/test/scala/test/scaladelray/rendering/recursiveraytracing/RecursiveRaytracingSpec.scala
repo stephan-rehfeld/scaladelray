@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package test.scaladelray.rendering.recursiveraytracing.light
+package test.scaladelray.rendering.recursiveraytracing
 
 /**
   * Created by Stephan Rehfeld on 09.03.2016.
