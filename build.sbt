@@ -2,7 +2,7 @@ name := "ScalaDelRay"
 
 version := "1.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 scalacOptions ++= Seq("-feature", "-language:postfixOps", "-unchecked", "-deprecation" )
 
@@ -16,12 +16,12 @@ libraryDependencies += "org.scala-lang" % "scala-swing" % "2.11+"
 
 libraryDependencies += "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.3"
 
-libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
+libraryDependencies += "org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.3.11"
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.4.7"
 
-libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.3.11"
+libraryDependencies += "com.typesafe.akka" %% "akka-remote" % "2.4.7"
 
-libraryDependencies += "com.typesafe" % "config" % "1.2.1"
+libraryDependencies += "com.typesafe" % "config" % "1.3.0"
 
-libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.3"
+libraryDependencies += "org.scala-lang.modules" %% "scala-async" % "0.9.5"

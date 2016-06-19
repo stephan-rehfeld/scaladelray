@@ -16,19 +16,21 @@
 
 package scaladelray.clustering
 
-import java.net._
-import akka.actor.{Props, ActorSystem}
-import akka.pattern.ask
-import com.typesafe.config.ConfigFactory
-import scala.swing._
-import scala.swing.GridBagPanel.{Anchor, Fill}
 import java.awt.Dimension
-import scala.collection.mutable
+import java.net._
 import java.util.Date
-import scala.swing.event.ButtonClicked
+
+import akka.actor.{ActorSystem, Props}
+import akka.pattern.ask
 import akka.util.Timeout
-import scala.concurrent.duration._
+import com.typesafe.config.ConfigFactory
+
+import scala.collection.mutable
 import scala.concurrent.Await
+import scala.concurrent.duration._
+import scala.swing.GridBagPanel.{Anchor, Fill}
+import scala.swing._
+import scala.swing.event.ButtonClicked
 
 
 /**
@@ -146,7 +148,7 @@ object RenderNode extends SimpleSwingApplication {
           startStopButton.enabled = false
           beaconSocket.get.close()
           beaconSocket = None
-          remoteActorSystem.get.shutdown()
+          remoteActorSystem.get.terminate()
           remoteActorSystem = None
           startStopButton.text = "Start"
           interfaceComboBox.enabled = true

@@ -23,7 +23,7 @@ import javax.imageio.ImageIO
 import akka.actor._
 import akka.pattern.ask
 import akka.remote.RemoteScope
-import akka.routing.{Broadcast, RoundRobinRouter}
+import akka.routing._
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 
@@ -230,7 +230,7 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
     infoWindow.close()
     targets ! Broadcast( PoisonPill )
     Thread.sleep( 1000 )
-    actorSystem.shutdown()
+    actorSystem.terminate()
   }
 
   val infoWindow = new Frame {
@@ -291,21 +291,25 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
   }
 
   private def createRenderNodes : ActorRef = {
-    val targets = mutable.MutableList[ActorRef]()
+    val targets = mutable.MutableList[Routee]()
 
     for( i <- 1 to Runtime.getRuntime.availableProcessors() ) {
-      targets += actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ) )
+      targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ) ) )
     }
 
     for( (hostname,port,threads) <- clusterNodes ) {
       val address = Address("akka.tcp", "renderNode", hostname, port )
       for( i <- 1 to threads ) {
-        targets += actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ).withDeploy(Deploy(scope = RemoteScope(address))) )
+        targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ).withDeploy(Deploy(scope = RemoteScope(address))) ) )
       }
     }
 
-    actorSystem.actorOf(Props.empty.withRouter( RoundRobinRouter(routees = targets.toList)) )
-
+    val router = Router( RoundRobinRoutingLogic(), targets.toIndexedSeq )
+    actorSystem.actorOf( Props.apply( new Actor {
+      override def receive: Receive = {
+        case msg  => router.route( msg, sender() )
+      }
+    }))
   }
 }
 

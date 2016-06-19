@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="IvyIDEA" name="IvyIDEA">
-      <configuration ivyFile="D:\repos\scaladelray\ivy.xml" useProjectSettings="true" useCustomIvySettings="true" ivySettingsFile="" onlyResolveSelectedConfigs="false">
+      <configuration ivyFile="C:\Users\Stephan Rehfeld\Eigene Softwareprojekte\scaladelray\ivy.xml" useProjectSettings="true" useCustomIvySettings="true" ivySettingsFile="" onlyResolveSelectedConfigs="false">
         <propertiesSettings>
           <propertiesFiles includeProjectLevelPropertiesFiles="true" />
         </propertiesSettings>
@@ -23,20 +23,8 @@
       <library name="IvyIDEA">
         <CLASSES>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-swing/jars/scala-swing-2.11.0-M7.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/jars/akka-actor_2.11-2.3.9.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/bundles/config-1.2.1.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/jars/akka-remote_2.11-2.3.9.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/bundles/netty-3.8.0.Final.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/com.google.protobuf/protobuf-java/bundles/protobuf-java-2.5.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.uncommons.maths/uncommons-maths/jars/uncommons-maths-1.2.2a.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.3.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-async_2.11/bundles/scala-async_2.11-0.9.2.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.6.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/bundles/scalatest_2.11-2.2.1.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/bundles/scala-xml_2.11-1.0.2.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.11.2.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/jars/scalacheck_2.11-1.11.3.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymockclassextension/jars/easymockclassextension-3.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymock/jars/easymock-3.1.jar!/" />
@@ -102,10 +90,20 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-tree/jars/asm-tree-4.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-analysis/jars/asm-analysis-4.1.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-util/jars/asm-util-4.1.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/jars/scala-library-2.11.8.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-async_2.11/bundles/scala-async_2.11-0.9.5.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/jars/scala-reflect-2.11.7.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/jars/scala-compiler-2.11.7.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/bundles/scala-parser-combinators_2.11-1.0.4.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/jars/scalacheck_2.11-1.12.5.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/jars/akka-actor_2.11-2.4.7.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/bundles/config-1.3.0.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-java8-compat_2.11/bundles/scala-java8-compat_2.11-0.7.0.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/jars/akka-remote_2.11-2.4.7.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-protobuf_2.11/jars/akka-protobuf_2.11-2.4.7.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/bundles/netty-3.10.3.Final.jar!/" />
         </CLASSES>
         <JAVADOC>
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/javadocs/scala-compiler-2.11.2-javadoc.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/javadocs/scalacheck_2.11-1.11.3-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymockclassextension/javadocs/easymockclassextension-3.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymock/javadocs/easymock-3.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/cglib/cglib-nodep/javadocs/cglib-nodep-2.2.2-javadoc.jar!/" />
@@ -152,10 +150,27 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-tree/javadocs/asm-tree-4.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-analysis/javadocs/asm-analysis-4.1-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-util/javadocs/asm-util-4.1-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-swing/javadocs/scala-swing-2.11.0-M7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/javadocs/scala-xml_2.11-1.0.2-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/test-interface/javadocs/test-interface-1.0-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-logging/commons-logging/javadocs/commons-logging-1.1.1-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/javadocs/commons-codec-1.6-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-collections/commons-collections/javadocs/commons-collections-3.2.1-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/xerces/xercesImpl/javadocs/xercesImpl-2.10.0-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/xml-apis/xml-apis/javadocs/xml-apis-1.4.01-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.uncommons.maths/uncommons-maths/javadocs/uncommons-maths-1.2.2a-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/javadocs/scala-library-2.11.8-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-async_2.11/javadocs/scala-async_2.11-0.9.5-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/javadocs/scalatest_2.11-2.2.6-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/javadocs/scalacheck_2.11-1.12.5-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/javadocs/akka-actor_2.11-2.4.7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/javadocs/config-1.3.0-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-java8-compat_2.11/javadocs/scala-java8-compat_2.11-0.7.0-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/javadocs/akka-remote_2.11-2.4.7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-protobuf_2.11/javadocs/akka-protobuf_2.11-2.4.7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/javadocs/netty-3.10.3.Final-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/sources/scala-compiler-2.11.2-sources.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/sources/scalacheck_2.11-1.11.3-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymockclassextension/sources/easymockclassextension-3.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.easymock/easymock/sources/easymock-3.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/cglib/cglib-nodep/sources/cglib-nodep-2.2.2-sources.jar!/" />
@@ -211,9 +226,29 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-tree/sources/asm-tree-4.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-analysis/sources/asm-analysis-4.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.ow2.asm/asm-util/sources/asm-util-4.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-swing/sources/scala-swing-2.11.0-M7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-xml_2.11/sources/scala-xml_2.11-1.0.2-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-sbt/test-interface/sources/test-interface-1.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-logging/commons-logging/sources/commons-logging-1.1.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-codec/commons-codec/sources/commons-codec-1.6-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/commons-collections/commons-collections/sources/commons-collections-3.2.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/xerces/xercesImpl/sources/xercesImpl-2.10.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/xml-apis/xml-apis/sources/xml-apis-1.4.01-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.uncommons.maths/uncommons-maths/sources/uncommons-maths-1.2.2a-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/sources/scala-library-2.11.8-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-async_2.11/sources/scala-async_2.11-0.9.5-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalatest/scalatest_2.11/sources/scalatest_2.11-2.2.6-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scalacheck/scalacheck_2.11/sources/scalacheck_2.11-1.12.5-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-actor_2.11/sources/akka-actor_2.11-2.4.7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe/config/sources/config-1.3.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-java8-compat_2.11/sources/scala-java8-compat_2.11-0.7.0-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-remote_2.11/sources/akka-remote_2.11-2.4.7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-protobuf_2.11/sources/akka-protobuf_2.11-2.4.7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/sources/netty-3.10.3.Final-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="library" name="scala-sdk-2.11.7" level="application" />
     <orderEntry type="library" name="scala-sdk-2.11.7" level="application" />
   </component>
 </module>
