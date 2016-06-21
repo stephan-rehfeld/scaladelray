@@ -17,10 +17,8 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math._
-import scaladelray.math.Mat4x4
-import scaladelray.math.Vector3
-import scaladelray.math.Point3
+
+import scaladelray.math.{Mat4x4, _}
 
 class TransformSpec extends FunSpec {
 
@@ -132,9 +130,15 @@ class TransformSpec extends FunSpec {
     it( "should have a function to append a rotation around the y axis to an existing transformation for a given angle (includes inverse matrix)" ) {
       assert( Transform.rotateY( 2 ).rotateY( 3 ) == Transform.rotateY( 5 ) )
     }
+
     it( "should have a function to append a rotation around the z axis to an existing transformation for a given angle (includes inverse matrix)" ) {
       assert( Transform.rotateZ( 2 ).rotateZ( 3 ) == Transform.rotateZ( 5 ) )
     }
+
+    it( "should have an overloaded *-operator that multiplies two transforms (includes inverse matrix)" ) {
+      assert( Transform.rotateZ( 2 ) * Transform.rotateZ( 3 ) == Transform.rotateZ( 5 ) )
+    }
+
 
   }
 
