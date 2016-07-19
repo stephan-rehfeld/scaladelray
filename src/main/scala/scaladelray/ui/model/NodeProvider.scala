@@ -20,7 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scala.collection.mutable
-import scaladelray.math.{Point3, Transform, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Transform
 import scaladelray.rendering.Renderable
 
 class NodeProvider extends RenderableProvider with TableModel {
@@ -108,7 +109,7 @@ class NodeProvider extends RenderableProvider with TableModel {
 
   override def removeTableModelListener(p1: TableModelListener) {}
 
-  override def isReady: Boolean = childNodes.find( (gp) => !gp.isReady ).isEmpty
+  override def isReady: Boolean = !childNodes.exists( (gp) => !gp.isReady )
 
   override def toString: String = "Node"
 

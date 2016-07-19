@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package scaladelray.math
+package scaladelray.math.d
 
 import scaladelray.Constants
 
@@ -36,7 +36,7 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
   val magnitude = scala.math.sqrt( x*x + y*y + z*z )
 
   /**
-   * This method multiplies the normal with a scalar and returns the result as a new [[scaladelray.math.Normal3]]
+   * This method multiplies the normal with a scalar and returns the result as a new [[Normal3]]
    * object.
    *
    * @param v The factor for the multiplication.
@@ -45,7 +45,7 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
   def *( v : Double ) = Normal3( x * v, y * v, z * v )
 
   /**
-   * This method multiplies two normals and returns the result as a new [[scaladelray.math.Normal3]]
+   * This method multiplies two normals and returns the result as a new [[Normal3]]
    * object.
    *
    * @param n The normal that should be added to this normal.
@@ -63,7 +63,7 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
   def dot( v : Direction3 ) : Double = x * v.x + y * v.y + z * v.z
 
   /**
-   * This method converts the normal to a [[scaladelray.math.Direction3]]. The direction has the same values for x, y, and
+   * This method converts the normal to a [[Direction3]]. The direction has the same values for x, y, and
    * z.
    *
    * @return A direction with the same x, y, and z values as this normal.

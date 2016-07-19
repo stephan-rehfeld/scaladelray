@@ -16,7 +16,8 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 import scaladelray.sampling.SamplingPattern
 
 /**
@@ -57,7 +58,7 @@ case class OrthographicOldCamera(e : Point3, g : Direction3, t : Direction3, wid
       val o = e +  u *  as * (x-w12)/w1  +  v * s * (y-h12)/h1 + u * p.x * pixelWidth  + v * p.y * pixelHeight
       Ray( o, d )
     }
-    rays.toSet
+    rays
 
   }
 

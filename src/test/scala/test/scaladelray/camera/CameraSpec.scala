@@ -19,7 +19,7 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.Camera
-import scaladelray.math.{Point3, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
 
 class CameraProxy(e : Point3, g : Direction3, t : Direction3 ) extends Camera( e, g, t ) {
 

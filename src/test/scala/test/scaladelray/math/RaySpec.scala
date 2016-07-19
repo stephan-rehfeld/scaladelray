@@ -17,9 +17,11 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Ray, Direction3, Point3}
+
+import scaladelray.math.Ray
 import scaladelray.geometry.Geometry
 import scaladelray.Color
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.world.{SingleBackgroundColor, World}
 
 class RaySpec extends FunSpec {

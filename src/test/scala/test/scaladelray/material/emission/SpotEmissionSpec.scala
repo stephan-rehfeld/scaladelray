@@ -21,7 +21,7 @@ import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.emission.SpotEmission
-import scaladelray.math.{Normal3, Point3, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 
 class SpotEmissionSpec extends FunSpec  {

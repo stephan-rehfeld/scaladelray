@@ -17,8 +17,9 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Direction3, Point3}
+
 import scaladelray.geometry.SurfacePoint
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 
 

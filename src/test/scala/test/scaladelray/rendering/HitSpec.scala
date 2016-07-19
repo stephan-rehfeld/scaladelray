@@ -17,18 +17,18 @@
 package test.scaladelray.rendering
 
 import org.scalatest.FunSpec
+
 import scaladelray.math._
 import scaladelray.geometry.SurfacePoint
 import scaladelray.math.Ray
 import test.scaladelray.geometry.GeometryTestAdapter
+
 import scaladelray.rendering.Renderable
 import scaladelray.Color
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
-import scaladelray.math.Direction3
-import scaladelray.math.Normal3
-import scaladelray.math.Point3
 import scaladelray.rendering.Hit
 import scaladelray.material.{LambertOldMaterial, Material}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 
 class HitSpec extends FunSpec {
 

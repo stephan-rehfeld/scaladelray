@@ -34,7 +34,7 @@ import scala.swing.GridBagPanel.{Anchor, Fill}
 import scala.swing.TabbedPane.Page
 import scala.swing.event.ButtonClicked
 import scala.swing.{Action, _}
-import scaladelray.math.{Point3, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.recursiveraytracing.RecursiveRaytracing
 import scaladelray.ui.model._
 import scaladelray.{Color, Constants}

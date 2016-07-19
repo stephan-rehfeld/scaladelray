@@ -21,7 +21,8 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Rectangle
-import scaladelray.math.{Normal3, Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.Ray
 
 class RectangleSpec extends FunSpec {
 
@@ -40,7 +41,7 @@ class RectangleSpec extends FunSpec {
       val d = Rectangle( None )
 
       val hits = r --> d
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
 
     it( "should return no hit for a ray that's direction is parallel to the rectangle and has the origin on the rectangle" ) {
@@ -48,7 +49,7 @@ class RectangleSpec extends FunSpec {
       val d = Rectangle( None )
 
       val hits = r --> d
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
 
     it( "should return no hit for a ray that misses the rectangle (is outside of the area" ) {
@@ -58,7 +59,7 @@ class RectangleSpec extends FunSpec {
         val d = Rectangle( None )
 
         val hits = r --> d
-        assert( hits.size == 0 )
+        assert( hits.isEmpty )
       }
     }
 

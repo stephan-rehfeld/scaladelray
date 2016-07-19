@@ -17,11 +17,13 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
+
 import scaladelray.Color
-import scaladelray.math.{Direction3, Point3}
-import scaladelray.light.{SpotLight, LightDescription}
+import scaladelray.light.{LightDescription, SpotLight}
 import java.lang.Double
 import javax.swing.event.TableModelListener
+
+import scaladelray.math.d.{Direction3, Point3}
 
 class SpotLightProvider extends LightDescriptionProvider with TableModel {
 

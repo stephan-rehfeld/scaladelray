@@ -19,7 +19,7 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.PerspectiveCamera
-import scaladelray.math.{Point3, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
 
 class PerspectiveCameraSpec extends FunSpec {
 

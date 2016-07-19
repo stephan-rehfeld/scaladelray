@@ -17,6 +17,7 @@
 package scaladelray.math
 
 import scaladelray.geometry.Geometry
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.Renderable
 import scaladelray.world.World
 

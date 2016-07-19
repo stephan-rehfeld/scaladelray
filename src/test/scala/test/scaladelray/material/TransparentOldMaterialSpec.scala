@@ -23,7 +23,8 @@ import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.bsdf.PerfectTransparentBTDF
 import scaladelray.material.{Material, TransparentOldMaterial}
-import scaladelray.math.{Point3, Ray, Direction3, _}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.world.{SingleBackgroundColor, World}

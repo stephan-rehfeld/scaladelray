@@ -20,7 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.Triangle
-import scaladelray.math.{Normal3, Point3, Transform}
+import scaladelray.math.d.{Normal3, Point3}
+import scaladelray.math.Transform
 import scaladelray.rendering.Renderable
 import scaladelray.texture.TexCoord2D
 

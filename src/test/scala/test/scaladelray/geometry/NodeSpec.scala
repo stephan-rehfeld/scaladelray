@@ -17,11 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.geometry.{SurfacePoint, Node, GeometryHit, Geometry}
+
+import scaladelray.geometry.{Geometry, GeometryHit, Node, SurfacePoint}
 import scaladelray.math._
 import scaladelray.math.Ray
-import scaladelray.math.Direction3
-import scaladelray.math.Point3
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 
 class NodeTestGeometry( t : Transform, r : Ray, hits : GeometryHit*  ) extends Geometry {
 
@@ -50,7 +50,7 @@ class NodeSpec extends FunSpec {
       val r = Ray( Point3( 5, 3, 2 ), Direction3( 7, 11, 13 ) )
 
       val g = new NodeTestGeometry( t, r, GeometryHit( r, null, 1, SurfacePoint( r( 1 ), Normal3( 1, 0, 0 ), Direction3( 0, 1, 0 ), Direction3( 0, 0, -1) , null ) ) , GeometryHit( r, null, 1,SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1) , null ) ), GeometryHit( r, null, 1, SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0) , null ) ) )
-      val n = new Node( t, g )
+      val n = Node( t, g )
 
       val hits = n <-- r
 

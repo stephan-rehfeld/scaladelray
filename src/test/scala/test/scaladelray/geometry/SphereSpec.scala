@@ -21,7 +21,8 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Normal3, Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.Ray
 
 class SphereSpec extends FunSpec {
   describe( "A Sphere" ) {

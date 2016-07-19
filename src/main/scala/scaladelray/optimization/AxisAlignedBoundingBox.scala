@@ -16,8 +16,9 @@
 
 package scaladelray.optimization
 
-import scaladelray.geometry.{GeometryHit, Plane, Node}
-import scaladelray.math.{Point3, Ray, Transform}
+import scaladelray.geometry.{GeometryHit, Node, Plane}
+import scaladelray.math.d.Point3
+import scaladelray.math.{Ray, Transform}
 
 /**
  * This class represents an axis aligned bounding box. It is used by the [[scaladelray.geometry.TriangleMesh]] to speed
@@ -33,7 +34,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The right plane of the AABB.
    */
-  private val right = new Node(
+  private val right = Node(
     Transform.translate( run ).rotateZ( -math.Pi/2.0 ),
     Plane( None )
   )
@@ -41,7 +42,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The top plane of the AABB.
    */
-  private val top = new Node(
+  private val top = Node(
     Transform.translate( run ),
     Plane( None )
   )
@@ -49,7 +50,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The front plane of the AABB.
    */
-  private val front = new Node(
+  private val front = Node(
     Transform.translate( run ).rotateZ( math.Pi ).rotateX( math.Pi/2.0 ),
     Plane( None )
   )
@@ -57,7 +58,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The left plane of the AABB.
    */
-  private val left =  new Node(
+  private val left =  Node(
     Transform.translate( lbf ).rotateZ( math.Pi/2.0 ),
     Plane( None )
   )
@@ -65,7 +66,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The bottom plane of the AABB.
    */
-  private val bottom = new Node(
+  private val bottom = Node(
     Transform.translate( lbf ).rotateX( math.Pi ),
     Plane( None )
   )
@@ -73,7 +74,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
   /**
    * The far plane of the AABB.
    */
-  private val far = new Node(
+  private val far = Node(
     Transform.translate( lbf ).rotateZ( math.Pi ).rotateX( -math.Pi/2.0 ),
     Plane( None )
   )
@@ -106,7 +107,7 @@ class AxisAlignedBoundingBox( run : Point3, lbf : Point3 ) {
       if( p.x >= lbf.x && p.x <= run.x && p.y >= lbf.y && p.y <= run.y ) hits = hits + hit
     }
     //hits = hits.filter( (h) => h.t > Constants.EPSILON)
-    !hits.isEmpty
+    hits.nonEmpty
   }
 
 }

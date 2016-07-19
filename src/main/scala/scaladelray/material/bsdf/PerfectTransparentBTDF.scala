@@ -17,7 +17,7 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.{Normal3, Direction3}
+import scaladelray.math.d.{Direction3, Normal3}
 
 case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
 

@@ -24,7 +24,8 @@ import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
 import scaladelray.material.bsdf.{LambertBRDF, PhongSpecularBRDF}
 import scaladelray.material.{Material, PhongOldMaterial}
-import scaladelray.math.{Normal3, Point3, Ray, Direction3, _}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.world.{SingleBackgroundColor, World}
@@ -192,8 +193,8 @@ class PhongOldMaterialSpec extends FunSpec {
     it( "should use the color returned by the texture to calculate to color at the point on the surface" ) {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
-      val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
-      val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
+      val t1 = SingleColorTexture( Color( 1, 0, 0 ) )
+      val t2 = SingleColorTexture( Color( 0, 1, 0 ) )
       val o = PhongOldMaterial( t1, t2, 1 )
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
@@ -209,8 +210,8 @@ class PhongOldMaterialSpec extends FunSpec {
     it( "should use the normal of the hit to calculate the color" ) {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
-      val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
-      val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
+      val t1 = SingleColorTexture( Color( 1, 0, 0 ) )
+      val t2 = SingleColorTexture( Color( 0, 1, 0 ) )
       val o = PhongOldMaterial( t1, t2, 1 )
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
@@ -253,8 +254,8 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
-      val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
+      val t1 = SingleColorTexture( Color( 1, 0, 0 ) )
+      val t2 = SingleColorTexture( Color( 0, 1, 0 ) )
       val o = PhongOldMaterial( t1, t2, 1 )
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
@@ -274,8 +275,8 @@ class PhongOldMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t1 = new SingleColorTexture( Color( 1, 0, 0 ) )
-      val t2 = new SingleColorTexture( Color( 0, 1, 0 ) )
+      val t1 = SingleColorTexture( Color( 1, 0, 0 ) )
+      val t2 = SingleColorTexture( Color( 0, 1, 0 ) )
       val o = PhongOldMaterial( t1, t2, 1 )
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 

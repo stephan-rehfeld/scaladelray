@@ -20,7 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Point3, Transform, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Transform
 import scaladelray.rendering.Renderable
 
 class SphereProvider extends RenderableProvider with TableModel {

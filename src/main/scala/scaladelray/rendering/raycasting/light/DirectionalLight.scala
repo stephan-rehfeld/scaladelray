@@ -16,8 +16,8 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Point3, Direction3}
 import scaladelray.Color
+import scaladelray.math.d.{Direction3, Point3}
 
 /**
  * A directional light illuminates the whole scene from the same direction.

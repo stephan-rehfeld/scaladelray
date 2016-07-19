@@ -19,7 +19,8 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.OldCamera
-import scaladelray.math.{Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 
 class OldCameraProxy(e : Point3, g : Direction3, t : Direction3 ) extends OldCamera( e, g, t ) {
   var called = false

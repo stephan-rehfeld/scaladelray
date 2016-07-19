@@ -17,7 +17,8 @@
 package scaladelray.world
 
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.math.{Direction3, Ray}
+import scaladelray.math.Ray
+import scaladelray.math.d.Direction3
 
 /**
  * A skybox is a background that consists of six textures, one for each side. Usually a set of special images is used

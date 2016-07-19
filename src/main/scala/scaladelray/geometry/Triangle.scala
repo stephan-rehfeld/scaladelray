@@ -17,7 +17,8 @@
 package scaladelray.geometry
 
 import scaladelray.Constants
-import scaladelray.math.{Mat3x3, Normal3, Point3, Ray, _}
+import scaladelray.math.d.{Direction3, Mat3x3, Normal3, Point3}
+import scaladelray.math.Ray
 import scaladelray.texture.{TexCoord2D, Texture}
 
 /**

@@ -21,7 +21,8 @@ import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.{Geometry, GeometryHit, SurfacePoint}
 import scaladelray.material.{LambertOldMaterial, Material}
-import scaladelray.math.{Point3, Ray, Direction3, _}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.Renderable
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 

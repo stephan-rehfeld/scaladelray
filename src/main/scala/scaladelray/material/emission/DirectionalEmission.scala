@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Direction3
+import scaladelray.math.d.Direction3
 
 /**
  * A directional emission only emits within a single direction

@@ -17,10 +17,10 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Direction3
+import scaladelray.math.d.Direction3
 
 case class PerfectReflectiveBRDF() extends BRDF {
 
-  override def apply(p: SurfacePoint, dIn: Direction3, dOut: Direction3 ): Double = if( (dIn).reflectOn( p.n ) =~= dOut ) 1.0 else 0.0
+  override def apply(p: SurfacePoint, dIn: Direction3, dOut: Direction3 ): Double = if( dIn.reflectOn( p.n ) =~= dOut ) 1.0 else 0.0
 
 }

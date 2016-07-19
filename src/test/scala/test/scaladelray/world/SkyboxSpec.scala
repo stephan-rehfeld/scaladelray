@@ -17,10 +17,12 @@
 package test.scaladelray.world
 
 import org.scalatest.FunSpec
+
 import scaladelray.texture.{TexCoord2D, Texture}
 import scaladelray.Color
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.world.Skybox
-import scaladelray.math.{Direction3, Point3, Ray}
+import scaladelray.math.Ray
 
 
 class SkyboxSpec extends FunSpec {

@@ -17,7 +17,9 @@
 package test.scaladelray.optimization
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Direction3, Point3, Ray}
+
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 import scaladelray.optimization.AxisAlignedBoundingBox
 
 class AxisAlignedBoundingBoxSpec extends FunSpec {

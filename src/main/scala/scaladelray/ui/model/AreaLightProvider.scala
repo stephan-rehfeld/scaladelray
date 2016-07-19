@@ -17,11 +17,13 @@
 package scaladelray.ui.model
 
 import javax.swing.table.TableModel
+
 import scaladelray.light.{AreaLight, LightDescription}
 import scaladelray.Color
-import scaladelray.math.{Direction3, Point3}
 import javax.swing.event.TableModelListener
 import java.lang.Double
+
+import scaladelray.math.d.{Direction3, Point3}
 
 class AreaLightProvider extends LightDescriptionProvider with TableModel {
 

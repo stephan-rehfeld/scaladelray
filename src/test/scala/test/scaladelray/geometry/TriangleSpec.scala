@@ -21,7 +21,8 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Triangle
-import scaladelray.math.{Normal3, Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.Ray
 import scaladelray.texture.TexCoord2D
 
 class TriangleSpec extends FunSpec {
@@ -38,7 +39,7 @@ class TriangleSpec extends FunSpec {
   val b = Point3( 1, 0, 0 )
   val c = Point3( 1, 1, 0 )
 
-  val triangle = new Triangle( a, b, c, n1, n2, n3, t1, t2, t3, None )
+  val triangle = Triangle( a, b, c, n1, n2, n3, t1, t2, t3, None )
 
   describe( "A Triangle" ) {
     it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) {

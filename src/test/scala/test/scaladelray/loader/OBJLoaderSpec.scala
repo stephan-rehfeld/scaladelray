@@ -17,8 +17,9 @@
 package test.scaladelray.loader
 
 import org.scalatest.FunSpec
+
 import scaladelray.loader.OBJLoader
-import scaladelray.math.{Normal3, Point3}
+import scaladelray.math.d.{Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 
 class OBJLoaderSpec extends FunSpec {
@@ -62,7 +63,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.vertices.contains( v8 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
+        mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
 
       assert( triangleSets.contains( v1 :: v2 :: v3 :: Nil ) )
       assert( triangleSets.contains( v3 :: v4 :: v1 :: Nil ) )
@@ -77,8 +78,8 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( v5 :: v6 :: v2 :: Nil ) )
       assert( triangleSets.contains( v2 :: v1 :: v5 :: Nil ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
     }
 
     it( "should load a file that contains a cube with all vertices and normals into a triangle mesh" ) {
@@ -103,7 +104,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.normals.contains( n6 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil )
+        (mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.normals( face.head._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil )
 
       assert( triangleSets.contains( (v1 :: v2 :: v3 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
       assert( triangleSets.contains( (v3 :: v4 :: v1 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
@@ -118,9 +119,9 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( (v5 :: v6 :: v2 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
       assert( triangleSets.contains( (v2 :: v1 :: v5 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
-      assert( mesh.normals.size == 6 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
+      assert( mesh.normals.length == 6 )
     }
 
     it( "should load a file that contains a cube with all vertices and texture coordinates into a triangle mesh" ) {
@@ -143,7 +144,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.texCoords.contains( t4 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face( 0 )._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil )
+        (mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face.head._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil )
 
       assert( triangleSets.contains( (v1 :: v2 :: v3 :: Nil, t1 :: t2 :: t3 :: Nil ) ) )
       assert( triangleSets.contains( (v3 :: v4 :: v1 :: Nil, t3 :: t4 :: t1 :: Nil ) ) )
@@ -159,9 +160,9 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( (v5 :: v6 :: v2 :: Nil, t1 :: t2 :: t3 :: Nil ) ) )
       assert( triangleSets.contains( (v2 :: v1 :: v5 :: Nil, t3 :: t4 :: t1 :: Nil ) ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
-      assert( mesh.texCoords.size == 4 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
+      assert( mesh.texCoords.length == 4 )
     }
 
     it( "should load a file that contains a cube with all vertices, texture coordinates, and normals into a triangle mesh" ) {
@@ -191,7 +192,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.normals.contains( n6 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face( 0 )._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
+        (mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face.head._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
 
       assert( triangleSets.contains( (v1 :: v2 :: v3 :: Nil, t1 :: t2 :: t3 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
       assert( triangleSets.contains( (v3 :: v4 :: v1 :: Nil, t3 :: t4 :: t1 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
@@ -207,10 +208,10 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( (v5 :: v6 :: v2 :: Nil, t1 :: t2 :: t3 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
       assert( triangleSets.contains( (v2 :: v1 :: v5 :: Nil, t3 :: t4 :: t1 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
-      assert( mesh.texCoords.size == 4 )
-      assert( mesh.normals.size == 6 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
+      assert( mesh.texCoords.length == 4 )
+      assert( mesh.normals.length == 6 )
     }
 
 
@@ -230,7 +231,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.vertices.contains( v8 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
+        mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
 
       assert( triangleSets.contains( v1 :: v2 :: v3 :: Nil ) )
       assert( triangleSets.contains( v3 :: v4 :: v1 :: Nil ) )
@@ -245,8 +246,8 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( v5 :: v6 :: v2 :: Nil ) )
       assert( triangleSets.contains( v2 :: v1 :: v5 :: Nil ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
     }
 
     it( "should load a file that contains a cube where the indices of the faces are that with a negative number" ) {
@@ -265,7 +266,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.vertices.contains( v8 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
+        mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil
 
       assert( triangleSets.contains( v1 :: v2 :: v3 :: Nil ) )
       assert( triangleSets.contains( v3 :: v4 :: v1 :: Nil ) )
@@ -280,8 +281,8 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( v5 :: v6 :: v2 :: Nil ) )
       assert( triangleSets.contains( v2 :: v1 :: v5 :: Nil ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
     }
 
     it( "should load a file with comments that contains a cube with all vertices, texture coordinates, and normals into a triangle mesh" ) {
@@ -311,7 +312,7 @@ class OBJLoaderSpec extends FunSpec {
       assert( mesh.normals.contains( n6 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face( 0 )._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
+        (mesh.vertices( face.head._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face.head._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
 
       assert( triangleSets.contains( (v1 :: v2 :: v3 :: Nil, t1 :: t2 :: t3 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
       assert( triangleSets.contains( (v3 :: v4 :: v1 :: Nil, t3 :: t4 :: t1 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
@@ -327,10 +328,10 @@ class OBJLoaderSpec extends FunSpec {
       assert( triangleSets.contains( (v5 :: v6 :: v2 :: Nil, t1 :: t2 :: t3 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
       assert( triangleSets.contains( (v2 :: v1 :: v5 :: Nil, t3 :: t4 :: t1 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
-      assert( mesh.texCoords.size == 4 )
-      assert( mesh.normals.size == 6 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
+      assert( mesh.texCoords.length == 4 )
+      assert( mesh.normals.length == 6 )
     }
 
   }

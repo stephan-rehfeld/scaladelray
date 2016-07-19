@@ -20,7 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.AxisAlignedBox
-import scaladelray.math.{Point3, Transform, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Transform
 import scaladelray.rendering.Renderable
 
 class AxisAlignedBoxProvider extends RenderableProvider with TableModel {

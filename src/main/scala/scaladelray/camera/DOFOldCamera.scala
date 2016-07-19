@@ -16,7 +16,8 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 import scaladelray.sampling.SamplingPattern
 
 /**

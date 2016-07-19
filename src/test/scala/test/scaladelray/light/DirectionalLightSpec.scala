@@ -17,20 +17,22 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
+
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Transform, Ray, Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
 import scaladelray.light.DirectionalLight
+import scaladelray.math.d.{Direction3, Point3}
 
 
 class DirectionalLightSpec extends FunSpec {
 
   describe( "A DirectionalLight" ) {
     it( "should radiate all points" ) {
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
@@ -62,7 +64,7 @@ class DirectionalLightSpec extends FunSpec {
     it( "should return false if an object is between the point and the light" ) {
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
       for( d <- directions ) {
         val l = new DirectionalLight( Color( 1, 1, 1 ), d )
         val p = (d * 2).asPoint

@@ -18,8 +18,8 @@ package test.scaladelray.material
 
 import scaladelray.texture.{TexCoord2D, Texture}
 import scaladelray.Color
-import scaladelray.math.{Point3, Direction3}
 import scaladelray.light.{Light, LightDescription}
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.world.World
 
 class TextureTestAdapter( c : Color ) extends Texture {

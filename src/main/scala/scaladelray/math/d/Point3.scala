@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package scaladelray.math
+package scaladelray.math.d
 
 /**
  * This class represents a point. It it used for light calculation. An instance of this class is immutable. Every
  * method creates a new object that contains the result.
  *
  * @author Stephan Rehfeld
- *
- * @param x The x-value of the point.
+  * @param x The x-value of the point.
  * @param y The y-value of the point.
  * @param z The z-value of the point.
  */
 case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
-   * This method calculates the direction between two points and returns the result as [[scaladelray.math.Direction3]].
+   * This method calculates the direction between two points and returns the result as [[Direction3]].
    *
    * @param p The other point.
-   * @return The direction between both points as [[scaladelray.math.Direction3]].
+   * @return The direction between both points as [[Direction3]].
    */
   def -( p : Point3 ) = Direction3( x - p.x, y - p.y, z - p.z )
 
@@ -53,7 +52,7 @@ case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
   def +( v : Direction3 ) = Point3( x + v.x, y + v.y, z + v.z )
 
   /**
-   * This method converts the point to a [[scaladelray.math.Direction3]]. The direction has the same values for x, y, an
+   * This method converts the point to a [[Direction3]]. The direction has the same values for x, y, an
    * z.
    *
    * @return A direction with the same x, y, and z values as this point.
@@ -61,7 +60,7 @@ case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
   def asDirection = Direction3( x, y, z )
 
   /**
-   * This method converts the point to a [[scaladelray.math.Normal3]]. The normal has the same values for x, y, and
+   * This method converts the point to a [[Normal3]]. The normal has the same values for x, y, and
    * z.
    *
    * @return A normal with the same x, y, and z values as this point.

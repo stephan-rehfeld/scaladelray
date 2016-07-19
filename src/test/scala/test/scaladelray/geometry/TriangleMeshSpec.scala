@@ -17,9 +17,11 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Direction3, Ray, Point3, Normal3}
+
+import scaladelray.math.Ray
 import scaladelray.texture.TexCoord2D
 import scaladelray.geometry.TriangleMesh
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 
 class TriangleMeshSpec extends FunSpec  {
 

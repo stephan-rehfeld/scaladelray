@@ -17,7 +17,8 @@
 package scaladelray.material
 
 import scaladelray.Color
-import scaladelray.math.{Normal3, Direction3, Ray}
+import scaladelray.math.d.{Direction3, Normal3}
+import scaladelray.math.Ray
 import scaladelray.rendering.Hit
 import scaladelray.world.World
 

@@ -16,8 +16,9 @@
 
 package scaladelray.geometry
 
+import scaladelray.math.d.{Direction3, Normal3, Point3}
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.math.{Point3, Normal3, Direction3, Ray}
+import scaladelray.math.Ray
 
 /**
  * A disc with the diameter of 1.

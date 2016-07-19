@@ -17,20 +17,22 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Transform, Ray, Point3}
+
+import scaladelray.math.{Ray, Transform}
 import scaladelray.Color
 import scaladelray.geometry.Sphere
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
 import scaladelray.light.PointLight
+import scaladelray.math.d.Point3
 
 class PointLightSpec extends FunSpec {
 
   describe( "A PointLight" ) {
     it( "should radiate in all directions." ) {
 
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
@@ -64,7 +66,7 @@ class PointLightSpec extends FunSpec {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

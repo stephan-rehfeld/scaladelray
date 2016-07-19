@@ -17,8 +17,9 @@
 package test.scaladelray.rendering.raycasting.light
 
 import org.scalatest.FunSpec
+
 import scaladelray.Color
-import scaladelray.math.Point3
+import scaladelray.math.d.Point3
 import scaladelray.rendering.raycasting.light.PointLight
 
 class PointLightSpec extends FunSpec {
@@ -26,7 +27,7 @@ class PointLightSpec extends FunSpec {
   describe( "A PointLight" ) {
     it( "should radiate in all directions." ) {
 
-      val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
+      val l = PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
@@ -39,7 +40,7 @@ class PointLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 1, 0, 0 )
 
-      val l = new PointLight( Color( 1, 1, 1 ), pl )
+      val l = PointLight( Color( 1, 1, 1 ), pl )
 
       assert( l.intensity( p ) == 1 )
     }
@@ -49,7 +50,7 @@ class PointLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
 
-      val l = new PointLight( Color( 1, 1, 1 ), pl, 0, 0.5 )
+      val l = PointLight( Color( 1, 1, 1 ), pl, 0, 0.5 )
 
       assert( l.intensity( p ) == 1 / (2*0.5) )
     }
@@ -58,7 +59,7 @@ class PointLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
 
-      val l = new PointLight( Color( 1, 1, 1 ), pl, 0, 0, 0.5 )
+      val l = PointLight( Color( 1, 1, 1 ), pl, 0, 0, 0.5 )
 
       assert( l.intensity( p ) == 1/(2*2*0.5) )
 
@@ -71,7 +72,7 @@ class PointLightSpec extends FunSpec {
 
       val d = (pl - p).normalized
 
-      val l = new PointLight( Color( 1, 1, 1 ), pl )
+      val l = PointLight( Color( 1, 1, 1 ), pl )
 
       assert( l.directionFrom( p ) == d )
     }

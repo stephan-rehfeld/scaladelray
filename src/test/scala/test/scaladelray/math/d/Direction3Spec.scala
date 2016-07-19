@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package test.scaladelray.math
+package test.scaladelray.math.d
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Direction3, Normal3}
+
 import scaladelray.Constants
+import scaladelray.math.d.{Direction3, Normal3}
 
 class Direction3Spec extends FunSpec {
 

@@ -19,22 +19,23 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.PerspectiveOldCamera
-import scaladelray.math.{Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 import scaladelray.sampling.SamplingPattern
 
 class OldPerspectiveCameraSpec extends FunSpec {
   describe( "A OldPerspectiveCamera") {
     it( "should calculate the correct center for an image with the size of 1024x768 and half angle of view of PI/4") {
-      val cam = new PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 1024, 768, math.Pi/4.0 )
+      val cam = PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 1024, 768, math.Pi/4.0 )
       assert( cam( 511, 383 ) == Set( Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) ) ) )
     }
 
     it( "should calculate the correct number of rays for the given sampling pattern" ) {
-      val cam1 = new PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 400, 400, math.Pi / 4 )
+      val cam1 = PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 400, 400, math.Pi / 4 )
       assert( cam1( 0, 0 ).size == 1 )
 
 
-      val cam2 = new PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 400, 400,  math.Pi / 4, SamplingPattern.regularPattern( 3, 2 ) )
+      val cam2 = PerspectiveOldCamera( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 400, 400,  math.Pi / 4, SamplingPattern.regularPattern( 3, 2 ) )
       assert( cam2( 0, 0 ).size == 3 * 2 )
     }
 

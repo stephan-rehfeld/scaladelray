@@ -16,7 +16,7 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
 
 /**
   * An instance of this class presents a perspective camera.

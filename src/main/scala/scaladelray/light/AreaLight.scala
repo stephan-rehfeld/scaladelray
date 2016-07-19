@@ -16,8 +16,9 @@
 
 package scaladelray.light
 
-import scaladelray.math.{Ray, Direction3, Point3}
-import scaladelray.{Constants, Color}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
+import scaladelray.{Color, Constants}
 import scaladelray.sampling.SamplingPattern
 import scaladelray.world.World
 

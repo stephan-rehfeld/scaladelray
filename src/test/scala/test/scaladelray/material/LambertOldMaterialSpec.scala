@@ -24,7 +24,8 @@ import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
 import scaladelray.material.bsdf.LambertBRDF
 import scaladelray.material.{LambertOldMaterial, Material}
-import scaladelray.math.{Normal3, Point3, Ray, Direction3, _}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.world.{SingleBackgroundColor, World}
@@ -54,7 +55,7 @@ class LambertOldMaterialSpec extends FunSpec {
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
       val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
-      val g = new GeometryTestAdapter()
+      val g = GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
       val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
@@ -83,7 +84,7 @@ class LambertOldMaterialSpec extends FunSpec {
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
       val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
-      val g = new GeometryTestAdapter()
+      val g = GeometryTestAdapter()
       val tc = TexCoord2D( 1.0, 1.0 )
       val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
@@ -180,7 +181,7 @@ class LambertOldMaterialSpec extends FunSpec {
     it( "should use the color returned by the texture to calculate to color at the point on the surface" ) {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
-      val t = new SingleColorTexture( Color( 1, 0, 0 ) )
+      val t = SingleColorTexture( Color( 1, 0, 0 ) )
       val o = LambertOldMaterial( t )
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
@@ -195,7 +196,7 @@ class LambertOldMaterialSpec extends FunSpec {
     it( "should use the normal of the hit to calculate the color" ) {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ) )
 
-      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val t = SingleColorTexture( Color( 1, 1, 1 ) )
       val o = LambertOldMaterial( t )
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
@@ -214,7 +215,7 @@ class LambertOldMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val t = SingleColorTexture( Color( 1, 1, 1 ) )
       val o = LambertOldMaterial( t )
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
@@ -233,7 +234,7 @@ class LambertOldMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val t = SingleColorTexture( Color( 1, 1, 1 ) )
       val o = LambertOldMaterial( t )
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
@@ -252,7 +253,7 @@ class LambertOldMaterialSpec extends FunSpec {
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
 
-      val t = new SingleColorTexture( Color( 1, 1, 1 ) )
+      val t = SingleColorTexture( Color( 1, 1, 1 ) )
       val o = LambertOldMaterial( t )
       val m = Material( None, (1.0, t, LambertBRDF() ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )

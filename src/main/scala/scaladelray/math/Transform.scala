@@ -16,6 +16,8 @@
 
 package scaladelray.math
 
+import scaladelray.math.d.{Mat4x4, Point3}
+
 /**
  * This class represents a transform that is used by [[scaladelray.geometry.Node]] to transform the geometries within
  * the scene graph node. A new Transform object is not directly created by calling a constructor, but by using methods

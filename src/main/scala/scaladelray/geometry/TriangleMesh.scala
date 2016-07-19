@@ -19,6 +19,7 @@ package scaladelray.geometry
 import scala.collection.mutable
 import scaladelray.Constants
 import scaladelray.math._
+import scaladelray.math.d.{Direction3, Mat3x3, Normal3, Point3}
 import scaladelray.optimization.Octree
 import scaladelray.texture.{TexCoord2D, Texture}
 
@@ -56,7 +57,7 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
             } )
 
 
-  override val center = (vertices.foldLeft( Direction3( 0, 0, 0 ) )((b, a) => { b + a.asDirection } ) / vertices.size).asPoint
+  override val center = (vertices.foldLeft( Direction3( 0, 0, 0 ) )((b, a) => { b + a.asDirection } ) / vertices.length).asPoint
 
   override val lbf = Point3( minX, minY, minZ )
 
@@ -66,11 +67,11 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
 
   val tanAndBitans = if( faces.forall( (f) => f.size == 3 && f.forall( (v) => v._2.isDefined && v._3.isDefined )  ) ) {
     for( face <- faces ) yield {
-      val a = vertices( face(0)._1 )
+      val a = vertices( face.head._1 )
       val b = vertices( face(1)._1 )
       val c = vertices( face(2)._1 )
 
-      val at = texCoords( face(0)._2.get )
+      val at = texCoords( face.head._2.get )
       val bt = texCoords( face(1)._2.get )
       val ct = texCoords( face(2)._2.get )
 
@@ -111,7 +112,7 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
    * @return A octree that split the model into various nodes to enhance rendering performance.
    */
   private def generateOctree( recursionDepth : Int, run: Point3, lbf : Point3, faces : Array[List[(Int,Option[Int],Option[Int])]], subDivideDecider : ((Int,Int) => Boolean ) ) : Octree[Array[List[(Int,Option[Int],Option[Int])]]] = {
-    if( subDivideDecider( recursionDepth, faces.size ) ) {
+    if( subDivideDecider( recursionDepth, faces.length ) ) {
       val center = lbf + ((run - lbf) / 2.0)
       // for - yield does not work here
       val facesOfOctants = Octree.values.toList.map( _ -> mutable.MutableList[List[(Int,Option[Int],Option[Int])]]() ).toMap
@@ -125,7 +126,7 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
           facesOfOctants( octants.head ) += face
         }
       }
-      if( thisNode.size == faces.size ) {
+      if( thisNode.size == faces.length ) {
         new Octree[Array[List[(Int,Option[Int],Option[Int])]]]( run, lbf, Set(), faces )
       } else {
         new Octree[Array[List[(Int,Option[Int],Option[Int])]]]( run, lbf,
@@ -178,19 +179,19 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
   private def findHitsInFaces( faces : Array[List[(Int,Option[Int],Option[Int])]], r : Ray ) : Set[GeometryHit] = {
     val hits = collection.mutable.Set[GeometryHit]()
     for( face <- faces ) {
-      val a = vertices( face(0)._1 )
+      val a = vertices( face.head._1 )
       val b = vertices( face(1)._1 )
       val c = vertices( face(2)._1 )
 
-      val (an,bn,cn) = if( face(0)._3.isDefined ) {
-        (normals(face(0)._3.get),normals(face(1)._3.get),normals(face(2)._3.get))
+      val (an,bn,cn) = if( face.head._3.isDefined ) {
+        (normals(face.head._3.get),normals(face(1)._3.get),normals(face(2)._3.get))
       } else {
         val n = (b-c x a-c).asNormal
         (-n,-n,-n)
       }
 
-      val (at,bt,ct) = if( face(0)._2.isDefined ) {
-        (texCoords(face(0)._2.get),texCoords(face(1)._2.get),texCoords(face(2)._2.get))
+      val (at,bt,ct) = if( face.head._2.isDefined ) {
+        (texCoords(face.head._2.get),texCoords(face(1)._2.get),texCoords(face(2)._2.get))
       } else {
         val t = TexCoord2D( 0, 0 )
         (t,t,t)

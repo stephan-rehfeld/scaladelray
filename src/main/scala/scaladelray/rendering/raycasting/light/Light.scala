@@ -16,8 +16,8 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Direction3, Point3}
 import scaladelray.Color
+import scaladelray.math.d.{Direction3, Point3}
 
 /**
  * Basic trait for all lights in the ray casting algorithm.

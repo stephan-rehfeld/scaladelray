@@ -18,7 +18,8 @@ package test.scaladelray.math
 
 import org.scalatest.FunSpec
 
-import scaladelray.math.{Mat4x4, _}
+import scaladelray.math._
+import scaladelray.math.d.Mat4x4
 
 class TransformSpec extends FunSpec {
 

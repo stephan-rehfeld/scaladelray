@@ -17,17 +17,18 @@
 package test.scaladelray.rendering.raycasting.light
 
 import org.scalatest.FunSpec
+
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.Color
 import scaladelray.rendering.Renderable
-import scaladelray.math.{Direction3, Point3}
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.raycasting.light.SpotLight
 
 class SpotLightSpec extends FunSpec {
 
   describe( "A SpotLight" ) {
     it( "should radiate a point within the angle" ) {
-      val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
+      val l = SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
       val p1 = Point3( 0, 0, -1 )
 
@@ -35,8 +36,8 @@ class SpotLightSpec extends FunSpec {
     }
 
     it( "should not radiate a point outside the angle" ) {
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
-      val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val l = SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
       val p1 = Point3( 0, 0, 1 )
 
@@ -47,7 +48,7 @@ class SpotLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 1, 0, 0 )
 
-      val l = new SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ) )
+      val l = SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ) )
 
       assert( l.intensity( p ) == 1 )
     }
@@ -57,7 +58,7 @@ class SpotLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
 
-      val l = new SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ), 0, 0.5  )
+      val l = SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ), 0, 0.5  )
 
       assert( l.intensity( p ) == 1 / (2*0.5) )
     }
@@ -66,7 +67,7 @@ class SpotLightSpec extends FunSpec {
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
 
-      val l = new SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ), 0, 0, 0.5 )
+      val l = SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 1, 0, 0 ), math.toRadians( 22.5 ), 0, 0, 0.5 )
 
       assert( l.intensity( p ) == 1/(2*2*0.5) )
     }
@@ -77,7 +78,7 @@ class SpotLightSpec extends FunSpec {
 
       val d = (pl - p).normalized
 
-      val l = new SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
+      val l = SpotLight( Color( 1, 1, 1 ),  pl, Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
       assert( l.directionFrom( p ) == d )
     }

@@ -16,13 +16,14 @@
 
 package scaladelray.loader
 
-import scaladelray.math.{Point3, Normal3}
 import collection.mutable
 import util.parsing.combinator.JavaTokenParsers
 import scaladelray.texture.TexCoord2D
 import scala.None
 import scaladelray.geometry.TriangleMesh
 import java.io.FileReader
+
+import scaladelray.math.d.{Normal3, Point3}
 
 /**
  * This class is a loader for the OBJ File format. It currently loads the vertices, normals, texture coordinates, and
@@ -51,7 +52,7 @@ class OBJLoader extends JavaTokenParsers {
    * Part of the parser implementation. Defines that a vertex starts with a "v" followed by three floating point numbers
    * and one optional number.
    *
-   * @return The parsed vertex as [[scaladelray.math.Point3]].
+   * @return The parsed vertex as [[Point3]].
    */
   private def vertex : Parser[Point3] = "v"~floatingPointNumber~floatingPointNumber~floatingPointNumber~opt( floatingPointNumber ) ^^ {
     case "v"~x~y~z~w =>
@@ -63,7 +64,7 @@ class OBJLoader extends JavaTokenParsers {
    * Part of the parser implementation. Defines that a normal starts with a "vn" followed by three floating point
    * numbers.
    *
-   * @return The parsed normal as [[scaladelray.math.Normal3]].
+   * @return The parsed normal as [[Normal3]].
    */
   private def normal : Parser[Normal3] = "vn"~floatingPointNumber~floatingPointNumber~floatingPointNumber ^^ {
     case "vn"~x~y~z =>
@@ -272,7 +273,7 @@ class OBJLoader extends JavaTokenParsers {
 
     constructFromBuffer()
 
-    new TriangleMesh( vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider, None )
+    TriangleMesh( vertices.toArray, normals.toArray, texCoords.toArray, faces.toArray, subDivideDecider, None )
 
   }
 

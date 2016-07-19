@@ -17,7 +17,8 @@
 package test.scaladelray.optimization
 
 import org.scalatest.FunSpec
-import scaladelray.math.Point3
+
+import scaladelray.math.d.Point3
 import scaladelray.optimization.Octree
 
 class OctreeSpec extends FunSpec {
@@ -72,7 +73,7 @@ class OctreeSpec extends FunSpec {
 
       val root = new Octree[List[Int]]( run, lbf, Set(), numbers )
 
-      assert( root.data( 0 ) == 4 )
+      assert( root.data.head == 4 )
       assert( root.data( 1 ) == 8 )
       assert( root.data( 2 ) == 15 )
       assert( root.data( 3 ) == 16 )

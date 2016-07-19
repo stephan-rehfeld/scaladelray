@@ -21,7 +21,8 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Disc
-import scaladelray.math.{Normal3, Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.Ray
 
 class DiscSpec extends FunSpec {
 
@@ -40,7 +41,7 @@ class DiscSpec extends FunSpec {
       val d = Disc( None )
 
       val hits = r --> d
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
 
     it( "should return no hit for a ray that's direction is parallel to the disc and has the origin on the disc" ) {
@@ -48,9 +49,8 @@ class DiscSpec extends FunSpec {
       val d = Disc( None )
 
       val hits = r --> d
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
-
     it( "should return no hit for a ray that misses the disc (is outside of the radius" ) {
       val points = Point3( 1, 0, 1 ) :: Point3( 1, 0, -1 ) :: Point3( -1, 0, -1 ) :: Point3( 1, 0, 1 ) :: Nil
       for( p <- points ) {
@@ -58,7 +58,7 @@ class DiscSpec extends FunSpec {
         val d = Disc( None )
 
         val hits = r --> d
-        assert( hits.size == 0 )
+        assert( hits.isEmpty )
       }
     }
 

@@ -16,7 +16,8 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Direction3, Point3, Ray, Transform}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
 
 
 /**

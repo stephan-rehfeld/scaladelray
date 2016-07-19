@@ -17,10 +17,11 @@
 package test.scaladelray.loader
 
 import org.scalatest.FunSpec
+
 import scaladelray.loader.ResourceManager
-import scaladelray.math.{Normal3, Point3}
 import scaladelray.texture.TexCoord2D
 import scaladelray.geometry.TriangleMesh
+import scaladelray.math.d.{Normal3, Point3}
 
 
 class ResourceManagerSpec extends FunSpec  {
@@ -78,7 +79,7 @@ class ResourceManagerSpec extends FunSpec  {
       assert( mesh.normals.contains( n6 ) )
 
       val triangleSets = for( face <- mesh.faces ) yield
-        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face( 0 )._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face( 0 )._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
+        (mesh.vertices( face( 0 )._1 ) :: mesh.vertices( face( 1 )._1 ) :: mesh.vertices( face( 2 )._1 ) :: Nil, mesh.texCoords( face.head._2.get ) :: mesh.texCoords( face( 1 )._2.get ) :: mesh.texCoords( face( 2 )._2.get ) :: Nil, mesh.normals( face.head._3.get ) :: mesh.normals( face( 1 )._3.get ) :: mesh.normals( face( 2 )._3.get ) :: Nil  )
 
       assert( triangleSets.contains( (v1 :: v2 :: v3 :: Nil, t1 :: t2 :: t3 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
       assert( triangleSets.contains( (v3 :: v4 :: v1 :: Nil, t3 :: t4 :: t1 :: Nil, n5 :: n5 :: n5 :: Nil ) ) )
@@ -94,10 +95,10 @@ class ResourceManagerSpec extends FunSpec  {
       assert( triangleSets.contains( (v5 :: v6 :: v2 :: Nil, t1 :: t2 :: t3 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
       assert( triangleSets.contains( (v2 :: v1 :: v5 :: Nil, t3 :: t4 :: t1 :: Nil, n4 :: n4 :: n4 :: Nil ) ) )
 
-      assert( mesh.vertices.size == 8 )
-      assert( mesh.faces.size == 12 )
-      assert( mesh.texCoords.size == 4 )
-      assert( mesh.normals.size == 6 )
+      assert( mesh.vertices.length == 8 )
+      assert( mesh.faces.length == 12 )
+      assert( mesh.texCoords.length == 4 )
+      assert( mesh.normals.length == 6 )
 
     }
 

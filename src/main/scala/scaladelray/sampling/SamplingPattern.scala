@@ -16,8 +16,8 @@
 
 package scaladelray.sampling
 
-import scaladelray.math.Point2
 import scala.util.Random
+import scaladelray.math.d.Point2
 
 
 /**

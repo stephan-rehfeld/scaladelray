@@ -17,13 +17,15 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
+
 import scaladelray.light.AreaLight
-import scaladelray.math.{Transform, Ray, Point3, Direction3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.Color
 import scaladelray.geometry.Sphere
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
+import scaladelray.math.d.{Direction3, Point3}
 
 class AreaLightSpec extends FunSpec {
 
@@ -31,7 +33,7 @@ class AreaLightSpec extends FunSpec {
     it( "should radiate all points" ) {
       val ld = new AreaLight( Color( 1, 1, 1 ), Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), Direction3( 0, 1, 0 ), 5, 1 )
       val l = ld.createLight
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
       for( p <- points )
@@ -68,7 +70,7 @@ class AreaLightSpec extends FunSpec {
       val l = ld.createLight
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None )  ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None )  ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

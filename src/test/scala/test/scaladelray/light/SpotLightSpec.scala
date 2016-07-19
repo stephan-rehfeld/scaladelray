@@ -17,19 +17,21 @@
 package test.scaladelray.light
 
 import org.scalatest.FunSpec
+
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Transform, Ray, Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
 import scaladelray.light.SpotLight
+import scaladelray.math.d.{Direction3, Point3}
 
 class SpotLightSpec extends FunSpec {
 
   describe( "A SpotLight" ) {
     it( "should radiate a point within the angle" ) {
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
       val p1 = Point3( 0, 0, -1 )
@@ -39,7 +41,7 @@ class SpotLightSpec extends FunSpec {
     }
 
     it( "should not radiate a point outside the angle" ) {
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
 
       val p1 = Point3( 0, 0, 1 )
@@ -71,7 +73,7 @@ class SpotLightSpec extends FunSpec {
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 2 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, -2 )
-      val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

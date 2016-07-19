@@ -20,7 +20,7 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.camera.DOFOldCamera
-import scaladelray.math.{Point3, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
 
 class DOFCameraProvider extends CameraProvider with TableModel {
 

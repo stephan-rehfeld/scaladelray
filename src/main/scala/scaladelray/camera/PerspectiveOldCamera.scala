@@ -16,7 +16,8 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Ray
 import scaladelray.sampling.SamplingPattern
 
 /**
@@ -47,7 +48,7 @@ case class PerspectiveOldCamera(e : Point3, g : Direction3, t : Direction3, widt
       val r = mw * one + u * (x-two)  + v * (y-three) + u * p.x + v * p.y
       Ray( e, r.normalized )
     }
-    rays.toSet
+    rays
   }
 
 }

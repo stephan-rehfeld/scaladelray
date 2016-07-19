@@ -16,6 +16,8 @@
 
 package scaladelray.math
 
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+
 /**
  * A transformable is an object that can be transformed by an affine transformation. Points, directions,
  * and rays can be multiplied with the transformation and its inverse.

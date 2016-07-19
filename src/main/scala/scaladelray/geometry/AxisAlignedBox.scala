@@ -16,7 +16,8 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Direction3, Point3, Ray, Transform}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
 import scaladelray.texture.Texture
 
 /**
@@ -29,7 +30,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The right plane of the box.
    */
-  private val right = new Node(
+  private val right = Node(
     Transform.translate( AxisAlignedBox.run ).rotateZ( -math.Pi/2.0 ),
     Plane( normalMap )
   )
@@ -37,7 +38,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The top plane of the box.
    */
-  private val top = new Node(
+  private val top = Node(
     Transform.translate( AxisAlignedBox.run ),
     Plane( normalMap )
   )
@@ -45,7 +46,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The front plane of the box.
    */
-  private val front = new Node(
+  private val front = Node(
     Transform.translate( AxisAlignedBox.run ).rotateX( math.Pi/2.0 ),
     Plane( normalMap )
   )
@@ -53,7 +54,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The left plane of the box.
    */
-  private val left =  new Node(
+  private val left =  Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateZ( math.Pi/2.0 ),
     Plane( normalMap )
   )
@@ -61,7 +62,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The bottom plane of the box.
    */
-  private val bottom = new Node(
+  private val bottom = Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateX( math.Pi ),
     Plane( normalMap )
   )
@@ -69,7 +70,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
   /**
    * The far plane of the box.
    */
-  private val far = new Node(
+  private val far = Node(
     Transform.translate( AxisAlignedBox.lbf ).rotateX( -math.Pi/2.0 ),
     Plane( normalMap )
   )

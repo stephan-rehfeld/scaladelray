@@ -17,7 +17,8 @@
 package test.scaladelray.sampling
 
 import org.scalatest.FunSpec
-import scaladelray.math.Point2
+
+import scaladelray.math.d.Point2
 import scaladelray.sampling.SamplingPattern
 
 

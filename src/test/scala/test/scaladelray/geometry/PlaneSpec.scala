@@ -21,7 +21,8 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Plane
-import scaladelray.math.{Normal3, Point3, Ray, Direction3}
+import scaladelray.math.d.{Direction3, Normal3, Point3}
+import scaladelray.math.Ray
 
 class PlaneSpec extends FunSpec {
 
@@ -40,7 +41,7 @@ class PlaneSpec extends FunSpec {
       val p = Plane( None )
 
       val hits = r --> p
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
 
     it( "should return no hit for a ray that's direction is parallel to the plane and has the origin on the plane" ) {
@@ -48,7 +49,7 @@ class PlaneSpec extends FunSpec {
       val p = Plane( None )
 
       val hits = r --> p
-      assert( hits.size == 0 )
+      assert( hits.isEmpty )
     }
 
     it( "should request the color from the texture that is used as normal map" ) {

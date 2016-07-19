@@ -16,8 +16,8 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Direction3, Point3}
 import scaladelray.Color
+import scaladelray.math.d.{Direction3, Point3}
 
 /**
  * A point lights illuminates the scene from a single point in all directions.

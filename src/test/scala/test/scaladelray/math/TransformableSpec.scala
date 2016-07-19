@@ -17,10 +17,11 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
+
 import scaladelray.math._
 import scaladelray.math.Ray
-import scaladelray.math.Point3
 import scala.language.reflectiveCalls
+import scaladelray.math.d.{Direction3, Point3}
 
 class TransformableSpec extends FunSpec {
 

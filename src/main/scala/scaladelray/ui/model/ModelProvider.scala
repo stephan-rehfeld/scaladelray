@@ -22,7 +22,8 @@ import javax.swing.table.TableModel
 
 import scala.collection.mutable
 import scaladelray.loader.OBJLoader
-import scaladelray.math.{Point3, Transform, Direction3}
+import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.Transform
 import scaladelray.rendering.Renderable
 
 class ModelProvider( tml : TableModelListener ) extends RenderableProvider with TableModel {

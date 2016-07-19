@@ -17,7 +17,7 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Direction3
+import scaladelray.math.d.Direction3
 
 /**
  * A Bidirectional reflectance distribution function describes how light is reflected between two directions

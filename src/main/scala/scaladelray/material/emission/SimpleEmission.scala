@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Direction3
+import scaladelray.math.d.Direction3
 
 /**
  * A simple emission emits light in all directions from a point.

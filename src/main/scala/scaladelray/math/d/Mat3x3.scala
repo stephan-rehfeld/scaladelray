@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package scaladelray.math
+package scaladelray.math.d
 
 /**
  * This class represents a 3x3 matrix. Points and directions can be multiplied with this matrix. The determinant of the
  * matrix is calculated during construction. It has three methods to replace the columns.
  *
  * @author Stephan Rehfeld
- *
- * @param m11 The element in the first row and the first column.
+  * @param m11 The element in the first row and the first column.
  * @param m12 The element in the first row and the second column.
  * @param m13 The element in the first row and the third column.
  * @param m21 The element in the second row and the first column.
