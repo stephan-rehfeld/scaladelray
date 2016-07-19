@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="IvyIDEA" name="IvyIDEA">
-      <configuration ivyFile="C:\Users\Stephan Rehfeld\Eigene Softwareprojekte\scaladelray\ivy.xml" useProjectSettings="true" useCustomIvySettings="true" ivySettingsFile="" onlyResolveSelectedConfigs="false">
+      <configuration ivyFile="C:\Users\rehfeld\repos\scaladelray\ivy.xml" useProjectSettings="true" useCustomIvySettings="true" ivySettingsFile="" onlyResolveSelectedConfigs="false">
         <propertiesSettings>
           <propertiesFiles includeProjectLevelPropertiesFiles="true" />
         </propertiesSettings>
@@ -171,6 +171,9 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-protobuf_2.11/javadocs/akka-protobuf_2.11-2.4.7-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/javadocs/netty-3.10.3.Final-javadoc.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.uncommons.maths/uncommons-maths/javadocs/uncommons-maths-1.2.2a-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/javadocs/scala-reflect-2.11.7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/javadocs/scala-compiler-2.11.7-javadoc.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/javadocs/scala-parser-combinators_2.11-1.0.4-javadoc.jar!/" />
         </JAVADOC>
         <SOURCES>
           <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-library/sources/scala-library-2.11.8-sources.jar!/" />
@@ -247,6 +250,9 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-protobuf_2.11/sources/akka-protobuf_2.11-2.4.7-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/io.netty/netty/sources/netty-3.10.3.Final-sources.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.uncommons.maths/uncommons-maths/sources/uncommons-maths-1.2.2a-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-reflect/sources/scala-reflect-2.11.7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang/scala-compiler/sources/scala-compiler-2.11.7-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.11/sources/scala-parser-combinators_2.11-1.0.4-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
