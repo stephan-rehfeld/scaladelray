@@ -16,8 +16,8 @@
 
 package scaladelray.ui.model
 
-import javax.swing.tree.{TreePath, TreeModel}
 import javax.swing.event.TreeModelListener
+import javax.swing.tree.{TreeModel, TreePath}
 
 class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
 
@@ -75,15 +75,6 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
       mp.materialProvider.getOrElse( "<Material>" )
     case np : NodeProvider =>
       np.childNodes(index)
-    case ocp : OrthograpicCameraProvider =>
-      ocp.samplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
-    case pcp : PerspectiveCameraProvider =>
-      pcp.samplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
-    case dcp : DOFCameraProvider =>
-      index match {
-        case 0 => dcp.aaSamplingPatternProvider.getOrElse( "<Anti-Aliasing Sampling Pattern>" )
-        case 1 => dcp.lensSamplingPatternProvider.getOrElse( "<Lens Sampling Pattern>" )
-      }
     case lp : LambertMaterialProvider =>
       index match {
         case 0 => lp.diffuseTextureProvider.getOrElse( "<Diffuse Texture>" )
@@ -117,9 +108,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case tp : TriangleProvider => 1
     case np : NodeProvider => np.childNodes.size
     case mp : ModelProvider => 1
-    case ocp : OrthograpicCameraProvider => 1
-    case pcp : PerspectiveCameraProvider => 1
-    case dcp : DOFCameraProvider => 2
+    case ocp : OrthograpicCameraProvider => 0
+    case pcp : PerspectiveCameraProvider => 0
     case lp : LambertMaterialProvider => 2
     case pp : PhongMaterialProvider => 3
     case rp : ReflectiveMaterialProvider => 4
@@ -131,8 +121,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case sbp : SkyboxProvider => false
     case "<Background>" => true
     case "<Camera>" => true
-    case "Renderables" => worldProvider.renderableProvider.size == 0
-    case "Lights" => worldProvider.lightDescriptionProvider.size == 0
+    case "Renderables" => worldProvider.renderableProvider.isEmpty
+    case "Lights" => worldProvider.lightDescriptionProvider.isEmpty
     case pp : PlaneProvider => false
     case dp : DiscProvider => false
     case rp : RectangleProvider => false
@@ -141,9 +131,8 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case tp : TriangleProvider => false
     case np : NodeProvider => np.childNodes.isEmpty
     case mp : ModelProvider => false
-    case ocp : OrthograpicCameraProvider => false
-    case pcp : PerspectiveCameraProvider => false
-    case dcp : DOFCameraProvider => false
+    case ocp : OrthograpicCameraProvider => true
+    case pcp : PerspectiveCameraProvider => true
     case lp : LambertMaterialProvider => false
     case pp : PhongMaterialProvider => false
     case rp : ReflectiveMaterialProvider => false
@@ -160,9 +149,6 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "Renderables" => 2
         case "Lights" => 3
         case bg : BackgroundProvider => 0
-        case ocp : OrthograpicCameraProvider => 1
-        case pcp : PerspectiveCameraProvider => 1
-        case dcp : DOFCameraProvider => 1
       }
     case sbp : SkyboxProvider =>
       child match {
@@ -221,13 +207,6 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
     case mp : ModelProvider => 0
     case ocp : OrthograpicCameraProvider => 0
     case pcp : PerspectiveCameraProvider => 0
-    case dcp : DOFCameraProvider =>
-      child match {
-        case "<Anti-Aliasing Sampling Pattern>" => 0
-        case "<Lens Sampling Pattern>" => 1
-        case spp : SamplingPatternProvider =>
-          if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) 0 else 1
-      }
     case lp : LambertMaterialProvider =>
       child match {
         case "<Diffuse Texture>" => 0

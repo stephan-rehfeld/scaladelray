@@ -411,54 +411,13 @@ object ScalaDelRay extends SimpleSwingApplication {
         updateUI( Some( pcp ))
       }
     })
-    val createDOFCameraMenuItem = new JMenuItem( "DOF Camera" )
-    createDOFCameraMenuItem.addActionListener( new ActionListener {
-      def actionPerformed(e: ActionEvent) {
-        val dofcp = new DOFCameraProvider
-        worldProvider.cameraProvider = Some( dofcp )
-        detailsTable.model = dofcp
-        updateUI( Some( dofcp ))
-      }
-    })
+
 
     cameraPopupMenu.add( createOrthographicCameraMenuItem )
     cameraPopupMenu.add( createPerspectiveCameraMenuItem )
-    cameraPopupMenu.add( createDOFCameraMenuItem )
 
     var selectionParent : Option[AnyRef] = None
     var selection : Option[AnyRef] = None
-
-    val samplingPatternPopupMenu = new JPopupMenu
-    val regularSamplingPatternMenuItem = new JMenuItem( "Regular sampling pattern" )
-    regularSamplingPatternMenuItem.addActionListener( new ActionListener {
-      def actionPerformed(e: ActionEvent) {
-        val rspp = new RegularSamplingPatternProvider
-        selectionParent match {
-          case Some( ocp : OrthograpicCameraProvider ) =>
-            ocp.samplingPatternProvider = Some( rspp )
-          case Some( pcp : PerspectiveCameraProvider ) =>
-            pcp.samplingPatternProvider = Some( rspp )
-          case Some( dcp : DOFCameraProvider ) =>
-            selection match {
-              case Some( "<Anti-Aliasing Sampling Pattern>" ) =>
-                dcp.aaSamplingPatternProvider = Some( rspp )
-              case Some( "<Lens Sampling Pattern>" ) =>
-                dcp.lensSamplingPatternProvider = Some( rspp )
-              case Some( spp : SamplingPatternProvider ) =>
-                if( dcp.aaSamplingPatternProvider.isDefined && dcp.aaSamplingPatternProvider.get == spp ) dcp.aaSamplingPatternProvider = Some( rspp )
-                if( dcp.lensSamplingPatternProvider.isDefined && dcp.lensSamplingPatternProvider.get == spp ) dcp.lensSamplingPatternProvider = Some( rspp )
-              case Some( _ ) => assert( false, "This should not happen!")
-              case None =>
-            }
-          case Some( _ ) => assert( false, "This should not happen!")
-          case None =>
-        }
-        detailsTable.model = rspp
-        updateUI( Some( rspp ) )
-      }
-    })
-
-    samplingPatternPopupMenu.add( regularSamplingPatternMenuItem )
 
     val materialPopupMenu = new JPopupMenu
 
@@ -1006,21 +965,6 @@ object ScalaDelRay extends SimpleSwingApplication {
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
               newTexturePopupMenu.show( e.getComponent, e.getX, e.getY )
 
-            case "<Anti-Aliasing Sampling Pattern>" =>
-              selection = Some( path.getLastPathComponent )
-              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
-              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
-
-            case "<Lens Sampling Pattern>" =>
-              selection = Some( path.getLastPathComponent )
-              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
-              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
-
-            case spp : SamplingPatternProvider =>
-              selection = Some( path.getLastPathComponent )
-              selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
-              samplingPatternPopupMenu.show( e.getComponent, e.getX, e.getY )
-
             case "<Material>" =>
               selection = Some( path.getLastPathComponent )
               selectionParent = Some( path.getPathComponent( path.getPathCount - 2 ) )
@@ -1192,8 +1136,8 @@ object ScalaDelRay extends SimpleSwingApplication {
               steps = steps + 1
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
-            val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
-            window.a ! StartRendering()
+            //val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
+            //window.a ! StartRendering()
             text = "Render"
             enabled = true
           }
@@ -1693,8 +1637,6 @@ object ScalaDelRay extends SimpleSwingApplication {
     val cameraProvider = new PerspectiveCameraProvider
     cameraProvider.position = Point3( 0, -0.5, 4.0 )
     cameraProvider.gazeDirection = Direction3( 0, 0, -1 )
-    cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].x = 5
-    cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].y = 5
 
     worldProvider.cameraProvider = Some( cameraProvider )
 

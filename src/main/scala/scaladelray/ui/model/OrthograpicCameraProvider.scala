@@ -19,7 +19,7 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
-import scaladelray.camera.OrthographicOldCamera
+import scaladelray.camera.OrthographicCamera
 import scaladelray.math.d.{Direction3, Point3}
 
 class OrthograpicCameraProvider extends CameraProvider with TableModel {
@@ -27,15 +27,16 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
   var position = Point3( 0, 0, 0 )
   var gazeDirection = Direction3( 0, 0, -1 )
   var upVector = Direction3( 0, 1, 0 )
-  var size = 1.0
-  var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
+  var imagePlaneFormat = (16.0,9.0)
+  var lensRadius = 0.0
+  var depthOfField = Double.PositiveInfinity
 
   override def createCamera( l : () => Unit ) = {
     l()
-    OrthographicOldCamera( position, gazeDirection, upVector, _, _, size, samplingPatternProvider.get.createSamplingPattern( l ) )
+    OrthographicCamera( position, gazeDirection, upVector,imagePlaneFormat, lensRadius, depthOfField )
   }
 
-  override def getRowCount: Int = 4
+  override def getRowCount: Int = 6
 
   override def getColumnCount: Int = 2
 
@@ -61,7 +62,11 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
         case 2 =>
           "Up vector"
         case 3 =>
-          "Size"
+          "Image Plane Format"
+        case 4 =>
+          "Lens's Radius"
+        case 5 =>
+          "Depth of Field"
       }
     case 1 =>
       row match {
@@ -72,7 +77,11 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
         case 2 =>
           "" + upVector.x + " " + upVector.y + " " + upVector.z
         case 3 =>
-          new java.lang.Double( size )
+          "" + imagePlaneFormat._1 + " " + imagePlaneFormat._2
+        case 4 =>
+          new java.lang.Double( lensRadius )
+        case 5 =>
+          new java.lang.Double( depthOfField )
       }
   }
 
@@ -89,7 +98,12 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
           val v = obj.asInstanceOf[String].split( " " )
           upVector = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 3 =>
-          size = obj.asInstanceOf[String].toDouble
+          val v = obj.asInstanceOf[String].split( " " )
+          imagePlaneFormat = (v(0).toDouble,v(1).toDouble)
+        case 4 =>
+          lensRadius = obj.asInstanceOf[String].toDouble
+        case 5 =>
+          depthOfField = obj.asInstanceOf[String].toDouble
       }
     } catch {
       case _ : Throwable =>
@@ -100,13 +114,11 @@ class OrthograpicCameraProvider extends CameraProvider with TableModel {
 
   override def removeTableModelListener(p1: TableModelListener) {}
 
-  override def remove(obj: AnyRef) {
-    if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
-  }
+  override def remove(obj: AnyRef) {}
 
-  override def isReady: Boolean = samplingPatternProvider.isDefined
+  override def isReady: Boolean = true
 
   override def toString: String = "Orthographic Camera"
 
-  override def count = 1 + samplingPatternProvider.get.count
+  override def count = 1
 }

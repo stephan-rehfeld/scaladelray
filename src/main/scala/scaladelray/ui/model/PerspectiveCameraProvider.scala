@@ -19,7 +19,7 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
-import scaladelray.camera.{PerspectiveCamera}
+import scaladelray.camera.PerspectiveCamera
 import scaladelray.math.d.{Direction3, Point3}
 
 
@@ -28,15 +28,17 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
   var position = Point3( 0, 0, 0 )
   var gazeDirection = Direction3( 0, 0, -1 )
   var upVector = Direction3( 0, 1, 0 )
-  var angle = math.Pi / 4.0
-  var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
+  var imagePlaneFormat = (0.036,0.024)
+  var focalLength = 0.05
+  var fNumber = 4.0
+  var depthOfField = Double.PositiveInfinity
 
   override def createCamera( l : () => Unit ) = {
     l()
-    PerspectiveCamera( position, gazeDirection, upVector, _, _, angle, samplingPatternProvider.get.createSamplingPattern( l ) )
+    PerspectiveCamera( position, gazeDirection, upVector, imagePlaneFormat, focalLength, fNumber, depthOfField )
   }
 
-  override def getRowCount: Int = 4
+  override def getRowCount: Int = 7
 
   override def getColumnCount: Int = 2
 
@@ -62,7 +64,13 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
         case 2 =>
           "Up vector"
         case 3 =>
-          "Angle"
+          "Image Plane Format"
+        case 4 =>
+          "Focal Length"
+        case 5 =>
+          "F Number"
+        case 6 =>
+          "Depth of Field"
       }
     case 1 =>
       row match {
@@ -73,7 +81,13 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
         case 2 =>
           "" + upVector.x + " " + upVector.y + " " + upVector.z
         case 3 =>
-          new java.lang.Double( math.toDegrees( angle ) )
+          "" + imagePlaneFormat._1 + " " + imagePlaneFormat._2
+        case 4 =>
+          new java.lang.Double( focalLength )
+        case 5 =>
+          new java.lang.Double( fNumber )
+        case 6 =>
+          new java.lang.Double( depthOfField )
       }
   }
 
@@ -91,7 +105,14 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
           val v = obj.asInstanceOf[String].split( " " )
           upVector = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 3 =>
-          angle = math.toRadians( obj.asInstanceOf[String].toDouble )
+          val v = obj.asInstanceOf[String].split( " " )
+          imagePlaneFormat = (v(0).toDouble,v(1).toDouble)
+        case 4 =>
+          focalLength = obj.asInstanceOf[String].toDouble
+        case 5 =>
+          fNumber = obj.asInstanceOf[String].toDouble
+        case 6 =>
+          depthOfField = obj.asInstanceOf[String].toDouble
       }
     } catch {
       case _ : Throwable =>
@@ -103,13 +124,13 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
   override def removeTableModelListener(p1: TableModelListener) {}
 
   override def remove(obj: AnyRef) {
-    if( samplingPatternProvider.isDefined && obj == samplingPatternProvider.get ) samplingPatternProvider = None
+
   }
 
-  override def isReady: Boolean = samplingPatternProvider.isDefined
+  override def isReady: Boolean = true
 
   override def toString: String = "Perspective Camera"
 
-  override def count = 1 + samplingPatternProvider.get.count
+  override def count = 1
 
 }
