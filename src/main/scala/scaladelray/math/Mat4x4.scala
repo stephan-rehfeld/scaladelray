@@ -18,7 +18,7 @@ package scaladelray.math
 
 /**
  * This class represents a 4x4 matrix. It is used by the [[scaladelray.math.Transform]] as transformation matrix.
- * Mat4x4 offers methods for multiplication with points and vectors.
+ * Mat4x4 offers methods for multiplication with points and directions.
  *
  * @author Stephan Rehfeld
  *
@@ -45,12 +45,12 @@ case class Mat4x4( m11 : Double, m12 : Double, m13 : Double, m14 : Double,
                    m41 : Double, m42 : Double, m43 : Double, m44 : Double ) extends Serializable {
 
   /**
-   * This method multiplies this matrix with a vector. A 0 is assumed as value for w.
+   * This method multiplies this matrix with a direction. A 0 is assumed as value for w.
    *
-   * @param v The vector that should be multiplied with this matrix.
-   * @return The resulting vector.
+   * @param v The direction that should be multiplied with this matrix.
+   * @return The resulting direction.
    */
-  def *( v : Vector3 ) = Vector3( m11 * v.x + m12 * v.y + m13 * v.z,
+  def *( v : Direction3 ) = Direction3( m11 * v.x + m12 * v.y + m13 * v.z,
                                   m21 * v.x + m22 * v.y + m23 * v.z,
                                   m31 * v.x + m32 * v.y + m33 * v.z )
 

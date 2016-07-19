@@ -17,7 +17,7 @@
 package scaladelray.material
 
 import scaladelray.Color
-import scaladelray.math.{Normal3, Vector3, Ray}
+import scaladelray.math.{Normal3, Direction3, Ray}
 import scaladelray.rendering.Hit
 import scaladelray.world.World
 
@@ -38,7 +38,7 @@ case class TransparentOldMaterial( indexOfRefraction : Double ) extends OldMater
     }
   }
 
-  def refracted( e : Vector3, n : Normal3, etaOut : Double, etaIn : Double ) : Option[Vector3] = {
+  def refracted(e : Direction3, n : Normal3, etaOut : Double, etaIn : Double ) : Option[Direction3] = {
     val inside = (n dot e) < 0
     val eta = if( inside )  etaIn/etaOut else etaOut/etaIn
     val cn = if( inside ) -n else n
@@ -72,7 +72,7 @@ case class TransparentOldMaterial( indexOfRefraction : Double ) extends OldMater
   }*/
 
 
-  def schlick( e : Vector3, n : Normal3, etaOut : Double, etaIn : Double ) : (Double,Double) = {
+  def schlick(e : Direction3, n : Normal3, etaOut : Double, etaIn : Double ) : (Double,Double) = {
     val inside = (n dot e) < 0
     val cn = if( inside ) n * -1 else n
     val cosThetaI = cn dot e

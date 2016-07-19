@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * The spot emission emits light only within a given angle.
@@ -31,6 +31,6 @@ case class SpotEmission( c : Color, halfAngle : Double ) extends Emission {
   require( halfAngle > 0, "The halfAngle must be larger than 0." )
   require( halfAngle <= math.Pi / 2.0, "The halfAngle must not be larger than 90 degrees.")
 
-  override def apply( sp: SurfacePoint, d : Vector3 ) = if( math.acos(  sp.n dot d ) <= halfAngle ) c else Color( 0, 0, 0 )
+  override def apply( sp: SurfacePoint, d : Direction3 ) = if( math.acos(  sp.n dot d ) <= halfAngle ) c else Color( 0, 0, 0 )
 
 }

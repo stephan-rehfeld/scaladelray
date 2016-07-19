@@ -22,7 +22,7 @@ import javax.swing.table.TableModel
 
 import scala.collection.mutable
 import scaladelray.loader.OBJLoader
-import scaladelray.math.{Point3, Transform, Vector3}
+import scaladelray.math.{Point3, Transform, Direction3}
 import scaladelray.rendering.Renderable
 
 class ModelProvider( tml : TableModelListener ) extends RenderableProvider with TableModel {
@@ -30,8 +30,8 @@ class ModelProvider( tml : TableModelListener ) extends RenderableProvider with 
   var fileName = ""
   var materialProvider : Option[MaterialProvider] = None
   var translate = Point3( 0, 0, 0 )
-  var scale = Vector3( 1, 1, 1 )
-  var rotate = Vector3( 0, 0, 0 )
+  var scale = Direction3( 1, 1, 1 )
+  var rotate = Direction3( 0, 0, 0 )
   var octreeRecursionDepth = 3
   var octreeFacesLimit = -1
   var fastLoad = true
@@ -123,10 +123,10 @@ class ModelProvider( tml : TableModelListener ) extends RenderableProvider with 
           translate = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
-          scale = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          scale = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 2 =>
           val v = obj.asInstanceOf[String].split( " " )
-          rotate = Vector3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
+          rotate = Direction3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
         case 3 =>
           fileName = obj.asInstanceOf[String]
           for( l <- listener ) l.tableChanged( new TableModelEvent( this ) )

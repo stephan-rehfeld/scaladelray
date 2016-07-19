@@ -17,7 +17,7 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Vector3, Ray, Point3, Normal3}
+import scaladelray.math.{Direction3, Ray, Point3, Normal3}
 import scaladelray.texture.TexCoord2D
 import scaladelray.geometry.TriangleMesh
 
@@ -39,9 +39,9 @@ class TriangleMeshSpec extends FunSpec  {
 
   describe( "A TriangleMesh" ) {
     it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) {
-      val r1 = Ray( Point3( 0, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r2 = Ray( Point3( 1, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r3 = Ray( Point3( 1, 1, 1 ), Vector3( 0, 0, -1 ) )
+      val r1 = Ray( Point3( 0, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r2 = Ray( Point3( 1, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r3 = Ray( Point3( 1, 1, 1 ), Direction3( 0, 0, -1 ) )
 
       val h1 = r1 --> triangleMesh
       val h2 = r2 --> triangleMesh
@@ -69,9 +69,9 @@ class TriangleMeshSpec extends FunSpec  {
     }
 
     it( "should return interpolated normals and texture coordinates when hit an edge." ) {
-      val r1 = Ray( Point3( 0.5, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r2 = Ray( Point3( 1, 0.5, 1 ), Vector3( 0, 0, -1 ) )
-      val r3 = Ray( Point3( 0.5, 0.5, 1 ), Vector3( 0, 0, -1 ) )
+      val r1 = Ray( Point3( 0.5, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r2 = Ray( Point3( 1, 0.5, 1 ), Direction3( 0, 0, -1 ) )
+      val r3 = Ray( Point3( 0.5, 0.5, 1 ), Direction3( 0, 0, -1 ) )
 
       val h1 = r1 --> triangleMesh
       val h2 = r2 --> triangleMesh
@@ -98,8 +98,8 @@ class TriangleMeshSpec extends FunSpec  {
     }
 
     it( "should return interpolated normals and texture coordinates when hit on the face." ) {
-      val o = (((a.asVector + b.asVector + c.asVector) * (1.0/3.0)) - Vector3( 0, 0, 1 ) ).asPoint
-      val r = Ray( o, Vector3( 0, 0, 1 ) )
+      val o = (((a.asDirection + b.asDirection + c.asDirection) * (1.0/3.0)) - Direction3( 0, 0, 1 ) ).asPoint
+      val r = Ray( o, Direction3( 0, 0, 1 ) )
 
       val h = r --> triangleMesh
 
@@ -112,7 +112,7 @@ class TriangleMeshSpec extends FunSpec  {
     }
 
     it( "should return nothing when missed by the ray." ) {
-      val r = Ray( Point3( 0, 1, 1 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 1, 1 ), Direction3( 0, 0, -1 ) )
       assert( (r --> triangleMesh).isEmpty )
     }
 

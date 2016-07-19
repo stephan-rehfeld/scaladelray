@@ -17,7 +17,7 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Ray, Point3, Vector3}
+import scaladelray.math.{Normal3, Ray, Point3, Direction3}
 import scaladelray.geometry.{SurfacePoint, GeometryHit}
 import scaladelray.texture.TexCoord2D
 
@@ -25,10 +25,10 @@ class GeometryHitSpec extends FunSpec {
 
   describe( "A GeometryHit" ) {
     it( "should consume a ray, geometry, t, and surface point as constructor parameter and provider them as value") {
-      val r = Ray( Point3( 3, 5, 7 ), Vector3( 11, 13, 17 ) )
+      val r = Ray( Point3( 3, 5, 7 ), Direction3( 11, 13, 17 ) )
       val g = new GeometryTestAdapter()
       val t = 8.15
-      val sp = SurfacePoint( r( t ), Normal3( 1, 0, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 2, 3 ) )
+      val sp = SurfacePoint( r( t ), Normal3( 1, 0, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 2, 3 ) )
 
       val hit = GeometryHit( r, g, t, sp )
 

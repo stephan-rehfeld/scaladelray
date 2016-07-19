@@ -17,13 +17,13 @@
 package scaladelray.rendering
 
 import scaladelray.HDRImage
-import scaladelray.camera.OldCamera
+import scaladelray.camera.{Camera, OldCamera}
 
 /**
  * Algorithm is the abstract base class for ray tracing based algorithms.
  */
 abstract class Algorithm {
 
-  def render( c : OldCamera, rect : HDRImage.Rectangle ) : HDRImage
+  def render( cam: Camera, c : OldCamera, rect : HDRImage.Rectangle ) : HDRImage
 
 }

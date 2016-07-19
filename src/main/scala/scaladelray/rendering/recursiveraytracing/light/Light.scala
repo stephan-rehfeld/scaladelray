@@ -17,7 +17,7 @@
 package scaladelray.rendering.recursiveraytracing.light
 
 import scaladelray.Color
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 import scaladelray.world.World
 
 /**
@@ -46,7 +46,7 @@ trait Light {
    * @param p The point in space.
    * @return The direction to the light source.
    */
-  def directionFrom( p : Point3 ) : Vector3
+  def directionFrom( p : Point3 ) : Direction3
 
   /**
    * An implementation of this function returns the intensity of the light that reaches the illuminated point.

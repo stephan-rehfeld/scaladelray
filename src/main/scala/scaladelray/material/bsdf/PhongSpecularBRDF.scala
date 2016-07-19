@@ -17,7 +17,7 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * A phong specular BRDF.
@@ -26,7 +26,7 @@ import scaladelray.math.Vector3
  */
 case class PhongSpecularBRDF( exponent : Double ) extends BRDF {
 
-  override def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double = {
+  override def apply(p : SurfacePoint, dIn : Direction3, dOut : Direction3 ) : Double = {
     val r = (-dIn).reflectOn(p.n)
     val v = math.pow( r dot dOut, exponent ) / math.Pi
     math.max( 0, v )

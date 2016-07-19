@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 
 /**
  * A behavior test of [[scaladelray.math.Normal3]].
@@ -46,34 +46,34 @@ class Point3Spec extends FunSpec {
       assert( point1 == point2 )
     }
 
-    it( "should calculate the correct vector between two points (- operator)") {
+    it( "should calculate the correct direction between two points (- operator)") {
       val point1 = Point3( 2, 3, 5 )
       val point2 = Point3( 7, 11, 13 )
 
-      assert( point1 - point2 == Vector3( 2-7, 3-11, 5-13) )
+      assert( point1 - point2 == Direction3( 2-7, 3-11, 5-13) )
     }
 
     it( "should calculate the correct point if a direction is subtracted (- operator)") {
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      assert( point - vector == Point3( 2-7, 3-11, 5-13) )
+      assert( point - direction == Point3( 2-7, 3-11, 5-13) )
     }
 
     it( "should calculate the correct point if a direction is added (+ operator)") {
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      assert( point + vector == Point3( 2+7, 3+11, 5+13) )
+      assert( point + direction == Point3( 2+7, 3+11, 5+13) )
     }
 
-    it( "should be convertible to a Vector3 with the same values for x, z, and y" ) {
+    it( "should be convertible to a Direction3 with the same values for x, z, and y" ) {
       val point = Point3( 2, 3, 5 )
-      val vector = point.asVector
+      val direction = point.asDirection
 
-      assert( point.x == vector.x )
-      assert( point.y == vector.y )
-      assert( point.z == vector.z )
+      assert( point.x == direction.x )
+      assert( point.y == direction.y )
+      assert( point.z == direction.z )
     }
 
     it( "should be convertible to a Normal3 with the same values for x, z, and y" ) {
@@ -97,34 +97,34 @@ class Point3Spec extends FunSpec {
       assert( point1.z == 5 )
     }
 
-    it( "should not be altered after subtraction with a Vector3") {
+    it( "should not be altered after subtraction with a Direction3") {
 
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      point - vector
+      point - direction
 
       assert( point.x == 2 )
       assert( point.y == 3 )
       assert( point.z == 5 )
     }
 
-    it( "should not be altered after addition with a Vector3") {
+    it( "should not be altered after addition with a Direction3") {
 
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      point + vector
+      point + direction
 
       assert( point.x == 2 )
       assert( point.y == 3 )
       assert( point.z == 5 )
     }
 
-    it( "should not be altered while converted to a Vector3") {
+    it( "should not be altered while converted to a Direction3") {
       val point = Point3( 2, 3, 5 )
 
-      point.asVector
+      point.asDirection
 
       assert( point.x == 2 )
       assert( point.y == 3 )
@@ -152,26 +152,26 @@ class Point3Spec extends FunSpec {
       assert( point2.z == 13 )
     }
 
-    it( "should not alter the Vector while subtracting") {
+    it( "should not alter the direction while subtracting") {
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      point - vector
+      point - direction
 
-      assert( vector.x == 7 )
-      assert( vector.y == 11 )
-      assert( vector.z == 13 )
+      assert( direction.x == 7 )
+      assert( direction.y == 11 )
+      assert( direction.z == 13 )
     }
 
-    it( "should not alter the Vector while adding") {
+    it( "should not alter the direction while adding") {
       val point = Point3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      point + vector
+      point + direction
 
-      assert( vector.x == 7 )
-      assert( vector.y == 11 )
-      assert( vector.z == 13 )
+      assert( direction.x == 7 )
+      assert( direction.y == 11 )
+      assert( direction.z == 13 )
     }
 
 

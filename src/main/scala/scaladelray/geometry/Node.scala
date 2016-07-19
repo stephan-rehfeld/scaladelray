@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Vector3, Point3, Ray, Transform}
+import scaladelray.math.{Direction3, Point3, Ray, Transform}
 
 
 /**
@@ -39,11 +39,11 @@ case class Node( t : Transform, nodes : Geometry* ) extends Geometry with Serial
   }
 
 
-  override val center: Point3 = (nodes.foldLeft( Vector3( 0, 0, 0 ) )( (v,g) => v + g.center.asVector ) / nodes.size).asPoint
+  override val center: Point3 = (nodes.foldLeft( Direction3( 0, 0, 0 ) )((v, g) => v + g.center.asDirection ) / nodes.size).asPoint
 
   override val lbf: Point3 = nodes.foldLeft( Point3( Double.MaxValue, Double.MaxValue, Double.MaxValue ) )( (v,g) => Point3( math.min( v.x, g.lbf.x ), math.min( v.y, g.lbf.y ), math.min( v.z, g.lbf.z ) ) )
 
   override val run: Point3 = nodes.foldLeft( Point3( Double.MinValue, Double.MinValue, Double.MinValue ) )( (v,g) => Point3( math.max( v.x, g.run.x ), math.max( v.y, g.run.y ), math.max( v.z, g.run.z ) ) )
 
-  override val axis = nodes.foldLeft( Vector3( 0, 0, 0 ) )( (v,g) => v + g.axis ) / nodes.size
+  override val axis = nodes.foldLeft( Direction3( 0, 0, 0 ) )((v, g) => v + g.axis ) / nodes.size
 }

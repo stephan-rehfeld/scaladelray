@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Vector3, Normal3}
+import scaladelray.math.{Direction3, Normal3}
 import scaladelray.Constants
 
 /**
@@ -68,20 +68,20 @@ class Normal3Spec extends FunSpec {
       assert( normal1 + normal2 == Normal3( 2+7, 3+11, 5+13 ) )
     }
 
-    it( "should compute the dot product with Vector3 correctly" ) {
+    it( "should compute the dot product with Direction3 correctly" ) {
       val normal = Normal3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      assert( (normal dot vector) == 2 * 7 + 3 * 11 + 5 * 13 )
+      assert( (normal dot direction) == 2 * 7 + 3 * 11 + 5 * 13 )
     }
 
-    it( "should be convertible to a Vector3 with the same values for x, z, and y" ) {
+    it( "should be convertible to a Direction3 with the same values for x, z, and y" ) {
       val normal = Normal3( 2, 3, 5 )
-      val vector = normal.asVector
+      val direction = normal.asDirection
 
-      assert( normal.x == vector.x )
-      assert( normal.y == vector.y )
-      assert( normal.z == vector.z )
+      assert( normal.x == direction.x )
+      assert( normal.y == direction.y )
+      assert( normal.z == direction.z )
     }
 
     it( "should not be altered after the multiplication with a scalar") {
@@ -117,33 +117,33 @@ class Normal3Spec extends FunSpec {
       assert( normal2.z == 13 )
     }
 
-    it( "should not be altered after calculating the dot product with a Vector3") {
+    it( "should not be altered after calculating the dot product with a Direction3") {
 
       val normal = Normal3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      normal dot vector
+      normal dot direction
 
       assert( normal.x == 2 )
       assert( normal.y == 3 )
       assert( normal.z == 5 )
     }
 
-    it( "should not alter the Vector3 while calculating the dot product") {
+    it( "should not alter the Direction3 while calculating the dot product") {
       val normal = Normal3( 2, 3, 5 )
-      val vector = Vector3( 7, 11, 13 )
+      val direction = Direction3( 7, 11, 13 )
 
-      normal dot vector
+      normal dot direction
 
-      assert( vector.x == 7 )
-      assert( vector.y == 11 )
-      assert( vector.z == 13 )
+      assert( direction.x == 7 )
+      assert( direction.y == 11 )
+      assert( direction.z == 13 )
     }
 
-    it( "should not be altered while converted to a Vector3") {
+    it( "should not be altered while converted to a Direction3") {
       val normal = Normal3( 2, 3, 5 )
 
-      normal.asVector
+      normal.asDirection
 
       assert( normal.x == 2 )
       assert( normal.y == 3 )

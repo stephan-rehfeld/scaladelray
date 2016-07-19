@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 import scaladelray.texture.{TexCoord2D, Texture}
 import scaladelray.Color
 import scaladelray.world.Skybox
-import scaladelray.math.{Vector3, Point3, Ray}
+import scaladelray.math.{Direction3, Point3, Ray}
 
 
 class SkyboxSpec extends FunSpec {
@@ -47,7 +47,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 0.75, -1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 0.75, -1 ).normalized )
       s( r )
       assert( front.called )
       assert( !back.called )
@@ -66,7 +66,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 0.75, 1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 0.75, 1 ).normalized )
       s( r )
       assert( !front.called )
       assert( back.called )
@@ -85,7 +85,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0.75, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0.75, 0.5 ).normalized )
       s( r )
       assert( !front.called )
       assert( !back.called )
@@ -104,7 +104,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0.75, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0.75, 0.5 ).normalized )
 
       s( r )
       assert( !front.called )
@@ -124,7 +124,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.75, 1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.75, 1, 0.5 ).normalized )
 
       s( r )
       assert( !front.called )
@@ -143,7 +143,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.75, -1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.75, -1, 0.5 ).normalized )
 
       s( r )
       assert( !front.called )
@@ -163,7 +163,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
 
       s( r )
       assert( front.v.isDefined )
@@ -179,7 +179,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
 
       s( r )
       assert( back.v.isDefined )
@@ -195,7 +195,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0, 0 ) )
 
       s( r )
       assert( left.v.isDefined )
@@ -211,7 +211,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0, 0 ) )
 
       s( r )
       assert( right.v.isDefined )
@@ -227,7 +227,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 1, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 1, 0 ) )
 
       s( r )
       assert( top.v.isDefined )
@@ -243,7 +243,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, -1, 0 ) )
 
       s( r )
       assert( bottom.v.isDefined )
@@ -259,7 +259,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, 0.5, -1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, 0.5, -1 ).normalized )
 
       s( r )
       assert( front.v.isDefined )
@@ -276,7 +276,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 0.5, -1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 0.5, -1 ).normalized )
 
       s( r )
       assert( front.v.isDefined )
@@ -293,7 +293,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, -0.5, -1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, -0.5, -1 ).normalized )
 
       s( r )
       assert( front.v.isDefined )
@@ -310,7 +310,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, -0.5, -1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, -0.5, -1 ).normalized )
 
       s( r )
       assert( front.v.isDefined )
@@ -329,7 +329,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 0.5, 1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 0.5, 1 ).normalized )
 
       s( r )
       assert( back.v.isDefined )
@@ -346,7 +346,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, 0.5, 1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, 0.5, 1 ).normalized )
 
       s( r )
       assert( back.v.isDefined )
@@ -363,7 +363,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, -0.5, 1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, -0.5, 1 ).normalized )
 
       s( r )
       assert( back.v.isDefined )
@@ -380,7 +380,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, -0.5, 1 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, -0.5, 1 ).normalized )
 
       s( r )
       assert( back.v.isDefined )
@@ -398,7 +398,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0.5, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0.5, 0.5 ).normalized )
 
       s( r )
       assert( left.v.isDefined )
@@ -415,7 +415,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0.5, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0.5, -0.5 ).normalized )
 
       s( r )
       assert( left.v.isDefined )
@@ -432,7 +432,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, -0.5, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, -0.5, 0.5 ).normalized )
 
       s( r )
       assert( left.v.isDefined )
@@ -449,7 +449,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, -0.5, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, -0.5, -0.5 ).normalized )
 
       s( r )
       assert( left.v.isDefined )
@@ -467,7 +467,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0.5, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0.5, -0.5 ).normalized )
 
       s( r )
       assert( right.v.isDefined )
@@ -484,7 +484,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0.5, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0.5, 0.5 ).normalized )
 
       s( r )
       assert( right.v.isDefined )
@@ -501,7 +501,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, -0.5, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, -0.5, -0.5 ).normalized )
 
       s( r )
       assert( right.v.isDefined )
@@ -518,7 +518,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, -0.5, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, -0.5, 0.5 ).normalized )
 
       s( r )
       assert( right.v.isDefined )
@@ -535,7 +535,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, 1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, 1, 0.5 ).normalized )
 
       s( r )
       assert( top.v.isDefined )
@@ -552,7 +552,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 1, 0.5 ).normalized )
 
       s( r )
       assert( top.v.isDefined )
@@ -569,7 +569,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, 1, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, 1, -0.5 ).normalized )
 
       s( r )
       assert( top.v.isDefined )
@@ -586,7 +586,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, 1, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, 1, -0.5 ).normalized )
 
       s( r )
       assert( top.v.isDefined )
@@ -603,7 +603,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, -1, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, -1, -0.5 ).normalized )
 
       s( r )
       assert( bottom.v.isDefined )
@@ -620,7 +620,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, -1, -0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, -1, -0.5 ).normalized )
 
       s( r )
       assert( bottom.v.isDefined )
@@ -637,7 +637,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -0.5, -1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -0.5, -1, 0.5 ).normalized )
 
       s( r )
       assert( bottom.v.isDefined )
@@ -654,7 +654,7 @@ class SkyboxSpec extends FunSpec {
       val bottom = TextureTestAdapter()
 
       val s = Skybox( front, back, left, right, top, bottom )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0.5, -1, 0.5 ).normalized )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0.5, -1, 0.5 ).normalized )
 
       s( r )
       assert( bottom.v.isDefined )

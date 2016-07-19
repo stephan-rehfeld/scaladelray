@@ -16,7 +16,7 @@
 
 package scaladelray.light
 
-import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.math.{Ray, Direction3, Point3}
 import scaladelray.{Constants, Color}
 import scaladelray.sampling.SamplingPattern
 import scaladelray.world.World
@@ -35,7 +35,7 @@ import scaladelray.world.World
  * @param linearAttenuation The linear attenuation.
  * @param quadraticAttenuation The quadratic attenuation.
  */
-class AreaLight( color : Color, position : Point3, direction : Vector3, upVector: Vector3, size : Double, samplingPoints : Int, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Serializable {
+class AreaLight(color : Color, position : Point3, direction : Direction3, upVector: Direction3, size : Double, samplingPoints : Int, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Serializable {
 
   /**
    * The w-axis of the local coordinate system of the light.
@@ -76,7 +76,7 @@ class AreaLight( color : Color, position : Point3, direction : Vector3, upVector
       }
     }
 
-    override def directionFrom(point: Point3): List[Vector3] = {
+    override def directionFrom(point: Point3): List[Direction3] = {
       for( p <- sp.samplingPoints.toList ) yield {
         val pos = position + u * p.x * size + v * p.y * size
         (pos - point).normalized

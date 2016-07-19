@@ -17,7 +17,7 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * A Bidirectional reflectance distribution function describes how light is reflected between two directions
@@ -25,7 +25,7 @@ import scaladelray.math.Vector3
  */
 abstract class BRDF extends BSDF {
 
-  override def apply( pIn: SurfacePoint, dIn: Vector3, eta : Double, pOut: SurfacePoint, dOut: Vector3 ) : Double = {
+  override def apply(pIn: SurfacePoint, dIn: Direction3, eta : Double, pOut: SurfacePoint, dOut: Direction3 ) : Double = {
     if( pIn != pOut || isPositive(pIn.n dot dIn) != isPositive(pIn.n dot dOut) ) 0.0 else apply( pIn, dIn, dOut )
   }
 
@@ -37,6 +37,6 @@ abstract class BRDF extends BSDF {
    * @param dOut The direction of the reflection.
    * @return The amount of light that is reflected between both directions at this point.
    */
-  def apply( p : SurfacePoint, dIn : Vector3, dOut : Vector3 ) : Double
+  def apply(p : SurfacePoint, dIn : Direction3, dOut : Direction3 ) : Double
 
 }

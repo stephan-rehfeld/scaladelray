@@ -17,14 +17,14 @@
 package scaladelray.world
 
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.math.{Vector3, Ray}
+import scaladelray.math.{Direction3, Ray}
 
 /**
  * A skybox is a background that consists of six textures, one for each side. Usually a set of special images is used
  * to have seamless background of the scene.
  *
  * Technically, this class determines the dominant direction of the ray. Afterward, it calculates texture coordinate
- * from the other two elements of the direction vector.
+ * from the other two elements of the direction.
  *
  * @param front The texture for the front side of the skybox.
  * @param back The texture for the back side of the skybox.
@@ -77,8 +77,8 @@ case class Skybox( front : Texture, back : Texture, left : Texture, right : Text
    * @param d The direction.
    * @return A string that contains the direction.
    */
-  private def mainDirection( d : Vector3 ) : String = {
-    val dAbs = Vector3( math.abs( d.x ), math.abs( d.y ), math.abs( d.z ) )
+  private def mainDirection( d : Direction3 ) : String = {
+    val dAbs = Direction3( math.abs( d.x ), math.abs( d.y ), math.abs( d.z ) )
     val e = largest( dAbs.x, dAbs.y, dAbs.z )
     e match {
       case 0 =>

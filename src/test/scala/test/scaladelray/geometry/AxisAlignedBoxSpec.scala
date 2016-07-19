@@ -21,7 +21,7 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.AxisAlignedBox
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3}
 
 
 class AxisAlignedBoxSpec extends FunSpec {
@@ -31,7 +31,7 @@ class AxisAlignedBoxSpec extends FunSpec {
   describe( "An AxisAlignedBox" ) {
     it( "should return two hit points for a ray that comes from the front of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -40,7 +40,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from the back of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, -3 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, -3 ), Direction3( 0, 0, 1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -49,7 +49,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from the left of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( -3, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( -3, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -57,7 +57,7 @@ class AxisAlignedBoxSpec extends FunSpec {
     }
     it( "should return two hit points for a ray that comes from the right of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 3, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 3, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -66,7 +66,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from the top of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -75,7 +75,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from the bottom of the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, -3, 0 ), Vector3( 0, 1, 0 ) )
+      val r = Ray( Point3( 0, -3, 0 ), Direction3( 0, 1, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( _.t == 2.5  ) )
@@ -86,7 +86,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the back" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -95,7 +95,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the front" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -104,7 +104,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the left" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -113,7 +113,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the right" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -122,7 +122,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the top" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -131,7 +131,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return two hit points for a ray that comes from inside the box and directs to the bottom" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hits = r --> aab
       assert( hits.size == 2 )
       assert( hits.exists( (h) => roughlyEquals( h.t, 0.5 ) ) )
@@ -140,7 +140,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should return no hit point for a ray that does not hit the box" ) {
       val aab = AxisAlignedBox( None )
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.isEmpty )
     }
@@ -149,7 +149,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0, 1 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       r --> aab
       assert( t.coordinates.isDefined )
     }
@@ -158,7 +158,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
@@ -167,7 +167,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
@@ -176,7 +176,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n == Normal3( 1, 0, 0 ) ) )
     }
@@ -185,7 +185,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n == Normal3( -1, 0, 0 ) ) )
     }
@@ -194,7 +194,7 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
@@ -203,18 +203,18 @@ class AxisAlignedBoxSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val aab = AxisAlignedBox( Some( t ) )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hits = r --> aab
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, -1, 0 ) ) )
     }
 
     it( "should calculate the tangent and bitangent correcly" ) {
-      val data = (Point3( 0, 0, 2 ), Vector3( 0, 0, -1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ) ) :: //front
-                 (Point3( 2, 0, 0 ), Vector3( -1, 0, 0 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ) ) :: //right
-                 (Point3( 0, 0, -2 ), Vector3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, -1, 0 ) ) :: // far
-                 (Point3( -2, 0, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), Vector3( 0, 0, -1 ) ) :: // left
-                 (Point3( 0, 2, 0 ), Vector3( 0, -1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ) ) :: // top
-                 (Point3( 0, -2, 0 ), Vector3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, 1 ) ) :: Nil // bottom
+      val data = (Point3( 0, 0, 2 ), Direction3( 0, 0, -1 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0 ) ) :: //front
+                 (Point3( 2, 0, 0 ), Direction3( -1, 0, 0 ), Direction3( 0, -1, 0 ), Direction3( 0, 0, -1 ) ) :: //right
+                 (Point3( 0, 0, -2 ), Direction3( 0, 0, 1 ), Direction3( 1, 0, 0 ), Direction3( 0, -1, 0 ) ) :: // far
+                 (Point3( -2, 0, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0 ), Direction3( 0, 0, -1 ) ) :: // left
+                 (Point3( 0, 2, 0 ), Direction3( 0, -1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ) ) :: // top
+                 (Point3( 0, -2, 0 ), Direction3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, 1 ) ) :: Nil // bottom
 
       val aab = AxisAlignedBox( None )
 
@@ -242,7 +242,7 @@ class AxisAlignedBoxSpec extends FunSpec {
 
     it( "should have a main axis of 0/1/0" ) {
       val aab = AxisAlignedBox( None )
-      assert( aab.axis == Vector3( 0, 1, 0 ) )
+      assert( aab.axis == Direction3( 0, 1, 0 ) )
     }
 
   }

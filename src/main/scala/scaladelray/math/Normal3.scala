@@ -54,23 +54,23 @@ case class Normal3( x : Double, y : Double, z : Double ) extends Serializable {
   def +( n : Normal3 ) = Normal3( x + n.x, y + n.y, z + n.z )
 
   /**
-   * This method calculated the dot product of this normal and a vector.
+   * This method calculated the dot product of this normal and a direction.
    *
-   * @param v The vector for the dot product.
-   * @return The dot product of this normal and the vector.
+   * @param v The direction for the dot product.
+   * @return The dot product of this normal and the direction.
    */
 
-  def dot( v : Vector3 ) : Double = x * v.x + y * v.y + z * v.z
+  def dot( v : Direction3 ) : Double = x * v.x + y * v.y + z * v.z
 
   /**
-   * This method converts the normal to a [[scaladelray.math.Vector3]]. The vector has the same values for x, y, and
+   * This method converts the normal to a [[scaladelray.math.Direction3]]. The direction has the same values for x, y, and
    * z.
    *
-   * @return A vector with the same x, y, and z values as this normal.
+   * @return A direction with the same x, y, and z values as this normal.
    */
-  def asVector = Vector3( x, y, z )
+  def asDirection = Direction3( x, y, z )
 
-  /**                                                  g
+  /**
     * Inverts the normal.
     *
     * @return An inverted normal.

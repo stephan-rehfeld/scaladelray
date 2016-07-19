@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.math.{Ray, Direction3, Point3}
 import scaladelray.geometry.Geometry
 import scaladelray.Color
 import scaladelray.world.{SingleBackgroundColor, World}
@@ -29,7 +29,7 @@ class RaySpec extends FunSpec {
     it( "should take the origin and the direction as parameter and provide them as attributes" ) {
 
       val o = Point3( 0, 0, 0 )
-      val d = Vector3( 0, 0, -1 )
+      val d = Direction3( 0, 0, -1 )
 
       val r = Ray( o, d )
 
@@ -38,7 +38,7 @@ class RaySpec extends FunSpec {
     }
 
     it( "should throw an exception if null is passed as origin" ) {
-      val d = Vector3( 0, 0, -1 )
+      val d = Direction3( 0, 0, -1 )
       intercept[RuntimeException] {
         Ray( null, d )
       }
@@ -54,7 +54,7 @@ class RaySpec extends FunSpec {
     it( "should have an apply method that takes a double value as parameter and calculates a point" ) {
 
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -65,7 +65,7 @@ class RaySpec extends FunSpec {
     it( "should have an apply method that takes a point value as parameter and calculates the t of the point" )  {
 
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -76,7 +76,7 @@ class RaySpec extends FunSpec {
     it( "should have a \"shoot-the-ray\" operator that take a geometry as parameter and calls the operator on that geometry" ) {
 
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -91,7 +91,7 @@ class RaySpec extends FunSpec {
         override val center = Point3( 0, 0, 0 )
         override val lbf = Point3( 0, 0, 0 )
         override val run = Point3( 0, 0, 0 )
-        override val axis = Vector3( 0, 0, 0 )
+        override val axis = Direction3( 0, 0, 0 )
       }
 
       r --> geo
@@ -102,7 +102,7 @@ class RaySpec extends FunSpec {
 
     it( "should have a \"shoot-the-ray\" operator that take a world as parameter and calls the operator on that world" ) {
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -123,7 +123,7 @@ class RaySpec extends FunSpec {
     it( "should not be altered by the apply method to calculate a point" ) {
 
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -136,7 +136,7 @@ class RaySpec extends FunSpec {
 
     it( "should not be altered by the apply method to calculate a t" ) {
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -149,7 +149,7 @@ class RaySpec extends FunSpec {
     it( "should not be altered by \"shoot-the-ray\" operator for a geometry" ) {
 
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 
@@ -164,7 +164,7 @@ class RaySpec extends FunSpec {
         override val center = Point3( 0, 0, 0 )
         override val lbf = Point3( 0, 0, 0 )
         override val run = Point3( 0, 0, 0 )
-        override val axis = Vector3( 0, 0, 0 )
+        override val axis = Direction3( 0, 0, 0 )
       }
 
       r --> geo
@@ -176,7 +176,7 @@ class RaySpec extends FunSpec {
 
     it( "should not be altered by \"shoot-the-ray\" operator for a world" ) {
       val o = Point3( 2, 3, 5 )
-      val d = Vector3( 7, 11, 13 )
+      val d = Direction3( 7, 11, 13 )
 
       val r = Ray( o, d )
 

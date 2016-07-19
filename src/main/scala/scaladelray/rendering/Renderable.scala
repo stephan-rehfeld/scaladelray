@@ -35,7 +35,7 @@ case class Renderable( override val t : Transform, geometry : Geometry, @depreca
   def <-- ( r : Ray ) : Set[Hit] = {
     val ri = down( r )
     val geoHits = ri --> geometry
-    for( h <- geoHits ) yield Hit( r, this, h.t, SurfacePoint( up( h.sp.p ), up( h.sp.n ), up( h.sp.tan.asNormal ).asVector, up( h.sp.biTan.asNormal ).asVector, h.sp.t ) )
+    for( h <- geoHits ) yield Hit( r, this, h.t, SurfacePoint( up( h.sp.p ), up( h.sp.n ), up( h.sp.tan.asNormal ).asDirection, up( h.sp.biTan.asNormal ).asDirection, h.sp.t ) )
   }
 
   /**

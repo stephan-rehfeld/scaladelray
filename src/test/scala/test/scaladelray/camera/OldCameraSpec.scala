@@ -19,14 +19,14 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.OldCamera
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 
-class OldCameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends OldCamera( e, g, t ) {
+class OldCameraProxy(e : Point3, g : Direction3, t : Direction3 ) extends OldCamera( e, g, t ) {
   var called = false
 
   def apply(x: Int, y: Int): Set[Ray] = {
     called = true
-    Set() + Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+    Set() + Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
   }
 }
 
@@ -35,8 +35,8 @@ class OldCameraSpec extends FunSpec {
     it( "should calculate to correct u, v, and w vectors out of e, g, and t" ) {
 
       val e = Point3( 2, 3, 5 )
-      val g = Vector3( 7, 11, 13 )
-      val t = Vector3( 17, 19, 23 )
+      val g = Direction3( 7, 11, 13 )
+      val t = Direction3( 17, 19, 23 )
 
       val w = -g.normalized
       val u = (t x w).normalized
@@ -51,12 +51,12 @@ class OldCameraSpec extends FunSpec {
 
     it( "should have a function that takes a tuple of two Int's as parameter and calls the function to create a ray" ) {
       val e = Point3( 2, 3, 5 )
-      val g = Vector3( 7, 11, 13 )
-      val t = Vector3( 17, 19, 23 )
+      val g = Direction3( 7, 11, 13 )
+      val t = Direction3( 17, 19, 23 )
 
       val cam = new OldCameraProxy( e, g, t )
 
-      assert( cam( (100,100) ) == Set( Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) ) ) )
+      assert( cam( (100,100) ) == Set( Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) ) ) )
       assert( cam.called )
     }
   }

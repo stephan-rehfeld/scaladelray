@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.recursiveraytracing.light
 
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 import scaladelray.rendering.Renderable
 import scaladelray.world.World
 import scaladelray.{Color, Constants}
@@ -40,7 +40,7 @@ case class PointLight( renderable : Renderable, c : Color, p : Point3, constantA
     hits.isEmpty || (hits.sortWith(  _.t < _.t ).head.t > ray( p ) )
   }
 
-  override def directionFrom( p: Point3 ): Vector3 = (this.p - p).normalized
+  override def directionFrom( p: Point3 ): Direction3 = (this.p - p).normalized
 
   override def intensity(point: Point3): Double = {
     val distance = (point - p).magnitude

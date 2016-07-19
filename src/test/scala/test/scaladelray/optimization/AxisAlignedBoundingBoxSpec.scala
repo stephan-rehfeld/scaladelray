@@ -17,7 +17,7 @@
 package test.scaladelray.optimization
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Vector3, Point3, Ray}
+import scaladelray.math.{Direction3, Point3, Ray}
 import scaladelray.optimization.AxisAlignedBoundingBox
 
 class AxisAlignedBoundingBoxSpec extends FunSpec {
@@ -25,41 +25,41 @@ class AxisAlignedBoundingBoxSpec extends FunSpec {
   describe( "An AxisAlignedBox" ) {
     it( "should return true for a ray that comes from the front of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 3 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 3 ), Direction3( 0, 0, -1 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from the back of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, -3 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, -3 ), Direction3( 0, 0, 1 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from the left of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( -3, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( -3, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
     it( "should return true for a ray that comes from the right of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 3, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 3, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from the top of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from the bottom of the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, -3, 0 ), Vector3( 0, 1, 0 ) )
+      val r = Ray( Point3( 0, -3, 0 ), Direction3( 0, 1, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
@@ -68,49 +68,49 @@ class AxisAlignedBoundingBoxSpec extends FunSpec {
 
     it( "should return true for a ray that comes from inside the box and directs to the back" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from inside the box and directs to the front" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from inside the box and directs to the left" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from inside the box and directs to the right" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from inside the box and directs to the top" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return true for a ray that comes from inside the box and directs to the bottom" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( -1, 0, 0 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( -1, 0, 0 ) )
       val hit = aabb <-- r
       assert( hit )
     }
 
     it( "should return false for a ray that does not hit the box" ) {
       val aabb = new AxisAlignedBoundingBox( Point3( 0.5, 0.5, 0.5 ), Point3( -0.5, -0.5, -0.5 )  )
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, 0, -1 ) )
       val hit = aabb <-- r
       assert( !hit )
     }

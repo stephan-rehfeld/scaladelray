@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * A simple emission emits light in all directions from a point.
@@ -27,6 +27,6 @@ import scaladelray.math.Vector3
  */
 case class SimpleEmission( c : Color ) extends Emission {
 
-  override def apply( sp: SurfacePoint, d : Vector3 ) = c
+  override def apply( sp: SurfacePoint, d : Direction3 ) = c
 
 }

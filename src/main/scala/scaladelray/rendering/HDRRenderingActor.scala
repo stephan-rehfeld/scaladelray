@@ -35,7 +35,7 @@ class HDRRenderingActor( cam : OldCamera, algorithm : Algorithm ) extends Actor 
 
   def receive = {
     case msg : HDRRender =>
-      sender ! (msg.rect,algorithm.render( cam, msg.rect ))
+      sender ! (msg.rect,algorithm.render( null, cam, msg.rect ))
 
   }
 

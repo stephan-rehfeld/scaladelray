@@ -29,12 +29,12 @@ package scaladelray.math
 case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
 
   /**
-   * This method calculates the direction between two points and returns the result as [[scaladelray.math.Vector3]].
+   * This method calculates the direction between two points and returns the result as [[scaladelray.math.Direction3]].
    *
    * @param p The other point.
-   * @return The direction between both points as [[scaladelray.math.Vector3]].
+   * @return The direction between both points as [[scaladelray.math.Direction3]].
    */
-  def -( p : Point3 ) = Vector3( x - p.x, y - p.y, z - p.z )
+  def -( p : Point3 ) = Direction3( x - p.x, y - p.y, z - p.z )
 
   /**
    * This method calculates a new point by subtracting a direction from this point.
@@ -42,7 +42,7 @@ case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
    * @param v The direction.
    * @return The new point in the opposite direction of v.
    */
-  def -( v : Vector3 ) = Point3( x - v.x, y - v.y, z - v.z )
+  def -( v : Direction3 ) = Point3( x - v.x, y - v.y, z - v.z )
 
   /**
    * This method calculates a new point by adding a direction to this point.
@@ -50,15 +50,15 @@ case class Point3( x : Double, y : Double, z : Double ) extends Serializable {
    * @param v The direction.
    * @return The new point in the direction of v.
    */
-  def +( v : Vector3 ) = Point3( x + v.x, y + v.y, z + v.z )
+  def +( v : Direction3 ) = Point3( x + v.x, y + v.y, z + v.z )
 
   /**
-   * This method converts the point to a [[scaladelray.math.Vector3]]. The vector has the same values for x, y, an
+   * This method converts the point to a [[scaladelray.math.Direction3]]. The direction has the same values for x, y, an
    * z.
    *
-   * @return A vector with the same x, y, and z values as this point.
+   * @return A direction with the same x, y, and z values as this point.
    */
-  def asVector = Vector3( x, y, z )
+  def asDirection = Direction3( x, y, z )
 
   /**
    * This method converts the point to a [[scaladelray.math.Normal3]]. The normal has the same values for x, y, and

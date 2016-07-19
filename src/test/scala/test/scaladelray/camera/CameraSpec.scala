@@ -19,9 +19,9 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.Camera
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 
-class CameraProxy( e : Point3, g : Vector3, t : Vector3 ) extends Camera( e, g, t ) {
+class CameraProxy(e : Point3, g : Direction3, t : Direction3 ) extends Camera( e, g, t ) {
 
 }
 
@@ -30,8 +30,8 @@ class CameraSpec extends FunSpec {
     it( "should calculate to correct u, v, and w vectors out of e, g, and t" ) {
 
       val e = Point3( 2, 3, 5 )
-      val g = Vector3( 7, 11, 13 )
-      val t = Vector3( 17, 19, 23 )
+      val g = Direction3( 7, 11, 13 )
+      val t = Direction3( 17, 19, 23 )
 
       val w = -g.normalized
       val u = (t x w).normalized
@@ -47,8 +47,8 @@ class CameraSpec extends FunSpec {
     it( "should throw an exception if the magnitude of g is 0.0") {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 0, 0, 0 )
-        val t = Vector3( 17, 19, 23 )
+        val g = Direction3( 0, 0, 0 )
+        val t = Direction3( 17, 19, 23 )
 
         val cam = new CameraProxy( e, g, t )
       }
@@ -56,8 +56,8 @@ class CameraSpec extends FunSpec {
     it( "should throw an exception if the magnitude of t is 0.0") {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 7, 11, 13 )
-        val t = Vector3( 0, 0, 0 )
+        val g = Direction3( 7, 11, 13 )
+        val t = Direction3( 0, 0, 0 )
 
         val cam = new CameraProxy( e, g, t )
       }
@@ -65,7 +65,7 @@ class CameraSpec extends FunSpec {
     it( "should throw an exception if g and t point in the same direction" ) {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 7, 11, 13 )
+        val g = Direction3( 7, 11, 13 )
 
         val cam = new CameraProxy( e, g, g * 3 )
       }

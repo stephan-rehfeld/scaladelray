@@ -19,7 +19,7 @@ package test.scaladelray.world
 import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.world.SingleBackgroundColor
-import scaladelray.math.{Ray, Point3, Vector3}
+import scaladelray.math.{Ray, Point3, Direction3}
 
 class SingleBackgroundColorSpec extends FunSpec {
 
@@ -28,7 +28,7 @@ class SingleBackgroundColorSpec extends FunSpec {
       val c = Color( 0, 1.0, 0.77 )
       val b = SingleBackgroundColor( c )
       for( ox <- -10 to 10; oy <- -10 to 10; oz <- -10 to 10; dx <- -10 to 10; dy <- -10 to 10; dz <- -10 to 10 )
-        assert( b( Ray( Point3( ox, oy, oz ), Vector3( dx, dy, dz ).normalized ) ) == c )
+        assert( b( Ray( Point3( ox, oy, oz ), Direction3( dx, dy, dz ).normalized ) ) == c )
     }
   }
 

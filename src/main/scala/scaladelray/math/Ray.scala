@@ -29,7 +29,7 @@ import scaladelray.world.World
  * @param o The origin of the ray. Must not be null.
  * @param d The direction of the ray. Must not be null.
  */
-case class Ray( o : Point3, d : Vector3 ) extends Serializable {
+case class Ray( o : Point3, d : Direction3 ) extends Serializable {
 
   require( o != null )
   require( d != null )

@@ -17,7 +17,7 @@
 package test.scaladelray.geometry
 
 import scaladelray.geometry.{GeometryHit, Geometry}
-import scaladelray.math.{Point3, Vector3, Ray}
+import scaladelray.math.{Point3, Direction3, Ray}
 
 case class GeometryTestAdapter() extends Geometry {
   override def <--(r: Ray): Set[GeometryHit] = throw new UnsupportedOperationException( "Just a test adapter! Don't call this method!" )
@@ -25,7 +25,7 @@ case class GeometryTestAdapter() extends Geometry {
   override val center = Point3( 0, 0, 0 )
   override val lbf = Point3( 0, 0, 0 )
   override val run = Point3( 0, 0, 0 )
-  override val axis = Vector3( 0, 0, 0 )
+  override val axis = Direction3( 0, 0, 0 )
 }
 
 class GeometrySpec {

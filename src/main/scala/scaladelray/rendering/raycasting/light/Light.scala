@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 import scaladelray.Color
 
 /**
@@ -44,7 +44,7 @@ trait Light {
    * @param p The point in space.
    * @return The direction to the light source.
    */
-  def directionFrom( p : Point3 ) : Vector3
+  def directionFrom( p : Point3 ) : Direction3
 
   /**
    * An implementation of this function returns the intensity of the light that reaches the illuminated point.

@@ -23,7 +23,7 @@ import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.bsdf.PerfectTransparentBTDF
 import scaladelray.material.{Material, TransparentOldMaterial}
-import scaladelray.math.{Point3, Ray, Vector3, _}
+import scaladelray.math.{Point3, Ray, Direction3, _}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.world.{SingleBackgroundColor, World}
@@ -37,17 +37,17 @@ class TransparentOldMaterialSpec extends FunSpec {
       val m = Material( None, (1.0, SingleColorTexture( Color( 1, 1, 1 ) ), PerfectTransparentBTDF( 1.0 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Direction3( 0, 1, 1 ).normalized.asNormal, Direction3( 1, -1, 0 ).normalized, Direction3( 0, 0, -1 ), tc ) )
 
       var called = 0
 
       val tracer = ( r: Ray, w : World) => {
         assert( r.o == Point3( 0, 0, -1 ) )
-        assert( r.d =~= Vector3( 0, 1, 0 ) || r.d =~= Vector3( 0, 0, -1 ) )
+        assert( r.d =~= Direction3( 0, 1, 0 ) || r.d =~= Direction3( 0, 0, -1 ) )
         called += 1
         Color( 0, 0, 0 )
       }

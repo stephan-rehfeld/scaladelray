@@ -17,7 +17,7 @@
 package scaladelray.geometry
 
 import scaladelray.texture.{TexCoord2D, Texture}
-import scaladelray.math.{Point3, Normal3, Vector3, Ray}
+import scaladelray.math.{Point3, Normal3, Direction3, Ray}
 
 /**
  * A disc with the diameter of 1.
@@ -29,11 +29,11 @@ case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializabl
   override def <-- ( r : Ray ) = {
     val h = r.d dot Disc.n
     if( h != 0.0 ) {
-      val t = ((-r.o.asVector) dot Disc.n) / h
+      val t = ((-r.o.asDirection) dot Disc.n) / h
       val p = r( t )
       if( math.sqrt( p.x * p.x + p.z * p.z ) <= Disc.r ) {
-        val tangent = Vector3( 1, 0, 0 )
-        val bitangent = Vector3( 0, 0, -1 )
+        val tangent = Direction3( 1, 0, 0 )
+        val bitangent = Direction3( 0, 0, -1 )
         val texCoord = TexCoord2D( p.x + 0.5, -p.z + 0.5 )
 
         val n = normalMap match {
@@ -56,7 +56,7 @@ case class Disc( normalMap : Option[Texture] ) extends Geometry with Serializabl
 
   override val run = Point3( 0.5, 0, 0.5 )
 
-  override val axis = Disc.n.asVector
+  override val axis = Disc.n.asDirection
 }
 
 /**

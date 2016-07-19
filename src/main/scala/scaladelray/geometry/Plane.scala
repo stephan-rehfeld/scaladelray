@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Point3, Vector3, Normal3, Ray}
+import scaladelray.math.{Point3, Direction3, Normal3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 
@@ -30,10 +30,10 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
    override def <-- ( r : Ray ) = {
      val h = r.d dot Plane.n
      if( h != 0.0 ) {
-       val t = ((-r.o.asVector) dot Plane.n) / h
+       val t = ((-r.o.asDirection) dot Plane.n) / h
        val p = r( t )
-       val tangent = Vector3( 1, 0, 0 )
-       val bitangent = Vector3( 0, 0, -1 )
+       val tangent = Direction3( 1, 0, 0 )
+       val bitangent = Direction3( 0, 0, -1 )
        val texCoord = TexCoord2D( p.x, -p.z )
 
        val n = normalMap match {
@@ -55,7 +55,7 @@ case class Plane( normalMap : Option[Texture] ) extends Geometry with Serializab
 
   override val run = Point3( Double.PositiveInfinity, 0.0, Double.PositiveInfinity )
 
-  override val axis: Vector3 = Plane.n.asVector
+  override val axis: Direction3 = Plane.n.asDirection
 }
 
 /**

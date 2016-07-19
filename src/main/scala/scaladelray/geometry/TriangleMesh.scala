@@ -56,13 +56,13 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
             } )
 
 
-  override val center = (vertices.foldLeft( Vector3( 0, 0, 0 ) )( (b,a) => { b + a.asVector } ) / vertices.size).asPoint
+  override val center = (vertices.foldLeft( Direction3( 0, 0, 0 ) )((b, a) => { b + a.asDirection } ) / vertices.size).asPoint
 
   override val lbf = Point3( minX, minY, minZ )
 
   override val run = Point3( maxX, maxY, maxZ )
 
-  override val axis = Vector3( 0, 1, 0 )
+  override val axis = Direction3( 0, 1, 0 )
 
   val tanAndBitans = if( faces.forall( (f) => f.size == 3 && f.forall( (v) => v._2.isDefined && v._3.isDefined )  ) ) {
     for( face <- faces ) yield {
@@ -82,17 +82,17 @@ case class TriangleMesh( vertices : Array[Point3], normals : Array[Normal3], tex
 
       val r = 1.0 / (abt.u * act.v - act.u * abt.v)
 
-      val tan = Vector3( (act.v*ab.x-abt.v*ac.x) * r,
+      val tan = Direction3( (act.v*ab.x-abt.v*ac.x) * r,
         (act.v*ab.y-abt.v*ac.y) * r,
         (act.v*ab.z-abt.v*ac.z) * r )
-      val biTan = Vector3( (abt.u*ac.x-act.u*ac.x) * r,
+      val biTan = Direction3( (abt.u*ac.x-act.u*ac.x) * r,
         (abt.u*ac.y-act.u*ac.y) * r,
         (abt.u*ac.z-act.u*ac.z) * r
       )
       (tan,biTan)
     }
   } else {
-    new Array[(Vector3,Vector3)](0)
+    new Array[(Direction3,Direction3)](0)
   }
 
   /**

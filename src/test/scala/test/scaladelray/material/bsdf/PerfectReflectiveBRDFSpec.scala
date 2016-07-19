@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.bsdf.PerfectReflectiveBRDF
-import scaladelray.math.{Normal3, Point3, Vector3}
+import scaladelray.math.{Normal3, Point3, Direction3}
 import scaladelray.texture.TexCoord2D
 
 class PerfectReflectiveBRDFSpec extends FunSpec {
@@ -28,7 +28,7 @@ class PerfectReflectiveBRDFSpec extends FunSpec {
   describe("A PerfectReflectiveBRDF") {
     it("should 1.0 if out is the reflected in direction otherwise 0.0") {
       val perfectReflectiveBRDF = PerfectReflectiveBRDF()
-      val surfacePoint = SurfacePoint(Point3(0, 0, 0), Normal3(0, 0, 0), Vector3(1, 0, 0), Vector3(0, 0, -1), TexCoord2D(0, 0))
+      val surfacePoint = SurfacePoint(Point3(0, 0, 0), Normal3(0, 0, 0), Direction3(1, 0, 0), Direction3(0, 0, -1), TexCoord2D(0, 0))
 
       val steps = 6
 
@@ -40,8 +40,8 @@ class PerfectReflectiveBRDFSpec extends FunSpec {
         yOut <- 1 to steps
         zOut <- 0 to steps
       } {
-        val in = Vector3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
-        val out = Vector3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
+        val in = Direction3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
+        val out = Direction3(xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0).normalized
         if (in.reflectOn(surfacePoint.n) =~= out)
           assert(perfectReflectiveBRDF(surfacePoint, in, 1.0, surfacePoint, out) == 1.0)
         else

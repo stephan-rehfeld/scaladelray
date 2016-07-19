@@ -20,14 +20,14 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.camera.PerspectiveOldCamera
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 
 
 class PerspectiveCameraProvider extends CameraProvider with TableModel {
 
   var position = Point3( 0, 0, 0 )
-  var gazeDirection = Vector3( 0, 0, -1 )
-  var upVector = Vector3( 0, 1, 0 )
+  var gazeDirection = Direction3( 0, 0, -1 )
+  var upVector = Direction3( 0, 1, 0 )
   var angle = math.Pi / 4.0
   var samplingPatternProvider : Option[SamplingPatternProvider] = Some( new RegularSamplingPatternProvider )
 
@@ -86,10 +86,10 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
           position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
-          gazeDirection = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          gazeDirection = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 2 =>
           val v = obj.asInstanceOf[String].split( " " )
-          upVector = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          upVector = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 3 =>
           angle = math.toRadians( obj.asInstanceOf[String].toDouble )
       }

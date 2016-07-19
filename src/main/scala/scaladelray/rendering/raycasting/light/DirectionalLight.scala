@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 import scaladelray.Color
 
 /**
@@ -24,7 +24,7 @@ import scaladelray.Color
  *
  * @param d The direction of the point light.
  */
-case class DirectionalLight( c : Color ,d : Vector3 ) extends Light {
+case class DirectionalLight( c : Color ,d : Direction3 ) extends Light {
 
   require( d.magnitude != 0, "The length of the direction vector must not be 0!")
 
@@ -32,7 +32,7 @@ case class DirectionalLight( c : Color ,d : Vector3 ) extends Light {
 
   override def illuminates(p: Point3): Boolean = true
 
-  override def directionFrom(p: Point3): Vector3 = l
+  override def directionFrom(p: Point3): Direction3 = l
 
   override def intensity( point: Point3 ): Double = 1.0
 }

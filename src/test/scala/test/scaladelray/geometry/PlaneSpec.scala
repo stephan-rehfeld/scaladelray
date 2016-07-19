@@ -21,13 +21,13 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Plane
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3}
 
 class PlaneSpec extends FunSpec {
 
   describe( "A Plane" ) {
     it( "should return one hit for a ray that comes from above the plane and directs downward" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, -1, 0 ) )
       val p = Plane( None )
 
       val hits = r --> p
@@ -36,7 +36,7 @@ class PlaneSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the plane but has the origin outside the plane" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, 0, 1 ) )
       val p = Plane( None )
 
       val hits = r --> p
@@ -44,7 +44,7 @@ class PlaneSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the plane and has the origin on the plane" ) {
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
       val p = Plane( None )
 
       val hits = r --> p
@@ -55,7 +55,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0, 1 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       r --> p
       assert( t.coordinates.isDefined )
     }
@@ -64,7 +64,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
@@ -73,7 +73,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n == Normal3( 0, -1, 0 ) ) )
     }
@@ -82,7 +82,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
     }
@@ -91,7 +91,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
     }
@@ -100,7 +100,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
@@ -109,7 +109,7 @@ class PlaneSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val p = Plane( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> p
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
@@ -124,9 +124,9 @@ class PlaneSpec extends FunSpec {
         dy <- 0 to 20
         dz <- 0 to 20
       } {
-        val r = Ray( Point3( -1.0 + ox * 0.1, -1.0 + oy * 0.1, -1.0 + oz * 0.1 ), Vector3( -1.0 + dx * 0.1, -1.0 + dy * 0.1, -1.0 + dz * 0.1 ) )
+        val r = Ray( Point3( -1.0 + ox * 0.1, -1.0 + oy * 0.1, -1.0 + oz * 0.1 ), Direction3( -1.0 + dx * 0.1, -1.0 + dy * 0.1, -1.0 + dz * 0.1 ) )
         val hits = r --> p
-        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+        assert( hits.forall( (h) => h.sp.tan == Direction3( 1, 0, 0 ) && h.sp.biTan == Direction3( 0, 0, -1 ) ) )
       }
 
     }
@@ -148,7 +148,7 @@ class PlaneSpec extends FunSpec {
 
     it( "should have a main axis of 0/1/0" ) {
       val p = Plane( None )
-      assert( p.axis == Vector3( 0, 1, 0 ) )
+      assert( p.axis == Direction3( 0, 1, 0 ) )
     }
   }
 

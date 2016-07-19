@@ -17,7 +17,7 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * A BSDF is a Bidirectional scattering distribution function. It is the super class of:
@@ -37,7 +37,7 @@ abstract class BSDF {
    * @param dOut The direction in which the ray leaved the surface.
    * @return The amount of light that is transported between both points and directions.
    */
-  def apply( pIn : SurfacePoint, dIn : Vector3, eta : Double, pOut : SurfacePoint, dOut : Vector3 ) : Double
+  def apply(pIn : SurfacePoint, dIn : Direction3, eta : Double, pOut : SurfacePoint, dOut : Direction3 ) : Double
 
 
   /**

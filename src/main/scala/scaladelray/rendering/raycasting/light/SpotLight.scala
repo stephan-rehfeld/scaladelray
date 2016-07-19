@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 import scaladelray.Color
 
 /**
@@ -30,14 +30,14 @@ import scaladelray.Color
  * @param linearAttenuation The linear attenuation.
  * @param quadraticAttenuation The quadratic attenuation.
  */
-case class SpotLight( c : Color,  p : Point3, d : Vector3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends Light {
+case class SpotLight(c : Color, p : Point3, d : Direction3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends Light {
   require( d.magnitude != 0, "The length of the direction must not be 0!" )
   require( halfAngle > 0, "The halfAngle must be larger than 0." )
   require( halfAngle <= math.Pi / 2.0, "The halfAngle must not be larger than 90 degrees.")
 
   override def illuminates( p: Point3 ): Boolean = math.acos( (p - this.p).normalized dot d) <= halfAngle
 
-  override def directionFrom( p: Point3 ): Vector3 = (this.p - p).normalized
+  override def directionFrom( p: Point3 ): Direction3 = (this.p - p).normalized
 
   override def intensity(point: Point3): Double = {
     val distance = (point - p).magnitude

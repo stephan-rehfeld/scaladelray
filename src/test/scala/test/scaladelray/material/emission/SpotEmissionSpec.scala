@@ -21,13 +21,13 @@ import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.emission.SpotEmission
-import scaladelray.math.{Normal3, Point3, Vector3}
+import scaladelray.math.{Normal3, Point3, Direction3}
 import scaladelray.texture.TexCoord2D
 
 class SpotEmissionSpec extends FunSpec  {
   describe( "A SpotEmission" )  {
     it( "should radiate only radiate within a given angle" ) {
-      val sp = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), TexCoord2D( 0, 0 )  )
+      val sp = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 1 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0 ), TexCoord2D( 0, 0 )  )
       val steps = 10
 
       for{
@@ -40,7 +40,7 @@ class SpotEmissionSpec extends FunSpec  {
         val phi = azimuthal.toDouble * math.Pi * 2.0 / steps.toDouble
 
         val e = SpotEmission( Color( 1, 1, 1 ), halfAngle )
-        val d = Vector3( math.sin( theta ) * math.cos( phi ), math.sin( theta ) * math.sin( phi ), math.cos( theta ) )
+        val d = Direction3( math.sin( theta ) * math.cos( phi ), math.sin( theta ) * math.sin( phi ), math.cos( theta ) )
 
         if( math.acos( d dot sp.n ) <= halfAngle )
           assert( e(sp, d ) == e.c )

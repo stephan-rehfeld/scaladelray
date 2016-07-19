@@ -16,7 +16,7 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 import scaladelray.sampling.SamplingPattern
 
 /**
@@ -34,7 +34,7 @@ import scaladelray.sampling.SamplingPattern
  * @param s The scale factor of the image plane.
  * @param samplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
  */
-case class OrthographicOldCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, s : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends OldCamera( e, g, t ) with Serializable {
+case class OrthographicOldCamera(e : Point3, g : Direction3, t : Direction3, width : Int, height : Int, s : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends OldCamera( e, g, t ) with Serializable {
 
   private val a = width.asInstanceOf[Double] / height.asInstanceOf[Double]
   private val d = g.normalized

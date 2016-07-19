@@ -24,7 +24,7 @@ import scaladelray.geometry.SurfacePoint
 import scaladelray.light.PointLight
 import scaladelray.material.bsdf.{LambertBRDF, PhongSpecularBRDF}
 import scaladelray.material.{Material, PhongOldMaterial}
-import scaladelray.math.{Normal3, Point3, Ray, Vector3, _}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3, _}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
 import scaladelray.world.{SingleBackgroundColor, World}
@@ -38,10 +38,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val o = PhongOldMaterial( t1, t2, 1 )
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -59,10 +59,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       var called = false
 
@@ -78,7 +78,7 @@ class PhongOldMaterialSpec extends FunSpec {
 
     it( "should call createLight of the light" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val directionFromData = Direction3( 0, 1, 0 ) :: Nil
       val intensityData = 1.0 :: Nil
 
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -90,10 +90,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -103,7 +103,7 @@ class PhongOldMaterialSpec extends FunSpec {
 
     it( "should request if a light hits a point" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val directionFromData = Direction3( 0, 1, 0 ) :: Nil
       val intensityData = 1.0 :: Nil
 
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -115,10 +115,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -135,7 +135,7 @@ class PhongOldMaterialSpec extends FunSpec {
 
     it( "should request the direction to the light" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val directionFromData = Direction3( 0, 1, 0 ) :: Nil
       val intensityData = 1.0 :: Nil
 
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -147,10 +147,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -163,7 +163,7 @@ class PhongOldMaterialSpec extends FunSpec {
 
     it( "should request the intensity of the light" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 1, 0 ) :: Nil
+      val directionFromData = Direction3( 0, 1, 0 ) :: Nil
       val intensityData = 1.0 :: Nil
 
       val l1 = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -175,10 +175,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), l1 + l2 )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) )
 
@@ -198,10 +198,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,  SurfacePoint( r( 1 ), Normal3( 0, 0, 1 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0 ), tc ) )
 
       assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) )
     }
@@ -215,18 +215,18 @@ class PhongOldMaterialSpec extends FunSpec {
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l )
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Vector3( 0, 1, 1 ).normalized.asNormal, Vector3( 1, -1, 0 ).normalized, Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1, SurfacePoint( r( 1 ), Direction3( 0, 1, 1 ).normalized.asNormal, Direction3( 1, -1, 0 ).normalized, Direction3( 0, 0, -1 ), tc ) )
 
-      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Vector3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 0 ) )
+      assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1 * Math.cos( Math.PI / 4 ) , Direction3( 0, 0, 1 ).reflectOn( h.sp.n ) dot -r.d , 0 ) )
     }
 
     it( "should use the information if the light illuminates the surface to calculate the color" ) {
       val illuminatesData = false :: Nil
-      val directionFromData = Vector3( 0, 0, 1 ) :: Nil
+      val directionFromData = Direction3( 0, 0, 1 ) :: Nil
       val intensityData = 1.0 :: Nil
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -237,18 +237,18 @@ class PhongOldMaterialSpec extends FunSpec {
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
 
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Direction3( 0, -1, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0, 0, 0 ) )
     }
 
     it( "should use the intensity returned by the light to calculate to color" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 0, 1 ) :: Nil
+      val directionFromData = Direction3( 0, 0, 1 ) :: Nil
       val intensityData = 0.5 :: Nil
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -259,17 +259,17 @@ class PhongOldMaterialSpec extends FunSpec {
       val m = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Direction3( 0, -1, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 0.5, 0.5, 0.0 ) )
     }
 
     it( "should use the direction returned by the light to calculate to color" ) {
       val illuminatesData = true :: Nil
-      val directionFromData = Vector3( 0, 1, 1 ).normalized :: Nil
+      val directionFromData = Direction3( 0, 1, 1 ).normalized :: Nil
       val intensityData = 1.0 :: Nil
 
       val l = new LightTestAdapter( illuminatesData, directionFromData, intensityData )
@@ -280,10 +280,10 @@ class PhongOldMaterialSpec extends FunSpec {
       val m  = Material( None, (0.5, t1, LambertBRDF() ), (0.5, t2, PhongSpecularBRDF( 1 ) ) )
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set() + l  )
-      val r = Ray( Point3(0,0,0), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3(0,0,0), Direction3( 0, 0, -1 ) )
       val g = new GeometryTestAdapter
       val tc = TexCoord2D( 1.0, 1.0 )
-      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Vector3( 0, -1, 0 ), Vector3( 0, 0, -1 ), tc ) )
+      val h = Hit( r, Renderable( Transform(), g, o, m ), 1,       SurfacePoint( r( 1 ),Normal3( 0, 0, 1 ), Direction3( 0, -1, 0 ), Direction3( 0, 0, -1 ), tc ) )
 
       assert( o.colorFor( h, w, (_,_) => Color( 0, 0, 0 ) ) == Color( 1, 1, 0 ) * Math.cos( Math.PI / 4 ) )
     }

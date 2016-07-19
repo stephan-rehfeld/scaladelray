@@ -18,14 +18,14 @@ package scaladelray.ui.model
 
 import javax.swing.table.TableModel
 import scaladelray.Color
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 import scaladelray.light.{DirectionalLight, LightDescription}
 import javax.swing.event.TableModelListener
 
 class DirectionalLightProvider extends LightDescriptionProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
-  var direction = Vector3( 0, 0, -1 )
+  var direction = Direction3( 0, 0, -1 )
 
   override def createLightDescription( l : () => Unit ) : LightDescription = {
     l()
@@ -73,7 +73,7 @@ class DirectionalLightProvider extends LightDescriptionProvider with TableModel 
           color = obj.asInstanceOf[Color]
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
-          direction = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          direction = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
       }
     } catch {
       case _ : Throwable =>

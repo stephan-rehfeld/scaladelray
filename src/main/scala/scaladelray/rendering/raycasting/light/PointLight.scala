@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.raycasting.light
 
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 import scaladelray.Color
 
 /**
@@ -32,7 +32,7 @@ case class PointLight( c : Color, p : Point3, constantAttenuation : Double = 1.0
 
   override def illuminates( p: Point3 ): Boolean = true
 
-  override def directionFrom( p: Point3 ): Vector3 = (this.p - p).normalized
+  override def directionFrom( p: Point3 ): Direction3 = (this.p - p).normalized
 
   override def intensity(point: Point3): Double = {
     val distance = (point - p).magnitude

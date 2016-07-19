@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Vector3, Mat3x3, Point3}
+import scaladelray.math.{Direction3, Mat3x3, Point3}
 
 class Mat3x3Spec  extends FunSpec {
 
@@ -65,11 +65,11 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       val r = m * v
 
-      assert( r == Vector3( 2 * 29 + 3 * 31 + 5 * 37, 7 * 29 + 11 * 31 + 13 * 37, 17 * 29 + 19 * 31 + 23 * 37 ))
+      assert( r == Direction3( 2 * 29 + 3 * 31 + 5 * 37, 7 * 29 + 11 * 31 + 13 * 37, 17 * 29 + 19 * 31 + 23 * 37 ))
     }
 
     it( "should multiply-able with points" ) {
@@ -89,7 +89,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       val r = m.replaceCol1( v )
 
@@ -103,7 +103,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       val r = m.replaceCol2( v )
 
@@ -117,7 +117,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       val r = m.replaceCol3( v )
 
@@ -131,7 +131,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m * v
 
@@ -171,7 +171,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol1( v )
 
@@ -191,7 +191,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol2( v )
 
@@ -211,7 +211,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol3( v )
 
@@ -231,7 +231,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m * v
 
@@ -259,7 +259,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol1( v )
 
@@ -273,7 +273,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol2( v )
 
@@ -287,7 +287,7 @@ class Mat3x3Spec  extends FunSpec {
         7, 11, 13,
         17, 19, 23 )
 
-      val v = Vector3( 29, 31, 37 )
+      val v = Direction3( 29, 31, 37 )
 
       m.replaceCol3( v )
 

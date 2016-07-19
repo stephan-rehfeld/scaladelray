@@ -19,7 +19,7 @@ package test.scaladelray.light
 import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.math.{Transform, Ray, Vector3, Point3}
+import scaladelray.math.{Transform, Ray, Direction3, Point3}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
 import scaladelray.material.Material
@@ -31,7 +31,7 @@ class DirectionalLightSpec extends FunSpec {
   describe( "A DirectionalLight" ) {
     it( "should radiate all points" ) {
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
@@ -41,7 +41,7 @@ class DirectionalLightSpec extends FunSpec {
     }
 
     it( "should return itself when createLight is called." ) {
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
       assert( l == l.createLight )
     }
 
@@ -54,13 +54,13 @@ class DirectionalLightSpec extends FunSpec {
           Set[Hit]()
         }
       }
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
       l.illuminates( Point3( 3, 3, 3 ), w )
       assert( called )
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
+      val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
       for( d <- directions ) {
@@ -73,12 +73,12 @@ class DirectionalLightSpec extends FunSpec {
 
 
     it( "should only have one sampling point") {
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
       assert( l.samplingPoints == 1 )
     }
     it( "should always return the same direction") {
 
-      val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
+      val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val points = for( d <- directions ) yield d.asPoint
 
       for( d <- directions )

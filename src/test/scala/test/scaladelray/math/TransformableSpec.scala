@@ -29,7 +29,7 @@ class TransformableSpec extends FunSpec {
       val t = Transform.translate( 1, -1, 10 ).scale( 1, 2, 4 ).rotateX( 1.23 ).rotateY( 2.4  ).rotateZ( -2 )
       val transformable = new Transformable( t ) {
         def performTest() = {
-          val r = Ray( Point3( 1, 2, 3 ), Vector3( 1, -1, 3 ).normalized )
+          val r = Ray( Point3( 1, 2, 3 ), Direction3( 1, -1, 3 ).normalized )
           assert( down(r) == Ray( t.i * r.o, t.i * r.d ))
         }
       }
@@ -40,7 +40,7 @@ class TransformableSpec extends FunSpec {
       val t = Transform.translate( 1, -1, 10 ).scale( 1, 2, 4 ).rotateX( 1.23 ).rotateY( 2.4  ).rotateZ( -2 )
       val transformable = new Transformable( t ) {
         def performTest() = {
-          val r = Ray( Point3( 1, 2, 3 ), Vector3( 1, -1, 3 ).normalized )
+          val r = Ray( Point3( 1, 2, 3 ), Direction3( 1, -1, 3 ).normalized )
           assert( up(r) == Ray( t.m * r.o, t.m * r.d ))
         }
       }
@@ -72,7 +72,7 @@ class TransformableSpec extends FunSpec {
       val t = Transform.translate( 1, -1, 10 ).scale( 1, 2, 4 ).rotateX( 1.23 ).rotateY( 2.4  ).rotateZ( -2 )
       val transformable = new Transformable( t ) {
         def performTest() = {
-          val v = Vector3( 1, -1, 3 )
+          val v = Direction3( 1, -1, 3 )
           assert( down(v) == t.i * v )
         }
       }
@@ -82,7 +82,7 @@ class TransformableSpec extends FunSpec {
       val t = Transform.translate( 1, -1, 10 ).scale( 1, 2, 4 ).rotateX( 1.23 ).rotateY( 2.4  ).rotateZ( -2 )
       val transformable = new Transformable( t ) {
         def performTest() = {
-          val v = Vector3( 1, -1, 3 )
+          val v = Direction3( 1, -1, 3 )
           assert( up(v) == t.m * v )
         }
       }
@@ -93,8 +93,8 @@ class TransformableSpec extends FunSpec {
       val t = Transform.translate( 1, -1, 10 ).scale( 1, 2, 4 ).rotateX( 1.23 ).rotateY( 2.4  ).rotateZ( -2 )
       val transformable = new Transformable( t ) {
         def performTest() = {
-          val n = Vector3( 1, -1, 3 ).normalized.asNormal
-          assert( up(n) == (t.i.transposed * n.asVector).normalized.asNormal )
+          val n = Direction3( 1, -1, 3 ).normalized.asNormal
+          assert( up(n) == (t.i.transposed * n.asDirection).normalized.asNormal )
         }
       }
       transformable.performTest()

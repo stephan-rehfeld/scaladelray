@@ -20,14 +20,14 @@ import org.scalatest.FunSpec
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.bsdf.BTDF
-import scaladelray.math.{Normal3, Point3, Vector3}
+import scaladelray.math.{Normal3, Point3, Direction3}
 import scaladelray.texture.TexCoord2D
 
 
 case class BTDFTestAdapter() extends BTDF {
   var called = false
 
-  override def apply(p: SurfacePoint, dIn: Vector3, eta : Double, dOut: Vector3): Double = {
+  override def apply(p: SurfacePoint, dIn: Direction3, eta : Double, dOut: Direction3): Double = {
     called = true
     1.0
   }
@@ -39,20 +39,20 @@ class BTDFSpec extends FunSpec {
     it( "should return 0.0 if the in and out points are different" ) {
       val btdf = BTDFTestAdapter()
 
-      val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
-      val sp2 = SurfacePoint( Point3( 1, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
+      val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
+      val sp2 = SurfacePoint( Point3( 1, 0, 0 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
-      assert( btdf( sp1, Vector3( 0, 1, 0 ), 1.0, sp2, Vector3( 0, 1, 0 ) ) == 0.0 )
+      assert( btdf( sp1, Direction3( 0, 1, 0 ), 1.0, sp2, Direction3( 0, 1, 0 ) ) == 0.0 )
       assert( !btdf.called )
     }
 
     it( "should call the reduced apply function if in and out points are the same and in and out direction is on the same side of the surface" ) {
       val btdf = BTDFTestAdapter()
 
-      val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
-      val sp2 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
+      val sp1 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
+      val sp2 = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 1, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
-      assert( btdf( sp1, Vector3( 0, 1, 0 ), 1.0, sp2, Vector3( 0, -1, 0 ) ) == 1.0 )
+      assert( btdf( sp1, Direction3( 0, 1, 0 ), 1.0, sp2, Direction3( 0, -1, 0 ) ) == 1.0 )
       assert( btdf.called )
     }
   }

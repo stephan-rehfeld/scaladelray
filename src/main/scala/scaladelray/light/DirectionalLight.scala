@@ -17,7 +17,7 @@
 package scaladelray.light
 
 import scaladelray.{Constants, Color}
-import scaladelray.math.{Ray, Point3, Vector3}
+import scaladelray.math.{Ray, Point3, Direction3}
 import scaladelray.world.World
 
 /**
@@ -29,7 +29,7 @@ import scaladelray.world.World
  * @param color The color of the light.
  * @param direction The direction of the light.
  */
-class DirectionalLight( color : Color, direction : Vector3 ) extends LightDescription( color ) with Light with Serializable {
+class DirectionalLight( color : Color, direction : Direction3 ) extends LightDescription( color ) with Light with Serializable {
   val l = (direction * -1).normalized
 
   override def illuminates(point: Point3, world : World) = (Ray( point, direction * -1 ) --> world).filter( _.t > Constants.EPSILON ).isEmpty :: Nil

@@ -21,13 +21,13 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Disc
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3}
 
 class DiscSpec extends FunSpec {
 
   describe( "A Disc" ) {
     it( "should return one hit for a ray that comes from above the disc and directs downward" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, -1, 0 ) )
       val d = Disc( None )
 
       val hits = r --> d
@@ -36,7 +36,7 @@ class DiscSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the disc but has the origin outside the disc" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, 0, 1 ) )
       val d = Disc( None )
 
       val hits = r --> d
@@ -44,7 +44,7 @@ class DiscSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the disc and has the origin on the disc" ) {
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
       val d = Disc( None )
 
       val hits = r --> d
@@ -54,7 +54,7 @@ class DiscSpec extends FunSpec {
     it( "should return no hit for a ray that misses the disc (is outside of the radius" ) {
       val points = Point3( 1, 0, 1 ) :: Point3( 1, 0, -1 ) :: Point3( -1, 0, -1 ) :: Point3( 1, 0, 1 ) :: Nil
       for( p <- points ) {
-        val r = Ray( p, Vector3( 0, -1, 0 ) )
+        val r = Ray( p, Direction3( 0, -1, 0 ) )
         val d = Disc( None )
 
         val hits = r --> d
@@ -66,7 +66,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0, 1 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       r --> d
       assert( t.coordinates.isDefined )
     }
@@ -75,7 +75,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
@@ -84,7 +84,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n == Normal3( 0, -1, 0 ) ) )
     }
@@ -93,7 +93,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
     }
@@ -102,7 +102,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
     }
@@ -111,7 +111,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
@@ -120,7 +120,7 @@ class DiscSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Disc( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
@@ -138,7 +138,7 @@ class DiscSpec extends FunSpec {
         val d = (Point3( math.sin( theta * math.Pi / 10.0  ) * rad * Disc.r / 20.0, 0,  math.cos( theta * math.Pi / 10.0  ) * rad * Disc.r / 20.0 ) - o).normalized
         val r = Ray( o, d )
         val hits = r --> disc
-        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+        assert( hits.forall( (h) => h.sp.tan == Direction3( 1, 0, 0 ) && h.sp.biTan == Direction3( 0, 0, -1 ) ) )
       }
 
     }
@@ -160,7 +160,7 @@ class DiscSpec extends FunSpec {
 
     it( "should have a main axis of 0/1/0" ) {
       val disc = Disc( None )
-      assert( disc.axis == Vector3( 0, 1, 0 ) )
+      assert( disc.axis == Direction3( 0, 1, 0 ) )
     }
 
   }

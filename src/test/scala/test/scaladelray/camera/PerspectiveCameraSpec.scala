@@ -19,7 +19,7 @@ package test.scaladelray.camera
 import org.scalatest.FunSpec
 
 import scaladelray.camera.PerspectiveCamera
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 
 class PerspectiveCameraSpec extends FunSpec {
 
@@ -27,8 +27,8 @@ class PerspectiveCameraSpec extends FunSpec {
 
     it( "should throw an exception if one or both numbers of the image sensor tuple is not larger than zero" ) {
       val e = Point3( 2, 3, 5 )
-      val g = Vector3( 7, 11, 13 )
-      val t = Vector3( 17, 19, 23 )
+      val g = Direction3( 7, 11, 13 )
+      val t = Direction3( 17, 19, 23 )
 
       val focalLength = 0.01
       val fNumber = 4
@@ -52,8 +52,8 @@ class PerspectiveCameraSpec extends FunSpec {
     it( "should throw an exception if the focal length not larger than zero" ) {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 7, 11, 13 )
-        val t = Vector3( 17, 19, 23 )
+        val g = Direction3( 7, 11, 13 )
+        val t = Direction3( 17, 19, 23 )
 
         val imagePlaneFormat = (0.1,0.1)
         val focalLength = 0.0
@@ -66,8 +66,8 @@ class PerspectiveCameraSpec extends FunSpec {
     it( "should throw an exception if the f# is not larger than zero" ) {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 7, 11, 13 )
-        val t = Vector3( 17, 19, 23 )
+        val g = Direction3( 7, 11, 13 )
+        val t = Direction3( 17, 19, 23 )
 
         val imagePlaneFormat = (0.1,0.1)
         val focalLength = 0.01
@@ -80,8 +80,8 @@ class PerspectiveCameraSpec extends FunSpec {
     it( "should throw an exception if the depth of field is not larger than zero" ) {
       intercept[IllegalArgumentException] {
         val e = Point3( 2, 3, 5 )
-        val g = Vector3( 7, 11, 13 )
-        val t = Vector3( 17, 19, 23 )
+        val g = Direction3( 7, 11, 13 )
+        val t = Direction3( 17, 19, 23 )
 
         val imagePlaneFormat = (0.1,0.1)
         val focalLength = 0.01

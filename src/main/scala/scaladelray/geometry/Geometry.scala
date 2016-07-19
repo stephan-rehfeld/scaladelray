@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Vector3, Point3, Normal3, Ray}
+import scaladelray.math.{Direction3, Point3, Normal3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 
@@ -41,7 +41,7 @@ case class GeometryHit( ray : Ray, geometry : Geometry, t : Double, sp : Surface
  * @param biTan The bitangent at the point.
  * @param t The texture coordinate at the point.
  */
-case class SurfacePoint( p : Point3, n : Normal3, tan : Vector3, biTan : Vector3, t : TexCoord2D ) extends Serializable
+case class SurfacePoint(p : Point3, n : Normal3, tan : Direction3, biTan : Direction3, t : TexCoord2D ) extends Serializable
 
 /**
  * The base class for all geometries.
@@ -82,6 +82,6 @@ abstract class Geometry extends Serializable {
   /**
    * The main axis of the geometry
    */
-  val axis : Vector3
+  val axis : Direction3
 
 }

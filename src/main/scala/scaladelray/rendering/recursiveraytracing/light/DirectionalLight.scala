@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.recursiveraytracing.light
 
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 import scaladelray.rendering.Renderable
 import scaladelray.world.World
 import scaladelray.{Color, Constants}
@@ -27,7 +27,7 @@ import scaladelray.{Color, Constants}
  * @param renderable The rendereable of this light
  * @param d The direction of the point light.
  */
-case class DirectionalLight( renderable : Renderable, c : Color ,d : Vector3 ) extends Light {
+case class DirectionalLight( renderable : Renderable, c : Color ,d : Direction3 ) extends Light {
 
   require( d.magnitude != 0, "The length of the direction vector must not be 0!")
 
@@ -35,7 +35,7 @@ case class DirectionalLight( renderable : Renderable, c : Color ,d : Vector3 ) e
 
   override def illuminates(point: Point3, world : World) = !(Ray( point, d * -1 ) --> world).exists( (h) => h.t > Constants.EPSILON && h.renderable != renderable )
 
-  override def directionFrom(p: Point3): Vector3 = l
+  override def directionFrom(p: Point3): Direction3 = l
 
   override def intensity( point: Point3 ): Double = 1.0
 }

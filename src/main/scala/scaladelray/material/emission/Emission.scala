@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * An emission describes how the material emits light to the scene.
@@ -33,6 +33,6 @@ abstract class Emission {
    *
    * @return The light that is emitted from the point in the direction.
    */
-  def apply( sp: SurfacePoint, d : Vector3 ) : Color
+  def apply( sp: SurfacePoint, d : Direction3 ) : Color
 
 }

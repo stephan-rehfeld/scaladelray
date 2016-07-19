@@ -17,7 +17,7 @@
 package scaladelray.light
 
 import scaladelray.Color
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 import scaladelray.world.World
 
 /**
@@ -56,7 +56,7 @@ trait Light extends Serializable {
    * @param point The illuminated point.
    * @return A list that contains the direction to each sampling point.
    */
-  def directionFrom( point : Point3 ) : List[Vector3]
+  def directionFrom( point : Point3 ) : List[Direction3]
 
   /**
    * An implementation of this function returns the intensity of the light that reaches the illuminated point.

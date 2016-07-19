@@ -21,7 +21,7 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Triangle
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3}
 import scaladelray.texture.TexCoord2D
 
 class TriangleSpec extends FunSpec {
@@ -43,9 +43,9 @@ class TriangleSpec extends FunSpec {
   describe( "A Triangle" ) {
     it( "should return a hit with original normal and texture coordinate when hit on a vertex." ) {
 
-      val r1 = Ray( Point3( 0, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r2 = Ray( Point3( 1, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r3 = Ray( Point3( 1, 1, 1 ), Vector3( 0, 0, -1 ) )
+      val r1 = Ray( Point3( 0, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r2 = Ray( Point3( 1, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r3 = Ray( Point3( 1, 1, 1 ), Direction3( 0, 0, -1 ) )
 
       val h1 = r1 --> triangle
       val h2 = r2 --> triangle
@@ -74,9 +74,9 @@ class TriangleSpec extends FunSpec {
     }
 
     it( "should return interpolated normals and texture coordinates when hit an edge." ) {
-      val r1 = Ray( Point3( 0.5, 0, 1 ), Vector3( 0, 0, -1 ) )
-      val r2 = Ray( Point3( 1, 0.5, 1 ), Vector3( 0, 0, -1 ) )
-      val r3 = Ray( Point3( 0.5, 0.5, 1 ), Vector3( 0, 0, -1 ) )
+      val r1 = Ray( Point3( 0.5, 0, 1 ), Direction3( 0, 0, -1 ) )
+      val r2 = Ray( Point3( 1, 0.5, 1 ), Direction3( 0, 0, -1 ) )
+      val r3 = Ray( Point3( 0.5, 0.5, 1 ), Direction3( 0, 0, -1 ) )
 
       val h1 = r1 --> triangle
       val h2 = r2 --> triangle
@@ -103,8 +103,8 @@ class TriangleSpec extends FunSpec {
     }
 
     it( "should return interpolated normals and texture coordinates when hit on the face." ) {
-      val o = (((a.asVector + b.asVector + c.asVector) * (1.0/3.0)) - Vector3( 0, 0, 1 ) ).asPoint
-      val r = Ray( o, Vector3( 0, 0, 1 ) )
+      val o = (((a.asDirection + b.asDirection + c.asDirection) * (1.0/3.0)) - Direction3( 0, 0, 1 ) ).asPoint
+      val r = Ray( o, Direction3( 0, 0, 1 ) )
 
       val h = r --> triangle
 
@@ -118,7 +118,7 @@ class TriangleSpec extends FunSpec {
     }
 
     it( "should return nothing when missed by the ray." ) {
-      val r = Ray( Point3( 0, 1, 1 ), Vector3( 0, 0, -1 ) )
+      val r = Ray( Point3( 0, 1, 1 ), Direction3( 0, 0, -1 ) )
       assert( (r --> triangle).isEmpty )
     }
 
@@ -144,7 +144,7 @@ class TriangleSpec extends FunSpec {
         val c = Point3( cx * stepSize - halfRange, cy * stepSize - halfRange, cz * stepSize - halfRange )
         val n = ((b-a) x (c-a)).normalized.asNormal
         val t = Triangle( a, b, c, n, n, n, t1, t2, t3, None )
-        assert( t.center == ((a.asVector + b.asNormal + c.asVector) / 3.0).asPoint )
+        assert( t.center == ((a.asDirection + b.asNormal + c.asDirection) / 3.0).asPoint )
       }
 
     }
@@ -215,12 +215,12 @@ class TriangleSpec extends FunSpec {
         cy <- 0 to steps
         cz <- 0 to steps
       } {
-        val na = Vector3( ax * stepSize - halfRange, ay * stepSize - halfRange, az * stepSize - halfRange ).normalized.asNormal
-        val nb = Vector3( bx * stepSize - halfRange, by * stepSize - halfRange, bz * stepSize - halfRange ).normalized.asNormal
-        val nc = Vector3( cx * stepSize - halfRange, cy * stepSize - halfRange, cz * stepSize - halfRange ).normalized.asNormal
+        val na = Direction3( ax * stepSize - halfRange, ay * stepSize - halfRange, az * stepSize - halfRange ).normalized.asNormal
+        val nb = Direction3( bx * stepSize - halfRange, by * stepSize - halfRange, bz * stepSize - halfRange ).normalized.asNormal
+        val nc = Direction3( cx * stepSize - halfRange, cy * stepSize - halfRange, cz * stepSize - halfRange ).normalized.asNormal
         val t = Triangle( a, b, c, na, nb, nc, t1, t2, t3, None )
 
-        assert( t.axis =~= ((na.asVector + nb.asVector + nc.asVector) / 3.0).normalized )
+        assert( t.axis =~= ((na.asDirection + nb.asDirection + nc.asDirection) / 3.0).normalized )
       }
     }
 
@@ -238,11 +238,11 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, None )
 
-      val r = Ray( Point3( 0.33, 1, -0.33 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0.33, 1, -0.33 ), Direction3( 0, -1, 0 ) )
 
       val hits = r --> t
 
-      for( hit <- hits ) assert( hit.sp.tan =~= Vector3( 1, 0, 0 ) )
+      for( hit <- hits ) assert( hit.sp.tan =~= Direction3( 1, 0, 0 ) )
 
     }
 
@@ -260,11 +260,11 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, None )
 
-      val r = Ray( Point3( 0.33, 1, -0.33 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0.33, 1, -0.33 ), Direction3( 0, -1, 0 ) )
 
       val hits = r --> t
 
-      for( hit <- hits ) assert( hit.sp.biTan =~= Vector3( 0, 0, -1 ) )
+      for( hit <- hits ) assert( hit.sp.biTan =~= Direction3( 0, 0, -1 ) )
 
     }
 
@@ -285,7 +285,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       r --> t
       assert( tex.coordinates.isDefined )
     }
@@ -306,7 +306,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
@@ -327,7 +327,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n == Normal3( 0, -1, 0 ) ) )
     }
@@ -348,7 +348,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
     }
@@ -369,7 +369,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
     }
@@ -390,7 +390,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
@@ -411,7 +411,7 @@ class TriangleSpec extends FunSpec {
 
       val t = Triangle( a, b, c, n, n, n, ta, tb, tc, Some( tex ) )
 
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> t
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }

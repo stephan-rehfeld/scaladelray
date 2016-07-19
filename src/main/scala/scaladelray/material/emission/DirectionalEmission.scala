@@ -18,7 +18,7 @@ package scaladelray.material.emission
 
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 
 /**
  * A directional emission only emits within a single direction
@@ -27,6 +27,6 @@ import scaladelray.math.Vector3
  */
 case class DirectionalEmission( c : Color ) extends Emission {
 
-  override def apply( sp: SurfacePoint, d : Vector3 ) = if( sp.n.asVector.normalized =~= d.normalized ) c else Color( 0, 0, 0 )
+  override def apply( sp: SurfacePoint, d : Direction3 ) = if( sp.n.asDirection.normalized =~= d.normalized ) c else Color( 0, 0, 0 )
 
 }

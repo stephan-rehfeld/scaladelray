@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Vector3, Point3, Ray, Transform}
+import scaladelray.math.{Direction3, Point3, Ray, Transform}
 import scaladelray.texture.Texture
 
 /**
@@ -106,7 +106,7 @@ case class AxisAlignedBox( normalMap : Option[Texture] ) extends Geometry with S
 
   override val run = AxisAlignedBox.run
 
-  override val axis = Vector3( 0, 1, 0 )
+  override val axis = Direction3( 0, 1, 0 )
 }
 
 /**

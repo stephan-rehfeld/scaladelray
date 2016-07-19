@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Point3, Normal3, Vector3, Ray}
+import scaladelray.math.{Point3, Normal3, Direction3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 /**
@@ -29,11 +29,11 @@ case class Rectangle( normalMap : Option[Texture] ) extends Geometry with Serial
   override def <-- ( r : Ray ) = {
     val h = r.d dot Rectangle.n
     if( h != 0.0 ) {
-      val t = ((-r.o.asVector) dot Rectangle.n) / h
+      val t = ((-r.o.asDirection) dot Rectangle.n) / h
       val p = r( t )
       if( p.x >= -Rectangle.e && p.x < Rectangle.e && p.z >= -Rectangle.e && p.z < Rectangle.e ) {
-        val tangent = Vector3( 1, 0, 0 )
-        val bitangent = Vector3( 0, 0, -1 )
+        val tangent = Direction3( 1, 0, 0 )
+        val bitangent = Direction3( 0, 0, -1 )
         val texCoord = TexCoord2D( p.x + 0.5, -p.z + 0.5 )
 
         val n = normalMap match {
@@ -56,7 +56,7 @@ case class Rectangle( normalMap : Option[Texture] ) extends Geometry with Serial
 
   override val run = Point3( 0.5, 0, 0.5 )
 
-  override val axis = Rectangle.n.asVector
+  override val axis = Rectangle.n.asDirection
 }
 
 /**

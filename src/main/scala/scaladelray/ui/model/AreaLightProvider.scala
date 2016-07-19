@@ -19,7 +19,7 @@ package scaladelray.ui.model
 import javax.swing.table.TableModel
 import scaladelray.light.{AreaLight, LightDescription}
 import scaladelray.Color
-import scaladelray.math.{Vector3, Point3}
+import scaladelray.math.{Direction3, Point3}
 import javax.swing.event.TableModelListener
 import java.lang.Double
 
@@ -27,8 +27,8 @@ class AreaLightProvider extends LightDescriptionProvider with TableModel {
 
   var color = Color( 1, 1, 1 )
   var position = Point3( 0, 0, 0 )
-  var direction = Vector3( 0, 0, -1 )
-  var upVector = Vector3( 0, 1, 0 )
+  var direction = Direction3( 0, 0, -1 )
+  var upVector = Direction3( 0, 1, 0 )
   var size = 1.0
   var samplingPoints = 255
   var constantAttenuation = 1.0
@@ -111,10 +111,10 @@ class AreaLightProvider extends LightDescriptionProvider with TableModel {
           position = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 2 =>
           val v = obj.asInstanceOf[String].split( " " )
-          direction = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          direction = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 3 =>
           val v = obj.asInstanceOf[String].split( " " )
-          upVector = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          upVector = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 4 =>
           val v = obj.asInstanceOf[String].toDouble
           size = v

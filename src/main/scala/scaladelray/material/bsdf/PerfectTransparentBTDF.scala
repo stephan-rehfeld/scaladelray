@@ -17,11 +17,11 @@
 package scaladelray.material.bsdf
 
 import scaladelray.geometry.SurfacePoint
-import scaladelray.math.{Normal3, Vector3}
+import scaladelray.math.{Normal3, Direction3}
 
 case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
 
-  override def apply( p : SurfacePoint, dIn : Vector3, eta : Double, dOut : Vector3 ) : Double = {
+  override def apply(p : SurfacePoint, dIn : Direction3, eta : Double, dOut : Direction3 ) : Double = {
     val reflected = this.reflectedRay( dIn, p.n )
     val mayBeRefractedRay = this.refractedRay( dIn, p.n, eta )
 
@@ -37,14 +37,14 @@ case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
     }
   }
 
-  def reflectedRay( direction : Vector3, surfaceNormal : Normal3 ) : Vector3 = {
+  def reflectedRay(direction : Direction3, surfaceNormal : Normal3 ) : Direction3 = {
     if( surfaceNormal.dot( direction ) >= 0 )
       direction.reflectOn( surfaceNormal )
     else
       (-direction).reflectOn( surfaceNormal )
   }
 
-  def refractedRay( direction : Vector3, n : Normal3, outsidesIndexOfRefraction : Double ) : Option[Vector3] = {
+  def refractedRay(direction : Direction3, n : Normal3, outsidesIndexOfRefraction : Double ) : Option[Direction3] = {
     val inside = (n dot direction) < 0
     val eta = if( inside )  indexOfRefraction/outsidesIndexOfRefraction else outsidesIndexOfRefraction/indexOfRefraction
     val cn = if( inside ) -n else n
@@ -59,7 +59,7 @@ case class PerfectTransparentBTDF( indexOfRefraction : Double ) extends BTDF {
     }
   }
 
-  private def schlick( direction : Vector3, normal : Normal3, etaOut : Double ) : (Double,Double) = {
+  private def schlick(direction : Direction3, normal : Normal3, etaOut : Double ) : (Double,Double) = {
     val inside = (normal dot direction) < 0
     val cn = if( inside ) normal * -1 else normal
     val cosThetaI = cn dot direction

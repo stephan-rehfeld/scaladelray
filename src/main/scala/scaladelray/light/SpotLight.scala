@@ -17,7 +17,7 @@
 package scaladelray.light
 
 import scaladelray.{Constants, Color}
-import scaladelray.math.{Ray, Vector3, Point3}
+import scaladelray.math.{Ray, Direction3, Point3}
 import scaladelray.world.World
 
 /**
@@ -33,7 +33,7 @@ import scaladelray.world.World
  * @param linearAttenuation The linear attenuation.
  * @param quadraticAttenuation The quadratic attenuation.
  */
-class SpotLight( color : Color, position : Point3, direction : Vector3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
+class SpotLight(color : Color, position : Point3, direction : Direction3, halfAngle : Double, constantAttenuation : Double = 1.0, linearAttenuation : Double = 0.0, quadraticAttenuation : Double = 0.0 ) extends LightDescription( color ) with Light with Serializable {
   override def illuminates( point: Point3, world : World ) = {
     val w = math.acos( (point - position).normalized dot direction) <= halfAngle
     if( w ) {

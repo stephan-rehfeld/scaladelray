@@ -24,7 +24,7 @@ import test.scaladelray.geometry.GeometryTestAdapter
 import scaladelray.rendering.Renderable
 import scaladelray.Color
 import scaladelray.texture.{SingleColorTexture, TexCoord2D}
-import scaladelray.math.Vector3
+import scaladelray.math.Direction3
 import scaladelray.math.Normal3
 import scaladelray.math.Point3
 import scaladelray.rendering.Hit
@@ -34,10 +34,10 @@ class HitSpec extends FunSpec {
 
   describe( "A Hit" ) {
     it( "should consume a ray, geometry, t, and surface point as constructor parameter and provider them as value") {
-      val r = Ray( Point3( 3, 5, 7 ), Vector3( 11, 13, 17 ) )
+      val r = Ray( Point3( 3, 5, 7 ), Direction3( 11, 13, 17 ) )
       val t = 8.15
       val ren = Renderable( Transform.scale( 1, 1, 1 ), GeometryTestAdapter(), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
-      val sp = SurfacePoint( r( t ), Normal3( 1, 0, 0 ), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 2, 3 ) )
+      val sp = SurfacePoint( r( t ), Normal3( 1, 0, 0 ), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 2, 3 ) )
 
       val hit = Hit( r, ren, t, sp )
 

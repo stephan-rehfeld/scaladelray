@@ -75,35 +75,35 @@ abstract class Transformable( val t : Transform ) {
   }
 
   /**
-   * This function transforms a vector "downward" a scene graph. Hence, it multiplies
-   * the vector with the inverse of the transformation matrix.
-   * A vector that was in the world coordinate system is the same vector in the local coordinate
+   * This function transforms a direction "downward" a scene graph. Hence, it multiplies
+   * the direction with the inverse of the transformation matrix.
+   * A direction that was in the world coordinate system is the same direction in the local coordinate
    * system of the underlying nodes.
    *
-   * @param v The vector to transform.
-   * @return The vector transformed by the inverse of the transformation matrix.
+   * @param v The direction to transform.
+   * @return The direction transformed by the inverse of the transformation matrix.
    *
    */
-  protected def down( v : Vector3 ) : Vector3 = {
+  protected def down( v : Direction3 ) : Direction3 = {
     t.i * v
   }
 
   /**
-   * This function transforms a vector "upward" a scene graph. Hence, it multiplies
-   * the vector with the transformation matrix.
-   * A vector that was in the local coordinate system of the object is the same vector
+   * This function transforms a direction "upward" a scene graph. Hence, it multiplies
+   * the direction with the transformation matrix.
+   * A direction that was in the local coordinate system of the object is the same direction
    * in the world coordinate system.
    *
-   * @param v The vector to transform.
-   * @return The vector transformed by the transformation matrix.
+   * @param v The direction to transform.
+   * @return The direction transformed by the transformation matrix.
    */
-  protected def up( v : Vector3 ) : Vector3 = {
+  protected def up( v : Direction3 ) : Direction3 = {
     t.m * v
   }
 
   /**
-   * This function transforms a vector "upward" a scene graph. Hence, it multiplies
-   * the vector with the transposed inverse of the transformation matrix.
+   * This function transforms a direction "upward" a scene graph. Hence, it multiplies
+   * the direction with the transposed inverse of the transformation matrix.
    * A normal that was in the local coordinate system of the object is the same normals
    * in the world coordinate system.
    *

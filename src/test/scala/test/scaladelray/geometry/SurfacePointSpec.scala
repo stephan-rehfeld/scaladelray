@@ -17,7 +17,7 @@
 package test.scaladelray.geometry
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Vector3, Point3}
+import scaladelray.math.{Normal3, Direction3, Point3}
 import scaladelray.geometry.SurfacePoint
 import scaladelray.texture.TexCoord2D
 
@@ -28,8 +28,8 @@ class SurfacePointSpec extends FunSpec {
     it( "should consume a point, a normal, a tangent, a bitangent, and a texture coordinate as constructor parameter and provider them as value") {
       val p = Point3( 0, 0, 0 )
       val n = Normal3( 1, 0, 0 )
-      val tan = Vector3( 1, 0, 0 )
-      val biTan =  Vector3( 0, 0, -1 )
+      val tan = Direction3( 1, 0, 0 )
+      val biTan =  Direction3( 0, 0, -1 )
       val t = TexCoord2D( 2, 3 )
 
       val sp = SurfacePoint( p, n, tan, biTan, t )

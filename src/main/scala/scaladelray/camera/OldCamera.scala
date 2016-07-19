@@ -16,7 +16,7 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 
 /**
  * This is the base class for all cameras of the ray tracer. I calculates to camera coordinate system (uvw vectors) out
@@ -29,7 +29,7 @@ import scaladelray.math.{Point3, Ray, Vector3}
  * @param g The gaze direction of the camera.
  * @param t The up vector of the camera.
  */
-abstract class OldCamera( e : Point3, g : Vector3, t : Vector3 ) extends Serializable {
+abstract class OldCamera(e : Point3, g : Direction3, t : Direction3 ) extends Serializable {
 
   require( e != null )
   require( g != null )

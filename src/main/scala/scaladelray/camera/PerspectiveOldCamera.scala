@@ -16,7 +16,7 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Ray, Vector3}
+import scaladelray.math.{Point3, Ray, Direction3}
 import scaladelray.sampling.SamplingPattern
 
 /**
@@ -34,7 +34,7 @@ import scaladelray.sampling.SamplingPattern
  * @param a The half angle of view.
  * @param samplingPattern The sampling pattern that should be used by generating the rays. The default is a regular sampling pattern with only one point.
  */
-case class PerspectiveOldCamera( e : Point3, g : Vector3, t : Vector3, width : Int, height : Int, a : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends OldCamera( e, g, t ) with Serializable {
+case class PerspectiveOldCamera(e : Point3, g : Direction3, t : Direction3, width : Int, height : Int, a : Double, samplingPattern : SamplingPattern = SamplingPattern.regularPattern( 1, 1 ) ) extends OldCamera( e, g, t ) with Serializable {
 
   // Some computations that are valid for the whole lifetime of the camera.
   private val mw = w * -1

@@ -20,15 +20,15 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scala.collection.mutable
-import scaladelray.math.{Point3, Transform, Vector3}
+import scaladelray.math.{Point3, Transform, Direction3}
 import scaladelray.rendering.Renderable
 
 class NodeProvider extends RenderableProvider with TableModel {
 
   var childNodes = mutable.MutableList[RenderableProvider]()
   var translate = Point3( 0, 0, 0 )
-  var scale = Vector3( 1, 1, 1 )
-  var rotate = Vector3( 0, 0, 0 )
+  var scale = Direction3( 1, 1, 1 )
+  var rotate = Direction3( 0, 0, 0 )
 
   override def createRenderable( l : () => Unit ) = {
     l()
@@ -93,10 +93,10 @@ class NodeProvider extends RenderableProvider with TableModel {
           translate = Point3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 1 =>
           val v = obj.asInstanceOf[String].split( " " )
-          scale = Vector3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
+          scale = Direction3( v(0).toDouble, v(1).toDouble, v(2).toDouble )
         case 2 =>
           val v = obj.asInstanceOf[String].split( " " )
-          rotate = Vector3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
+          rotate = Direction3( math.toRadians( v(0).toDouble ), math.toRadians( v(1).toDouble ), math.toRadians( v(2).toDouble ) )
       }
     } catch {
       case _ : Throwable =>

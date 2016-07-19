@@ -34,7 +34,7 @@ import scala.swing.GridBagPanel.{Anchor, Fill}
 import scala.swing.TabbedPane.Page
 import scala.swing.event.ButtonClicked
 import scala.swing.{Action, _}
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 import scaladelray.rendering.recursiveraytracing.RecursiveRaytracing
 import scaladelray.ui.model._
 import scaladelray.{Color, Constants}
@@ -1692,7 +1692,7 @@ object ScalaDelRay extends SimpleSwingApplication {
     worldProvider.backgroundProvider = Some( bp )
     val cameraProvider = new PerspectiveCameraProvider
     cameraProvider.position = Point3( 0, -0.5, 4.0 )
-    cameraProvider.gazeDirection = Vector3( 0, 0, -1 )
+    cameraProvider.gazeDirection = Direction3( 0, 0, -1 )
     cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].x = 5
     cameraProvider.samplingPatternProvider.get.asInstanceOf[RegularSamplingPatternProvider].y = 5
 

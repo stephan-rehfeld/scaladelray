@@ -16,16 +16,16 @@
 
 package scaladelray.camera
 
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 
 /**
   * An instance of this class presents a camera.
   *
   * @param e The eye position of the camera.
-  * @param g The gaze direction of the camera. The passed vector must not have a magnitude of 0.
-  * @param t The up-vector of the camera. The passed vector must not have a magnitude of 0. Must not point in the same direction as g.
+  * @param g The gaze direction of the camera. The passed direction must not have a magnitude of 0.
+  * @param t The up-vector of the camera. The passed direction must not have a magnitude of 0. Must not point in the same direction as g.
   */
-class Camera( e : Point3, g : Vector3, t : Vector3 ) {
+class Camera(e : Point3, g : Direction3, t : Direction3 ) {
 
   require( this.g.magnitude != 0.0 )
   require( this.t.magnitude != 0.0 )

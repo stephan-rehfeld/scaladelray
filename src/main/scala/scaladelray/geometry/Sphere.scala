@@ -16,7 +16,7 @@
 
 package scaladelray.geometry
 
-import scaladelray.math.{Vector3, Point3, Ray}
+import scaladelray.math.{Direction3, Point3, Ray}
 import scaladelray.texture.{Texture, TexCoord2D}
 
 
@@ -28,7 +28,7 @@ import scaladelray.texture.{Texture, TexCoord2D}
 case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializable {
 
   override def <-- ( r : Ray ) = {
-    val o = r.o.asVector
+    val o = r.o.asDirection
     val one = r.d dot r.d
     val two = r.d dot (o * 2)
     val three = (o dot o) - 1
@@ -39,13 +39,13 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
       case 0.0 =>
         val t = -two / (2 * one)
         val p = r( t )
-        val tangent = Vector3( -p.z, 0.0, p.x ).normalized
-        val bitangent = tangent x p.asVector
+        val tangent = Direction3( -p.z, 0.0, p.x ).normalized
+        val bitangent = tangent x p.asDirection
         val texCoord = texCoordFor( p )
         val n = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord )
-            (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + p.asVector * (c.b-0.5)).normalized.asNormal
+            (tangent * (c.r-0.5) + bitangent * (c.g-0.5) + p.asDirection * (c.b-0.5)).normalized.asNormal
           case None =>
             p.asNormal
         }
@@ -54,13 +54,13 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
       case _ =>
         val t1 = (-two + scala.math.sqrt( four ))/ (2 * one)
         val p1 = r( t1 )
-        val tangent1 = Vector3( -p1.z, 0.0, p1.x ).normalized
-        val bitangent1 = tangent1 x p1.asVector
+        val tangent1 = Direction3( -p1.z, 0.0, p1.x ).normalized
+        val bitangent1 = tangent1 x p1.asDirection
         val texCoord1 = texCoordFor( p1 )
         val n1 = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord1 )
-            (tangent1 * (c.r-0.5) + bitangent1 * (c.g-0.5) + p1.asVector * (c.b-0.5)).normalized.asNormal
+            (tangent1 * (c.r-0.5) + bitangent1 * (c.g-0.5) + p1.asDirection * (c.b-0.5)).normalized.asNormal
           case None =>
             p1.asNormal
         }
@@ -68,13 +68,13 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
 
         val t2 = (-two - scala.math.sqrt( four ))/ (2 * one)
         val p2 = r( t2 )
-        val tangent2 = Vector3( -p2.z, 0.0, p2.x ).normalized
-        val bitangent2 = tangent2 x p2.asVector
+        val tangent2 = Direction3( -p2.z, 0.0, p2.x ).normalized
+        val bitangent2 = tangent2 x p2.asDirection
         val texCoord2 = texCoordFor( p2 )
         val n2 = normalMap match {
           case Some( texture ) =>
             val c = texture( texCoord2 )
-            (tangent2 * (c.r-0.5) + bitangent2 * (c.g-0.5) + p2.asVector * (c.b-0.5)).normalized.asNormal
+            (tangent2 * (c.r-0.5) + bitangent2 * (c.g-0.5) + p2.asDirection * (c.b-0.5)).normalized.asNormal
           case None =>
             p2.asNormal
         }
@@ -90,7 +90,7 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
    * @return The texture coordinate.
    */
   private def texCoordFor( p : Point3 ) : TexCoord2D = {
-    val d = p.asVector
+    val d = p.asDirection
     val theta = math.acos( d.y )
     val phi = math.atan2( d.x, d.z )
     TexCoord2D( phi / (math.Pi * 2), -(theta/math.Pi) )
@@ -102,6 +102,6 @@ case class Sphere( normalMap : Option[Texture] ) extends Geometry with Serializa
 
   override val run = Point3( 1, 1, 1 )
 
-  override val axis = Vector3( 0, 1, 0 )
+  override val axis = Direction3( 0, 1, 0 )
 
 }

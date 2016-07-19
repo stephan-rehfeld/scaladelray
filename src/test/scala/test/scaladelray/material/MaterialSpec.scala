@@ -18,7 +18,7 @@ package test.scaladelray.material
 
 import scaladelray.texture.{TexCoord2D, Texture}
 import scaladelray.Color
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 import scaladelray.light.{Light, LightDescription}
 import scaladelray.world.World
 
@@ -33,7 +33,7 @@ class TextureTestAdapter( c : Color ) extends Texture {
 
 }
 
-class LightTestAdapter( illuminatesData : List[Boolean], directionFromData : List[Vector3], intensityData : List[Double] ) extends LightDescription( Color( 1, 1, 1 )) with Light {
+class LightTestAdapter(illuminatesData : List[Boolean], directionFromData : List[Direction3], intensityData : List[Double] ) extends LightDescription( Color( 1, 1, 1 )) with Light {
 
   assert( illuminatesData.size == directionFromData.size )
   assert( illuminatesData.size == intensityData.size )
@@ -53,7 +53,7 @@ class LightTestAdapter( illuminatesData : List[Boolean], directionFromData : Lis
     illuminatesData
   }
 
-  def directionFrom( point: Point3 ): List[Vector3] = {
+  def directionFrom( point: Point3 ): List[Direction3] = {
     directionPoint = Some( point )
     directionFromData
   }

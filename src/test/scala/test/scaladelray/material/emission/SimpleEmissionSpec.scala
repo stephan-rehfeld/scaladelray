@@ -21,13 +21,13 @@ import org.scalatest.FunSpec
 import scaladelray.Color
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.emission.SimpleEmission
-import scaladelray.math.{Normal3, Point3, Vector3}
+import scaladelray.math.{Normal3, Point3, Direction3}
 import scaladelray.texture.TexCoord2D
 
 class SimpleEmissionSpec extends FunSpec {
     describe( "A PointEmission" ) {
       it( "should radiate in all directions" ) {
-        val sp = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 1 ), Vector3( 1, 0, 0 ), Vector3( 0, 1, 0 ), TexCoord2D( 0, 0 )  )
+        val sp = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 1 ), Direction3( 1, 0, 0 ), Direction3( 0, 1, 0 ), TexCoord2D( 0, 0 )  )
         val steps = 10
         val e = SimpleEmission( Color( 1, 1, 1 ) )
         for{
@@ -36,7 +36,7 @@ class SimpleEmissionSpec extends FunSpec {
         } {
           val theta = polar.toDouble * math.Pi / steps.toDouble
           val phi = azimuthal.toDouble * math.Pi * 2.0 / steps.toDouble
-          val d = Vector3( math.sin( theta ) * math.cos( phi ), math.sin( theta ) * math.sin( phi ), math.cos( theta ) )
+          val d = Direction3( math.sin( theta ) * math.cos( phi ), math.sin( theta ) * math.sin( phi ), math.cos( theta ) )
           assert( e(sp, d ) == e.c )
         }
       }

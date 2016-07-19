@@ -71,15 +71,15 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
 
   }
 
-  override val center = ((a.asVector + b.asVector + c.asVector) / 3.0).asPoint
+  override val center = ((a.asDirection + b.asDirection + c.asDirection) / 3.0).asPoint
 
   override val lbf = Point3( math.min( a.x, math.min( b.x, c.x ) ), math.min( a.y, math.min( b.y, c.y ) ), math.min( a.z, math.min( b.z, c.z ) ) )
 
   override val run = Point3( math.max( a.x, math.max( b.x, c.x ) ), math.max( a.y, math.max( b.y, c.y ) ), math.max( a.z, math.max( b.z, c.z ) ) )
 
-  override val axis = ((an + bn + cn).asVector / 3.0).normalized
+  override val axis = ((an + bn + cn).asDirection / 3.0).normalized
 
-  private def calcTanAndBiTan() : (Vector3,Vector3) = {
+  private def calcTanAndBiTan() : (Direction3,Direction3) = {
     val ab = b - a
     val ac = c - a
 
@@ -88,10 +88,10 @@ case class Triangle  ( a: Point3, b : Point3, c : Point3,
 
     val r = 1.0 / (abt.u * act.v - act.u * abt.v)
 
-    val tan = Vector3( (act.v*ab.x-abt.v*ac.x) * r,
+    val tan = Direction3( (act.v*ab.x-abt.v*ac.x) * r,
                        (act.v*ab.y-abt.v*ac.y) * r,
                        (act.v*ab.z-abt.v*ac.z) * r )
-    val biTan = Vector3( (abt.u*ac.x-act.u*ac.x) * r,
+    val biTan = Direction3( (abt.u*ac.x-act.u*ac.x) * r,
                          (abt.u*ac.y-act.u*ac.y) * r,
                          (abt.u*ac.z-act.u*ac.z) * r
     )

@@ -17,7 +17,7 @@
 package test.scaladelray.math
 
 import org.scalatest.FunSpec
-import scaladelray.math.{Normal3, Point3, Vector3, Mat4x4}
+import scaladelray.math.{Normal3, Point3, Direction3, Mat4x4}
 
 class Mat4x4Spec extends FunSpec {
   describe( "A Mat4x4" ) {
@@ -67,7 +67,7 @@ class Mat4x4Spec extends FunSpec {
                       23, 29, 31, 37,
                       41, 43, 47, 53 )
 
-      val v = Vector3( 59, 61, 67 )
+      val v = Direction3( 59, 61, 67 )
 
       val r = m * v
 
@@ -161,7 +161,7 @@ class Mat4x4Spec extends FunSpec {
         23, 29, 31, 37,
         41, 43, 47, 53 )
 
-      val v = Vector3( 59, 61, 67 )
+      val v = Direction3( 59, 61, 67 )
 
       val r = m * v
 
@@ -288,7 +288,7 @@ class Mat4x4Spec extends FunSpec {
         23, 29, 31, 37,
         41, 43, 47, 53 )
 
-      val v = Vector3( 59, 61, 67 )
+      val v = Direction3( 59, 61, 67 )
 
       val r = m * v
 

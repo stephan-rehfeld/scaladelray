@@ -20,7 +20,7 @@ import org.scalatest.FunSpec
 
 import scaladelray.geometry.SurfacePoint
 import scaladelray.material.bsdf.LambertBRDF
-import scaladelray.math.{Normal3, Point3, Vector3}
+import scaladelray.math.{Normal3, Point3, Direction3}
 import scaladelray.texture.TexCoord2D
 
 class LambertBRDFSpec extends FunSpec {
@@ -28,7 +28,7 @@ class LambertBRDFSpec extends FunSpec {
   describe( "A LambertBRDF" ) {
     it( "should return 1/PI for any two directions that are on the same side of a surface" ) {
       val lambertBRDF = LambertBRDF()
-      val surfacePoint = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 0), Vector3( 1, 0, 0 ), Vector3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
+      val surfacePoint = SurfacePoint( Point3( 0, 0, 0 ), Normal3( 0, 0, 0), Direction3( 1, 0, 0 ), Direction3( 0, 0, -1 ), TexCoord2D( 0, 0 ) )
 
       val steps = 6
 
@@ -40,8 +40,8 @@ class LambertBRDFSpec extends FunSpec {
         yOut <- 1 to steps
         zOut <- 0 to steps
       } {
-        val in = Vector3( xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0 ).normalized
-        val out = Vector3( xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0 ).normalized
+        val in = Direction3( xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0 ).normalized
+        val out = Direction3( xIn.toDouble - steps.toDouble / 2.0, yIn.toDouble, zIn.toDouble - steps.toDouble / 2.0 ).normalized
         assert( lambertBRDF( surfacePoint, in, 1.0, surfacePoint, out ) == 1.0/math.Pi )
       }
     }

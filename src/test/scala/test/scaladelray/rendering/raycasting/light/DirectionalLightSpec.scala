@@ -18,14 +18,14 @@ package test.scaladelray.rendering.raycasting.light
 
 import org.scalatest.FunSpec
 import scaladelray.Color
-import scaladelray.math.{Point3, Vector3}
+import scaladelray.math.{Point3, Direction3}
 import scaladelray.rendering.raycasting.light.DirectionalLight
 
 class DirectionalLightSpec extends FunSpec {
 
   describe( "A DirectionalLight" ) {
     it( "should radiate all points" ) {
-      val l = new DirectionalLight( Color( 1, 1, 1 ), Vector3( 0, -1, 0 ) )
+      val l = new DirectionalLight( Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
 
       val points = Point3( 1, 0, 0 ) :: Point3( 0, 1, 0 ) :: Point3( 0, 0, 1 ) :: Point3( -1, 0, 0 ) :: Point3( 0, -1, 0 ) :: Point3( 0, 0, -1 ) :: Nil
 
@@ -35,7 +35,7 @@ class DirectionalLightSpec extends FunSpec {
 
     it( "should always return the same direction") {
 
-      val directions = Vector3( 1, 0, 0 ) :: Vector3( 0, 1, 0 ) :: Vector3( 0, 0, 1 ) :: Vector3( -1, 0, 0 ) :: Vector3( 0, -1, 0 ) :: Vector3( 0, 0, -1 ) :: Nil
+      val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val points = for( d <- directions ) yield d.asPoint
 
       for( d <- directions )

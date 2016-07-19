@@ -21,13 +21,13 @@ import test.scaladelray.material.TextureTestAdapter
 
 import scaladelray.Color
 import scaladelray.geometry.Rectangle
-import scaladelray.math.{Normal3, Point3, Ray, Vector3}
+import scaladelray.math.{Normal3, Point3, Ray, Direction3}
 
 class RectangleSpec extends FunSpec {
 
   describe( "A Rectangle" ) {
     it( "should return one hit for a ray that comes from above the disc and directs downward" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, -1, 0 ) )
       val d = Rectangle( None )
 
       val hits = r --> d
@@ -36,7 +36,7 @@ class RectangleSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the disc but has the origin outside the rectangle" ) {
-      val r = Ray( Point3( 0, 1, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 1, 0 ), Direction3( 0, 0, 1 ) )
       val d = Rectangle( None )
 
       val hits = r --> d
@@ -44,7 +44,7 @@ class RectangleSpec extends FunSpec {
     }
 
     it( "should return no hit for a ray that's direction is parallel to the rectangle and has the origin on the rectangle" ) {
-      val r = Ray( Point3( 0, 0, 0 ), Vector3( 0, 0, 1 ) )
+      val r = Ray( Point3( 0, 0, 0 ), Direction3( 0, 0, 1 ) )
       val d = Rectangle( None )
 
       val hits = r --> d
@@ -54,7 +54,7 @@ class RectangleSpec extends FunSpec {
     it( "should return no hit for a ray that misses the rectangle (is outside of the area" ) {
       val points = Point3( 1, 0, 1 ) :: Point3( 1, 0, -1 ) :: Point3( -1, 0, -1 ) :: Point3( 1, 0, 1 ) :: Nil
       for( p <- points ) {
-        val r = Ray( p, Vector3( 0, -1, 0 ) )
+        val r = Ray( p, Direction3( 0, -1, 0 ) )
         val d = Rectangle( None )
 
         val hits = r --> d
@@ -66,7 +66,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0, 1 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       r --> d
       assert( t.coordinates.isDefined )
     }
@@ -75,7 +75,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 1 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 1, 0 ) ) )
     }
@@ -84,7 +84,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0.5, 0 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n == Normal3( 0, -1, 0 ) ) )
     }
@@ -93,7 +93,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 1, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 1, 0, 0 ) ) )
     }
@@ -102,7 +102,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0, 0.5, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( -1, 0, 0 ) ) )
     }
@@ -111,7 +111,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 1, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, -1 ) ) )
     }
@@ -120,7 +120,7 @@ class RectangleSpec extends FunSpec {
       val t = new TextureTestAdapter( Color( 0.5, 0, 0.5 ) )
       assert( t.coordinates.isEmpty )
       val d = Rectangle( Some( t ) )
-      val r = Ray( Point3( 0, 3, 0 ), Vector3( 0, -1, 0 ) )
+      val r = Ray( Point3( 0, 3, 0 ), Direction3( 0, -1, 0 ) )
       val hits = r --> d
       assert( hits.exists( (h) => h.sp.n =~= Normal3( 0, 0, 1 ) ) )
     }
@@ -140,7 +140,7 @@ class RectangleSpec extends FunSpec {
         val d = (Point3( -Rectangle.e + dx * step, 0, -Rectangle.e + dz * step ) - o).normalized
         val r = Ray( o, d )
         val hits = r --> rec
-        assert( hits.forall( (h) => h.sp.tan == Vector3( 1, 0, 0 ) && h.sp.biTan == Vector3( 0, 0, -1 ) ) )
+        assert( hits.forall( (h) => h.sp.tan == Direction3( 1, 0, 0 ) && h.sp.biTan == Direction3( 0, 0, -1 ) ) )
       }
 
     }
@@ -162,7 +162,7 @@ class RectangleSpec extends FunSpec {
 
     it( "should have a main axis of 0/1/0" ) {
       val rec = Rectangle( None )
-      assert( rec.axis == Vector3( 0, 1, 0 ) )
+      assert( rec.axis == Direction3( 0, 1, 0 ) )
     }
   }
 
