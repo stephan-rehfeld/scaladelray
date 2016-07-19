@@ -19,100 +19,83 @@ package test.scaladelray
 import org.scalatest.FunSpec
 
 import scala.util.Random
+import scaladelray.math.i.Size2
 import scaladelray.{Color, HDRImage}
 
 class HDRImageSpec extends FunSpec {
 
   describe( "A HDRImage" ) {
-    it( "should have the correct size after initialized" ) {
-      val width = 640
-      val height = 480
 
-      val i = HDRImage( width , height )
-      assert( i.width == width )
-      assert( i.height == height )
-    }
-
-    it( "should throw an exception if the width is 0 or smaller" ) {
-      intercept[RuntimeException] {
-        HDRImage( -1 , 480 )
-      }
-    }
-    it( "should throw an exception if the height is 0 or smaller" ) {
-      intercept[RuntimeException] {
-        HDRImage( 640, -1 )
-      }
-    }
     it( "should be initialized by a black color" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } assert( i( x, y ) == Color( 0, 0, 0 ) )
     }
 
     it( "should throw an exception when a pixel with an x coordinate smaller than 0 is read" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 )  )
       intercept[RuntimeException] {
         i( -1, 0 )
       }
     }
 
     it( "should throw an exception when a pixel with an x coordinate larger than width-1  is read" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 )  )
       intercept[RuntimeException] {
         i( 640, 0 )
       }
     }
 
     it( "should throw an exception when a pixel with an y coordinate smaller than 0 is read" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       intercept[RuntimeException] {
         i( 0, -1 )
       }
     }
 
     it( "should throw an exception when a pixel with an y coordinate larger than height-1  is read" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       intercept[RuntimeException] {
         i( 0, 480 )
       }
     }
 
     it( "should throw an exception when a pixel width a x coordinate smaller than 0 is set" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       intercept[RuntimeException] {
         i.set( -1, 0, Color( 0, 0, 0 ) )
       }
     }
 
     it( "should throw an exception when a pixel width a x coordinate larger than width-1  is set" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       intercept[RuntimeException] {
         i.set( 640, 0, Color( 0, 0, 0 ) )
       }
     }
 
     it( "should throw an exception when a pixel width a y coordinate smaller than 0 is set" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       intercept[RuntimeException] {
         i.set( 0, -1, Color( 0, 0, 0 ) )
       }
     }
 
     it( "should throw an exception when a pixel width a y coordinate larger than height-1  is set" ) {
-      val i = HDRImage( 640, 480 )
-      intercept[RuntimeException] {
+      val i = HDRImage( Size2( 640, 480 ) )
+        intercept[RuntimeException] {
         i.set( 0, 480, Color( 0, 0, 0 ) )
       }
     }
 
     it( "should save a color when the pixel is set and return the same color when this pixel is read" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       val r = new Random()
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } {
         val c = Color( r.nextDouble(), r.nextDouble(), r.nextDouble() )
         i.set( x, y, c )
@@ -121,11 +104,11 @@ class HDRImageSpec extends FunSpec {
     }
 
     it( "should calculate the correct min value of the image" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage(  Size2( 640, 480 ) )
       val r = new Random()
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } {
         val c = Color( r.nextDouble(), r.nextDouble(), r.nextDouble() )
         i.set( x, y, c )
@@ -134,8 +117,8 @@ class HDRImageSpec extends FunSpec {
 
       var min = Double.MaxValue
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } {
         min = scala.math.min( min, i( x, y  ).r )
         min = scala.math.min( min, i( x, y  ).g )
@@ -146,11 +129,11 @@ class HDRImageSpec extends FunSpec {
     }
 
     it( "should calculate the correct max value of the image" ) {
-      val i = HDRImage( 640, 480 )
+      val i = HDRImage( Size2( 640, 480 ) )
       val r = new Random()
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } {
         val c = Color( r.nextDouble(), r.nextDouble(), r.nextDouble() )
         i.set( x, y, c )
@@ -159,8 +142,8 @@ class HDRImageSpec extends FunSpec {
 
       var max = Double.MinValue
       for{
-        x <- 0 until i.width
-        y <- 0 until i.height
+        x <- 0 until i.size.width
+        y <- 0 until i.size.height
       } {
         max = scala.math.max( max, i( x, y  ).r )
         max = scala.math.max( max, i( x, y  ).g )

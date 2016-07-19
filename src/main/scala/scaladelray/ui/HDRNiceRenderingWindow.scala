@@ -35,6 +35,7 @@ import scala.swing.GridBagPanel.Fill
 import scala.swing._
 import scaladelray.HDRImage
 import scaladelray.camera.OldCamera
+import scaladelray.math.i.{Point2, Rectangle, Size2}
 import scaladelray.rendering.{Algorithm, HDRRender, HDRRenderingActor}
 
 
@@ -71,14 +72,14 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
 
   val targets = createRenderNodes
 
-  val originalHDRImage = HDRImage( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
-  val _adjustedHDRImage = HDRImage( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
+  val originalHDRImage = HDRImage( Size2( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] ) )
+  val _adjustedHDRImage = HDRImage( Size2( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] ) )
 
   def adjustedHDRImage = _adjustedHDRImage
   def adjustedHDRImage_=( newImage : HDRImage ) {
     for{
-      x <- 0 until newImage.width
-      y <- 0 until newImage.height
+      x <- 0 until newImage.size.width
+      y <- 0 until newImage.size.height
     } _adjustedHDRImage.set( x, y, newImage( x, y ) )
     win.repaint()
   }
@@ -94,16 +95,16 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
     if( result == FileChooser.Result.Approve ) {
       val file = fsd.selectedFile
       val extension = file.getName.split( '.' ).last
-      val awtImage = new BufferedImage( _adjustedHDRImage.width,  _adjustedHDRImage.height, BufferedImage.TYPE_INT_ARGB)
+      val awtImage = new BufferedImage( _adjustedHDRImage.size.width,  _adjustedHDRImage.size.height, BufferedImage.TYPE_INT_ARGB)
 
       val model = awtImage.getColorModel
       val raster = awtImage.getRaster
       for {
-        x <- 0 until _adjustedHDRImage.width
-        y <- 0 until _adjustedHDRImage.height } {
+        x <- 0 until _adjustedHDRImage.size.width
+        y <- 0 until _adjustedHDRImage.size.height } {
         val c = _adjustedHDRImage( x, y )
         val color = new java.awt.Color( math.min(c.r.asInstanceOf[Float], 1.0f), math.min(c.g.asInstanceOf[Float], 1.0f), math.min(c.b.asInstanceOf[Float], 1.0f) )
-        raster.setDataElements(x, _adjustedHDRImage.height-1-y, model.getDataElements(color.getRGB, null))
+        raster.setDataElements(x, _adjustedHDRImage.size.height-1-y, model.getDataElements(color.getRGB, null))
       }
       ImageIO.write( awtImage, extension, file )
 
@@ -127,15 +128,15 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
           futures += ftr
         }*/
         val tiles = 10
-        val tileWidth = originalHDRImage.width / tiles
-        val tileHeight = originalHDRImage.height / tiles
+        val tileWidth = originalHDRImage.size.width / tiles
+        val tileHeight = originalHDRImage.size.height / tiles
 
         for {
           tileX <- 0 until tiles
           tileY <- 0 until tiles
         } {
-
-          val ftr = targets ? HDRRender( HDRImage.Rectangle( tileX * tileWidth, tileY * tileHeight, tileWidth, tileHeight) , cam )
+          // TODO: Pass correct camera
+          val ftr = targets ? HDRRender( null, cam, originalHDRImage.size, Rectangle( Point2( tileX * tileWidth, tileY * tileHeight ), Size2( tileWidth, tileHeight) ) )
           futures += ftr
         }
 
@@ -185,12 +186,12 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
         }))
 
         for( future <- futures ) {
-          val (tileRectangle,tileImage) = Await.result( future, timeout.duration ).asInstanceOf[(HDRImage.Rectangle,HDRImage)]
+          val (tileRectangle,tileImage) = Await.result( future, timeout.duration ).asInstanceOf[(Rectangle,HDRImage)]
 
-          for { x <- tileRectangle.x until tileRectangle.x + tileRectangle.width
-                y <- tileRectangle.y until tileRectangle.y + tileRectangle.height
+          for { x <- tileRectangle.corner.x until tileRectangle.corner.x + tileRectangle.size.width
+                y <- tileRectangle.corner.y until tileRectangle.corner.y + tileRectangle.size.height
           } {
-            originalHDRImage.set( x, y, tileImage( x - tileRectangle.x, y - tileRectangle.y ) )
+            originalHDRImage.set( x, y, tileImage( x - tileRectangle.corner.x, y - tileRectangle.corner.y ) )
 
           }
           brightnessAdjustmentWindow.img = originalHDRImage
@@ -210,16 +211,16 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
   contents = new Component {
     override def paintComponent( g: Graphics2D ) = {
       super.paintComponent( g )
-      val awtImage = new BufferedImage( _adjustedHDRImage.width,  _adjustedHDRImage.height, BufferedImage.TYPE_INT_ARGB)
+      val awtImage = new BufferedImage( _adjustedHDRImage.size.width,  _adjustedHDRImage.size.height, BufferedImage.TYPE_INT_ARGB)
 
       val model = awtImage.getColorModel
       val raster = awtImage.getRaster
       for {
-        x <- 0 until _adjustedHDRImage.width
-        y <- 0 until _adjustedHDRImage.height } {
+        x <- 0 until _adjustedHDRImage.size.width
+        y <- 0 until _adjustedHDRImage.size.height } {
         val c = _adjustedHDRImage( x, y )
         val color = new java.awt.Color( math.min(c.r.asInstanceOf[Float], 1.0f), math.min(c.g.asInstanceOf[Float], 1.0f), math.min(c.b.asInstanceOf[Float], 1.0f) )
-        raster.setDataElements(x, _adjustedHDRImage.height-1-y, model.getDataElements(color.getRGB, null))
+        raster.setDataElements(x, _adjustedHDRImage.size.height-1-y, model.getDataElements(color.getRGB, null))
       }
       g.drawImage(awtImage, 0, 0, null)
     }

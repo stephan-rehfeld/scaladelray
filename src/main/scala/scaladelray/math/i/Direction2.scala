@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
-
-import scaladelray.HDRImage
-import scaladelray.camera.{Camera, OldCamera}
-import scaladelray.math.i.{Rectangle, Size2}
+package scaladelray.math.i
 
 /**
- * Algorithm is the abstract base class for ray tracing based algorithms.
- */
-abstract class Algorithm {
-
-  def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle ) : HDRImage
-
-}
+  * An instance of this class represents a direction in 2D space.
+  *
+  * @param x The x element of the direction.
+  * @param y The y element of the direction.
+  */
+case class Direction2( x: Int, y : Int )

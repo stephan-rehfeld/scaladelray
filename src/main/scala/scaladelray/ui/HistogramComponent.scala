@@ -41,8 +41,8 @@ class HistogramComponent( private var _img : HDRImage ) extends Component {
     val binSize = (max - min) / (w-2)
 
     for {
-      x <- 0 until _img.width
-      y <- 0 until _img.height
+      x <- 0 until _img.size.width
+      y <- 0 until _img.size.height
     } {
       val c = _img( x, y )
       val b = (c.r + c.g + c.b) / 3.0

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
-
-import scaladelray.HDRImage
-import scaladelray.camera.{Camera, OldCamera}
-import scaladelray.math.i.{Rectangle, Size2}
+package scaladelray.math.i
 
 /**
- * Algorithm is the abstract base class for ray tracing based algorithms.
- */
-abstract class Algorithm {
+  * An instance of this class represents a size in 2D space.
+  *
+  * @param width The width of the size. Must be at least 0.
+  * @param height The height of the size. Must be at least 0.
+  */
+case class Size2( width : Int, height : Int ) {
 
-  def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle ) : HDRImage
+  require( width >= 0 )
+  require( height >= 0 )
 
 }

@@ -17,9 +17,9 @@
 package scaladelray.rendering.raycasting
 
 import scala.collection.mutable
-import scaladelray.camera.{Camera, OldCamera, PerspectiveCamera}
+import scaladelray.camera.{Camera, OldCamera}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
-import scaladelray.math.Ray
+import scaladelray.math.i.{Rectangle, Size2}
 import scaladelray.rendering.raycasting.light.{DirectionalLight, Light, PointLight, SpotLight}
 import scaladelray.rendering.{Algorithm, Renderable}
 import scaladelray.world.World
@@ -40,12 +40,12 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
     }
   }
 
-  override def render( cam : Camera, c : OldCamera, rect : HDRImage.Rectangle ) : HDRImage = {
+  override def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle  ) : HDRImage = {
 
-    val img = HDRImage( rect.width, rect.height )
+    val img = HDRImage( rect.size )
 
-    for { x <- rect.x until rect.x + rect.width
-          y <- rect.y until rect.y + rect.height
+    for { x <- rect.corner.x until rect.corner.x + rect.size.width
+          y <- rect.corner.y until rect.corner.y + rect.size.height
     } {
       val ray = c( x, y ).head
       val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
@@ -54,7 +54,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
       } else {
         val hit = hits.head
         if( hit.renderable.material.isEmissive ) {
-          img.set( x -rect.x, y - rect.y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
+          img.set( x -rect.corner.x, y - rect.corner.y, hit.renderable.material.e.get( hit.sp, -ray.d ) )
         } else {
           var c = Color( 0, 0, 0 )
           if( c != ambient ) {
@@ -72,7 +72,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
               c = c + light.c * cr * bsdfItensity * weight * lightIntensity * cos
             }
           }
-          img.set( x-rect.x, y-rect.y, c )
+          img.set( x-rect.corner.x, y-rect.corner.y, c )
         }
       }
     }

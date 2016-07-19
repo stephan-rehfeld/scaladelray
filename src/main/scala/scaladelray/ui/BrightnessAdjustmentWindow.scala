@@ -53,10 +53,10 @@ class BrightnessAdjustmentWindow( private var _img : HDRImage, p : HDRNiceRender
 
   private def adjust( i : HDRImage, oldMin : Double, oldMax : Double, newMin : Double, newMax : Double ) : HDRImage = {
     if( oldMax > oldMin) {
-      val newImage = new HDRImage( i.width, i.height )
+      val newImage = new HDRImage( i.size )
       for{
-        x <- 0 until newImage.width
-        y <- 0 until newImage.height
+        x <- 0 until newImage.size.width
+        y <- 0 until newImage.size.height
       } {
         val c = i( x, y )
         val r = (c.r - oldMin) * ((newMax-newMin)/(oldMax-oldMin)) + newMin

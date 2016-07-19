@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Stephan Rehfeld
+ * Copyright 2016 Stephan Rehfeld
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package scaladelray.rendering
+package test.scaladelray.math.i
 
-import scaladelray.HDRImage
-import scaladelray.camera.{Camera, OldCamera}
-import scaladelray.math.i.{Rectangle, Size2}
+import org.scalatest.FunSpec
 
-/**
- * Algorithm is the abstract base class for ray tracing based algorithms.
- */
-abstract class Algorithm {
+import scaladelray.math.i.Size2
 
-  def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle ) : HDRImage
+class Size2Spec extends FunSpec {
+
+  describe( "A Size2" ) {
+
+    it( "should throw an Exception if the width is smaller than 0" ) {
+      intercept[IllegalArgumentException] {
+        Size2( -1, 255 )
+      }
+    }
+
+    it( "should throw an Exception if the height is smaller than 0" ) {
+      intercept[IllegalArgumentException] {
+        Size2( 255, -1 )
+      }
+    }
+
+  }
 
 }

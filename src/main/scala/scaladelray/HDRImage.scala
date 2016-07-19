@@ -16,25 +16,24 @@
 
 package scaladelray
 
+import scaladelray.math.i.Size2
+
 /**
  * An instance of this class represents an image with high dynamic range. It uses the [[scaladelray.Color]] to represent
  * to color for each pixel.
  *
- * @param width The width of the image. Must be larger than 0.
- * @param height The height of the image. Must be larget than 0.
+ * @param size The size of the image.
  */
-case class HDRImage( width : Int, height : Int ) {
-  require( width > 0, "The width of an image must be larger than 0!" )
-  require( height > 0, "The heigh of an image mus be larger than 0!")
+case class HDRImage( size : Size2 ) {
 
   /**
    * The array that contains the color of all pixels.
    */
-  private val d = Array.ofDim[Color]( width, height )
+  private val d = Array.ofDim[Color]( size.width, size.height )
 
   // Set all pixels to black
-  for{ x <- 0 until width
-       y <- 0 until height
+  for{ x <- 0 until size.width
+       y <- 0 until size.height
   } d( x )( y ) = Color( 0, 0, 0 )
 
   /**
@@ -46,9 +45,9 @@ case class HDRImage( width : Int, height : Int ) {
    */
   def apply( x : Int, y : Int ) : Color = {
     require( x >= 0, "The x coordinate of a pixel must be at least 0!" )
-    require( x < width, "The x coordinate must be smaller than the width of the image!" )
+    require( x < size.width, "The x coordinate must be smaller than the width of the image!" )
     require( y >= 0, "The y coordinate of a pixel must be at least 0!" )
-    require( y < height, "The y coordinate must be smaller than the height of the image!" )
+    require( y < size.height, "The y coordinate must be smaller than the height of the image!" )
     d( x )( y )
   }
 
@@ -60,9 +59,9 @@ case class HDRImage( width : Int, height : Int ) {
    */
   def set( x : Int, y : Int, c : Color ) {
     require( x >= 0, "The x coordinate of a pixel must be at least 0!" )
-    require( x < width, "The x coordinate must be smaller than the width of the image!" )
+    require( x < size.width, "The x coordinate must be smaller than the width of the image!" )
     require( y >= 0, "The y coordinate of a pixel must be at least 0!" )
-    require( y < height, "The y coordinate must be smaller than the height of the image!" )
+    require( y < size.height, "The y coordinate must be smaller than the height of the image!" )
     d( x )( y ) = c
   }
 
@@ -74,8 +73,8 @@ case class HDRImage( width : Int, height : Int ) {
   def min : Double = {
     var v = Double.MaxValue
     for{
-      x <- 0 until width
-      y <- 0 until height
+      x <- 0 until size.width
+      y <- 0 until size.height
     } {
       val c = this( x,y )
       v = scala.math.min( c.r, v )
@@ -93,8 +92,8 @@ case class HDRImage( width : Int, height : Int ) {
   def max : Double = {
     var v = Double.MinValue
     for{
-      x <- 0 until width
-      y <- 0 until height
+      x <- 0 until size.width
+      y <- 0 until size.height
     } {
       val c = this( x,y )
       v = scala.math.max( c.r, v )
@@ -103,9 +102,4 @@ case class HDRImage( width : Int, height : Int ) {
     }
     v
   }
-}
-
-object HDRImage {
-  case class Size( width : Int, height : Int )
-  case class Rectangle( x : Int, y : Int, width : Int, height : Int )
 }
