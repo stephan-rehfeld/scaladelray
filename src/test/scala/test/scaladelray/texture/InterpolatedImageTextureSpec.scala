@@ -17,8 +17,9 @@
 package test.scaladelray.texture
 
 import org.scalatest.FunSpec
-import scaladelray.texture.{InterpolatedImageTexture, TexCoord2D}
+
 import scaladelray.Color
+import scaladelray.texture.{InterpolatedImageTexture, TexCoord2D}
 
 class InterpolatedImageTextureSpec extends FunSpec {
 
@@ -91,5 +92,22 @@ class InterpolatedImageTextureSpec extends FunSpec {
       assert( c01 == Color( 1, 1, 0 ) )
       assert( c11 == Color( 0, 0, 1 ) )
     }
+
+    it( "should be rotatable" ) {
+
+      val t = InterpolatedImageTexture( "texture-example.bmp", Math.PI / 2.0 )
+
+      val c00 = t( TexCoord2D( 0.0, 0.0 ) )
+      val c10 = t( TexCoord2D( 1.0, 0.0 ) )
+      val c01 = t( TexCoord2D( 0.0, 1.0 ) )
+      val c11 = t( TexCoord2D( 1.0, 1.0 ) )
+
+      assert( c00 =~= Color( 0, 0, 1 ) )
+      assert( c10 =~= Color( 1, 0, 0 ) )
+      assert( c01 =~= Color( 0, 0, 1 ) )
+      assert( c11 =~= Color( 1, 0, 0 ) )
+
+    }
+
   }
 }

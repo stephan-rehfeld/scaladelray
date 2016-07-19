@@ -17,8 +17,9 @@
 package test.scaladelray.texture
 
 import org.scalatest.FunSpec
-import scaladelray.texture.{TexCoord2D, ImageTexture}
+
 import scaladelray.Color
+import scaladelray.texture.{ImageTexture, TexCoord2D}
 
 class ImageTextureSpec extends FunSpec {
 
@@ -128,6 +129,22 @@ class ImageTextureSpec extends FunSpec {
         val t = TexCoord2D( i * 0.01, j * 0.01 )
         assert( ImageTexture.flipVertically( t ) == TexCoord2D( t.u, 1.0 - t.v ))
       }
+    }
+
+    it( "should be rotatable" ) {
+
+      val t = ImageTexture( "texture-example.bmp", Math.PI / 2.0 )
+
+      val c00 = t( TexCoord2D( 0.0, 0.0 ) )
+      val c10 = t( TexCoord2D( 1.0, 0.0 ) )
+      val c01 = t( TexCoord2D( 0.0, 1.0 ) )
+      val c11 = t( TexCoord2D( 1.0, 1.0 ) )
+
+      assert( c00 =~= Color( 0, 0, 1 ) )
+      assert( c10 =~= Color( 1, 0, 0 ) )
+      assert( c01 =~= Color( 0, 0, 1 ) )
+      assert( c11 =~= Color( 1, 0, 0 ) )
+
     }
   }
 
