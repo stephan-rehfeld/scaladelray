@@ -17,9 +17,10 @@
 package scaladelray.rendering.raycasting
 
 import scala.collection.mutable
-import scaladelray.camera.{Camera, OldCamera}
+import scaladelray.camera.{Camera, OldCamera, PerspectiveCamera}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
-import scaladelray.math.i.{Rectangle, Size2}
+import scaladelray.math.Ray
+import scaladelray.math.i.{Point2, Rectangle, Size2}
 import scaladelray.rendering.raycasting.light.{DirectionalLight, Light, PointLight, SpotLight}
 import scaladelray.rendering.{Algorithm, Renderable}
 import scaladelray.world.World
@@ -40,14 +41,16 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
     }
   }
 
-  override def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle  ) : HDRImage = {
+  override def render( cam: Camera, imageSize: Size2, rect : Rectangle  ) : HDRImage = {
 
     val img = HDRImage( rect.size )
 
     for { x <- rect.corner.x until rect.corner.x + rect.size.width
           y <- rect.corner.y until rect.corner.y + rect.size.height
     } {
-      val ray = c( x, y ).head
+      val ray = cam match {
+        case pCam : PerspectiveCamera => rayFor( pCam, imageSize, Point2( x, y ) )
+      }
       val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
       if( hits.isEmpty ) {
         world.background( ray )
@@ -65,11 +68,11 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
           for( (light,renderable) <- lights ) {
             if( light.illuminates( hit.sp.p ) ) for( (weight, texture, bsdf ) <- hit.renderable.material.bsdfs ) {
               val cr = texture( hit.sp.t )
-              val bsdfItensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
+              val bsdIntensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
               val lightIntensity = light.intensity( hit.sp.p )
               val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
 
-              c = c + light.c * cr * bsdfItensity * weight * lightIntensity * cos
+              c = c + light.c * cr * bsdIntensity * weight * lightIntensity * cos
             }
           }
           img.set( x-rect.corner.x, y-rect.corner.y, c )
@@ -77,6 +80,18 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
       }
     }
     img
+  }
+
+  def rayFor( cam : PerspectiveCamera, imageSize : Size2, pixel : Point2 ): Ray = {
+    val lensCenter = cam.e + -cam.w * cam.focalLength
+    val upperRightOfImagePlane = cam.e + cam.u * cam.imagePlaneFormat._1 / 2 + cam.v * cam.imagePlaneFormat._2 / 2
+    val xStepWidth = cam.imagePlaneFormat._1 / imageSize.width
+    val yStepHeight = cam.imagePlaneFormat._2 / imageSize.height
+
+    val o = upperRightOfImagePlane - cam.u * xStepWidth * pixel.x - cam.v * yStepHeight * pixel.y
+    val d = lensCenter - o
+
+    Ray( o, d )
   }
 
 }

@@ -17,11 +17,11 @@
 package scaladelray.rendering.recursiveraytracing
 
 import scala.collection.mutable
-import scaladelray.camera.{Camera, OldCamera}
+import scaladelray.camera.{Camera, OldCamera, PerspectiveCamera}
 import scaladelray.material.bsdf.{PerfectReflectiveBRDF, PerfectTransparentBTDF}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.math.Ray
-import scaladelray.math.i.{Rectangle, Size2}
+import scaladelray.math.i.{Point2, Rectangle, Size2}
 import scaladelray.rendering.recursiveraytracing.light.{DirectionalLight, Light, PointLight, SpotLight}
 import scaladelray.rendering.{Algorithm, Renderable}
 import scaladelray.world.World
@@ -99,17 +99,31 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
       Color( 0, 0, 0 )
     }
 
-  override def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle  ) : HDRImage = {
+  override def render( cam: Camera, imageSize: Size2, rect : Rectangle  ) : HDRImage = {
 
     val img = HDRImage( rect.size )
 
     for { x <- rect.corner.x until rect.corner.x + rect.size.width
           y <- rect.corner.y until rect.corner.y + rect.size.height
     } {
-      val ray = c( x, y ).head
+      val ray = cam match {
+        case pCam : PerspectiveCamera => rayFor( pCam, imageSize, Point2( x, y ) )
+      }
       img.set( x-rect.corner.x, y-rect.corner.y, trace( ray, recursionDepth ) )
     }
     img
+  }
+
+  def rayFor( cam : PerspectiveCamera, imageSize : Size2, pixel : Point2 ): Ray = {
+    val lensCenter = cam.e + -cam.w * cam.focalLength
+    val upperRightOfImagePlane = cam.e + cam.u * cam.imagePlaneFormat._1 / 2 + cam.v * cam.imagePlaneFormat._2 / 2
+    val xStepWidth = cam.imagePlaneFormat._1 / imageSize.width
+    val yStepHeight = cam.imagePlaneFormat._2 / imageSize.height
+
+    val o = upperRightOfImagePlane - cam.u * xStepWidth * pixel.x - cam.v * yStepHeight * pixel.y
+    val d = lensCenter - o
+
+    Ray( o, d )
   }
 
 }

@@ -16,11 +16,11 @@
 
 package scaladelray.ui.model
 
-import scaladelray.camera.OldCamera
+import scaladelray.camera.Camera
 
 abstract class CameraProvider {
 
-  def createCamera( l : () => Unit ) : ((Int,Int) => OldCamera)
+  def createCamera( l : () => Unit ) : Camera
   def remove( obj : AnyRef )
   def isReady : Boolean
   def count : Int

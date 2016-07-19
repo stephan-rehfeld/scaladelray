@@ -25,6 +25,6 @@ import scaladelray.math.i.{Rectangle, Size2}
  */
 abstract class Algorithm {
 
-  def render( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle ) : HDRImage
+  def render( cam: Camera, imageSize: Size2, rect : Rectangle ) : HDRImage
 
 }

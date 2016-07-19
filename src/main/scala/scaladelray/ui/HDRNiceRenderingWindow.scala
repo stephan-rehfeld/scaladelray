@@ -34,12 +34,12 @@ import scala.language.reflectiveCalls
 import scala.swing.GridBagPanel.Fill
 import scala.swing._
 import scaladelray.HDRImage
-import scaladelray.camera.OldCamera
+import scaladelray.camera.Camera
 import scaladelray.math.i.{Point2, Rectangle, Size2}
 import scaladelray.rendering.{Algorithm, HDRRender, HDRRenderingActor}
 
 
-class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
+class HDRNiceRenderingWindow( camera : Camera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
 
   title = "Rendering"
   size = s
@@ -67,8 +67,6 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
       }""")//.withFallback(ConfigFactory.load())
 
   private val actorSystem = if( clusterNodes.isEmpty ) ActorSystem("Rendering") else ActorSystem("Rendering",config)
-
-  val cam = camera( this.size.getWidth.asInstanceOf[Int], this.size.getHeight.asInstanceOf[Int] )
 
   val targets = createRenderNodes
 
@@ -136,7 +134,7 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
           tileY <- 0 until tiles
         } {
           // TODO: Pass correct camera
-          val ftr = targets ? HDRRender( null, cam, originalHDRImage.size, Rectangle( Point2( tileX * tileWidth, tileY * tileHeight ), Size2( tileWidth, tileHeight) ) )
+          val ftr = targets ? HDRRender( camera, originalHDRImage.size, Rectangle( Point2( tileX * tileWidth, tileY * tileHeight ), Size2( tileWidth, tileHeight) ) )
           futures += ftr
         }
 
@@ -295,13 +293,13 @@ class HDRNiceRenderingWindow( camera : (Int,Int) => OldCamera, s : Dimension, ac
     val targets = mutable.MutableList[Routee]()
 
     for( i <- 1 to Runtime.getRuntime.availableProcessors() ) {
-      targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ) ) )
+      targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], algorithm ) ) )
     }
 
     for( (hostname,port,threads) <- clusterNodes ) {
       val address = Address("akka.tcp", "renderNode", hostname, port )
       for( i <- 1 to threads ) {
-        targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], cam, algorithm ).withDeploy(Deploy(scope = RemoteScope(address))) ) )
+        targets += ActorRefRoutee( actorSystem.actorOf( Props( classOf[HDRRenderingActor], algorithm ).withDeploy(Deploy(scope = RemoteScope(address))) ) )
       }
     }
 

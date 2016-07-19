@@ -20,12 +20,12 @@ import akka.actor.SupervisorStrategy.{Escalate, Stop}
 import akka.actor.{Actor, ActorKilledException, OneForOneStrategy, SupervisorStrategy}
 
 import scala.concurrent.duration._
-import scaladelray.camera.{Camera, OldCamera}
+import scaladelray.camera.Camera
 import scaladelray.math.i.{Rectangle, Size2}
 
-case class HDRRender( cam: Camera, c : OldCamera, imageSize: Size2, rect : Rectangle )
+case class HDRRender( cam: Camera, imageSize: Size2, rect : Rectangle )
 
-class HDRRenderingActor( cam : OldCamera, algorithm : Algorithm ) extends Actor {
+class HDRRenderingActor( algorithm : Algorithm ) extends Actor {
 
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
@@ -35,7 +35,7 @@ class HDRRenderingActor( cam : OldCamera, algorithm : Algorithm ) extends Actor 
 
   def receive = {
     case msg : HDRRender =>
-      sender ! (msg.rect,algorithm.render( msg.cam, msg.c, msg.imageSize, msg.rect ))
+      sender ! (msg.rect,algorithm.render( msg.cam, msg.imageSize, msg.rect ))
 
   }
 
