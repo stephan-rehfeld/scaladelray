@@ -16,7 +16,7 @@
 
 package scaladelray.rendering.stochasticraytracing
 
-import scaladelray.camera.{Camera, OldCamera}
+import scaladelray.camera.Camera
 import scaladelray.math.i.{Rectangle, Size2}
 import scaladelray.rendering.Algorithm
 import scaladelray.world.World
@@ -25,4 +25,7 @@ import scaladelray.{Color, HDRImage}
 class StochasticRaytracing( ambient : Color, world : World, recursionDepth : Int ) extends Algorithm {
 
   override def render( cam: Camera, imageSize: Size2, rect : Rectangle ): HDRImage = ???
+
+
+
 }

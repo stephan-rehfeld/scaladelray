@@ -90,7 +90,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
     val yStepHeight = cam.imagePlaneFormat._2 / imageSize.height
 
     val o = upperRightOfImagePlane - cam.u * xStepWidth * pixel.x - cam.v * yStepHeight * pixel.y
-    val d = lensCenter - o
+    val d = (lensCenter - o).normalized
 
     Ray( o, d )
   }
