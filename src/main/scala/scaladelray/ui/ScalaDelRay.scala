@@ -1136,37 +1136,6 @@ object ScalaDelRay extends SimpleSwingApplication {
               steps = steps + 1
               progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
             })
-            //val window = new NiceRenderingWindow( w, c, renderingWindowsSize, Runtime.getRuntime.availableProcessors(), recursionDepth, clusterNodes.toList )
-            //window.a ! StartRendering()
-            text = "Render"
-            enabled = true
-          }
-      }
-    }
-
-    c.fill = Fill.Horizontal
-    c.ipady = 0
-    c.weighty = 0
-    c.weightx = 0.5
-    c.gridwidth = 4
-    c.gridx = 0
-    c.gridy = 4
-    layout( renderButton ) = c
-
-    val newRenderButton = new Button {
-      text = "New Render"
-      reactions += {
-        case ButtonClicked(_) =>
-          text = "Preparing"
-          enabled = false
-          progressBar.value = 0
-          async {
-            val totalSteps = worldProvider.count.asInstanceOf[Double]
-            var steps = 0.0
-            val (c,w) = worldProvider.createWorld( () => {
-              steps = steps + 1
-              progressBar.value = (steps * 100.0 / totalSteps).asInstanceOf[Int]
-            })
             //val a = new RayCasting( Color( 0, 0, 0 ), w )
             val a = new RecursiveRaytracing( Color( 0, 0, 0 ), w, 4 )
 
@@ -1182,10 +1151,10 @@ object ScalaDelRay extends SimpleSwingApplication {
     c.ipady = 0
     c.weighty = 0
     c.weightx = 0.5
-    c.gridwidth = 4
-    c.gridx = 4
+    c.gridwidth = 8
+    c.gridx = 0
     c.gridy = 4
-    layout( newRenderButton ) = c
+    layout( renderButton ) = c
 
     val progressBar = new ProgressBar{
       min = 0

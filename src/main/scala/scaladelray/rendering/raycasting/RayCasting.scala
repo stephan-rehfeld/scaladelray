@@ -71,7 +71,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
               val cr = texture( hit.sp.t )
               val bsdIntensity = bsdf( hit.sp, light.directionFrom( hit.sp.p ), 1.0, hit.sp, -ray.d )
               val lightIntensity = light.intensity( hit.sp.p )
-              val cos = hit.sp.n dot light.directionFrom( hit.sp.p )
+              val cos = Math.max( 0, hit.sp.n dot light.directionFrom( hit.sp.p ) )
 
               c = c + light.c * cr * bsdIntensity * weight * lightIntensity * cos
             }

@@ -38,6 +38,7 @@ import scaladelray.camera.Camera
 import scaladelray.math.i.{Point2, Rectangle, Size2}
 import scaladelray.rendering.{Algorithm, HDRRender, HDRRenderingActor}
 
+case class StartRendering()
 
 class HDRNiceRenderingWindow( camera : Camera, s : Dimension, actors : Int, clusterNodes : List[(String,Int,Int)], algorithm : Algorithm ) extends Frame {
 
@@ -133,7 +134,6 @@ class HDRNiceRenderingWindow( camera : Camera, s : Dimension, actors : Int, clus
           tileX <- 0 until tiles
           tileY <- 0 until tiles
         } {
-          // TODO: Pass correct camera
           val ftr = targets ? HDRRender( camera, originalHDRImage.size, Rectangle( Point2( tileX * tileWidth, tileY * tileHeight ), Size2( tileWidth, tileHeight) ) )
           futures += ftr
         }

@@ -17,7 +17,7 @@
 package scaladelray.rendering
 
 import scaladelray.HDRImage
-import scaladelray.camera.{Camera, OldCamera}
+import scaladelray.camera.Camera
 import scaladelray.math.i.{Rectangle, Size2}
 
 /**
