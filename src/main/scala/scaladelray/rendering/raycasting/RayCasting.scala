@@ -17,7 +17,7 @@
 package scaladelray.rendering.raycasting
 
 import scala.collection.mutable
-import scaladelray.camera.{Camera, OldCamera, PerspectiveCamera}
+import scaladelray.camera.{Camera, OrthographicCamera, PerspectiveCamera}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.math.Ray
 import scaladelray.math.i.{Point2, Rectangle, Size2}
@@ -50,6 +50,7 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
     } {
       val ray = cam match {
         case pCam : PerspectiveCamera => rayFor( pCam, imageSize, Point2( x, y ) )
+        case oCam : OrthographicCamera => rayFor( oCam, imageSize, Point2( x, y ) )
       }
       val hits = (ray --> world).toList.filter( _.t > Constants.EPSILON ).sortWith( _.t < _.t )
       if( hits.isEmpty ) {
@@ -90,6 +91,17 @@ class RayCasting( ambient : Color, world : World  ) extends Algorithm {
 
     val o = upperRightOfImagePlane - cam.u * xStepWidth * pixel.x - cam.v * yStepHeight * pixel.y
     val d = lensCenter - o
+
+    Ray( o, d )
+  }
+
+  def rayFor( cam : OrthographicCamera, imageSize : Size2, pixel : Point2 ): Ray = {
+    val lowerLeftOfImagePlane = cam.e - cam.u * cam.imagePlaneFormat._1 / 2 - cam.v * cam.imagePlaneFormat._2 / 2
+    val xStepWidth = cam.imagePlaneFormat._1 / imageSize.width
+    val yStepHeight = cam.imagePlaneFormat._2 / imageSize.height
+
+    val o = lowerLeftOfImagePlane + cam.u * xStepWidth * pixel.x + cam.v * yStepHeight * pixel.y
+    val d = -cam.w
 
     Ray( o, d )
   }

@@ -149,6 +149,7 @@ class SceneGraphTreeModel( worldProvider : WorldProvider ) extends TreeModel {
         case "Renderables" => 2
         case "Lights" => 3
         case bg : BackgroundProvider => 0
+        case cp : CameraProvider => 1
       }
     case sbp : SkyboxProvider =>
       child match {

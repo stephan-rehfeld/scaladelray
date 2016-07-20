@@ -29,7 +29,7 @@ class PerspectiveCameraProvider extends CameraProvider with TableModel {
   var gazeDirection = Direction3( 0, 0, -1 )
   var upVector = Direction3( 0, 1, 0 )
   var imagePlaneFormat = (0.036,0.024)
-  var focalLength = 0.05
+  var focalLength = 0.025
   var fNumber = 4.0
   var depthOfField = Double.PositiveInfinity
 

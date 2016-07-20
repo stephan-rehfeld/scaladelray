@@ -17,7 +17,7 @@
 package scaladelray.rendering.recursiveraytracing
 
 import scala.collection.mutable
-import scaladelray.camera.{Camera, OldCamera, PerspectiveCamera}
+import scaladelray.camera.{Camera, OrthographicCamera, PerspectiveCamera}
 import scaladelray.material.bsdf.{PerfectReflectiveBRDF, PerfectTransparentBTDF}
 import scaladelray.material.emission.{DirectionalEmission, SimpleEmission, SpotEmission}
 import scaladelray.math.Ray
@@ -108,6 +108,7 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
     } {
       val ray = cam match {
         case pCam : PerspectiveCamera => rayFor( pCam, imageSize, Point2( x, y ) )
+        case oCam : OrthographicCamera => rayFor( oCam, imageSize, Point2( x, y ) )
       }
       img.set( x-rect.corner.x, y-rect.corner.y, trace( ray, recursionDepth ) )
     }
@@ -122,6 +123,17 @@ class RecursiveRaytracing( ambient : Color, world : World, recursionDepth : Int 
 
     val o = upperRightOfImagePlane - cam.u * xStepWidth * pixel.x - cam.v * yStepHeight * pixel.y
     val d = lensCenter - o
+
+    Ray( o, d )
+  }
+
+  def rayFor( cam : OrthographicCamera, imageSize : Size2, pixel : Point2 ): Ray = {
+    val lowerLeftOfImagePlane = cam.e - cam.u * cam.imagePlaneFormat._1 / 2 - cam.v * cam.imagePlaneFormat._2 / 2
+    val xStepWidth = cam.imagePlaneFormat._1 / imageSize.width
+    val yStepHeight = cam.imagePlaneFormat._2 / imageSize.height
+
+    val o = lowerLeftOfImagePlane + cam.u * xStepWidth * pixel.x + cam.v * yStepHeight * pixel.y
+    val d = -cam.w
 
     Ray( o, d )
   }
