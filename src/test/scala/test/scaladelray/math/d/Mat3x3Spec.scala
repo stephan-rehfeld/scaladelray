@@ -18,7 +18,7 @@ package test.scaladelray.math.d
 
 import org.scalatest.FunSpec
 
-import scaladelray.math.d.{Direction3, Mat3x3, Point3}
+import scaladelray.math.d.{Direction3, Mat3x3, Point2, Point3}
 
 class Mat3x3Spec  extends FunSpec {
 
@@ -61,7 +61,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( m.determinant == -78 )
     }
 
-    it( "should be multiply-able with vectors" ) {
+    it( "should be multiply-able with  3D vectors" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
@@ -73,7 +73,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( r == Direction3( 2 * 29 + 3 * 31 + 5 * 37, 7 * 29 + 11 * 31 + 13 * 37, 17 * 29 + 19 * 31 + 23 * 37 ))
     }
 
-    it( "should multiply-able with points" ) {
+    it( "should multiply-able with 3D points" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
@@ -83,6 +83,18 @@ class Mat3x3Spec  extends FunSpec {
       val r = m * p
 
       assert( r == Point3( 2 * 29 + 3 * 31 + 5 * 37, 7 * 29 + 11 * 31 + 13 * 37, 17 * 29 + 19 * 31 + 23 * 37 ))
+    }
+
+    it( "should multiply-able with 2D points" ) {
+      val m = Mat3x3(  2,  3,  5,
+        7, 11, 13,
+        17, 19, 23 )
+
+      val p = Point2( 29, 31 )
+
+      val r = m * p
+
+      assert( r == Point2( 2 * 29 + 3 * 31 + 5, 7 * 29 + 11 * 31 + 13 ) )
     }
 
     it( "should have a function to replace the first column") {
@@ -127,7 +139,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( r.m33 == 37 )
     }
 
-    it( "should not be altered after multiplying with a vector" ) {
+    it( "should not be altered after multiplying with a 3D direction" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
@@ -147,12 +159,32 @@ class Mat3x3Spec  extends FunSpec {
       assert( m.m33 == 23 )
     }
 
-    it( "should not be altered after multiplied with a point" ) {
+    it( "should not be altered after multiplied with a 3D point" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
 
       val p = Point3( 29, 31, 37 )
+
+      m * p
+
+      assert( m.m11 == 2 )
+      assert( m.m12 == 3 )
+      assert( m.m13 == 5 )
+      assert( m.m21 == 7 )
+      assert( m.m22 == 11 )
+      assert( m.m23 == 13 )
+      assert( m.m31 == 17 )
+      assert( m.m32 == 19 )
+      assert( m.m33 == 23 )
+    }
+
+    it( "should not be altered after multiplied with a 2D point" ) {
+      val m = Mat3x3(  2,  3,  5,
+        7, 11, 13,
+        17, 19, 23 )
+
+      val p = Point2( 29, 31 )
 
       m * p
 
@@ -227,7 +259,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( m.m33 == 23 )
     }
 
-    it( "should not alter the other vector while multiplying" ) {
+    it( "should not alter the other 3D direction while multiplying" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
@@ -241,7 +273,7 @@ class Mat3x3Spec  extends FunSpec {
       assert( v.z == 37 )
     }
 
-    it( "should not alter the other point while multiplying" ) {
+    it( "should not alter the other 3D point while multiplying" ) {
       val m = Mat3x3(  2,  3,  5,
         7, 11, 13,
         17, 19, 23 )
@@ -254,6 +286,20 @@ class Mat3x3Spec  extends FunSpec {
       assert( p.y == 31 )
       assert( p.z == 37 )
     }
+
+    it( "should not alter the other 2D point while multiplying" ) {
+      val m = Mat3x3(  2,  3,  5,
+        7, 11, 13,
+        17, 19, 23 )
+
+      val p = Point2( 29, 31 )
+
+      m * p
+
+      assert( p.x == 29 )
+      assert( p.y == 31 )
+    }
+
 
     it( "should not alter the other vector while changing the first column" ) {
       val m = Mat3x3(  2,  3,  5,

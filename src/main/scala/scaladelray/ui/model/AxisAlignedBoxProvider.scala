@@ -20,8 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.AxisAlignedBox
-import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.Transform
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.Renderable
 
 class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
@@ -36,8 +36,8 @@ class AxisAlignedBoxProvider extends RenderableProvider with TableModel {
     l()
     val aab = new AxisAlignedBox( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val (m,o) = materialProvider.get.createMaterial( l )
-    Set( Renderable( t, aab, o, m ) )
+    val m = materialProvider.get.createMaterial( l )
+    Set( Renderable( t, aab, m ) )
   }
 
   override def getRowCount: Int = 3

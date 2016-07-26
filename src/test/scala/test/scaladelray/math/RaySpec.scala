@@ -18,9 +18,9 @@ package test.scaladelray.math
 
 import org.scalatest.FunSpec
 
-import scaladelray.math.Ray
-import scaladelray.geometry.Geometry
 import scaladelray.Color
+import scaladelray.geometry.Geometry
+import scaladelray.math.Ray
 import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.world.{SingleBackgroundColor, World}
 
@@ -110,7 +110,7 @@ class RaySpec extends FunSpec {
 
       var called = false
 
-      val world = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set(), 1.0 ) {
+      val world = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Set(), 1.0 ) {
         override def <--(r: Ray) = {
           called = true
           Set()
@@ -184,7 +184,7 @@ class RaySpec extends FunSpec {
 
       var called = false
 
-      val world = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Color( 0, 0, 0 ), Set(), 1.0 ) {
+      val world = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set(), Set(), 1.0 ) {
         override def <--(r: Ray) = {
           called = true
           Set()

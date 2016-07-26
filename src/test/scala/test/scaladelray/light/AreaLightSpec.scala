@@ -18,14 +18,14 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 
-import scaladelray.light.AreaLight
-import scaladelray.math.{Ray, Transform}
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.rendering.{Hit, Renderable}
-import scaladelray.world.{SingleBackgroundColor, World}
+import scaladelray.light.AreaLight
 import scaladelray.material.Material
 import scaladelray.math.d.{Direction3, Point3}
+import scaladelray.math.{Ray, Transform}
+import scaladelray.rendering.{Hit, Renderable}
+import scaladelray.world.{SingleBackgroundColor, World}
 
 class AreaLightSpec extends FunSpec {
 
@@ -70,7 +70,7 @@ class AreaLightSpec extends FunSpec {
       val l = ld.createLight
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None )  ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None )  ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

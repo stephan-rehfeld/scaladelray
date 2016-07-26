@@ -20,12 +20,11 @@ import org.scalatest.FunSpec
 
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.material.{LambertOldMaterial, Material}
+import scaladelray.material.Material
 import scaladelray.math.d.Point3
 import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.recursiveraytracing.light.PointLight
 import scaladelray.rendering.{Hit, Renderable}
-import scaladelray.texture.SingleColorTexture
 import scaladelray.world.{SingleBackgroundColor, World}
 
 /**
@@ -36,7 +35,7 @@ class PointLightSpec extends FunSpec {
   describe( "A PointLight" ) {
     it( "should radiate in all directions." ) {
 
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
 
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
@@ -50,7 +49,7 @@ class PointLightSpec extends FunSpec {
     }
 
     it( "should check the world if an object is between the point and the point light" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       var called = false
 
@@ -66,18 +65,18 @@ class PointLightSpec extends FunSpec {
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val l = PointLight( r, Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None ) ) )
 
       assert( !l.illuminates( p, w ) )
     }
 
     it( "should return true if an object is between the point and the light, but if that object is the renderable of the light" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val l = PointLight( r, Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
@@ -88,7 +87,7 @@ class PointLightSpec extends FunSpec {
     }
 
     it( "should calculate the constant attenuation correctly") {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 1, 0, 0 )
@@ -101,7 +100,7 @@ class PointLightSpec extends FunSpec {
 
 
     it( "should calculate the linear attenuation correctly") {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
@@ -112,7 +111,7 @@ class PointLightSpec extends FunSpec {
     }
 
     it( "should calculate the quadratic attenuation correctly") {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val pl = Point3( 0, 0, 0 )
       val p = Point3( 2, 0, 0 )
@@ -124,7 +123,7 @@ class PointLightSpec extends FunSpec {
     }
 
     it( "should calculate the direction correctly") {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
 
       val pl = Point3( 0, 0, 0 )

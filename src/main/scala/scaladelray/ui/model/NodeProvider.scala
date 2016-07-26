@@ -20,8 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scala.collection.mutable
-import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.Transform
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.Renderable
 
 class NodeProvider extends RenderableProvider with TableModel {
@@ -36,7 +36,7 @@ class NodeProvider extends RenderableProvider with TableModel {
     (for( n <- childNodes ) yield {
       for( r <- n.createRenderable( l ) ) yield {
         val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-        Renderable( t * r.t, r.geometry, r.oldMaterial, r.material )
+        Renderable( t * r.t, r.geometry, r.material )
       }
     }).flatten.toSet
   }

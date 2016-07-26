@@ -41,19 +41,30 @@ case class Mat3x3( m11 : Double, m12 : Double, m13 : Double,
   val determinant = m11 * m22 * m33 + m12 * m23 * m31 + m13 * m21 * m32 - m13 * m22 * m31 - m12 * m21 * m33 - m11 * m23 * m32
 
   /**
-   * This method multiplies a direction with the matrix and returns the result as a direction.
+   * This method multiplies a 3D direction with the matrix and returns the result as a direction.
+    *
    * @param v The direction that should be multiplied with the matrix.
    * @return The result of the multiplication.
    */
   def *( v : Direction3 ) = Direction3( m11 * v.x + m12 * v.y + m13 * v.z, m21 * v.x + m22 * v.y + m23 * v.z, m31 * v.x + m32 * v.y + m33 * v.z )
 
   /**
-   * This method multiplies a point with the matrix and returns the result as a point.
+   * This method multiplies a 3D point with the matrix and returns the result as a point.
    *
    * @param p The point that should be multiplied with the matrix.
    * @return The result of the multiplication.
    */
   def *( p : Point3 ) = Point3( m11 * p.x + m12 * p.y + m13 * p.z, m21 * p.x + m22 * p.y + m23 * p.z, m31 * p.x + m32 * p.y + m33 * p.z )
+
+
+  /**
+    * This method multiplies ad 2D point with the matrix and returns the result as point.
+    *
+    * @param p The point that should be multiplied with the matrix.
+    * @return The result of the multiplication.
+    */
+  def *( p : Point2 ) = Point2( m11 * p.x + m12 * p.y + m13, m21 * p.x + m22 * p.y + m23 )
+
 
   /**
    * This method creates a matrix where the first column is replaced by the given direction.

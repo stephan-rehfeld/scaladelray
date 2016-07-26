@@ -24,4 +24,11 @@ package scaladelray.math.d
  */
 case class Point2( x : Double, y : Double ) extends Serializable {
 
+  /**
+    * This method multiples this points by a scalar and creates a new point.
+    * @param v A value this point should be multiplied with.
+    * @return The product.
+    */
+  def *( v : Double ) = Point2( x * v, y * v )
+
 }

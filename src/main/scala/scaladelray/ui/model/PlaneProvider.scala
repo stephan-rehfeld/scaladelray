@@ -20,8 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.Plane
-import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.Transform
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.Renderable
 
 class PlaneProvider extends RenderableProvider with TableModel {
@@ -35,8 +35,8 @@ class PlaneProvider extends RenderableProvider with TableModel {
   override def createRenderable( l : () => Unit ) = {
     val p = Plane( if( normalMapProvider.isDefined ) Some( normalMapProvider.get.createTexture( l ) ) else None )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val (m,o) = materialProvider.get.createMaterial( l )
-    Set( Renderable( t, p, o, m ) )
+    val m = materialProvider.get.createMaterial( l )
+    Set( Renderable( t, p, m ) )
   }
 
   override def getRowCount: Int = 3

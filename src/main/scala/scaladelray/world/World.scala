@@ -17,12 +17,11 @@
 package scaladelray.world
 
 import scaladelray.light.LightDescription
-import scaladelray.rendering.{Hit, Renderable}
-import scaladelray.Color
 import scaladelray.math.Ray
+import scaladelray.rendering.{Hit, Renderable}
 
 
-case class World( background : Background, objects : Set[Renderable], @deprecated ambientLight : Color = Color( 0, 0, 0 ), lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
+case class World( background : Background, objects : Set[Renderable], lightDescriptions : Set[LightDescription] = Set(), indexOfRefraction : Double = 1.0 ) {
 
   def <--( r : Ray ) : Set[Hit] = {
     var hits = Set[Hit]()

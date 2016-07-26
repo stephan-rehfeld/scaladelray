@@ -19,19 +19,17 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
+import scaladelray.material.Material
 import scaladelray.material.bsdf.LambertBRDF
-import scaladelray.material.{LambertOldMaterial, Material, OldMaterial}
 
 class LambertMaterialProvider extends MaterialProvider with TableModel {
 
   var diffuseTextureProvider : Option[TextureProvider] = None
 
-  override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
+  override def createMaterial( l : () => Unit ) : Material = {
     l()
     val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
-    val o = LambertOldMaterial( diffuseTextureProvider.get.createTexture( l ) )
-    val m = Material( e, (1.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ) )
-    (m,o)
+    Material( e, (1.0, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ) )
   }
 
   override def remove(obj: AnyRef) {

@@ -18,14 +18,14 @@ package test.scaladelray.light
 
 import org.scalatest.FunSpec
 
-import scaladelray.math.{Ray, Transform}
 import scaladelray.Color
 import scaladelray.geometry.Sphere
+import scaladelray.light.PointLight
+import scaladelray.material.Material
+import scaladelray.math.d.Point3
+import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
-import scaladelray.material.Material
-import scaladelray.light.PointLight
-import scaladelray.math.d.Point3
 
 class PointLightSpec extends FunSpec {
 
@@ -66,7 +66,7 @@ class PointLightSpec extends FunSpec {
       val l = new PointLight( Color( 1, 1, 1 ), Point3( 0, 0, -2 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, 2 )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None ) ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

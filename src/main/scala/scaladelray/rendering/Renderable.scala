@@ -16,9 +16,9 @@
 
 package scaladelray.rendering
 
+import scaladelray.geometry.{Geometry, SurfacePoint}
+import scaladelray.material.Material
 import scaladelray.math.{Ray, Transform, Transformable}
-import scaladelray.geometry.{SurfacePoint, Geometry}
-import scaladelray.material.{Material, OldMaterial}
 
 case class Hit( ray : Ray, renderable : Renderable, t : Double, sp : SurfacePoint )
 
@@ -27,10 +27,9 @@ case class Hit( ray : Ray, renderable : Renderable, t : Double, sp : SurfacePoin
  *
  * @param t The transformation of the renderable.
  * @param geometry The geometry of the renderable.
- * @param oldMaterial The material of the renderable.
  * @param material The material of the renderable.
  */
-case class Renderable( override val t : Transform, geometry : Geometry, @deprecated oldMaterial : OldMaterial, material : Material ) extends Transformable( t ) {
+case class Renderable( override val t : Transform, geometry : Geometry, material : Material ) extends Transformable( t ) {
 
   def <-- ( r : Ray ) : Set[Hit] = {
     val ri = down( r )

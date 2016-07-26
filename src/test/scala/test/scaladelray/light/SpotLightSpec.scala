@@ -20,12 +20,12 @@ import org.scalatest.FunSpec
 
 import scaladelray.Color
 import scaladelray.geometry.Sphere
+import scaladelray.light.SpotLight
+import scaladelray.material.Material
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
-import scaladelray.material.Material
-import scaladelray.light.SpotLight
-import scaladelray.math.d.{Direction3, Point3}
 
 class SpotLightSpec extends FunSpec {
 
@@ -73,7 +73,7 @@ class SpotLightSpec extends FunSpec {
       val l = new SpotLight( Color( 1, 1, 1 ),  Point3( 0, 0, 2 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
       val s = Sphere( None )
       val p = Point3( 0, 0, -2 )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None ) ) )
 
       for( b <- l.illuminates( p, w ) )
         assert( !b )

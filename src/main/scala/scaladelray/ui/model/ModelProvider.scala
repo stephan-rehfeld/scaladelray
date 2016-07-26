@@ -22,8 +22,8 @@ import javax.swing.table.TableModel
 
 import scala.collection.mutable
 import scaladelray.loader.OBJLoader
-import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.Transform
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.rendering.Renderable
 
 class ModelProvider( tml : TableModelListener ) extends RenderableProvider with TableModel {
@@ -50,8 +50,8 @@ class ModelProvider( tml : TableModelListener ) extends RenderableProvider with 
     val loader = new OBJLoader
     val m = loader.load( fileName, subDivideFunction( octreeRecursionDepth, octreeFacesLimit, _ , _ ), fastLoad, l )
     val t = Transform.translate( translate ).rotateZ( rotate.z ).rotateY(rotate.y ).rotateX( rotate.x ).scale( scale.x, scale.y, scale.z )
-    val (mat,old) = materialProvider.get.createMaterial( l )
-    Set( Renderable( t, m, old, mat ) )
+    val mat = materialProvider.get.createMaterial( l )
+    Set( Renderable( t, m, mat ) )
   }
 
   override def remove(obj: AnyRef) {

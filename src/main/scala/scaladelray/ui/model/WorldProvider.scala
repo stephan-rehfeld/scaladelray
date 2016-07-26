@@ -61,7 +61,7 @@ class WorldProvider extends TableModel {
     val renderables = (for( rp <- renderableProvider ) yield rp.createRenderable( l )).flatten
     val lightDescriptions = for( ld <- lightDescriptionProvider ) yield ld.createLightDescription( l )
 
-    (cameraProvider.get.createCamera( l ),World( backgroundProvider.get.createBackground( l ), renderables.toSet, ambientLight, lightDescriptions.toSet, indexOfRefraction ))
+    (cameraProvider.get.createCamera( l ),World( backgroundProvider.get.createBackground( l ), renderables.toSet, lightDescriptions.toSet, indexOfRefraction ))
   }
 
   override def getRowCount: Int = 2

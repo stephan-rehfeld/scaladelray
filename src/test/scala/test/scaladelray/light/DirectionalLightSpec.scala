@@ -20,12 +20,12 @@ import org.scalatest.FunSpec
 
 import scaladelray.Color
 import scaladelray.geometry.Sphere
+import scaladelray.light.DirectionalLight
+import scaladelray.material.Material
+import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.{Hit, Renderable}
 import scaladelray.world.{SingleBackgroundColor, World}
-import scaladelray.material.Material
-import scaladelray.light.DirectionalLight
-import scaladelray.math.d.{Direction3, Point3}
 
 
 class DirectionalLightSpec extends FunSpec {
@@ -64,7 +64,7 @@ class DirectionalLightSpec extends FunSpec {
     it( "should return false if an object is between the point and the light" ) {
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None ) ) )
       for( d <- directions ) {
         val l = new DirectionalLight( Color( 1, 1, 1 ), d )
         val p = (d * 2).asPoint

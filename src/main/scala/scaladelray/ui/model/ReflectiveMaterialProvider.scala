@@ -19,8 +19,8 @@ package scaladelray.ui.model
 import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
+import scaladelray.material.Material
 import scaladelray.material.bsdf.{LambertBRDF, PerfectReflectiveBRDF, PhongSpecularBRDF}
-import scaladelray.material.{Material, ReflectiveOldMaterial, _}
 
 class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
 
@@ -29,12 +29,10 @@ class ReflectiveMaterialProvider extends MaterialProvider with TableModel {
   var specularTextureProvider : Option[TextureProvider] = None
   var reflectionTextureProvider : Option[TextureProvider] = None
 
-  override def createMaterial( l : () => Unit ) : (Material,OldMaterial) = {
+  override def createMaterial( l : () => Unit ) : Material = {
     l()
     val e = if( this.emission.isDefined ) Some( emission.get.createEmission( l ) ) else None
-    val o = ReflectiveOldMaterial( diffuseTextureProvider.get.createTexture( l ), specularTextureProvider.get.createTexture( l ), phongExponent, reflectionTextureProvider.get.createTexture( l ) )
-    val m = Material( e, (0.25, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.25, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (0.5, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
-    (m,o)
+    Material( e, (0.25, diffuseTextureProvider.get.createTexture( l ), LambertBRDF() ), (0.25, specularTextureProvider.get.createTexture( l ), PhongSpecularBRDF( phongExponent ) ), (0.5, reflectionTextureProvider.get.createTexture( l ), PerfectReflectiveBRDF() ) )
   }
 
   override def remove(obj: AnyRef) {

@@ -18,13 +18,12 @@ package test.scaladelray.rendering
 
 import org.scalatest.FunSpec
 
-import scaladelray.Color
 import scaladelray.geometry.{Geometry, GeometryHit, SurfacePoint}
-import scaladelray.material.{LambertOldMaterial, Material}
+import scaladelray.material.Material
 import scaladelray.math.d.{Direction3, Normal3, Point3}
 import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.Renderable
-import scaladelray.texture.{SingleColorTexture, TexCoord2D}
+import scaladelray.texture.TexCoord2D
 
 class RenderableSpec extends FunSpec {
 
@@ -45,7 +44,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 0, 0, 0 )
         override val axis = Direction3( 0, 0, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
       ray --> renderable
       assert( called )
     }
@@ -63,7 +62,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 0, 0, 0 )
         override val axis = Direction3( 0, 0, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
       val hits = ray --> renderable
       assert( hits.size == 1 )
       assert( hits.head.t == 1 )
@@ -85,7 +84,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 0, 0, 0 )
         override val axis = Direction3( 0, 0, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
       val hits = ray --> renderable
       assert( hits.size == 1 )
       assert( hits.head.t == 1 )
@@ -107,7 +106,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 0, 0, 0 )
         override val axis = Direction3( 0, 0, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
       val hits = ray --> renderable
       assert( hits.size == 1 )
       assert( hits.head.t == 1 )
@@ -129,7 +128,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 1, 1, 1 )
         override val axis = Direction3( 0, 1, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
 
       assert( renderable.center == (t.m * g.center) )
 
@@ -149,7 +148,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 1, 1, 1 )
         override val axis = Direction3( 0, 1, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
 
       assert( renderable.lbf == (t.m * g.lbf) )
 
@@ -168,7 +167,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 1, 1, 1 )
         override val axis = Direction3( 0, 1, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
 
       assert( renderable.run == (t.m * g.run) )
     }
@@ -186,7 +185,7 @@ class RenderableSpec extends FunSpec {
         override val run = Point3( 1, 1, 1 )
         override val axis = Direction3( 0, 1, 0 )
       }
-      val renderable = Renderable( t, g, LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val renderable = Renderable( t, g, Material( None ) )
 
       assert( renderable.axis == (t.m * g.axis) )
 

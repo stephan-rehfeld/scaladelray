@@ -21,4 +21,9 @@ import scaladelray.math.d.{Direction3, Point3}
 
 case class OrthographicCamera( e : Point3, g : Direction3, t : Direction3, imagePlaneFormat : (Double,Double), lensRadius : Double, depthOfField : Double ) extends Camera( e, g, t ) {
 
+  require( imagePlaneFormat._1 > 0.0 )
+  require( imagePlaneFormat._2 > 0.0 )
+  require( lensRadius >= 0.0 )
+  require( depthOfField > 0.0 )
+
 }

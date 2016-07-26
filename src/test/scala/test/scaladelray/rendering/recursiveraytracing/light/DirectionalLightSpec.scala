@@ -20,12 +20,11 @@ import org.scalatest.FunSpec
 
 import scaladelray.Color
 import scaladelray.geometry.Sphere
-import scaladelray.material.{LambertOldMaterial, Material}
+import scaladelray.material.Material
 import scaladelray.math.d.{Direction3, Point3}
 import scaladelray.math.{Ray, Transform}
 import scaladelray.rendering.recursiveraytracing.light.DirectionalLight
 import scaladelray.rendering.{Hit, Renderable}
-import scaladelray.texture.SingleColorTexture
 import scaladelray.world.{SingleBackgroundColor, World}
 
 /**
@@ -35,7 +34,7 @@ class DirectionalLightSpec extends FunSpec {
 
   describe( "A DirectionalLight" ) {
     it( "should radiate all points" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
       val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() )
       val l = DirectionalLight( r, Color( 1, 1, 1 ), Direction3( 0, -1, 0 ) )
 
@@ -48,7 +47,7 @@ class DirectionalLightSpec extends FunSpec {
     it( "should check the world if an object is between the point and the point light" ) {
       var called = false
 
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val w = new World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set[Renderable]() ) {
         override def <--( r : Ray ) : Set[Hit] = {
@@ -62,11 +61,11 @@ class DirectionalLightSpec extends FunSpec {
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ),  Material( None ) )
 
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )
-      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, null, Material( None ) ) )
+      val w = World( SingleBackgroundColor( Color( 0, 0, 0 ) ), Set() + Renderable( Transform(), s, Material( None ) ) )
       for( d <- directions ) {
         val l = DirectionalLight( r, Color( 1, 1, 1 ), d )
         val p = (d * 2).asPoint
@@ -75,7 +74,7 @@ class DirectionalLightSpec extends FunSpec {
     }
 
     it( "should return true if an object is between the point and the light, but if this object is the renderable of the light" ) {
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ),  Material( None ) )
 
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )
@@ -89,7 +88,7 @@ class DirectionalLightSpec extends FunSpec {
 
     it( "should always return the same direction") {
 
-      val r = Renderable( Transform(), Sphere( None ), LambertOldMaterial( SingleColorTexture( Color( 0, 0, 0 ) ) ), Material( None ) )
+      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
 
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val points = for( d <- directions ) yield d.asPoint

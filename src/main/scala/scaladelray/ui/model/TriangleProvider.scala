@@ -20,8 +20,8 @@ import javax.swing.event.TableModelListener
 import javax.swing.table.TableModel
 
 import scaladelray.geometry.Triangle
-import scaladelray.math.d.{Normal3, Point3}
 import scaladelray.math.Transform
+import scaladelray.math.d.{Normal3, Point3}
 import scaladelray.rendering.Renderable
 import scaladelray.texture.TexCoord2D
 
@@ -44,8 +44,8 @@ class TriangleProvider extends RenderableProvider with TableModel {
   override def createRenderable( l : () => Unit ) = {
     l()
     val g = Triangle( vertexA, vertexB, vertexC, normalA, normalB, normalC, texCoordA, texCoordB, texCoordC, None )
-    val (m,o) = materialProvider.get.createMaterial( l )
-    Set( Renderable( Transform(), g, o, m ) )
+    val m = materialProvider.get.createMaterial( l )
+    Set( Renderable( Transform(), g, m ) )
   }
 
   override def getRowCount: Int = 9
