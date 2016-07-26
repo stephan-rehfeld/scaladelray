@@ -61,7 +61,7 @@ class DirectionalLightSpec extends FunSpec {
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val r = Renderable( Transform(), Sphere( None ),  Material( None ) )
+      val r = Renderable( Transform().scale( 0.1, 0.1, 0.1 ), Sphere( None ),  Material( None ) )
 
       val directions = Direction3( 1, 0, 0 ) :: Direction3( 0, 1, 0 ) :: Direction3( 0, 0, 1 ) :: Direction3( -1, 0, 0 ) :: Direction3( 0, -1, 0 ) :: Direction3( 0, 0, -1 ) :: Nil
       val s = Sphere( None )

@@ -72,7 +72,7 @@ class SpotLightSpec extends FunSpec {
     }
 
     it( "should return false if an object is between the point and the light" ) {
-      val r = Renderable( Transform(), Sphere( None ), Material( None ) )
+      val r = Renderable( Transform().scale( 0.1, 0.1, 0.1 ), Sphere( None ), Material( None ) )
 
       val l = SpotLight( r, Color( 1, 1, 1 ),  Point3( 0, 0, 2 ), Direction3( 0, 0, -1 ), math.toRadians( 22.5 ) )
       val s = Sphere( None )

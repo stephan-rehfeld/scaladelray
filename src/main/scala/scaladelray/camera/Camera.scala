@@ -29,7 +29,7 @@ class Camera(e : Point3, g : Direction3, t : Direction3 ) {
 
   require( this.g.magnitude != 0.0 )
   require( this.t.magnitude != 0.0 )
-  require( this.g.normalized != this.t.normalized )
+  require( !(this.g.normalized =~= this.t.normalized) )
 
   /**
     * The w axis of the camera coordinate system.
